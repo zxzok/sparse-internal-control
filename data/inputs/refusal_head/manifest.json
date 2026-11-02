@@ -1,0 +1,10 @@
+{
+  "input_set_id": "refusal_head",
+  "files": [
+    "data/inputs/refusal_head/batches.jsonl",
+    "data/inputs/refusal_head/pair_manifests.jsonl"
+  ],
+  "tokenized_batches_available": true,
+  "construction_module": "sparse_control.tasks",
+  "unavailable_fields": []
+}

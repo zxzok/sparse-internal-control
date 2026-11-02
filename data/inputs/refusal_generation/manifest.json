@@ -1,0 +1,9 @@
+{
+  "input_set_id": "refusal_generation",
+  "files": [],
+  "tokenized_batches_available": false,
+  "construction_module": "sparse_control.tasks",
+  "unavailable_fields": [
+    "complete saved tokenized batches"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "input_set_id": "ioi_nominal",
+  "files": [
+    "data/inputs/ioi_nominal/batches.jsonl"
+  ],
+  "tokenized_batches_available": true,
+  "construction_module": "sparse_control.tasks",
+  "unavailable_fields": []
+}

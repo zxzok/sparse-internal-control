@@ -1,0 +1,5 @@
+Method,Refit recovery,Fixed-coefficient recovery,Refit failure fraction,Fixed failure fraction
+Driver-OMP,0.461 ± 0.144,0.391 ± 0.111,0.583,0.661
+Coverage-Driver,0.449 ± 0.083,0.298 ± 0.143,0.667,0.833
+Top-k,0.632 ± 0.012,0.434 ± 0.160,0.464,0.734
+Random,-0.670 ± 0.612,-0.649 ± 0.637,0.984,0.984

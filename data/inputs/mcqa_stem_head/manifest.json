@@ -1,0 +1,11 @@
+{
+  "input_set_id": "mcqa_stem_head",
+  "files": [
+    "data/inputs/mcqa_stem_head/pair_manifests.jsonl"
+  ],
+  "tokenized_batches_available": false,
+  "construction_module": "sparse_control.tasks",
+  "unavailable_fields": [
+    "complete saved tokenized batches"
+  ]
+}

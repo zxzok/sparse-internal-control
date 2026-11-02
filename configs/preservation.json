@@ -1,0 +1,58 @@
+{
+  "experiment_id": "preservation",
+  "model": "task-specific models",
+  "panel": "fixed 32-prompt MMLU panel: 16 Humanities+16 STEM",
+  "settings": "gamma=1; full-vocabulary KL; paired Sentiment supports k=8; panel shared across seeds",
+  "direction_conditions": "MCQA:P; Sentiment/Refusal:F",
+  "seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "record_paths": [
+    "data/measurements/preservation/mcqa_humanities.jsonl",
+    "data/measurements/preservation/mcqa_stem.jsonl",
+    "data/measurements/preservation/refusal.jsonl",
+    "data/measurements/preservation/sentiment.jsonl"
+  ],
+  "input_manifest": "data/inputs/preservation/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 8,
+  "nominal_dose": 1.0,
+  "interventions": "data/interventions/preservation/interventions.jsonl",
+  "model_asset_id": null,
+  "execution_profiles": [
+    "cuda_head_fp32",
+    "mps_head_fp32"
+  ],
+  "dtype": "float32",
+  "readout": "final_valid_token_full_vocabulary_distribution",
+  "refit": {
+    "implementation": "coefficient_ridge",
+    "lambda": 1.0,
+    "row_normalization": "none",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "fixed_evaluation_available": false,
+  "available_stages": [
+    "preservation"
+  ],
+  "task_models": {
+    "mcqa_humanities": "Qwen/Qwen3-4B",
+    "mcqa_stem": "Qwen/Qwen3-4B",
+    "sentiment": "gpt2",
+    "refusal": "Qwen/Qwen3-1.7B"
+  },
+  "methods": [
+    "driver_omp",
+    "coverage_driver",
+    "top_attribution"
+  ]
+}

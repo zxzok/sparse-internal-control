@@ -1,0 +1,230 @@
+{
+  "artifact_id": "mcqa_reuse",
+  "columns": [
+    "Task",
+    "Method",
+    "Seeds",
+    "Refit coefficients",
+    "Fully frozen"
+  ],
+  "cells": [
+    [
+      "Humanities",
+      "Driver-OMP",
+      4,
+      "0.992 ± 0.009",
+      "0.021 ± 0.026"
+    ],
+    [
+      "Humanities",
+      "Coverage-Driver",
+      4,
+      "0.995 ± 0.053",
+      "0.033 ± 0.029"
+    ],
+    [
+      "Humanities",
+      "Top-k",
+      4,
+      "1.078 ± 0.017",
+      "0.028 ± 0.024"
+    ],
+    [
+      "Humanities",
+      "Random",
+      4,
+      "0.758 ± 0.443",
+      "0.022 ± 0.023"
+    ],
+    [
+      "STEM",
+      "Driver-OMP",
+      4,
+      "0.987 ± 0.034",
+      "0.024 ± 0.066"
+    ],
+    [
+      "STEM",
+      "Coverage-Driver",
+      4,
+      "0.944 ± 0.056",
+      "0.038 ± 0.108"
+    ],
+    [
+      "STEM",
+      "Top-k",
+      4,
+      "1.075 ± 0.029",
+      "0.031 ± 0.093"
+    ],
+    [
+      "STEM",
+      "Random",
+      4,
+      "0.744 ± 0.424",
+      "0.041 ± 0.108"
+    ]
+  ],
+  "numeric_rows": [
+    {
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "condition": "refit_P",
+      "mean": 0.9920263737440109,
+      "sample_sd": 0.00917441111184954,
+      "n": 4,
+      "minimum": 0.9834325313568115,
+      "maximum": 1.0025428533554077
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "condition": "frozen_F",
+      "mean": 0.02119873730407562,
+      "sample_sd": 0.025663366505372563,
+      "n": 4,
+      "minimum": 0.0006357181700877845,
+      "maximum": 0.05565623939037323
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "condition": "refit_P",
+      "mean": 0.995153397321701,
+      "sample_sd": 0.052558442230404435,
+      "n": 4,
+      "minimum": 0.9230316877365112,
+      "maximum": 1.0487805604934692
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "condition": "frozen_F",
+      "mean": 0.032700592651963234,
+      "sample_sd": 0.02939196957863117,
+      "n": 4,
+      "minimum": -0.0019072126597166061,
+      "maximum": 0.058754391968250275
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "condition": "refit_P",
+      "mean": 1.0782709121704102,
+      "sample_sd": 0.016824844120654003,
+      "n": 4,
+      "minimum": 1.0642085075378418,
+      "maximum": 1.1023330688476562
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "condition": "frozen_F",
+      "mean": 0.028438375098630786,
+      "sample_sd": 0.024343034485263624,
+      "n": 4,
+      "minimum": 0.004450026899576187,
+      "maximum": 0.05410301685333252
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "random_matched",
+      "condition": "refit_P",
+      "mean": 0.758199866861105,
+      "sample_sd": 0.4429434724215679,
+      "n": 4,
+      "minimum": 0.09862802922725677,
+      "maximum": 1.051431655883789
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "random_matched",
+      "condition": "frozen_F",
+      "mean": 0.022358226007781923,
+      "sample_sd": 0.023223258369184752,
+      "n": 4,
+      "minimum": 0.005721579771488905,
+      "maximum": 0.05522915720939636
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "condition": "refit_P",
+      "mean": 0.9867709279060364,
+      "sample_sd": 0.03378686765346839,
+      "n": 4,
+      "minimum": 0.941415011882782,
+      "maximum": 1.0215755701065063
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "condition": "frozen_F",
+      "mean": 0.02379135454975767,
+      "sample_sd": 0.06554077632898192,
+      "n": 4,
+      "minimum": -0.020572079345583916,
+      "maximum": 0.12121209502220154
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "condition": "refit_P",
+      "mean": 0.9441847801208496,
+      "sample_sd": 0.05612244461618154,
+      "n": 4,
+      "minimum": 0.906563401222229,
+      "maximum": 1.0265884399414062
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "condition": "frozen_F",
+      "mean": 0.03783312696032226,
+      "sample_sd": 0.10754218716364598,
+      "n": 4,
+      "minimum": -0.04616159573197365,
+      "maximum": 0.1956709772348404
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "condition": "refit_P",
+      "mean": 1.0750296115875244,
+      "sample_sd": 0.029069471868376117,
+      "n": 4,
+      "minimum": 1.034184217453003,
+      "maximum": 1.1030303239822388
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "condition": "frozen_F",
+      "mean": 0.03145547746680677,
+      "sample_sd": 0.09296690307469252,
+      "n": 4,
+      "minimum": -0.03662821650505066,
+      "maximum": 0.1688312143087387
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "random_matched",
+      "condition": "refit_P",
+      "mean": 0.7437837328761816,
+      "sample_sd": 0.4239704304919764,
+      "n": 4,
+      "minimum": 0.11311402171850204,
+      "maximum": 1.0218778848648071
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "random_matched",
+      "condition": "frozen_F",
+      "mean": 0.04113885830156505,
+      "sample_sd": 0.10806622874706649,
+      "n": 4,
+      "minimum": -0.03813348338007927,
+      "maximum": 0.20086579024791718
+    }
+  ]
+}

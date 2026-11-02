@@ -1,0 +1,541 @@
+[
+  {
+    "artifact_id": "control_axes",
+    "paper_label": "tab:protocol",
+    "paper_display_name": "Table 1",
+    "experiment_ids": [],
+    "record_paths": [
+      "configs/display_control_axes.json"
+    ],
+    "metric_id": "static_definition",
+    "aggregation": "axis definitions and metric names",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {},
+    "output_files": [
+      "tables/control_axes.csv",
+      "tables/control_axes.tex",
+      "tables/control_axes.json"
+    ]
+  },
+  {
+    "artifact_id": "nominal_reconstruction",
+    "paper_label": "tab:nominal-restored",
+    "paper_display_name": "Table 2",
+    "experiment_ids": [
+      "ioi_nominal",
+      "mcqa_humanities_nominal",
+      "mcqa_stem_nominal"
+    ],
+    "record_paths": [
+      "data/measurements/ioi_nominal/nominal.jsonl",
+      "data/measurements/ioi_nominal/readouts.jsonl",
+      "data/measurements/ioi_nominal/reversal.jsonl",
+      "data/measurements/ioi_nominal/run_metadata.json",
+      "data/measurements/mcqa_humanities_nominal/nominal.jsonl",
+      "data/measurements/mcqa_humanities_nominal/readouts.jsonl",
+      "data/measurements/mcqa_humanities_nominal/run_metadata.json",
+      "data/measurements/mcqa_stem_nominal/nominal.jsonl",
+      "data/measurements/mcqa_stem_nominal/readouts.jsonl",
+      "data/measurements/mcqa_stem_nominal/run_metadata.json"
+    ],
+    "metric_id": "r_clean",
+    "aggregation": "R_clean mean and sample SD",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/nominal_reconstruction.csv",
+      "tables/nominal_reconstruction.tex",
+      "tables/nominal_reconstruction.json",
+      "tables/nominal_reconstruction_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "feedback_hits",
+    "paper_label": "tab:feedback",
+    "paper_display_name": "Table 3",
+    "experiment_ids": [
+      "ioi_feedback",
+      "mcqa_humanities_head",
+      "mcqa_stem_head",
+      "refusal_head"
+    ],
+    "record_paths": [
+      "data/measurements/ioi_feedback/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_humanities_head/dose_scan.jsonl",
+      "data/measurements/mcqa_humanities_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_humanities_head/readouts.jsonl",
+      "data/measurements/mcqa_humanities_head/reversal.jsonl",
+      "data/measurements/mcqa_humanities_head/run_metadata.json",
+      "data/measurements/mcqa_stem_head/dose_scan.jsonl",
+      "data/measurements/mcqa_stem_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_stem_head/readouts.jsonl",
+      "data/measurements/mcqa_stem_head/reversal.jsonl",
+      "data/measurements/refusal_head/dose_scan.jsonl",
+      "data/measurements/refusal_head/feedback_trajectories.jsonl",
+      "data/measurements/refusal_head/readouts.jsonl",
+      "data/measurements/refusal_head/reversal.jsonl",
+      "data/measurements/refusal_head/run_metadata.json"
+    ],
+    "metric_id": "feedback_endpoint",
+    "aggregation": "endpoint counts and initial counts",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/feedback_hits.csv",
+      "tables/feedback_hits.tex",
+      "tables/feedback_hits.json",
+      "tables/feedback_hits_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "formal_reference_settings",
+    "paper_label": "tab:hyper",
+    "paper_display_name": "Table F.1",
+    "experiment_ids": [
+      "ioi_recurrence"
+    ],
+    "record_paths": [
+      "configs/display_formal_reference_settings.json"
+    ],
+    "metric_id": "static_definition",
+    "aggregation": "formal settings separate from executed settings",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {},
+    "output_files": [
+      "tables/formal_reference_settings.csv",
+      "tables/formal_reference_settings.tex",
+      "tables/formal_reference_settings.json"
+    ]
+  },
+  {
+    "artifact_id": "experiment_matrix",
+    "paper_label": "tab:experiment-configurations",
+    "paper_display_name": "Table G.2",
+    "experiment_ids": [],
+    "record_paths": [
+      "configs/display_experiment_matrix.json"
+    ],
+    "metric_id": "static_definition",
+    "aggregation": "sample sizes, splits, seeds and statistical unit",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {},
+    "output_files": [
+      "tables/experiment_matrix.csv",
+      "tables/experiment_matrix.tex",
+      "tables/experiment_matrix.json"
+    ]
+  },
+  {
+    "artifact_id": "formal_reachability_samepanel",
+    "paper_label": "tab:formal_reachability_samepanel",
+    "paper_display_name": "Table G.3",
+    "experiment_ids": [
+      "formal_reachability"
+    ],
+    "record_paths": [
+      "data/measurements/formal_reachability/readouts.jsonl"
+    ],
+    "metric_id": "rel_tar",
+    "aggregation": "15 groups; means, SD, counts",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/formal_reachability_samepanel.csv",
+      "tables/formal_reachability_samepanel.tex",
+      "tables/formal_reachability_samepanel.json",
+      "tables/formal_reachability_samepanel_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "formal_reachability_heldout",
+    "paper_label": "tab:formal_reachability_heldout",
+    "paper_display_name": "Table G.4",
+    "experiment_ids": [
+      "formal_reachability"
+    ],
+    "record_paths": [
+      "data/measurements/formal_reachability/readouts.jsonl"
+    ],
+    "metric_id": "rel_tar",
+    "aggregation": "24 groups; means, SD, counts",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/formal_reachability_heldout.csv",
+      "tables/formal_reachability_heldout.tex",
+      "tables/formal_reachability_heldout.json",
+      "tables/formal_reachability_heldout_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "signed_reversal",
+    "paper_label": "tab:formal-reversal",
+    "paper_display_name": "Table G.5",
+    "experiment_ids": [
+      "ioi_nominal",
+      "sentiment_paired",
+      "mcqa_humanities_head",
+      "mcqa_stem_head",
+      "refusal_head"
+    ],
+    "record_paths": [
+      "data/measurements/ioi_nominal/nominal.jsonl",
+      "data/measurements/ioi_nominal/readouts.jsonl",
+      "data/measurements/ioi_nominal/reversal.jsonl",
+      "data/measurements/ioi_nominal/run_metadata.json",
+      "data/measurements/mcqa_humanities_head/dose_scan.jsonl",
+      "data/measurements/mcqa_humanities_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_humanities_head/readouts.jsonl",
+      "data/measurements/mcqa_humanities_head/reversal.jsonl",
+      "data/measurements/mcqa_humanities_head/run_metadata.json",
+      "data/measurements/mcqa_stem_head/dose_scan.jsonl",
+      "data/measurements/mcqa_stem_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_stem_head/readouts.jsonl",
+      "data/measurements/mcqa_stem_head/reversal.jsonl",
+      "data/measurements/refusal_head/dose_scan.jsonl",
+      "data/measurements/refusal_head/feedback_trajectories.jsonl",
+      "data/measurements/refusal_head/readouts.jsonl",
+      "data/measurements/refusal_head/reversal.jsonl",
+      "data/measurements/refusal_head/run_metadata.json",
+      "data/measurements/sentiment_paired/fixed_dose.jsonl",
+      "data/measurements/sentiment_paired/readouts.jsonl",
+      "data/measurements/sentiment_paired/reversal.jsonl"
+    ],
+    "metric_id": "reversal_ratio",
+    "aggregation": "seed-level target-side ratios",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/signed_reversal.csv",
+      "tables/signed_reversal.tex",
+      "tables/signed_reversal.json",
+      "tables/signed_reversal_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "dose_ordering",
+    "paper_label": "tab:independent-dose-stats",
+    "paper_display_name": "Table G.6",
+    "experiment_ids": [
+      "mcqa_humanities_head",
+      "mcqa_stem_head",
+      "refusal_head"
+    ],
+    "record_paths": [
+      "data/measurements/mcqa_humanities_head/dose_scan.jsonl",
+      "data/measurements/mcqa_humanities_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_humanities_head/readouts.jsonl",
+      "data/measurements/mcqa_humanities_head/reversal.jsonl",
+      "data/measurements/mcqa_humanities_head/run_metadata.json",
+      "data/measurements/mcqa_stem_head/dose_scan.jsonl",
+      "data/measurements/mcqa_stem_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_stem_head/readouts.jsonl",
+      "data/measurements/mcqa_stem_head/reversal.jsonl",
+      "data/measurements/refusal_head/dose_scan.jsonl",
+      "data/measurements/refusal_head/feedback_trajectories.jsonl",
+      "data/measurements/refusal_head/readouts.jsonl",
+      "data/measurements/refusal_head/reversal.jsonl",
+      "data/measurements/refusal_head/run_metadata.json"
+    ],
+    "metric_id": "signed_spearman",
+    "aggregation": "positive and negative Spearman counts; means and sample SD",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/dose_ordering.csv",
+      "tables/dose_ordering.tex",
+      "tables/dose_ordering.json",
+      "tables/dose_ordering_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "feedback_details",
+    "paper_label": "tab:feedback-details",
+    "paper_display_name": "Table G.7",
+    "experiment_ids": [
+      "mcqa_humanities_head",
+      "mcqa_stem_head",
+      "refusal_head"
+    ],
+    "record_paths": [
+      "data/measurements/mcqa_humanities_head/dose_scan.jsonl",
+      "data/measurements/mcqa_humanities_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_humanities_head/readouts.jsonl",
+      "data/measurements/mcqa_humanities_head/reversal.jsonl",
+      "data/measurements/mcqa_humanities_head/run_metadata.json",
+      "data/measurements/mcqa_stem_head/dose_scan.jsonl",
+      "data/measurements/mcqa_stem_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_stem_head/readouts.jsonl",
+      "data/measurements/mcqa_stem_head/reversal.jsonl",
+      "data/measurements/refusal_head/dose_scan.jsonl",
+      "data/measurements/refusal_head/feedback_trajectories.jsonl",
+      "data/measurements/refusal_head/readouts.jsonl",
+      "data/measurements/refusal_head/reversal.jsonl",
+      "data/measurements/refusal_head/run_metadata.json"
+    ],
+    "metric_id": "feedback_endpoint",
+    "aggregation": "hits, MAE, evaluations, initial hits",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/feedback_details.csv",
+      "tables/feedback_details.tex",
+      "tables/feedback_details.json",
+      "tables/feedback_details_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "off_target_preservation",
+    "paper_label": "tab:fixed-panel-preservation",
+    "paper_display_name": "Table G.8",
+    "experiment_ids": [
+      "preservation"
+    ],
+    "record_paths": [
+      "data/measurements/preservation/mcqa_humanities.jsonl",
+      "data/measurements/preservation/mcqa_stem.jsonl",
+      "data/measurements/preservation/refusal.jsonl",
+      "data/measurements/preservation/sentiment.jsonl"
+    ],
+    "metric_id": "kl",
+    "aggregation": "mean, median, nearest-rank P95, max, seed-mean pass and all-prompt pass",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/off_target_preservation.csv",
+      "tables/off_target_preservation.tex",
+      "tables/off_target_preservation.json",
+      "tables/off_target_preservation_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "mcqa_reuse",
+    "paper_label": "tab:baselines-transfer",
+    "paper_display_name": "Table G.9",
+    "experiment_ids": [
+      "mcqa_humanities_reuse",
+      "mcqa_stem_reuse"
+    ],
+    "record_paths": [
+      "data/measurements/mcqa_humanities_reuse/reuse.jsonl",
+      "data/measurements/mcqa_stem_reuse/reuse.jsonl"
+    ],
+    "metric_id": "mcqa_recovery",
+    "aggregation": "signed mean-margin recovery",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/mcqa_reuse.csv",
+      "tables/mcqa_reuse.tex",
+      "tables/mcqa_reuse.json",
+      "tables/mcqa_reuse_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "ioi_reuse",
+    "paper_label": "tab:ioi-reuse",
+    "paper_display_name": "Table G.10",
+    "experiment_ids": [
+      "ioi_reuse"
+    ],
+    "record_paths": [
+      "data/measurements/ioi_reuse/reuse.jsonl"
+    ],
+    "metric_id": "ioi_recovery",
+    "aggregation": "pointwise recovery and failure fractions",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/ioi_reuse.csv",
+      "tables/ioi_reuse.tex",
+      "tables/ioi_reuse.json",
+      "tables/ioi_reuse_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "sentiment_fixed_dose",
+    "paper_label": "tab:sentiment-reuse",
+    "paper_display_name": "Table G.11",
+    "experiment_ids": [
+      "sentiment_paired"
+    ],
+    "record_paths": [
+      "data/measurements/sentiment_paired/fixed_dose.jsonl",
+      "data/measurements/sentiment_paired/readouts.jsonl",
+      "data/measurements/sentiment_paired/reversal.jsonl"
+    ],
+    "metric_id": "sentiment_recovery",
+    "aggregation": "4 methods \u00d7 3 budgets \u00d7 2 modes; mean and SD",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/sentiment_fixed_dose.csv",
+      "tables/sentiment_fixed_dose.tex",
+      "tables/sentiment_fixed_dose.json",
+      "tables/sentiment_fixed_dose_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "feedback_tolerance",
+    "paper_label": "tab:feedback-tolerances",
+    "paper_display_name": "Table G.12",
+    "experiment_ids": [
+      "mcqa_humanities_head",
+      "mcqa_stem_head",
+      "refusal_head"
+    ],
+    "record_paths": [
+      "data/measurements/mcqa_humanities_head/dose_scan.jsonl",
+      "data/measurements/mcqa_humanities_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_humanities_head/readouts.jsonl",
+      "data/measurements/mcqa_humanities_head/reversal.jsonl",
+      "data/measurements/mcqa_humanities_head/run_metadata.json",
+      "data/measurements/mcqa_stem_head/dose_scan.jsonl",
+      "data/measurements/mcqa_stem_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_stem_head/readouts.jsonl",
+      "data/measurements/mcqa_stem_head/reversal.jsonl",
+      "data/measurements/refusal_head/dose_scan.jsonl",
+      "data/measurements/refusal_head/feedback_trajectories.jsonl",
+      "data/measurements/refusal_head/readouts.jsonl",
+      "data/measurements/refusal_head/reversal.jsonl",
+      "data/measurements/refusal_head/run_metadata.json"
+    ],
+    "metric_id": "feedback_endpoint",
+    "aggregation": "same endpoints; tol=.10,.20,.30,.40,.50",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/feedback_tolerance.csv",
+      "tables/feedback_tolerance.tex",
+      "tables/feedback_tolerance.json",
+      "tables/feedback_tolerance_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "model_comparison",
+    "paper_label": "tab:source-bound-scale",
+    "paper_display_name": "Table G.13",
+    "experiment_ids": [
+      "mcqa_humanities_nominal",
+      "model_qwen3_8b",
+      "model_mistral7b"
+    ],
+    "record_paths": [
+      "data/measurements/mcqa_humanities_nominal/nominal.jsonl",
+      "data/measurements/mcqa_humanities_nominal/readouts.jsonl",
+      "data/measurements/mcqa_humanities_nominal/run_metadata.json",
+      "data/measurements/model_mistral7b/nominal.jsonl",
+      "data/measurements/model_qwen3_8b/nominal.jsonl"
+    ],
+    "metric_id": "r_clean",
+    "aggregation": "R_clean with model-specific panels and libraries",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/model_comparison.csv",
+      "tables/model_comparison.tex",
+      "tables/model_comparison.json",
+      "tables/model_comparison_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "reachability_tolerance",
+    "paper_label": "app:rq5",
+    "paper_display_name": "G.3.2",
+    "experiment_ids": [
+      "formal_reachability"
+    ],
+    "record_paths": [
+      "data/measurements/formal_reachability/readouts.jsonl"
+    ],
+    "metric_id": "rel_tar",
+    "aggregation": "39 groups \u00d7 5 thresholds = 195 rows",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "max_support": 8
+    },
+    "output_files": [
+      "tables/reachability_tolerance.csv",
+      "tables/reachability_tolerance.tex",
+      "tables/reachability_tolerance.json",
+      "formal_reachability/per_seed.csv",
+      "formal_reachability/summary.csv",
+      "formal_reachability/threshold_sensitivity.csv",
+      "tables/reachability_tolerance_statistics.csv"
+    ]
+  },
+  {
+    "artifact_id": "supporting_numbers",
+    "paper_label": "app:rq1;app:rq6",
+    "paper_display_name": "Sections 5.2 and G.4",
+    "experiment_ids": [
+      "ioi_backup",
+      "ioi_recurrence",
+      "refusal_single_site",
+      "refusal_generation",
+      "preservation"
+    ],
+    "record_paths": [
+      "data/measurements/ioi_backup/pointwise_errors.json",
+      "data/measurements/ioi_recurrence/supports.jsonl",
+      "data/measurements/preservation/mcqa_humanities.jsonl",
+      "data/measurements/preservation/mcqa_stem.jsonl",
+      "data/measurements/preservation/refusal.jsonl",
+      "data/measurements/preservation/sentiment.jsonl",
+      "data/measurements/refusal_generation/generation.jsonl",
+      "data/measurements/refusal_single_site/axes.jsonl",
+      "data/measurements/refusal_single_site/preservation.jsonl"
+    ],
+    "metric_id": "static_definition",
+    "aggregation": "numerical text claims exported as named scalars",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {},
+    "output_files": [
+      "supporting_numbers.json"
+    ]
+  }
+]

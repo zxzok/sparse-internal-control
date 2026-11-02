@@ -1,0 +1,122 @@
+{
+  "experiment_id": "refusal_head",
+  "model": "Qwen3-1.7B",
+  "panel": "20 pairs, fit/eval=10/10",
+  "settings": "lexical margin; 448 heads; k<=8; raw ridge=1",
+  "direction_conditions": "P,F",
+  "seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "record_paths": [
+    "data/measurements/refusal_head/dose_scan.jsonl",
+    "data/measurements/refusal_head/feedback_trajectories.jsonl",
+    "data/measurements/refusal_head/readouts.jsonl",
+    "data/measurements/refusal_head/reversal.jsonl",
+    "data/measurements/refusal_head/run_metadata.json"
+  ],
+  "input_manifest": "data/inputs/refusal_head/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 8,
+  "nominal_dose": 1.0,
+  "interventions": "data/interventions/refusal_head/interventions.jsonl",
+  "full_run": {
+    "module": "sparse_control.runners.implementations.refusal_feedback",
+    "arguments": [
+      "--model",
+      "Qwen/Qwen3-1.7B",
+      "--device",
+      "cuda",
+      "--ridge",
+      "1",
+      "--k",
+      "8",
+      "--seed",
+      "0",
+      "--targets=-1.55,-1.45,-1.35,-1.25,-1.15",
+      "--tol",
+      "0.1",
+      "--max-iters",
+      "12",
+      "--lr",
+      "0.5",
+      "--algos",
+      "driver_omp,coverage_driver,top_attribution"
+    ],
+    "output_flag": "--out",
+    "seed_argument": "--seed"
+  },
+  "configuration_identity": "saved_command",
+  "model_asset_id": "Qwen/Qwen3-1.7B",
+  "execution_profiles": [
+    "mps_head_fp32",
+    "cuda_head_fp32"
+  ],
+  "dtype": "float32",
+  "readout": "word_set_margin",
+  "refit": {
+    "implementation": "coefficient_ridge",
+    "lambda": 1.0,
+    "row_normalization": "none",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "feedback": {
+    "gain": 0.5,
+    "targets": [
+      -1.55,
+      -1.45,
+      -1.35,
+      -1.25,
+      -1.15
+    ],
+    "tolerance": 0.1,
+    "max_updates": 12,
+    "initial_dose": 0.0,
+    "clipping": false,
+    "gain_halving": false,
+    "final_endpoint_evaluation": true
+  },
+  "dose_grid": [
+    -1.0,
+    -0.5,
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0,
+    1.25,
+    1.5,
+    2.0
+  ],
+  "fixed_evaluation_available": true,
+  "available_stages": [
+    "full",
+    "fit",
+    "nominal",
+    "dose",
+    "reversal",
+    "feedback"
+  ],
+  "fit_examples": 10,
+  "eval_examples": 10,
+  "candidate_count": 448,
+  "candidate_library": "answer_position_heads",
+  "direction_cache_microbatch": 10,
+  "direction_modes": [
+    "P",
+    "F"
+  ],
+  "methods": [
+    "driver_omp",
+    "coverage_driver",
+    "top_attribution"
+  ]
+}

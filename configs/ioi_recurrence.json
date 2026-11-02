@@ -1,0 +1,75 @@
+{
+  "experiment_id": "ioi_recurrence",
+  "model": "GPT-2 small",
+  "panel": "recorded IOI recurrence panel",
+  "settings": "Driver-OMP; frequency threshold=.6; L9.END.H9 and L10.END.H7 each 15/25",
+  "direction_conditions": "P",
+  "seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "record_paths": [
+    "data/measurements/ioi_recurrence/supports.jsonl"
+  ],
+  "input_manifest": "data/inputs/ioi_recurrence/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 16,
+  "nominal_dose": 1.0,
+  "interventions": "data/interventions/ioi_recurrence/interventions.jsonl",
+  "full_run": {
+    "module": "sparse_control.runners.implementations.ioi_recurrence",
+    "arguments": [
+      "--model",
+      "gpt2",
+      "--device",
+      "mps",
+      "--batch-size",
+      "64",
+      "--seeds",
+      "0,1,2,3,4",
+      "--ks",
+      "3,5,8,12,16",
+      "--ridge",
+      "1"
+    ],
+    "output_flag": "--out",
+    "seed_argument": "--seeds"
+  },
+  "configuration_identity": "producer_and_record_parameters",
+  "model_asset_id": "gpt2",
+  "execution_profiles": [
+    "mps_head_fp32",
+    "cuda_head_fp32"
+  ],
+  "dtype": "float32",
+  "readout": "io_minus_subject_margin",
+  "refit": {
+    "implementation": "coefficient_ridge",
+    "lambda": 1.0,
+    "row_normalization": "none",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "fixed_evaluation_available": false,
+  "available_stages": [
+    "full",
+    "fit"
+  ],
+  "budgets": [
+    3,
+    5,
+    8,
+    12,
+    16
+  ],
+  "methods": [
+    "driver_omp"
+  ],
+  "direction_modes": [
+    "P"
+  ]
+}

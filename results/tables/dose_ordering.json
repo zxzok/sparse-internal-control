@@ -1,0 +1,394 @@
+{
+  "artifact_id": "dose_ordering",
+  "columns": [
+    "Task",
+    "Mode",
+    "Method",
+    "rho>=.95",
+    "rho<=-.95",
+    "Mean",
+    "SD"
+  ],
+  "cells": [
+    [
+      "Humanities",
+      "P",
+      "Driver-OMP",
+      "3/8",
+      "0/8",
+      "0.5970",
+      "0.6005"
+    ],
+    [
+      "Humanities",
+      "F",
+      "Driver-OMP",
+      "4/8",
+      "3/8",
+      "0.2303",
+      "1.0202"
+    ],
+    [
+      "Humanities",
+      "P",
+      "Coverage-Driver",
+      "5/8",
+      "0/8",
+      "0.9394",
+      "0.0987"
+    ],
+    [
+      "Humanities",
+      "F",
+      "Coverage-Driver",
+      "5/8",
+      "3/8",
+      "0.2500",
+      "1.0351"
+    ],
+    [
+      "Humanities",
+      "P",
+      "Top-k",
+      "2/8",
+      "0/8",
+      "0.8939",
+      "0.0727"
+    ],
+    [
+      "Humanities",
+      "F",
+      "Top-k",
+      "5/8",
+      "3/8",
+      "0.2500",
+      "1.0351"
+    ],
+    [
+      "STEM",
+      "P",
+      "Driver-OMP",
+      "4/8",
+      "0/8",
+      "0.5076",
+      "0.6972"
+    ],
+    [
+      "STEM",
+      "F",
+      "Driver-OMP",
+      "4/8",
+      "4/8",
+      "-0.0015",
+      "1.0674"
+    ],
+    [
+      "STEM",
+      "P",
+      "Coverage-Driver",
+      "6/8",
+      "0/8",
+      "0.9742",
+      "0.0352"
+    ],
+    [
+      "STEM",
+      "F",
+      "Coverage-Driver",
+      "4/8",
+      "4/8",
+      "0.0000",
+      "1.0690"
+    ],
+    [
+      "STEM",
+      "P",
+      "Top-k",
+      "5/8",
+      "0/8",
+      "0.9621",
+      "0.0495"
+    ],
+    [
+      "STEM",
+      "F",
+      "Top-k",
+      "4/8",
+      "4/8",
+      "0.0000",
+      "1.0690"
+    ],
+    [
+      "Refusal",
+      "P",
+      "Driver-OMP",
+      "8/8",
+      "0/8",
+      "1.0000",
+      "0.0000"
+    ],
+    [
+      "Refusal",
+      "F",
+      "Driver-OMP",
+      "8/8",
+      "0/8",
+      "1.0000",
+      "0.0000"
+    ],
+    [
+      "Refusal",
+      "P",
+      "Coverage-Driver",
+      "8/8",
+      "0/8",
+      "1.0000",
+      "0.0000"
+    ],
+    [
+      "Refusal",
+      "F",
+      "Coverage-Driver",
+      "8/8",
+      "0/8",
+      "1.0000",
+      "0.0000"
+    ],
+    [
+      "Refusal",
+      "P",
+      "Top-k",
+      "8/8",
+      "0/8",
+      "1.0000",
+      "0.0000"
+    ],
+    [
+      "Refusal",
+      "F",
+      "Top-k",
+      "8/8",
+      "0/8",
+      "1.0000",
+      "0.0000"
+    ]
+  ],
+  "numeric_rows": [
+    {
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "positive": 3,
+      "negative": 0,
+      "mean": 0.5969696969696969,
+      "sample_sd": 0.6004851770486721,
+      "n": 8,
+      "minimum": -0.5878787878787879,
+      "maximum": 1.0
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "F",
+      "positive": 4,
+      "negative": 3,
+      "mean": 0.2303030303030303,
+      "sample_sd": 1.0201794462663343,
+      "n": 8,
+      "minimum": -1.0,
+      "maximum": 1.0
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "positive": 5,
+      "negative": 0,
+      "mean": 0.9393939393939394,
+      "sample_sd": 0.09868610804346326,
+      "n": 8,
+      "minimum": 0.7090909090909091,
+      "maximum": 1.0
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "F",
+      "positive": 5,
+      "negative": 3,
+      "mean": 0.25,
+      "sample_sd": 1.0350983390135313,
+      "n": 8,
+      "minimum": -1.0,
+      "maximum": 1.0
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "positive": 2,
+      "negative": 0,
+      "mean": 0.8939393939393939,
+      "sample_sd": 0.0726550868308476,
+      "n": 8,
+      "minimum": 0.7818181818181819,
+      "maximum": 1.0
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "F",
+      "positive": 5,
+      "negative": 3,
+      "mean": 0.25,
+      "sample_sd": 1.0350983390135313,
+      "n": 8,
+      "minimum": -1.0,
+      "maximum": 1.0
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "positive": 4,
+      "negative": 0,
+      "mean": 0.5075757575757576,
+      "sample_sd": 0.697242559047557,
+      "n": 8,
+      "minimum": -0.5878787878787879,
+      "maximum": 1.0
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "F",
+      "positive": 4,
+      "negative": 4,
+      "mean": -0.001515151515151511,
+      "sample_sd": 1.067432576262712,
+      "n": 8,
+      "minimum": -1.0,
+      "maximum": 1.0
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "positive": 6,
+      "negative": 0,
+      "mean": 0.9742424242424242,
+      "sample_sd": 0.03515300787993384,
+      "n": 8,
+      "minimum": 0.9151515151515152,
+      "maximum": 1.0
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "F",
+      "positive": 4,
+      "negative": 4,
+      "mean": 0.0,
+      "sample_sd": 1.0690449676496976,
+      "n": 8,
+      "minimum": -1.0,
+      "maximum": 1.0
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "positive": 5,
+      "negative": 0,
+      "mean": 0.9621212121212122,
+      "sample_sd": 0.04952880427693014,
+      "n": 8,
+      "minimum": 0.8666666666666667,
+      "maximum": 1.0
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "F",
+      "positive": 4,
+      "negative": 4,
+      "mean": 0.0,
+      "sample_sd": 1.0690449676496976,
+      "n": 8,
+      "minimum": -1.0,
+      "maximum": 1.0
+    },
+    {
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "P",
+      "positive": 8,
+      "negative": 0,
+      "mean": 1.0,
+      "sample_sd": 0.0,
+      "n": 8,
+      "minimum": 1.0,
+      "maximum": 1.0
+    },
+    {
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "F",
+      "positive": 8,
+      "negative": 0,
+      "mean": 1.0,
+      "sample_sd": 0.0,
+      "n": 8,
+      "minimum": 1.0,
+      "maximum": 1.0
+    },
+    {
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "P",
+      "positive": 8,
+      "negative": 0,
+      "mean": 1.0,
+      "sample_sd": 0.0,
+      "n": 8,
+      "minimum": 1.0,
+      "maximum": 1.0
+    },
+    {
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "F",
+      "positive": 8,
+      "negative": 0,
+      "mean": 1.0,
+      "sample_sd": 0.0,
+      "n": 8,
+      "minimum": 1.0,
+      "maximum": 1.0
+    },
+    {
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "P",
+      "positive": 8,
+      "negative": 0,
+      "mean": 1.0,
+      "sample_sd": 0.0,
+      "n": 8,
+      "minimum": 1.0,
+      "maximum": 1.0
+    },
+    {
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "F",
+      "positive": 8,
+      "negative": 0,
+      "mean": 1.0,
+      "sample_sd": 0.0,
+      "n": 8,
+      "minimum": 1.0,
+      "maximum": 1.0
+    }
+  ]
+}

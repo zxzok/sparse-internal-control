@@ -1,0 +1,178 @@
+{
+  "artifact_id": "nominal_reconstruction",
+  "columns": [
+    "Method",
+    "IOI (10 seeds)",
+    "Humanities (3 seeds)",
+    "STEM (3 seeds)"
+  ],
+  "cells": [
+    [
+      "Driver-OMP",
+      "0.386 ± 0.114",
+      "0.045 ± 0.013",
+      "0.030 ± 0.008"
+    ],
+    [
+      "Coverage-Driver",
+      "0.567 ± 0.059",
+      "0.027 ± 0.031",
+      "0.010 ± 0.005"
+    ],
+    [
+      "Top-k",
+      "0.464 ± 0.078",
+      "0.054 ± 0.024",
+      "0.038 ± 0.012"
+    ],
+    [
+      "Random",
+      "1.430 ± 0.442",
+      "0.185 ± 0.132",
+      "0.196 ± 0.185"
+    ],
+    [
+      "Nonlinear greedy",
+      "0.289 ± 0.068",
+      "0.013 ± 0.018",
+      "0.003 ± 0.002"
+    ]
+  ],
+  "numeric_rows": [
+    {
+      "experiment": "ioi_nominal",
+      "method": "driver_omp",
+      "mean": 0.3860743671655655,
+      "sample_sd": 0.11359084944192613,
+      "n": 10,
+      "minimum": 0.2662646472454071,
+      "maximum": 0.5953489542007446
+    },
+    {
+      "experiment": "mcqa_humanities_nominal",
+      "method": "driver_omp",
+      "mean": 0.04506289710601171,
+      "sample_sd": 0.013175846015831091,
+      "n": 3,
+      "minimum": 0.036916181445121765,
+      "maximum": 0.0602639764547348
+    },
+    {
+      "experiment": "mcqa_stem_nominal",
+      "method": "driver_omp",
+      "mean": 0.030035225674510002,
+      "sample_sd": 0.0076484936129001275,
+      "n": 3,
+      "minimum": 0.021255141124129295,
+      "maximum": 0.03525112569332123
+    },
+    {
+      "experiment": "ioi_nominal",
+      "method": "coverage_driver",
+      "mean": 0.5665030121803284,
+      "sample_sd": 0.059023200500877004,
+      "n": 10,
+      "minimum": 0.5001661777496338,
+      "maximum": 0.6745676398277283
+    },
+    {
+      "experiment": "mcqa_humanities_nominal",
+      "method": "coverage_driver",
+      "mean": 0.027047062603135903,
+      "sample_sd": 0.031313058082644604,
+      "n": 3,
+      "minimum": 0.008614443242549896,
+      "maximum": 0.06320194154977798
+    },
+    {
+      "experiment": "mcqa_stem_nominal",
+      "method": "coverage_driver",
+      "mean": 0.010152571524182955,
+      "sample_sd": 0.004642235120929149,
+      "n": 3,
+      "minimum": 0.006843192502856255,
+      "maximum": 0.015459158457815647
+    },
+    {
+      "experiment": "ioi_nominal",
+      "method": "top_attribution",
+      "mean": 0.46376618146896365,
+      "sample_sd": 0.07835172328419847,
+      "n": 10,
+      "minimum": 0.34850218892097473,
+      "maximum": 0.57735276222229
+    },
+    {
+      "experiment": "mcqa_humanities_nominal",
+      "method": "top_attribution",
+      "mean": 0.05415821261703968,
+      "sample_sd": 0.0244709018770826,
+      "n": 3,
+      "minimum": 0.02897275798022747,
+      "maximum": 0.0778457447886467
+    },
+    {
+      "experiment": "mcqa_stem_nominal",
+      "method": "top_attribution",
+      "mean": 0.038222127283612885,
+      "sample_sd": 0.011686433926822155,
+      "n": 3,
+      "minimum": 0.026530390605330467,
+      "maximum": 0.049903251230716705
+    },
+    {
+      "experiment": "ioi_nominal",
+      "method": "random_matched",
+      "mean": 1.4302238404750824,
+      "sample_sd": 0.4422942771946743,
+      "n": 10,
+      "minimum": 0.7868397235870361,
+      "maximum": 1.998203158378601
+    },
+    {
+      "experiment": "mcqa_humanities_nominal",
+      "method": "random_matched",
+      "mean": 0.18493696550528207,
+      "sample_sd": 0.13203152812936164,
+      "n": 3,
+      "minimum": 0.09922880679368973,
+      "maximum": 0.3369831144809723
+    },
+    {
+      "experiment": "mcqa_stem_nominal",
+      "method": "random_matched",
+      "mean": 0.19599309066931406,
+      "sample_sd": 0.18465099947212232,
+      "n": 3,
+      "minimum": 0.06452459841966629,
+      "maximum": 0.40709933638572693
+    },
+    {
+      "experiment": "ioi_nominal",
+      "method": "actual_gain_greedy",
+      "mean": 0.28912818282842634,
+      "sample_sd": 0.06797359277280024,
+      "n": 10,
+      "minimum": 0.23755089938640594,
+      "maximum": 0.4718955457210541
+    },
+    {
+      "experiment": "mcqa_humanities_nominal",
+      "method": "actual_gain_greedy",
+      "mean": 0.013343868311494589,
+      "sample_sd": 0.018222844021423514,
+      "n": 3,
+      "minimum": 0.0,
+      "maximum": 0.03410579636693001
+    },
+    {
+      "experiment": "mcqa_stem_nominal",
+      "method": "actual_gain_greedy",
+      "mean": 0.003205172950401902,
+      "sample_sd": 0.001650164214144252,
+      "n": 3,
+      "minimum": 0.001835100119933486,
+      "maximum": 0.005037038587033749
+    }
+  ]
+}

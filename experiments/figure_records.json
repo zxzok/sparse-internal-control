@@ -1,0 +1,63 @@
+[
+  {
+    "artifact_id": "ioi_sentiment_dose",
+    "paper_label": "fig:dose",
+    "paper_display_name": "Figure 2",
+    "experiment_ids": [
+      "ioi_dose",
+      "sentiment_unpaired_dose"
+    ],
+    "record_paths": [
+      "data/measurements/ioi_dose/dose_scan.jsonl",
+      "data/measurements/sentiment_unpaired_dose/dose_scan.jsonl"
+    ]
+  },
+  {
+    "artifact_id": "independent_dose",
+    "paper_label": "fig:independent-dose",
+    "paper_display_name": "Figure 3",
+    "experiment_ids": [
+      "mcqa_humanities_head",
+      "mcqa_stem_head",
+      "refusal_head"
+    ],
+    "record_paths": [
+      "data/measurements/mcqa_humanities_head/dose_scan.jsonl",
+      "data/measurements/mcqa_humanities_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_humanities_head/readouts.jsonl",
+      "data/measurements/mcqa_humanities_head/reversal.jsonl",
+      "data/measurements/mcqa_humanities_head/run_metadata.json",
+      "data/measurements/mcqa_stem_head/dose_scan.jsonl",
+      "data/measurements/mcqa_stem_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_stem_head/readouts.jsonl",
+      "data/measurements/mcqa_stem_head/reversal.jsonl",
+      "data/measurements/refusal_head/dose_scan.jsonl",
+      "data/measurements/refusal_head/feedback_trajectories.jsonl",
+      "data/measurements/refusal_head/readouts.jsonl",
+      "data/measurements/refusal_head/reversal.jsonl",
+      "data/measurements/refusal_head/run_metadata.json"
+    ]
+  },
+  {
+    "artifact_id": "ioi_feedback",
+    "paper_label": "fig:closed_loop",
+    "paper_display_name": "Figure G.1",
+    "experiment_ids": [
+      "ioi_feedback"
+    ],
+    "record_paths": [
+      "data/measurements/ioi_feedback/feedback_trajectories.jsonl"
+    ]
+  },
+  {
+    "artifact_id": "ioi_recurrence",
+    "paper_label": "fig:driver-class-freq-app",
+    "paper_display_name": "Figure G.2",
+    "experiment_ids": [
+      "ioi_recurrence"
+    ],
+    "record_paths": [
+      "data/measurements/ioi_recurrence/supports.jsonl"
+    ]
+  }
+]

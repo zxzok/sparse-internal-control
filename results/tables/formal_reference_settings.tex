@@ -1,0 +1,22 @@
+\begin{tabular}{@{}p{0.14\linewidth}p{0.20\linewidth}p{0.58\linewidth}@{}}
+\toprule
+Setting type & Component & Setting \\
+\midrule
+Reference & Refit and certificate & Ridge and preservation weights
+$\lambda=\mu=1$; activation-energy bound $E\leq\kappa=2$;
+target criterion $\mathrm{Rel}_{\rm tar}(1)\leq0.4$;
+preservation bound $L_{\rm off}\leq0.001$ nat. \\
+Reference & Sparse selection & \DriverOMP\ residual tolerance
+$\varepsilon_{\rm lin}=0.05$ and improvement tolerance
+$\eta_{\rm tol}=10^{-3}$; \CoverageDriver\ coverage $\tau=0.95$.
+Denominator stabilizers $\delta_0=\eta_0=10^{-3}$; normalized
+marginal-gain threshold $g_{\min}=10^{-3}$.
+Uniform row weights $w_j=1/n$ for $j=1,\ldots,nr$ give
+$W_{\rm row}=\sum_jw_j=r$; Algorithm~\ref{alg:rewrite_coverage_driver}
+normalizes coverage by $W_{\rm row}$.
+Target normalization guard $\xi=10^{-6}$. \\
+Executed & IOI recurrence & Five seeds and five budgets
+$k\in\{3,5,8,12,16\}$ give 25 seed--budget configurations;
+consensus threshold $\pi^\star=0.6$. \\
+\bottomrule
+\end{tabular}

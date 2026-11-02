@@ -1,0 +1,10 @@
+{
+  "included": {
+    "formal_readout_vectors": 272,
+    "preservation_prompt_seed_scalars": 3072
+  },
+  "full_vocabulary_logits": {
+    "included": false,
+    "verification_scope": "Saved KL scalar aggregation only; no logit-to-KL recalculation."
+  }
+}

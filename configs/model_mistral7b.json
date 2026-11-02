@@ -1,0 +1,80 @@
+{
+  "experiment_id": "model_mistral7b",
+  "model": "Mistral-7B",
+  "panel": "4 Humanities questions; same panel",
+  "settings": "four option logits; three module types; exact checkpoint from actual metadata",
+  "direction_conditions": "P",
+  "seed_ids": [
+    0,
+    1,
+    2
+  ],
+  "record_paths": [
+    "data/measurements/model_mistral7b/nominal.jsonl"
+  ],
+  "input_manifest": "data/inputs/model_mistral7b/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 8,
+  "nominal_dose": 1.0,
+  "interventions": "data/interventions/model_mistral7b/interventions.jsonl",
+  "full_run": {
+    "module": "sparse_control.runners.implementations.module_nominal",
+    "arguments": [
+      "--model",
+      "mistralai/Mistral-7B-Instruct-v0.1",
+      "--device",
+      "mps",
+      "--batch-size",
+      "4",
+      "--seeds",
+      "0,1,2",
+      "--ks",
+      "8",
+      "--epsilon",
+      ".2",
+      "--ridge",
+      "1.0",
+      "--mcqa-source",
+      "mmlu_humanities",
+      "--methods",
+      "driver_omp,coverage_driver,top_attribution,random_matched"
+    ],
+    "output_flag": "--out",
+    "seed_argument": "--seeds"
+  },
+  "configuration_identity": "saved_command",
+  "model_asset_id": "mistralai/Mistral-7B-Instruct-v0.1",
+  "execution_profiles": [
+    "mps_module_bf16",
+    "cuda_module_bf16"
+  ],
+  "dtype": "bfloat16",
+  "readout": "option_logits_4",
+  "refit": {
+    "implementation": "coefficient_ridge",
+    "lambda": 1.0,
+    "row_normalization": "none",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "fixed_evaluation_available": false,
+  "available_stages": [
+    "full",
+    "fit"
+  ],
+  "fit_examples": 4,
+  "eval_examples": 4,
+  "candidate_count": 96,
+  "candidate_library": "resid_post_mlp_out_attn_out",
+  "direction_cache_microbatch": 4,
+  "direction_modes": [
+    "P"
+  ],
+  "methods": [
+    "driver_omp",
+    "coverage_driver",
+    "top_attribution",
+    "random_matched"
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "experiment_id": "ioi_backup",
+  "model": "GPT-2 small",
+  "panel": "separate 64-prompt panel",
+  "settings": "start L9.END.H9; add up to 6 sites; threshold=.3; max(abs(clean),1e-6); random reference k=6",
+  "direction_conditions": "P",
+  "seed_ids": [
+    0
+  ],
+  "record_paths": [
+    "data/measurements/ioi_backup/pointwise_errors.json"
+  ],
+  "input_manifest": "data/inputs/ioi_backup/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 7,
+  "nominal_dose": 1.0,
+  "interventions": null,
+  "full_run": {
+    "module": "sparse_control.runners.implementations.ioi_backup",
+    "arguments": [
+      "--model",
+      "gpt2",
+      "--device",
+      "mps",
+      "--batch-size",
+      "64",
+      "--seed",
+      "0",
+      "--ridge",
+      "1",
+      "--ioi-jsonl",
+      "data/inputs/ioi_backup/support_source.jsonl"
+    ],
+    "output_flag": "--out",
+    "seed_argument": "--seed"
+  },
+  "configuration_identity": "producer_and_record_parameters",
+  "model_asset_id": "gpt2",
+  "execution_profiles": [
+    "mps_head_fp32",
+    "cuda_head_fp32"
+  ],
+  "dtype": "float32",
+  "readout": "io_minus_subject_margin",
+  "refit": {
+    "implementation": "coefficient_ridge",
+    "lambda": 1.0,
+    "row_normalization": "none",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "fixed_evaluation_available": false,
+  "available_stages": [
+    "full",
+    "fit"
+  ],
+  "support_source": "data/inputs/ioi_backup/support_source.jsonl",
+  "methods": [
+    "driver_omp",
+    "random_matched"
+  ],
+  "direction_modes": [
+    "P"
+  ]
+}

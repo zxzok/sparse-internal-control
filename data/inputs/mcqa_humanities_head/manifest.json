@@ -1,0 +1,10 @@
+{
+  "input_set_id": "mcqa_humanities_head",
+  "files": [
+    "data/inputs/mcqa_humanities_head/batches.jsonl",
+    "data/inputs/mcqa_humanities_head/pair_manifests.jsonl"
+  ],
+  "tokenized_batches_available": true,
+  "construction_module": "sparse_control.tasks",
+  "unavailable_fields": []
+}

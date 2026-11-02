@@ -1,0 +1,38 @@
+{
+  "task": "refusal",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "model": "Qwen/Qwen3-1.7B",
+  "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "device": "mps",
+  "versions": {
+    "torch": "2.11.0",
+    "transformer-lens": "3.0.0",
+    "transformers": "5.6.2",
+    "numpy": "2.4.4",
+    "datasets": "4.8.4"
+  },
+  "expected_rows": 48,
+  "script_sha256": "b41949f001be73912f21a8de4a290adb3c3ffd45dce0f9a30857bfa9fac59315",
+  "started_unix": 1793547888.8655539,
+  "status": "COMPLETE",
+  "refit_or_reselection": false,
+  "compatibility_atol": 0.0001,
+  "compatibility_rtol": 0,
+  "model_dtype": "torch.float32",
+  "tokenizer_padding_side": "right",
+  "tokenizer_truncation_side": "right",
+  "elapsed_seconds": 23.878788232803345,
+  "applies_to": [
+    "readouts.jsonl"
+  ],
+  "scope": "fixed nominal-dose full-readout measurements only"
+}

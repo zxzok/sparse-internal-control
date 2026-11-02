@@ -1,0 +1,447 @@
+{
+  "artifact_id": "sentiment_fixed_dose",
+  "columns": [
+    "Method",
+    "k",
+    "Mode",
+    "Mean",
+    "SD",
+    "Seeds"
+  ],
+  "cells": [
+    [
+      "Driver-OMP",
+      3,
+      "P",
+      "0.3602",
+      "0.1887",
+      8
+    ],
+    [
+      "Driver-OMP",
+      3,
+      "F",
+      "0.3536",
+      "0.1723",
+      8
+    ],
+    [
+      "Driver-OMP",
+      5,
+      "P",
+      "0.4949",
+      "0.1142",
+      8
+    ],
+    [
+      "Driver-OMP",
+      5,
+      "F",
+      "0.4538",
+      "0.1586",
+      8
+    ],
+    [
+      "Driver-OMP",
+      8,
+      "P",
+      "0.5928",
+      "0.1053",
+      8
+    ],
+    [
+      "Driver-OMP",
+      8,
+      "F",
+      "0.5291",
+      "0.2137",
+      8
+    ],
+    [
+      "Coverage-Driver",
+      3,
+      "P",
+      "0.7687",
+      "0.1038",
+      8
+    ],
+    [
+      "Coverage-Driver",
+      3,
+      "F",
+      "0.8137",
+      "0.4851",
+      8
+    ],
+    [
+      "Coverage-Driver",
+      5,
+      "P",
+      "0.9542",
+      "0.0969",
+      8
+    ],
+    [
+      "Coverage-Driver",
+      5,
+      "F",
+      "0.8891",
+      "0.5155",
+      8
+    ],
+    [
+      "Coverage-Driver",
+      8,
+      "P",
+      "1.0311",
+      "0.1120",
+      8
+    ],
+    [
+      "Coverage-Driver",
+      8,
+      "F",
+      "0.9420",
+      "0.5354",
+      8
+    ],
+    [
+      "Top-k",
+      3,
+      "P",
+      "0.7804",
+      "0.1173",
+      8
+    ],
+    [
+      "Top-k",
+      3,
+      "F",
+      "0.8127",
+      "0.4852",
+      8
+    ],
+    [
+      "Top-k",
+      5,
+      "P",
+      "0.9328",
+      "0.1041",
+      8
+    ],
+    [
+      "Top-k",
+      5,
+      "F",
+      "0.8880",
+      "0.5157",
+      8
+    ],
+    [
+      "Top-k",
+      8,
+      "P",
+      "1.0325",
+      "0.1085",
+      8
+    ],
+    [
+      "Top-k",
+      8,
+      "F",
+      "0.9370",
+      "0.5262",
+      8
+    ],
+    [
+      "Random",
+      3,
+      "P",
+      "0.0745",
+      "0.1221",
+      8
+    ],
+    [
+      "Random",
+      3,
+      "F",
+      "0.0743",
+      "0.1072",
+      8
+    ],
+    [
+      "Random",
+      5,
+      "P",
+      "0.1065",
+      "0.1376",
+      8
+    ],
+    [
+      "Random",
+      5,
+      "F",
+      "0.0845",
+      "0.1030",
+      8
+    ],
+    [
+      "Random",
+      8,
+      "P",
+      "0.1532",
+      "0.1601",
+      8
+    ],
+    [
+      "Random",
+      8,
+      "F",
+      "0.1122",
+      "0.1246",
+      8
+    ]
+  ],
+  "numeric_rows": [
+    {
+      "method": "driver_omp",
+      "budget": 3,
+      "direction": "P",
+      "mean": 0.3601729939644204,
+      "sample_sd": 0.18867339017433077,
+      "n": 8,
+      "minimum": 0.08968307857823123,
+      "maximum": 0.6663371332150465
+    },
+    {
+      "method": "driver_omp",
+      "budget": 3,
+      "direction": "F",
+      "mean": 0.353569023886444,
+      "sample_sd": 0.17233877391322228,
+      "n": 8,
+      "minimum": 0.07797447805676978,
+      "maximum": 0.5899214983490993
+    },
+    {
+      "method": "driver_omp",
+      "budget": 5,
+      "direction": "P",
+      "mean": 0.4948809542343898,
+      "sample_sd": 0.11416629123607805,
+      "n": 8,
+      "minimum": 0.371338472695713,
+      "maximum": 0.7027222210228874
+    },
+    {
+      "method": "driver_omp",
+      "budget": 5,
+      "direction": "F",
+      "mean": 0.4537773161750155,
+      "sample_sd": 0.15863741915655963,
+      "n": 8,
+      "minimum": 0.19682001122005754,
+      "maximum": 0.678311983046715
+    },
+    {
+      "method": "driver_omp",
+      "budget": 8,
+      "direction": "P",
+      "mean": 0.59277761405283,
+      "sample_sd": 0.10531924835677159,
+      "n": 8,
+      "minimum": 0.41663176435845634,
+      "maximum": 0.7148122081826829
+    },
+    {
+      "method": "driver_omp",
+      "budget": 8,
+      "direction": "F",
+      "mean": 0.5290735755628517,
+      "sample_sd": 0.21365248854050897,
+      "n": 8,
+      "minimum": 0.19682001122005754,
+      "maximum": 0.904018325187895
+    },
+    {
+      "method": "coverage_driver",
+      "budget": 3,
+      "direction": "P",
+      "mean": 0.7687185743406081,
+      "sample_sd": 0.10382256180066797,
+      "n": 8,
+      "minimum": 0.6569588743018095,
+      "maximum": 0.9581667918688194
+    },
+    {
+      "method": "coverage_driver",
+      "budget": 3,
+      "direction": "F",
+      "mean": 0.8136618502338685,
+      "sample_sd": 0.4850532488856924,
+      "n": 8,
+      "minimum": 0.2528474078122149,
+      "maximum": 1.6017465770936847
+    },
+    {
+      "method": "coverage_driver",
+      "budget": 5,
+      "direction": "P",
+      "mean": 0.9541848217722735,
+      "sample_sd": 0.09686868300190433,
+      "n": 8,
+      "minimum": 0.818835445579747,
+      "maximum": 1.1337597457798305
+    },
+    {
+      "method": "coverage_driver",
+      "budget": 5,
+      "direction": "F",
+      "mean": 0.8890517130553921,
+      "sample_sd": 0.5154792688089358,
+      "n": 8,
+      "minimum": 0.2889919155393277,
+      "maximum": 1.7405919693389864
+    },
+    {
+      "method": "coverage_driver",
+      "budget": 8,
+      "direction": "P",
+      "mean": 1.0311401130934736,
+      "sample_sd": 0.11197827842365213,
+      "n": 8,
+      "minimum": 0.8895938962506308,
+      "maximum": 1.2322827182324376
+    },
+    {
+      "method": "coverage_driver",
+      "budget": 8,
+      "direction": "F",
+      "mean": 0.9419611906326091,
+      "sample_sd": 0.5354135895022254,
+      "n": 8,
+      "minimum": 0.3232790975038703,
+      "maximum": 1.844836929728679
+    },
+    {
+      "method": "top_attribution",
+      "budget": 3,
+      "direction": "P",
+      "mean": 0.7803723034631926,
+      "sample_sd": 0.11732553411161342,
+      "n": 8,
+      "minimum": 0.6569588743018095,
+      "maximum": 0.9581667918688194
+    },
+    {
+      "method": "top_attribution",
+      "budget": 3,
+      "direction": "F",
+      "mean": 0.812682939006495,
+      "sample_sd": 0.4852230074174938,
+      "n": 8,
+      "minimum": 0.2528474078122149,
+      "maximum": 1.6017465770936847
+    },
+    {
+      "method": "top_attribution",
+      "budget": 5,
+      "direction": "P",
+      "mean": 0.9328084981450334,
+      "sample_sd": 0.10410110947636282,
+      "n": 8,
+      "minimum": 0.8188357429731297,
+      "maximum": 1.1337597457798305
+    },
+    {
+      "method": "top_attribution",
+      "budget": 5,
+      "direction": "F",
+      "mean": 0.8880014378345616,
+      "sample_sd": 0.5157444960951182,
+      "n": 8,
+      "minimum": 0.28899198988767333,
+      "maximum": 1.740591517311658
+    },
+    {
+      "method": "top_attribution",
+      "budget": 8,
+      "direction": "P",
+      "mean": 1.0325045867829292,
+      "sample_sd": 0.1084983079813076,
+      "n": 8,
+      "minimum": 0.8843011862189334,
+      "maximum": 1.2323855544496582
+    },
+    {
+      "method": "top_attribution",
+      "budget": 8,
+      "direction": "F",
+      "mean": 0.9370372044901443,
+      "sample_sd": 0.5261863326267932,
+      "n": 8,
+      "minimum": 0.32252862530265725,
+      "maximum": 1.8272178085206587
+    },
+    {
+      "method": "random_matched",
+      "budget": 3,
+      "direction": "P",
+      "mean": 0.07446899623659363,
+      "sample_sd": 0.12212098904760531,
+      "n": 8,
+      "minimum": -0.0006532979377478898,
+      "maximum": 0.3414882712833148
+    },
+    {
+      "method": "random_matched",
+      "budget": 3,
+      "direction": "F",
+      "mean": 0.07426597150906625,
+      "sample_sd": 0.10715288083703496,
+      "n": 8,
+      "minimum": 0.0003737151099268515,
+      "maximum": 0.26963979594164844
+    },
+    {
+      "method": "random_matched",
+      "budget": 5,
+      "direction": "P",
+      "mean": 0.1064833430513392,
+      "sample_sd": 0.1375872268913779,
+      "n": 8,
+      "minimum": -0.002786610754935291,
+      "maximum": 0.3418776762589466
+    },
+    {
+      "method": "random_matched",
+      "budget": 5,
+      "direction": "F",
+      "mean": 0.084506585176455,
+      "sample_sd": 0.10299054523012947,
+      "n": 8,
+      "minimum": 0.00040700087228910745,
+      "maximum": 0.26912627864579064
+    },
+    {
+      "method": "random_matched",
+      "budget": 8,
+      "direction": "P",
+      "mean": 0.15322757659516206,
+      "sample_sd": 0.1601243848911885,
+      "n": 8,
+      "minimum": -0.0012417501999604592,
+      "maximum": 0.43068223124510985
+    },
+    {
+      "method": "random_matched",
+      "budget": 8,
+      "direction": "F",
+      "mean": 0.11220071305451823,
+      "sample_sd": 0.12463508053830578,
+      "n": 8,
+      "minimum": 0.0005252158620624753,
+      "maximum": 0.36529920945762884
+    }
+  ]
+}

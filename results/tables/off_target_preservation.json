@@ -1,0 +1,293 @@
+{
+  "artifact_id": "off_target_preservation",
+  "columns": [
+    "Task",
+    "Method",
+    "Mean",
+    "Median",
+    "P95",
+    "Max",
+    "Mean seeds",
+    "All seeds"
+  ],
+  "cells": [
+    [
+      "Humanities",
+      "Driver-OMP",
+      "0.496530",
+      "0.050394",
+      "2.349920",
+      "15.5523",
+      "0/8",
+      "0/8"
+    ],
+    [
+      "Humanities",
+      "Coverage-Driver",
+      "0.109692",
+      "0.050405",
+      "0.392607",
+      "1.0154",
+      "0/8",
+      "0/8"
+    ],
+    [
+      "Humanities",
+      "Top-k",
+      "0.115396",
+      "0.056724",
+      "0.478003",
+      "0.6963",
+      "0/8",
+      "0/8"
+    ],
+    [
+      "STEM",
+      "Driver-OMP",
+      "0.581701",
+      "0.051584",
+      "3.088410",
+      "17.7225",
+      "0/8",
+      "0/8"
+    ],
+    [
+      "STEM",
+      "Coverage-Driver",
+      "0.128467",
+      "0.060374",
+      "0.465265",
+      "1.0098",
+      "0/8",
+      "0/8"
+    ],
+    [
+      "STEM",
+      "Top-k",
+      "0.118910",
+      "0.055203",
+      "0.511026",
+      "0.7559",
+      "0/8",
+      "0/8"
+    ],
+    [
+      "Sentiment",
+      "Driver-OMP",
+      "0.005527",
+      "0.004959",
+      "0.011119",
+      "0.0286",
+      "0/8",
+      "0/8"
+    ],
+    [
+      "Sentiment",
+      "Coverage-Driver",
+      "0.011015",
+      "0.009627",
+      "0.024779",
+      "0.0381",
+      "0/8",
+      "0/8"
+    ],
+    [
+      "Sentiment",
+      "Top-k",
+      "0.011567",
+      "0.010322",
+      "0.024746",
+      "0.0387",
+      "0/8",
+      "0/8"
+    ],
+    [
+      "Refusal",
+      "Driver-OMP",
+      "0.001080",
+      "0.000174",
+      "0.005086",
+      "0.0410",
+      "4/8",
+      "2/8"
+    ],
+    [
+      "Refusal",
+      "Coverage-Driver",
+      "0.008658",
+      "0.002119",
+      "0.035977",
+      "0.1698",
+      "0/8",
+      "0/8"
+    ],
+    [
+      "Refusal",
+      "Top-k",
+      "0.007986",
+      "0.001948",
+      "0.036849",
+      "0.1572",
+      "0/8",
+      "0/8"
+    ]
+  ],
+  "numeric_rows": [
+    {
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "mean_kl": 0.49652989345549575,
+      "median_kl": 0.050393972830012665,
+      "p95_kl": 2.3499202663499257,
+      "max_kl": 15.552269893752547,
+      "prompt_passes": 0,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 0,
+      "all_prompt_seed_passes": 0
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "mean_kl": 0.10969202421053531,
+      "median_kl": 0.050404808640515025,
+      "p95_kl": 0.39260650690423393,
+      "max_kl": 1.0154375915809533,
+      "prompt_passes": 2,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 0,
+      "all_prompt_seed_passes": 0
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "mean_kl": 0.11539649090830187,
+      "median_kl": 0.05672363845461668,
+      "p95_kl": 0.47800283714918707,
+      "max_kl": 0.6963423276636456,
+      "prompt_passes": 3,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 0,
+      "all_prompt_seed_passes": 0
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "mean_kl": 0.5817014304239642,
+      "median_kl": 0.05158387425270705,
+      "p95_kl": 3.0884100150171734,
+      "max_kl": 17.722482301402597,
+      "prompt_passes": 0,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 0,
+      "all_prompt_seed_passes": 0
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "mean_kl": 0.1284666679365419,
+      "median_kl": 0.06037422903976462,
+      "p95_kl": 0.46526490107151713,
+      "max_kl": 1.009790729299966,
+      "prompt_passes": 3,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 0,
+      "all_prompt_seed_passes": 0
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "mean_kl": 0.11891045061311076,
+      "median_kl": 0.055203261384047485,
+      "p95_kl": 0.5110255744660843,
+      "max_kl": 0.7558936134081292,
+      "prompt_passes": 5,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 0,
+      "all_prompt_seed_passes": 0
+    },
+    {
+      "task": "sentiment",
+      "method": "driver_omp",
+      "mean_kl": 0.005526658777666563,
+      "median_kl": 0.004958759810162041,
+      "p95_kl": 0.011119309434544974,
+      "max_kl": 0.028638772567115375,
+      "prompt_passes": 0,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 0,
+      "all_prompt_seed_passes": 0
+    },
+    {
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "mean_kl": 0.011014750027337669,
+      "median_kl": 0.009627478640273522,
+      "p95_kl": 0.024779019707919212,
+      "max_kl": 0.038091449077687065,
+      "prompt_passes": 0,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 0,
+      "all_prompt_seed_passes": 0
+    },
+    {
+      "task": "sentiment",
+      "method": "top_attribution",
+      "mean_kl": 0.011566673867990778,
+      "median_kl": 0.010322127804253612,
+      "p95_kl": 0.02474649797474429,
+      "max_kl": 0.03872564804497844,
+      "prompt_passes": 0,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 0,
+      "all_prompt_seed_passes": 0
+    },
+    {
+      "task": "refusal",
+      "method": "driver_omp",
+      "mean_kl": 0.0010804161856183656,
+      "median_kl": 0.0001738377193863501,
+      "p95_kl": 0.005085575712947634,
+      "max_kl": 0.040965739962212686,
+      "prompt_passes": 196,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 4,
+      "all_prompt_seed_passes": 2
+    },
+    {
+      "task": "refusal",
+      "method": "coverage_driver",
+      "mean_kl": 0.008657797462662657,
+      "median_kl": 0.002119159188566807,
+      "p95_kl": 0.03597707904179307,
+      "max_kl": 0.1698153615366759,
+      "prompt_passes": 82,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 0,
+      "all_prompt_seed_passes": 0
+    },
+    {
+      "task": "refusal",
+      "method": "top_attribution",
+      "mean_kl": 0.007986085916445337,
+      "median_kl": 0.0019478629359639434,
+      "p95_kl": 0.03684851638779052,
+      "max_kl": 0.1571916896504026,
+      "prompt_passes": 93,
+      "total": 256,
+      "seed_total": 8,
+      "mean_kl_seed_passes": 0,
+      "all_prompt_seed_passes": 0
+    }
+  ]
+}

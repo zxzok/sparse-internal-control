@@ -1,0 +1,71 @@
+{
+  "experiment_id": "ioi_reuse",
+  "model": "GPT-2 small",
+  "panel": "split and exact IDs from recorded IOI reuse inputs",
+  "settings": "pointwise clean-normalized recovery; refit-beta vs fixed-beta; actual denominator floor and failure threshold from producer",
+  "direction_conditions": "P in both conditions",
+  "seed_ids": [
+    0,
+    1,
+    2
+  ],
+  "record_paths": [
+    "data/measurements/ioi_reuse/reuse.jsonl"
+  ],
+  "input_manifest": "data/inputs/ioi_reuse/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 8,
+  "nominal_dose": 1.0,
+  "interventions": "data/interventions/ioi_reuse/interventions.jsonl",
+  "full_run": {
+    "module": "sparse_control.runners.implementations.ioi_reuse",
+    "arguments": [
+      "--model",
+      "gpt2",
+      "--device",
+      "mps",
+      "--batch-size",
+      "64",
+      "--seeds",
+      "0,1,2",
+      "--ks",
+      "8",
+      "--ridge",
+      "1",
+      "--variants",
+      "id_test"
+    ],
+    "output_flag": "--out",
+    "seed_argument": "--seeds"
+  },
+  "configuration_identity": "producer_and_record_parameters",
+  "model_asset_id": "gpt2",
+  "execution_profiles": [
+    "mps_head_fp32",
+    "cuda_head_fp32"
+  ],
+  "dtype": "float32",
+  "readout": "io_minus_subject_margin",
+  "refit": {
+    "implementation": "coefficient_ridge",
+    "lambda": 1.0,
+    "row_normalization": "none",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "fixed_evaluation_available": false,
+  "available_stages": [
+    "full",
+    "fit"
+  ],
+  "methods": [
+    "driver_omp",
+    "coverage_driver",
+    "top_attribution",
+    "random_matched"
+  ],
+  "direction_modes": [
+    "P"
+  ]
+}

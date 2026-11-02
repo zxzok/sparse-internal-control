@@ -1,0 +1,59 @@
+{
+  "models": {
+    "gpt2": {
+      "model_id": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+      "tokenizer_revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+      "source_url": "https://huggingface.co/gpt2/tree/607a30d783dfa663caf39e06633721c8d4cfcd7e",
+      "license": "mit",
+      "weights_included": false,
+      "revision_binding": "execution_asset; exact record-producing revision is not recorded for every series"
+    },
+    "Qwen/Qwen3-4B": {
+      "model_id": "Qwen/Qwen3-4B",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "tokenizer_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "source_url": "https://huggingface.co/Qwen/Qwen3-4B/tree/1cfa9a7208912126459214e8b04321603b3df60c",
+      "license": "apache-2.0",
+      "weights_included": false,
+      "revision_binding": "measurement_metadata"
+    },
+    "Qwen/Qwen3-1.7B": {
+      "model_id": "Qwen/Qwen3-1.7B",
+      "revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "tokenizer_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "source_url": "https://huggingface.co/Qwen/Qwen3-1.7B/tree/70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+      "license": "apache-2.0",
+      "weights_included": false,
+      "revision_binding": "measurement_metadata"
+    },
+    "Qwen/Qwen3-8B": {
+      "model_id": "Qwen/Qwen3-8B",
+      "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "tokenizer_revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "source_url": "https://huggingface.co/Qwen/Qwen3-8B/tree/b968826d9c46dd6066d109eabc6255188de91218",
+      "license": "apache-2.0",
+      "weights_included": false,
+      "revision_binding": "execution_asset; exact record-producing revision is not recorded for every series"
+    },
+    "mistralai/Mistral-7B-Instruct-v0.1": {
+      "model_id": "mistralai/Mistral-7B-Instruct-v0.1",
+      "revision": "ec5deb64f2c6e6fa90c1abf74a91d5c93a9669ca",
+      "tokenizer_revision": "ec5deb64f2c6e6fa90c1abf74a91d5c93a9669ca",
+      "source_url": "https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1/tree/ec5deb64f2c6e6fa90c1abf74a91d5c93a9669ca",
+      "license": "apache-2.0",
+      "weights_included": false,
+      "revision_binding": "execution_asset; exact record-producing revision is not recorded for every series"
+    }
+  },
+  "datasets": {
+    "cais/mmlu": {
+      "dataset_id": "cais/mmlu",
+      "revision": "c30699e8356da336a370243923dbaf21066bb9fe",
+      "split": "test",
+      "license": "mit",
+      "source_url": "https://huggingface.co/datasets/cais/mmlu"
+    }
+  },
+  "weights_included": false
+}

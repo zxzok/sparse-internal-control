@@ -1,0 +1,33 @@
+{
+  "task": "mcqa_module_humanities",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "model": "Qwen/Qwen3-4B",
+  "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+  "device": "mps",
+  "versions": {
+    "torch": "2.11.0",
+    "transformer-lens": "3.0.0",
+    "transformers": "5.6.2",
+    "numpy": "2.4.4",
+    "datasets": "4.8.4"
+  },
+  "expected_rows": 15,
+  "script_sha256": "b41949f001be73912f21a8de4a290adb3c3ffd45dce0f9a30857bfa9fac59315",
+  "started_unix": 1793547715.2202408,
+  "status": "COMPLETE",
+  "refit_or_reselection": false,
+  "compatibility_atol": 0.0001,
+  "compatibility_rtol": 0,
+  "model_dtype": "torch.bfloat16",
+  "tokenizer_padding_side": "right",
+  "tokenizer_truncation_side": "right",
+  "elapsed_seconds": 68.13863396644592,
+  "applies_to": [
+    "readouts.jsonl"
+  ],
+  "scope": "fixed nominal-dose full-readout measurements only"
+}

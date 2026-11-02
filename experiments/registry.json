@@ -1,0 +1,655 @@
+[
+  {
+    "experiment_id": "ioi_nominal",
+    "config_path": "configs/ioi_nominal.json",
+    "record_paths": [
+      "data/measurements/ioi_nominal/nominal.jsonl",
+      "data/measurements/ioi_nominal/readouts.jsonl",
+      "data/measurements/ioi_nominal/reversal.jsonl",
+      "data/measurements/ioi_nominal/run_metadata.json"
+    ],
+    "available_stages": [
+      "full",
+      "fit",
+      "nominal",
+      "reversal"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "input_manifest": "data/inputs/ioi_nominal/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution",
+      "random_matched",
+      "actual_gain_greedy"
+    ],
+    "direction_modes": [
+      "P"
+    ],
+    "readout": "io_minus_subject_margin"
+  },
+  {
+    "experiment_id": "mcqa_humanities_nominal",
+    "config_path": "configs/mcqa_humanities_nominal.json",
+    "record_paths": [
+      "data/measurements/mcqa_humanities_nominal/nominal.jsonl",
+      "data/measurements/mcqa_humanities_nominal/readouts.jsonl",
+      "data/measurements/mcqa_humanities_nominal/run_metadata.json"
+    ],
+    "available_stages": [
+      "full",
+      "fit",
+      "nominal"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2
+    ],
+    "input_manifest": "data/inputs/mcqa_humanities_nominal/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution",
+      "random_matched",
+      "actual_gain_greedy"
+    ],
+    "direction_modes": [
+      "P"
+    ],
+    "readout": "option_logits_4"
+  },
+  {
+    "experiment_id": "mcqa_stem_nominal",
+    "config_path": "configs/mcqa_stem_nominal.json",
+    "record_paths": [
+      "data/measurements/mcqa_stem_nominal/nominal.jsonl",
+      "data/measurements/mcqa_stem_nominal/readouts.jsonl",
+      "data/measurements/mcqa_stem_nominal/run_metadata.json"
+    ],
+    "available_stages": [
+      "full",
+      "fit",
+      "nominal"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2
+    ],
+    "input_manifest": "data/inputs/mcqa_stem_nominal/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution",
+      "random_matched",
+      "actual_gain_greedy"
+    ],
+    "direction_modes": [
+      "P"
+    ],
+    "readout": "option_logits_4"
+  },
+  {
+    "experiment_id": "mcqa_humanities_head",
+    "config_path": "configs/mcqa_humanities_head.json",
+    "record_paths": [
+      "data/measurements/mcqa_humanities_head/dose_scan.jsonl",
+      "data/measurements/mcqa_humanities_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_humanities_head/readouts.jsonl",
+      "data/measurements/mcqa_humanities_head/reversal.jsonl",
+      "data/measurements/mcqa_humanities_head/run_metadata.json"
+    ],
+    "available_stages": [
+      "full",
+      "fit",
+      "nominal",
+      "dose",
+      "reversal",
+      "feedback"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "input_manifest": "data/inputs/mcqa_humanities_head/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution"
+    ],
+    "direction_modes": [
+      "P",
+      "F"
+    ],
+    "readout": "correct_minus_mean_wrong_margin"
+  },
+  {
+    "experiment_id": "mcqa_stem_head",
+    "config_path": "configs/mcqa_stem_head.json",
+    "record_paths": [
+      "data/measurements/mcqa_stem_head/dose_scan.jsonl",
+      "data/measurements/mcqa_stem_head/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_stem_head/readouts.jsonl",
+      "data/measurements/mcqa_stem_head/reversal.jsonl"
+    ],
+    "available_stages": [
+      "full",
+      "fit",
+      "nominal",
+      "dose",
+      "reversal",
+      "feedback"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "input_manifest": "data/inputs/mcqa_stem_head/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution"
+    ],
+    "direction_modes": [
+      "P",
+      "F"
+    ],
+    "readout": "correct_minus_mean_wrong_margin"
+  },
+  {
+    "experiment_id": "sentiment_paired",
+    "config_path": "configs/sentiment_paired.json",
+    "record_paths": [
+      "data/measurements/sentiment_paired/fixed_dose.jsonl",
+      "data/measurements/sentiment_paired/readouts.jsonl",
+      "data/measurements/sentiment_paired/reversal.jsonl"
+    ],
+    "available_stages": [
+      "full",
+      "fit",
+      "nominal",
+      "reversal"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "input_manifest": "data/inputs/sentiment_paired/manifest.json",
+    "feedback": "not_evaluated",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution",
+      "random_matched"
+    ],
+    "direction_modes": [
+      "P",
+      "F"
+    ],
+    "readout": "word_set_margin"
+  },
+  {
+    "experiment_id": "refusal_head",
+    "config_path": "configs/refusal_head.json",
+    "record_paths": [
+      "data/measurements/refusal_head/dose_scan.jsonl",
+      "data/measurements/refusal_head/feedback_trajectories.jsonl",
+      "data/measurements/refusal_head/readouts.jsonl",
+      "data/measurements/refusal_head/reversal.jsonl",
+      "data/measurements/refusal_head/run_metadata.json"
+    ],
+    "available_stages": [
+      "full",
+      "fit",
+      "nominal",
+      "dose",
+      "reversal",
+      "feedback"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "input_manifest": "data/inputs/refusal_head/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution"
+    ],
+    "direction_modes": [
+      "P",
+      "F"
+    ],
+    "readout": "word_set_margin"
+  },
+  {
+    "experiment_id": "ioi_feedback",
+    "config_path": "configs/ioi_feedback.json",
+    "record_paths": [
+      "data/measurements/ioi_feedback/feedback_trajectories.jsonl"
+    ],
+    "available_stages": [
+      "full",
+      "fit"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2
+    ],
+    "input_manifest": "data/inputs/ioi_feedback/manifest.json",
+    "methods": [
+      "driver_omp"
+    ],
+    "direction_modes": [
+      "P"
+    ],
+    "readout": "io_minus_subject_margin"
+  },
+  {
+    "experiment_id": "ioi_dose",
+    "config_path": "configs/ioi_dose.json",
+    "record_paths": [
+      "data/measurements/ioi_dose/dose_scan.jsonl"
+    ],
+    "available_stages": [
+      "full",
+      "fit"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2
+    ],
+    "input_manifest": "data/inputs/ioi_dose/manifest.json",
+    "methods": [
+      "driver_omp",
+      "random_matched"
+    ],
+    "direction_modes": [
+      "P"
+    ],
+    "readout": "io_minus_subject_margin"
+  },
+  {
+    "experiment_id": "sentiment_unpaired_dose",
+    "config_path": "configs/sentiment_unpaired_dose.json",
+    "record_paths": [
+      "data/measurements/sentiment_unpaired_dose/dose_scan.jsonl"
+    ],
+    "available_stages": [
+      "full",
+      "fit"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2
+    ],
+    "input_manifest": "data/inputs/sentiment_unpaired_dose/manifest.json",
+    "feedback": "not_evaluated",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution",
+      "random_matched"
+    ],
+    "direction_modes": [
+      "F"
+    ],
+    "readout": "word_set_margin"
+  },
+  {
+    "experiment_id": "preservation",
+    "config_path": "configs/preservation.json",
+    "record_paths": [
+      "data/measurements/preservation/mcqa_humanities.jsonl",
+      "data/measurements/preservation/mcqa_stem.jsonl",
+      "data/measurements/preservation/refusal.jsonl",
+      "data/measurements/preservation/sentiment.jsonl"
+    ],
+    "available_stages": [
+      "preservation"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "input_manifest": "data/inputs/preservation/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution"
+    ],
+    "readout": "final_valid_token_full_vocabulary_distribution"
+  },
+  {
+    "experiment_id": "mcqa_humanities_reuse",
+    "config_path": "configs/mcqa_humanities_reuse.json",
+    "record_paths": [
+      "data/measurements/mcqa_humanities_reuse/reuse.jsonl"
+    ],
+    "available_stages": [
+      "full",
+      "fit"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "input_manifest": "data/inputs/mcqa_humanities_reuse/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution",
+      "random_matched"
+    ],
+    "direction_modes": [
+      "P",
+      "F"
+    ],
+    "readout": "correct_minus_mean_wrong_margin"
+  },
+  {
+    "experiment_id": "mcqa_stem_reuse",
+    "config_path": "configs/mcqa_stem_reuse.json",
+    "record_paths": [
+      "data/measurements/mcqa_stem_reuse/reuse.jsonl"
+    ],
+    "available_stages": [
+      "full",
+      "fit"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "input_manifest": "data/inputs/mcqa_stem_reuse/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution",
+      "random_matched"
+    ],
+    "direction_modes": [
+      "P",
+      "F"
+    ],
+    "readout": "correct_minus_mean_wrong_margin"
+  },
+  {
+    "experiment_id": "ioi_reuse",
+    "config_path": "configs/ioi_reuse.json",
+    "record_paths": [
+      "data/measurements/ioi_reuse/reuse.jsonl"
+    ],
+    "available_stages": [
+      "full",
+      "fit"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2
+    ],
+    "input_manifest": "data/inputs/ioi_reuse/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution",
+      "random_matched"
+    ],
+    "direction_modes": [
+      "P"
+    ],
+    "readout": "io_minus_subject_margin"
+  },
+  {
+    "experiment_id": "ioi_recurrence",
+    "config_path": "configs/ioi_recurrence.json",
+    "record_paths": [
+      "data/measurements/ioi_recurrence/supports.jsonl"
+    ],
+    "available_stages": [
+      "full",
+      "fit"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "input_manifest": "data/inputs/ioi_recurrence/manifest.json",
+    "methods": [
+      "driver_omp"
+    ],
+    "direction_modes": [
+      "P"
+    ],
+    "readout": "io_minus_subject_margin"
+  },
+  {
+    "experiment_id": "ioi_backup",
+    "config_path": "configs/ioi_backup.json",
+    "record_paths": [
+      "data/measurements/ioi_backup/pointwise_errors.json"
+    ],
+    "available_stages": [
+      "full",
+      "fit"
+    ],
+    "seed_ids": [
+      0
+    ],
+    "input_manifest": "data/inputs/ioi_backup/manifest.json",
+    "methods": [
+      "driver_omp",
+      "random_matched"
+    ],
+    "direction_modes": [
+      "P"
+    ],
+    "readout": "io_minus_subject_margin"
+  },
+  {
+    "experiment_id": "model_qwen3_8b",
+    "config_path": "configs/model_qwen3_8b.json",
+    "record_paths": [
+      "data/measurements/model_qwen3_8b/nominal.jsonl"
+    ],
+    "available_stages": [
+      "full",
+      "fit"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "input_manifest": "data/inputs/model_qwen3_8b/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution",
+      "random_matched"
+    ],
+    "direction_modes": [
+      "P"
+    ],
+    "readout": "option_logits_4"
+  },
+  {
+    "experiment_id": "model_mistral7b",
+    "config_path": "configs/model_mistral7b.json",
+    "record_paths": [
+      "data/measurements/model_mistral7b/nominal.jsonl"
+    ],
+    "available_stages": [
+      "full",
+      "fit"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2
+    ],
+    "input_manifest": "data/inputs/model_mistral7b/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution",
+      "random_matched"
+    ],
+    "direction_modes": [
+      "P"
+    ],
+    "readout": "option_logits_4"
+  },
+  {
+    "experiment_id": "refusal_generation",
+    "config_path": "configs/refusal_generation.json",
+    "record_paths": [
+      "data/measurements/refusal_generation/generation.jsonl"
+    ],
+    "available_stages": [
+      "generation"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "input_manifest": "data/inputs/refusal_generation/manifest.json",
+    "methods": [
+      "baseline_no_patch",
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution"
+    ],
+    "direction_modes": [
+      "F"
+    ],
+    "readout": "16_token_greedy_continuation_and_lexical_flags"
+  },
+  {
+    "experiment_id": "refusal_single_site",
+    "config_path": "configs/refusal_single_site.json",
+    "record_paths": [
+      "data/measurements/refusal_single_site/axes.jsonl",
+      "data/measurements/refusal_single_site/preservation.jsonl"
+    ],
+    "available_stages": [
+      "dose",
+      "reversal",
+      "feedback",
+      "preservation"
+    ],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "input_manifest": "data/inputs/refusal_single_site/manifest.json",
+    "methods": [
+      "L15.H0 single-site reference"
+    ],
+    "direction_modes": [
+      "P",
+      "F"
+    ],
+    "readout": "word_set_margin"
+  },
+  {
+    "experiment_id": "formal_reachability",
+    "config_path": "configs/formal_reachability.json",
+    "record_paths": [
+      "data/measurements/formal_reachability/readouts.jsonl"
+    ],
+    "available_stages": [],
+    "seed_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "input_manifest": "data/inputs/formal_reachability/manifest.json",
+    "methods": [
+      "driver_omp",
+      "coverage_driver",
+      "top_attribution",
+      "random_matched",
+      "actual_gain_greedy"
+    ],
+    "direction_modes": [
+      "P",
+      "F"
+    ],
+    "readout": "series_specific_complete_source_target_patched_vectors"
+  }
+]

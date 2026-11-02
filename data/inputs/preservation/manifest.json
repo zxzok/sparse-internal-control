@@ -1,0 +1,11 @@
+{
+  "input_set_id": "preservation",
+  "files": [
+    "data/inputs/preservation/panel.json"
+  ],
+  "tokenized_batches_available": false,
+  "construction_module": "sparse_control.tasks",
+  "unavailable_fields": [
+    "complete saved tokenized batches"
+  ]
+}

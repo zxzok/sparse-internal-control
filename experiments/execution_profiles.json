@@ -1,0 +1,104 @@
+{
+  "mps_head_fp32": {
+    "backend": "mps",
+    "dtype": "float32",
+    "versions": {
+      "torch": "2.11.0",
+      "transformer-lens": "3.0.0",
+      "transformers": "5.6.2",
+      "numpy": "2.4.4",
+      "datasets": "4.8.4"
+    },
+    "python": null,
+    "loader": "TransformerLens",
+    "attention_implementation": null,
+    "tokenizer_padding_side": "right",
+    "tokenizer_truncation_side": "right",
+    "identity_scope": "explicit measurement/re-execution profile; not a universal identity assertion for saved series",
+    "verified_full_campaign": false,
+    "python_recorded": "not_recorded",
+    "model_loader_options": {
+      "fold_ln": true,
+      "center_writing_weights": true,
+      "center_unembed": true,
+      "fold_value_biases": true,
+      "refactor_factored_attn_matrices": false
+    },
+    "loader_options_scope": "Explicit re-execution options; the complete loader-option record is unavailable for some saved series."
+  },
+  "mps_module_bf16": {
+    "backend": "mps",
+    "dtype": "bfloat16",
+    "versions": {
+      "torch": "2.11.0",
+      "transformer-lens": "3.0.0",
+      "transformers": "5.6.2",
+      "numpy": "2.4.4",
+      "datasets": "4.8.4"
+    },
+    "python": null,
+    "loader": "HuggingFace",
+    "attention_implementation": "eager",
+    "tokenizer_padding_side": "right",
+    "tokenizer_truncation_side": "right",
+    "identity_scope": "explicit measurement/re-execution profile; not a universal identity assertion for saved series",
+    "verified_full_campaign": false,
+    "python_recorded": "not_recorded",
+    "model_loader_options": {
+      "attention_implementation": "eager",
+      "torch_dtype": "bfloat16"
+    },
+    "loader_options_scope": "Explicit re-execution options; the complete loader-option record is unavailable for some saved series."
+  },
+  "cuda_head_fp32": {
+    "backend": "cuda",
+    "dtype": "float32",
+    "versions": {
+      "torch": "2.10.0",
+      "transformer-lens": "3.0.0",
+      "transformers": "5.5.3",
+      "numpy": "2.3.5",
+      "datasets": "4.8.4"
+    },
+    "python": null,
+    "loader": "TransformerLens",
+    "attention_implementation": null,
+    "tokenizer_padding_side": "right",
+    "tokenizer_truncation_side": "right",
+    "identity_scope": "explicit measurement/re-execution profile; not a universal identity assertion for saved series",
+    "verified_full_campaign": false,
+    "python_recorded": "not_recorded",
+    "model_loader_options": {
+      "fold_ln": true,
+      "center_writing_weights": true,
+      "center_unembed": true,
+      "fold_value_biases": true,
+      "refactor_factored_attn_matrices": false
+    },
+    "loader_options_scope": "Explicit re-execution options; the complete loader-option record is unavailable for some saved series."
+  },
+  "cuda_module_bf16": {
+    "backend": "cuda",
+    "dtype": "bfloat16",
+    "versions": {
+      "torch": "2.10.0",
+      "transformer-lens": "3.0.0",
+      "transformers": "5.5.3",
+      "numpy": "2.3.5",
+      "datasets": "4.8.4"
+    },
+    "python": null,
+    "loader": "HuggingFace",
+    "attention_implementation": "eager",
+    "tokenizer_padding_side": "right",
+    "tokenizer_truncation_side": "right",
+    "identity_scope": "explicit measurement/re-execution profile; not a universal identity assertion for saved series",
+    "verified_full_campaign": false,
+    "python_recorded": "not_recorded",
+    "model_loader_options": {
+      "attention_implementation": "eager",
+      "torch_dtype": "bfloat16"
+    },
+    "loader_options_scope": "Explicit re-execution options; the complete loader-option record is unavailable for some saved series."
+  }
+}

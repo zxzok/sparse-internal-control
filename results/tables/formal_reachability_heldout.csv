@@ -1,0 +1,13 @@
+Task,Method,P,F
+Humanities,Driver-OMP,0.495 ± 0.428 (6/8),1.009 ± 0.048 (0/8)
+Humanities,Coverage-Driver,0.188 ± 0.072 (8/8),1.012 ± 0.058 (0/8)
+Humanities,Top-k,0.192 ± 0.071 (8/8),1.010 ± 0.055 (0/8)
+STEM,Driver-OMP,0.497 ± 0.439 (6/8),1.016 ± 0.048 (0/8)
+STEM,Coverage-Driver,0.169 ± 0.067 (8/8),1.031 ± 0.053 (0/8)
+STEM,Top-k,0.170 ± 0.046 (8/8),1.030 ± 0.051 (0/8)
+Sentiment,Driver-OMP,0.445 ± 0.088 (3/8),0.766 ± 0.065 (0/8)
+Sentiment,Coverage-Driver,0.171 ± 0.084 (8/8),0.746 ± 0.056 (0/8)
+Sentiment,Top-k,0.167 ± 0.084 (8/8),0.742 ± 0.052 (0/8)
+Refusal,Driver-OMP,0.932 ± 0.045 (0/8),0.928 ± 0.053 (0/8)
+Refusal,Coverage-Driver,0.799 ± 0.037 (0/8),0.801 ± 0.039 (0/8)
+Refusal,Top-k,0.774 ± 0.043 (0/8),0.779 ± 0.044 (0/8)

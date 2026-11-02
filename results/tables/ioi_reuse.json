@@ -1,0 +1,122 @@
+{
+  "artifact_id": "ioi_reuse",
+  "columns": [
+    "Method",
+    "Refit recovery",
+    "Fixed-coefficient recovery",
+    "Refit failure fraction",
+    "Fixed failure fraction"
+  ],
+  "cells": [
+    [
+      "Driver-OMP",
+      "0.461 ± 0.144",
+      "0.391 ± 0.111",
+      "0.583",
+      "0.661"
+    ],
+    [
+      "Coverage-Driver",
+      "0.449 ± 0.083",
+      "0.298 ± 0.143",
+      "0.667",
+      "0.833"
+    ],
+    [
+      "Top-k",
+      "0.632 ± 0.012",
+      "0.434 ± 0.160",
+      "0.464",
+      "0.734"
+    ],
+    [
+      "Random",
+      "-0.670 ± 0.612",
+      "-0.649 ± 0.637",
+      "0.984",
+      "0.984"
+    ]
+  ],
+  "numeric_rows": [
+    {
+      "method": "driver_omp",
+      "condition": "refit",
+      "mean": 0.4605935722768966,
+      "sample_sd": 0.14382916407821436,
+      "n": 3,
+      "minimum": 0.31879430456319824,
+      "maximum": 0.6063701331295306,
+      "failure_fraction": 0.5833333333333334
+    },
+    {
+      "method": "driver_omp",
+      "condition": "frozen",
+      "mean": 0.39118219970259815,
+      "sample_sd": 0.11057735136693607,
+      "n": 3,
+      "minimum": 0.28338280535535887,
+      "maximum": 0.5043424956675153,
+      "failure_fraction": 0.6614583333333334
+    },
+    {
+      "method": "coverage_driver",
+      "condition": "refit",
+      "mean": 0.4485239744293115,
+      "sample_sd": 0.08260133755914038,
+      "n": 3,
+      "minimum": 0.3562345135724172,
+      "maximum": 0.5155246998619987,
+      "failure_fraction": 0.6666666666666666
+    },
+    {
+      "method": "coverage_driver",
+      "condition": "frozen",
+      "mean": 0.2983304894223693,
+      "sample_sd": 0.14347599747943368,
+      "n": 3,
+      "minimum": 0.13271585409529507,
+      "maximum": 0.38490692857885733,
+      "failure_fraction": 0.8333333333333334
+    },
+    {
+      "method": "top_attribution",
+      "condition": "refit",
+      "mean": 0.6324711116079319,
+      "sample_sd": 0.01160442542012777,
+      "n": 3,
+      "minimum": 0.622834086389048,
+      "maximum": 0.6453524089738494,
+      "failure_fraction": 0.4635416666666667
+    },
+    {
+      "method": "top_attribution",
+      "condition": "frozen",
+      "mean": 0.4335366678230154,
+      "sample_sd": 0.16046251658513647,
+      "n": 3,
+      "minimum": 0.25490691396407783,
+      "maximum": 0.5654752178234048,
+      "failure_fraction": 0.734375
+    },
+    {
+      "method": "random_matched",
+      "condition": "refit",
+      "mean": -0.6704617010545917,
+      "sample_sd": 0.6117488405692921,
+      "n": 3,
+      "minimum": -1.3707620734348893,
+      "maximum": -0.24017921631457284,
+      "failure_fraction": 0.984375
+    },
+    {
+      "method": "random_matched",
+      "condition": "frozen",
+      "mean": -0.6489642606272051,
+      "sample_sd": 0.6368724676890836,
+      "n": 3,
+      "minimum": -1.377246068790555,
+      "maximum": -0.19644493144005537,
+      "failure_fraction": 0.984375
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "artifact_id": "formal_reference_settings",
+  "columns": [
+    "Setting type",
+    "Component",
+    "Setting"
+  ],
+  "cells": [
+    [
+      "Reference",
+      "Refit and certificate",
+      "Ridge and preservation weights\n$\\lambda=\\mu=1$; activation-energy bound $E\\leq\\kappa=2$;\ntarget criterion $\\mathrm{Rel}_{\\rm tar}(1)\\leq0.4$;\npreservation bound $L_{\\rm off}\\leq0.001$ nat."
+    ],
+    [
+      "Reference",
+      "Sparse selection",
+      "\\DriverOMP\\ residual tolerance\n$\\varepsilon_{\\rm lin}=0.05$ and improvement tolerance\n$\\eta_{\\rm tol}=10^{-3}$; \\CoverageDriver\\ coverage $\\tau=0.95$.\nDenominator stabilizers $\\delta_0=\\eta_0=10^{-3}$; normalized\nmarginal-gain threshold $g_{\\min}=10^{-3}$.\nUniform row weights $w_j=1/n$ for $j=1,\\ldots,nr$ give\n$W_{\\rm row}=\\sum_jw_j=r$; Algorithm~\\ref{alg:rewrite_coverage_driver}\nnormalizes coverage by $W_{\\rm row}$.\nTarget normalization guard $\\xi=10^{-6}$."
+    ],
+    [
+      "Executed",
+      "IOI recurrence",
+      "Five seeds and five budgets\n$k\\in\\{3,5,8,12,16\\}$ give 25 seed--budget configurations;\nconsensus threshold $\\pi^\\star=0.6$."
+    ]
+  ],
+  "numeric_rows": []
+}

@@ -1,0 +1,58 @@
+{
+  "experiment_id": "refusal_generation",
+  "model": "Qwen3-1.7B",
+  "panel": "10 harmful prompts/seed; 20 unique prompts reused",
+  "settings": "16 greedy tokens; unpadded single prompt; patch current final valid position each step; no EOS early stop",
+  "direction_conditions": "F for patched conditions",
+  "seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "record_paths": [
+    "data/measurements/refusal_generation/generation.jsonl"
+  ],
+  "input_manifest": "data/inputs/refusal_generation/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 8,
+  "nominal_dose": 1.0,
+  "interventions": "data/interventions/refusal_generation/interventions.jsonl",
+  "model_asset_id": "Qwen/Qwen3-1.7B",
+  "execution_profiles": [
+    "cuda_head_fp32",
+    "mps_head_fp32"
+  ],
+  "dtype": "float32",
+  "readout": "16_token_greedy_continuation_and_lexical_flags",
+  "refit": {
+    "implementation": "coefficient_ridge",
+    "lambda": 1.0,
+    "row_normalization": "none",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "fixed_evaluation_available": false,
+  "available_stages": [
+    "generation"
+  ],
+  "fit_examples": 10,
+  "eval_examples": 10,
+  "candidate_count": 448,
+  "candidate_library": "answer_position_heads",
+  "direction_cache_microbatch": 10,
+  "direction_modes": [
+    "F"
+  ],
+  "methods": [
+    "baseline_no_patch",
+    "driver_omp",
+    "coverage_driver",
+    "top_attribution"
+  ]
+}

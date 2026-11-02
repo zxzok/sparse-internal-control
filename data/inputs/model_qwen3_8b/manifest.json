@@ -1,0 +1,9 @@
+{
+  "input_set_id": "model_qwen3_8b",
+  "files": [],
+  "tokenized_batches_available": false,
+  "construction_module": "sparse_control.tasks",
+  "unavailable_fields": [
+    "complete saved tokenized batches"
+  ]
+}

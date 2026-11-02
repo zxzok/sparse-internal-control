@@ -1,0 +1,39 @@
+{
+  "task": "humanities_head",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "model": "Qwen/Qwen3-4B",
+  "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+  "device": "cuda",
+  "versions": {
+    "torch": "2.10.0",
+    "transformer-lens": "3.0.0",
+    "transformers": "5.5.3",
+    "numpy": "2.3.5",
+    "datasets": "4.8.4"
+  },
+  "expected_rows": 48,
+  "script_sha256": "a86c9290e77ec68a8e06b1bada6b8538b8ae94a47d763244815fa26522a9aa57",
+  "started_unix": 1793548159.6031692,
+  "status": "COMPLETE",
+  "refit_or_reselection": false,
+  "compatibility_atol": 0.0001,
+  "compatibility_rtol": 0,
+  "direction_cache_microbatch": true,
+  "model_dtype": "torch.float32",
+  "tokenizer_padding_side": "right",
+  "tokenizer_truncation_side": "right",
+  "elapsed_seconds": 344.6948175430298,
+  "applies_to": [
+    "readouts.jsonl"
+  ],
+  "scope": "fixed nominal-dose full-readout measurements only"
+}

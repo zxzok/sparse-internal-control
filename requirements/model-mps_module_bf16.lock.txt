@@ -1,0 +1,6 @@
+# Recorded model-runtime package pins; see docs/compute_resources.md.
+torch==2.11.0
+transformer-lens==3.0.0
+transformers==5.6.2
+numpy==2.4.4
+datasets==4.8.4

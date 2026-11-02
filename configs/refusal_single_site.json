@@ -1,0 +1,95 @@
+{
+  "experiment_id": "refusal_single_site",
+  "model": "Qwen3-1.7B",
+  "panel": "same Refusal control panels; independent preservation panel",
+  "settings": "fixed L15.H0; preserve actual coefficient/direction construction",
+  "direction_conditions": "P,F",
+  "seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "record_paths": [
+    "data/measurements/refusal_single_site/axes.jsonl",
+    "data/measurements/refusal_single_site/preservation.jsonl"
+  ],
+  "input_manifest": "data/inputs/refusal_single_site/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 1,
+  "nominal_dose": 1.0,
+  "interventions": "data/interventions/refusal_single_site/interventions.jsonl",
+  "model_asset_id": "Qwen/Qwen3-1.7B",
+  "execution_profiles": [
+    "cuda_head_fp32",
+    "mps_head_fp32"
+  ],
+  "dtype": "float32",
+  "readout": "word_set_margin",
+  "refit": {
+    "implementation": "coefficient_ridge",
+    "lambda": 1.0,
+    "row_normalization": "none",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "fixed_evaluation_available": true,
+  "available_stages": [
+    "dose",
+    "reversal",
+    "feedback",
+    "preservation"
+  ],
+  "feedback": {
+    "gain": 0.5,
+    "targets": [
+      -1.55,
+      -1.45,
+      -1.35,
+      -1.25,
+      -1.15
+    ],
+    "tolerance": 0.1,
+    "max_updates": 12,
+    "initial_dose": 0.0,
+    "clipping": false,
+    "gain_halving": false,
+    "final_endpoint_evaluation": true
+  },
+  "fit_examples": 10,
+  "eval_examples": 10,
+  "candidate_count": 1,
+  "candidate_library": "L15.H0",
+  "direction_cache_microbatch": 10,
+  "direction_modes": [
+    "P",
+    "F"
+  ],
+  "methods": [
+    "L15.H0 single-site reference"
+  ],
+  "fixed_evaluation_ids": [
+    "refusal_single_site.L15.H0 single-site reference.k8.seed0.P",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed0.F",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed1.P",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed1.F",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed2.P",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed2.F",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed3.P",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed3.F",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed4.P",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed4.F",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed5.P",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed5.F",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed6.P",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed6.F",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed7.P",
+    "refusal_single_site.L15.H0 single-site reference.k8.seed7.F"
+  ],
+  "framework_budget_field": 8
+}

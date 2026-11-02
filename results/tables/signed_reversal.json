@@ -1,0 +1,500 @@
+{
+  "artifact_id": "signed_reversal",
+  "columns": [
+    "Task",
+    "Mode",
+    "Method",
+    "Pass/seeds",
+    "Ratio mean ± SD"
+  ],
+  "cells": [
+    [
+      "IOI",
+      "P",
+      "Driver-OMP",
+      "10/10",
+      "4.7425 ± 1.1143"
+    ],
+    [
+      "IOI",
+      "P",
+      "Coverage-Driver",
+      "10/10",
+      "2.5702 ± 0.3689"
+    ],
+    [
+      "IOI",
+      "P",
+      "Top-k",
+      "10/10",
+      "3.4315 ± 0.8456"
+    ],
+    [
+      "Sentiment",
+      "P",
+      "Driver-OMP",
+      "4/8",
+      "2.3722 ± 1.0708"
+    ],
+    [
+      "Sentiment",
+      "F",
+      "Driver-OMP",
+      "0/8",
+      "0.6547 ± 0.2871"
+    ],
+    [
+      "Sentiment",
+      "P",
+      "Coverage-Driver",
+      "8/8",
+      "8.5143 ± 2.9573"
+    ],
+    [
+      "Sentiment",
+      "F",
+      "Coverage-Driver",
+      "0/8",
+      "0.9969 ± 0.4172"
+    ],
+    [
+      "Sentiment",
+      "P",
+      "Top-k",
+      "8/8",
+      "8.7627 ± 3.4087"
+    ],
+    [
+      "Sentiment",
+      "F",
+      "Top-k",
+      "0/8",
+      "1.0000 ± 0.4175"
+    ],
+    [
+      "Humanities",
+      "P",
+      "Driver-OMP",
+      "5/8",
+      "3.0596 ± 1.7541"
+    ],
+    [
+      "Humanities",
+      "F",
+      "Driver-OMP",
+      "0/8",
+      "0.1304 ± 0.0733"
+    ],
+    [
+      "Humanities",
+      "P",
+      "Coverage-Driver",
+      "8/8",
+      "3.7768 ± 0.8716"
+    ],
+    [
+      "Humanities",
+      "F",
+      "Coverage-Driver",
+      "0/8",
+      "0.1428 ± 0.0905"
+    ],
+    [
+      "Humanities",
+      "P",
+      "Top-k",
+      "8/8",
+      "4.2961 ± 2.2079"
+    ],
+    [
+      "Humanities",
+      "F",
+      "Top-k",
+      "0/8",
+      "0.1424 ± 0.0880"
+    ],
+    [
+      "STEM",
+      "P",
+      "Driver-OMP",
+      "7/8",
+      "3.6450 ± 2.0158"
+    ],
+    [
+      "STEM",
+      "F",
+      "Driver-OMP",
+      "0/8",
+      "0.1312 ± 0.0658"
+    ],
+    [
+      "STEM",
+      "P",
+      "Coverage-Driver",
+      "8/8",
+      "4.8023 ± 1.4251"
+    ],
+    [
+      "STEM",
+      "F",
+      "Coverage-Driver",
+      "0/8",
+      "0.1520 ± 0.0533"
+    ],
+    [
+      "STEM",
+      "P",
+      "Top-k",
+      "8/8",
+      "5.0921 ± 1.5127"
+    ],
+    [
+      "STEM",
+      "F",
+      "Top-k",
+      "0/8",
+      "0.1441 ± 0.0516"
+    ],
+    [
+      "Refusal",
+      "P",
+      "Driver-OMP",
+      "0/8",
+      "0.0770 ± 0.0513"
+    ],
+    [
+      "Refusal",
+      "F",
+      "Driver-OMP",
+      "0/8",
+      "0.0713 ± 0.0519"
+    ],
+    [
+      "Refusal",
+      "P",
+      "Coverage-Driver",
+      "0/8",
+      "0.1123 ± 0.0452"
+    ],
+    [
+      "Refusal",
+      "F",
+      "Coverage-Driver",
+      "0/8",
+      "0.1252 ± 0.0573"
+    ],
+    [
+      "Refusal",
+      "P",
+      "Top-k",
+      "0/8",
+      "0.1356 ± 0.0527"
+    ],
+    [
+      "Refusal",
+      "F",
+      "Top-k",
+      "0/8",
+      "0.1452 ± 0.0606"
+    ]
+  ],
+  "numeric_rows": [
+    {
+      "task": "ioi",
+      "method": "driver_omp",
+      "direction": "P",
+      "passes": 10,
+      "mean": 4.742473220838365,
+      "sample_sd": 1.1142575216047161,
+      "n": 10,
+      "minimum": 2.93867182679365,
+      "maximum": 6.044162211665784
+    },
+    {
+      "task": "ioi",
+      "method": "coverage_driver",
+      "direction": "P",
+      "passes": 10,
+      "mean": 2.5701992956911552,
+      "sample_sd": 0.3688642717545294,
+      "n": 10,
+      "minimum": 2.0983106084889442,
+      "maximum": 3.1554349861406714
+    },
+    {
+      "task": "ioi",
+      "method": "top_attribution",
+      "direction": "P",
+      "passes": 10,
+      "mean": 3.4314609601636903,
+      "sample_sd": 0.8456465562059025,
+      "n": 10,
+      "minimum": 2.1317158199529374,
+      "maximum": 4.825675760511267
+    },
+    {
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "P",
+      "passes": 4,
+      "mean": 2.3721559179474037,
+      "sample_sd": 1.0707665527408143,
+      "n": 8,
+      "minimum": 1.0864776452763858,
+      "maximum": 4.462422006442501
+    },
+    {
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "F",
+      "passes": 0,
+      "mean": 0.6546830155318665,
+      "sample_sd": 0.2871269344579218,
+      "n": 8,
+      "minimum": 0.22538971279792952,
+      "maximum": 0.9792067186214556
+    },
+    {
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "P",
+      "passes": 8,
+      "mean": 8.514260046893321,
+      "sample_sd": 2.9573203248426374,
+      "n": 8,
+      "minimum": 4.146548156112367,
+      "maximum": 14.190391555933168
+    },
+    {
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "F",
+      "passes": 0,
+      "mean": 0.996903742568938,
+      "sample_sd": 0.41721387999678844,
+      "n": 8,
+      "minimum": 0.37874050657318237,
+      "maximum": 1.6012561359298152
+    },
+    {
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "P",
+      "passes": 8,
+      "mean": 8.7627494581174,
+      "sample_sd": 3.408703111806561,
+      "n": 8,
+      "minimum": 4.266289867526524,
+      "maximum": 15.983424070528825
+    },
+    {
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "F",
+      "passes": 0,
+      "mean": 1.0000451503156567,
+      "sample_sd": 0.4175038750016154,
+      "n": 8,
+      "minimum": 0.379146945889909,
+      "maximum": 1.6133215198770194
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "passes": 5,
+      "mean": 3.0595556391433747,
+      "sample_sd": 1.7541345557605295,
+      "n": 8,
+      "minimum": 1.1112268179458884,
+      "maximum": 6.68385123910768
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "F",
+      "passes": 0,
+      "mean": 0.13039229846388642,
+      "sample_sd": 0.07333812211737352,
+      "n": 8,
+      "minimum": 0.053148233972672675,
+      "maximum": 0.2687653155005723
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "passes": 8,
+      "mean": 3.7768209460287423,
+      "sample_sd": 0.8715742617661684,
+      "n": 8,
+      "minimum": 2.3691246252630336,
+      "maximum": 5.0038880533498045
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "F",
+      "passes": 0,
+      "mean": 0.14282277335416163,
+      "sample_sd": 0.09046613458704429,
+      "n": 8,
+      "minimum": 0.06301853694482175,
+      "maximum": 0.2910230864190247
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "passes": 8,
+      "mean": 4.296137640692954,
+      "sample_sd": 2.2079300611881427,
+      "n": 8,
+      "minimum": 2.16918013671342,
+      "maximum": 8.08013030472896
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "F",
+      "passes": 0,
+      "mean": 0.14237599123275144,
+      "sample_sd": 0.0879922141614439,
+      "n": 8,
+      "minimum": 0.06482353208299094,
+      "maximum": 0.311806287723846
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "passes": 7,
+      "mean": 3.6449654148191533,
+      "sample_sd": 2.01583822506493,
+      "n": 8,
+      "minimum": 1.1628390774826776,
+      "maximum": 7.580238946374813
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "F",
+      "passes": 0,
+      "mean": 0.13117477860699855,
+      "sample_sd": 0.06582235986599769,
+      "n": 8,
+      "minimum": 0.0861872880561742,
+      "maximum": 0.2703053992682999
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "passes": 8,
+      "mean": 4.802296100559804,
+      "sample_sd": 1.4250701330543705,
+      "n": 8,
+      "minimum": 2.2021327644864366,
+      "maximum": 6.6106307426917885
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "F",
+      "passes": 0,
+      "mean": 0.1519634327111385,
+      "sample_sd": 0.05334968451240904,
+      "n": 8,
+      "minimum": 0.09433183129025624,
+      "maximum": 0.229879425889882
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "passes": 8,
+      "mean": 5.0920861656349015,
+      "sample_sd": 1.5127078672240024,
+      "n": 8,
+      "minimum": 3.661577339485152,
+      "maximum": 7.999699751025606
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "F",
+      "passes": 0,
+      "mean": 0.1440782674589822,
+      "sample_sd": 0.05155905444999984,
+      "n": 8,
+      "minimum": 0.09295709780630296,
+      "maximum": 0.22797509770368746
+    },
+    {
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "P",
+      "passes": 0,
+      "mean": 0.07703819389051368,
+      "sample_sd": 0.05130974444311012,
+      "n": 8,
+      "minimum": 0.0010966177767485269,
+      "maximum": 0.14796210612643612
+    },
+    {
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "F",
+      "passes": 0,
+      "mean": 0.07129415079284238,
+      "sample_sd": 0.05185643769515075,
+      "n": 8,
+      "minimum": 0.0009011489196185664,
+      "maximum": 0.16213248983287992
+    },
+    {
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "P",
+      "passes": 0,
+      "mean": 0.11227528909726255,
+      "sample_sd": 0.04523950625890898,
+      "n": 8,
+      "minimum": 0.05641578382052541,
+      "maximum": 0.19901087729596084
+    },
+    {
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "F",
+      "passes": 0,
+      "mean": 0.12516680357132734,
+      "sample_sd": 0.05733627848138417,
+      "n": 8,
+      "minimum": 0.04305037527439254,
+      "maximum": 0.19014670276459317
+    },
+    {
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "P",
+      "passes": 0,
+      "mean": 0.13557148795490423,
+      "sample_sd": 0.05271778334213953,
+      "n": 8,
+      "minimum": 0.07522260448150071,
+      "maximum": 0.22752242622372115
+    },
+    {
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "F",
+      "passes": 0,
+      "mean": 0.14524237025679484,
+      "sample_sd": 0.06063919043745917,
+      "n": 8,
+      "minimum": 0.07013748490364051,
+      "maximum": 0.22506132622930733
+    }
+  ]
+}

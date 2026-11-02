@@ -1,0 +1,9 @@
+Task,Method,Seeds,Refit coefficients,Fully frozen
+Humanities,Driver-OMP,4,0.992 ± 0.009,0.021 ± 0.026
+Humanities,Coverage-Driver,4,0.995 ± 0.053,0.033 ± 0.029
+Humanities,Top-k,4,1.078 ± 0.017,0.028 ± 0.024
+Humanities,Random,4,0.758 ± 0.443,0.022 ± 0.023
+STEM,Driver-OMP,4,0.987 ± 0.034,0.024 ± 0.066
+STEM,Coverage-Driver,4,0.944 ± 0.056,0.038 ± 0.108
+STEM,Top-k,4,1.075 ± 0.029,0.031 ± 0.093
+STEM,Random,4,0.744 ± 0.424,0.041 ± 0.108

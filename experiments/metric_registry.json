@@ -1,0 +1,48 @@
+{
+  "rel_tar": {
+    "formula": "norm(target-patched)/(norm(target-source)+1e-6)",
+    "unit": "seed-level full vector",
+    "threshold": 0.4
+  },
+  "r_clean": {
+    "formula": "norm(target-patched)/max(norm(target),1e-12)",
+    "unit": "seed-level full vector"
+  },
+  "reversal_ratio": {
+    "formula": "norm(reversed-target)/norm(reversed-source)",
+    "unit": "seed",
+    "threshold": 2
+  },
+  "signed_spearman": {
+    "formula": "Spearman(dose,progress)",
+    "unit": "seed curve",
+    "positive_threshold": 0.95,
+    "negative_threshold": -0.95
+  },
+  "feedback_endpoint": {
+    "formula": "abs(terminal_margin-target_margin)",
+    "unit": "seed-target endpoint"
+  },
+  "kl": {
+    "formula": "KL(unpatched||patched)",
+    "unit": "nat per prompt-seed",
+    "threshold": 0.001,
+    "p95": "nearest rank ceil(.95*n)"
+  },
+  "mcqa_recovery": {
+    "formula": "mean(patched-source)/mean(target-source)",
+    "unit": "seed",
+    "exclude_abs_gap_below": 1e-09
+  },
+  "sentiment_recovery": {
+    "formula": "(mean(patched)-mean(source))/max(mean(target)-mean(source),1e-6)",
+    "unit": "seed"
+  },
+  "ioi_recovery": {
+    "formula": "1-mean(abs(target-patched)/max(abs(target),1e-6))",
+    "unit": "seed"
+  },
+  "static_definition": {
+    "unit": "method/configuration definition"
+  }
+}

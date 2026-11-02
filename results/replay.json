@@ -1,0 +1,24 @@
+{
+  "artifacts": [
+    "control_axes",
+    "nominal_reconstruction",
+    "feedback_hits",
+    "formal_reference_settings",
+    "experiment_matrix",
+    "formal_reachability_samepanel",
+    "formal_reachability_heldout",
+    "signed_reversal",
+    "dose_ordering",
+    "feedback_details",
+    "off_target_preservation",
+    "mcqa_reuse",
+    "ioi_reuse",
+    "sentiment_fixed_dose",
+    "feedback_tolerance",
+    "model_comparison",
+    "reachability_tolerance",
+    "supporting_numbers"
+  ],
+  "scope": "tabular_saved_records",
+  "model_execution": false
+}

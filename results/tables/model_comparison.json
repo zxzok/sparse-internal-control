@@ -1,0 +1,147 @@
+{
+  "artifact_id": "model_comparison",
+  "columns": [
+    "Model",
+    "Seeds",
+    "Driver-OMP",
+    "Coverage-Driver",
+    "Top-k",
+    "Random"
+  ],
+  "cells": [
+    [
+      "Qwen3-4B",
+      3,
+      "0.045 ± 0.013",
+      "0.027 ± 0.031",
+      "0.054 ± 0.024",
+      "0.185 ± 0.132"
+    ],
+    [
+      "Qwen3-8B",
+      5,
+      "0.016 ± 0.008",
+      "0.018 ± 0.009",
+      "0.027 ± 0.012",
+      "0.077 ± 0.032"
+    ],
+    [
+      "Mistral-7B",
+      3,
+      "0.044 ± 0.005",
+      "0.015 ± 0.003",
+      "0.008 ± 0.006",
+      "0.050 ± 0.047"
+    ]
+  ],
+  "numeric_rows": [
+    {
+      "model": "Qwen3-4B",
+      "method": "driver_omp",
+      "mean": 0.04506289710601171,
+      "sample_sd": 0.013175846015831091,
+      "n": 3,
+      "minimum": 0.036916181445121765,
+      "maximum": 0.0602639764547348
+    },
+    {
+      "model": "Qwen3-4B",
+      "method": "coverage_driver",
+      "mean": 0.027047062603135903,
+      "sample_sd": 0.031313058082644604,
+      "n": 3,
+      "minimum": 0.008614443242549896,
+      "maximum": 0.06320194154977798
+    },
+    {
+      "model": "Qwen3-4B",
+      "method": "top_attribution",
+      "mean": 0.05415821261703968,
+      "sample_sd": 0.0244709018770826,
+      "n": 3,
+      "minimum": 0.02897275798022747,
+      "maximum": 0.0778457447886467
+    },
+    {
+      "model": "Qwen3-4B",
+      "method": "random_matched",
+      "mean": 0.18493696550528207,
+      "sample_sd": 0.13203152812936164,
+      "n": 3,
+      "minimum": 0.09922880679368973,
+      "maximum": 0.3369831144809723
+    },
+    {
+      "model": "Qwen3-8B",
+      "method": "driver_omp",
+      "mean": 0.016316221561282873,
+      "sample_sd": 0.007868403778052716,
+      "n": 5,
+      "minimum": 0.004402996506541967,
+      "maximum": 0.023560114204883575
+    },
+    {
+      "model": "Qwen3-8B",
+      "method": "coverage_driver",
+      "mean": 0.018020198307931425,
+      "sample_sd": 0.00851627690769645,
+      "n": 5,
+      "minimum": 0.0110614700242877,
+      "maximum": 0.028456177562475204
+    },
+    {
+      "model": "Qwen3-8B",
+      "method": "top_attribution",
+      "mean": 0.0266188345849514,
+      "sample_sd": 0.011519561738219466,
+      "n": 5,
+      "minimum": 0.015532251447439194,
+      "maximum": 0.04491853341460228
+    },
+    {
+      "model": "Qwen3-8B",
+      "method": "random_matched",
+      "mean": 0.07656581476330757,
+      "sample_sd": 0.03166529669342733,
+      "n": 5,
+      "minimum": 0.0404503270983696,
+      "maximum": 0.12488829344511032
+    },
+    {
+      "model": "Mistral-7B",
+      "method": "driver_omp",
+      "mean": 0.043897115935881935,
+      "sample_sd": 0.004532938459219715,
+      "n": 3,
+      "minimum": 0.03925732895731926,
+      "maximum": 0.04831505939364433
+    },
+    {
+      "model": "Mistral-7B",
+      "method": "coverage_driver",
+      "mean": 0.015242973652978739,
+      "sample_sd": 0.003449196481547906,
+      "n": 3,
+      "minimum": 0.011332756839692593,
+      "maximum": 0.017853528261184692
+    },
+    {
+      "model": "Mistral-7B",
+      "method": "top_attribution",
+      "mean": 0.008066947727153698,
+      "sample_sd": 0.005542112739611843,
+      "n": 3,
+      "minimum": 0.004078015685081482,
+      "maximum": 0.014395156875252724
+    },
+    {
+      "model": "Mistral-7B",
+      "method": "random_matched",
+      "mean": 0.04955229038993517,
+      "sample_sd": 0.046925342149140216,
+      "n": 3,
+      "minimum": 0.008674107491970062,
+      "maximum": 0.10079265385866165
+    }
+  ]
+}

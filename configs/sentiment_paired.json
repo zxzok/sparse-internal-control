@@ -1,0 +1,84 @@
+{
+  "experiment_id": "sentiment_paired",
+  "model": "GPT-2 small",
+  "panel": "16 pairs, fit/eval=8/8",
+  "settings": "word-set margin; 144 last-position heads; k=3,5,8; ridge=1",
+  "direction_conditions": "P,F",
+  "seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "record_paths": [
+    "data/measurements/sentiment_paired/fixed_dose.jsonl",
+    "data/measurements/sentiment_paired/readouts.jsonl",
+    "data/measurements/sentiment_paired/reversal.jsonl"
+  ],
+  "input_manifest": "data/inputs/sentiment_paired/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 8,
+  "nominal_dose": 1.0,
+  "interventions": "data/interventions/sentiment_paired/interventions.jsonl",
+  "full_run": {
+    "module": "sparse_control.runners.implementations.sentiment_fixed",
+    "arguments": [
+      "--model",
+      "gpt2",
+      "--device",
+      "mps",
+      "--ridge",
+      "1",
+      "--ks",
+      "3,5,8",
+      "--seeds",
+      "0,1,2,3,4,5,6,7"
+    ],
+    "output_flag": "--out",
+    "seed_argument": "--seeds"
+  },
+  "configuration_identity": "producer_and_record_parameters",
+  "model_asset_id": "gpt2",
+  "execution_profiles": [
+    "mps_head_fp32",
+    "cuda_head_fp32"
+  ],
+  "dtype": "float32",
+  "readout": "word_set_margin",
+  "refit": {
+    "implementation": "coefficient_ridge",
+    "lambda": 1.0,
+    "row_normalization": "none",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "fixed_evaluation_available": true,
+  "available_stages": [
+    "full",
+    "fit",
+    "nominal",
+    "reversal"
+  ],
+  "feedback": "not_evaluated",
+  "fit_examples": 8,
+  "eval_examples": 8,
+  "candidate_count": 144,
+  "candidate_library": "answer_position_heads",
+  "direction_cache_microbatch": 8,
+  "direction_modes": [
+    "P",
+    "F"
+  ],
+  "methods": [
+    "driver_omp",
+    "coverage_driver",
+    "top_attribution",
+    "random_matched"
+  ],
+  "stage_scope": "Stages correspond to this experimental series; IOI and unpaired Sentiment dose producers are separate configurations."
+}

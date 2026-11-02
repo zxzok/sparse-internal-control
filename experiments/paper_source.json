@@ -1,0 +1,8 @@
+{
+  "title": "Sparse Internal Control of Language Models",
+  "source_sha256": {
+    "main": "bd22ddcd0f1bed9c5103270cfe7ebf183d723fb78c21e17547e95ea3cc04aaa2",
+    "appendix": "e8f36569da918b2f59b58f64427cddd06a1e4f769fca106b7129c052b69a94ed"
+  },
+  "mapping_rule": "Stable LaTeX labels and compiled display numbers. Numerical tables and textual claims are checked separately from layout."
+}

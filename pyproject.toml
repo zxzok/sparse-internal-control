@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sparse-internal-control"
+version = "1.1.0"
+description = "Sparse Internal Control of Language Models: methods and experimental records"
+requires-python = ">=3.12"
+dependencies = []
+license = "MIT"
+authors = [{name = "Xizhe Zhang"}]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.scripts]
+sparse-control = "sparse_control.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["model: requires the explicit model execution environment", "smoke: bounded pretrained-model execution"]

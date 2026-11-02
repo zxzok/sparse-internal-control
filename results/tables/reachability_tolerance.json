@@ -1,0 +1,3526 @@
+{
+  "artifact_id": "reachability_tolerance",
+  "columns": [
+    "series",
+    "task",
+    "method",
+    "direction",
+    "seeds",
+    "epsilon",
+    "passes"
+  ],
+  "cells": [
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "actual_gain_greedy",
+      "P",
+      10,
+      0.3,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "actual_gain_greedy",
+      "P",
+      10,
+      0.35,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "actual_gain_greedy",
+      "P",
+      10,
+      0.4,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "actual_gain_greedy",
+      "P",
+      10,
+      0.45,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "actual_gain_greedy",
+      "P",
+      10,
+      0.5,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "coverage_driver",
+      "P",
+      10,
+      0.3,
+      7
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "coverage_driver",
+      "P",
+      10,
+      0.35,
+      9
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "coverage_driver",
+      "P",
+      10,
+      0.4,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "coverage_driver",
+      "P",
+      10,
+      0.45,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "coverage_driver",
+      "P",
+      10,
+      0.5,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "driver_omp",
+      "P",
+      10,
+      0.3,
+      9
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "driver_omp",
+      "P",
+      10,
+      0.35,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "driver_omp",
+      "P",
+      10,
+      0.4,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "driver_omp",
+      "P",
+      10,
+      0.45,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "driver_omp",
+      "P",
+      10,
+      0.5,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "random_matched",
+      "P",
+      10,
+      0.3,
+      0
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "random_matched",
+      "P",
+      10,
+      0.35,
+      0
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "random_matched",
+      "P",
+      10,
+      0.4,
+      1
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "random_matched",
+      "P",
+      10,
+      0.45,
+      2
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "random_matched",
+      "P",
+      10,
+      0.5,
+      2
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "top_attribution",
+      "P",
+      10,
+      0.3,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "top_attribution",
+      "P",
+      10,
+      0.35,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "top_attribution",
+      "P",
+      10,
+      0.4,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "top_attribution",
+      "P",
+      10,
+      0.45,
+      10
+    ],
+    [
+      "ioi_nominal_same_panel",
+      "ioi",
+      "top_attribution",
+      "P",
+      10,
+      0.5,
+      10
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "coverage_driver",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "coverage_driver",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "coverage_driver",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "coverage_driver",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "coverage_driver",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "coverage_driver",
+      "P",
+      8,
+      0.3,
+      8
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "coverage_driver",
+      "P",
+      8,
+      0.35,
+      8
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "coverage_driver",
+      "P",
+      8,
+      0.4,
+      8
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "coverage_driver",
+      "P",
+      8,
+      0.45,
+      8
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "coverage_driver",
+      "P",
+      8,
+      0.5,
+      8
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "driver_omp",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "driver_omp",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "driver_omp",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "driver_omp",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "driver_omp",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "driver_omp",
+      "P",
+      8,
+      0.3,
+      5
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "driver_omp",
+      "P",
+      8,
+      0.35,
+      5
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "driver_omp",
+      "P",
+      8,
+      0.4,
+      6
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "driver_omp",
+      "P",
+      8,
+      0.45,
+      6
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "driver_omp",
+      "P",
+      8,
+      0.5,
+      6
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "top_attribution",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "top_attribution",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "top_attribution",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "top_attribution",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "top_attribution",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "top_attribution",
+      "P",
+      8,
+      0.3,
+      8
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "top_attribution",
+      "P",
+      8,
+      0.35,
+      8
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "top_attribution",
+      "P",
+      8,
+      0.4,
+      8
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "top_attribution",
+      "P",
+      8,
+      0.45,
+      8
+    ],
+    [
+      "mcqa_humanities_head_scalar_heldout",
+      "mcqa_humanities",
+      "top_attribution",
+      "P",
+      8,
+      0.5,
+      8
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "actual_gain_greedy",
+      "P",
+      3,
+      0.3,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "actual_gain_greedy",
+      "P",
+      3,
+      0.35,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "actual_gain_greedy",
+      "P",
+      3,
+      0.4,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "actual_gain_greedy",
+      "P",
+      3,
+      0.45,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "actual_gain_greedy",
+      "P",
+      3,
+      0.5,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "coverage_driver",
+      "P",
+      3,
+      0.3,
+      2
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "coverage_driver",
+      "P",
+      3,
+      0.35,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "coverage_driver",
+      "P",
+      3,
+      0.4,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "coverage_driver",
+      "P",
+      3,
+      0.45,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "coverage_driver",
+      "P",
+      3,
+      0.5,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "driver_omp",
+      "P",
+      3,
+      0.3,
+      2
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "driver_omp",
+      "P",
+      3,
+      0.35,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "driver_omp",
+      "P",
+      3,
+      0.4,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "driver_omp",
+      "P",
+      3,
+      0.45,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "driver_omp",
+      "P",
+      3,
+      0.5,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "random_matched",
+      "P",
+      3,
+      0.3,
+      0
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "random_matched",
+      "P",
+      3,
+      0.35,
+      0
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "random_matched",
+      "P",
+      3,
+      0.4,
+      0
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "random_matched",
+      "P",
+      3,
+      0.45,
+      0
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "random_matched",
+      "P",
+      3,
+      0.5,
+      0
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "top_attribution",
+      "P",
+      3,
+      0.3,
+      1
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "top_attribution",
+      "P",
+      3,
+      0.35,
+      1
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "top_attribution",
+      "P",
+      3,
+      0.4,
+      2
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "top_attribution",
+      "P",
+      3,
+      0.45,
+      3
+    ],
+    [
+      "mcqa_humanities_module_option_logits_same_panel",
+      "mcqa_humanities",
+      "top_attribution",
+      "P",
+      3,
+      0.5,
+      3
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "coverage_driver",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "coverage_driver",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "coverage_driver",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "coverage_driver",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "coverage_driver",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "coverage_driver",
+      "P",
+      8,
+      0.3,
+      7
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "coverage_driver",
+      "P",
+      8,
+      0.35,
+      8
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "coverage_driver",
+      "P",
+      8,
+      0.4,
+      8
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "coverage_driver",
+      "P",
+      8,
+      0.45,
+      8
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "coverage_driver",
+      "P",
+      8,
+      0.5,
+      8
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "driver_omp",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "driver_omp",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "driver_omp",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "driver_omp",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "driver_omp",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "driver_omp",
+      "P",
+      8,
+      0.3,
+      4
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "driver_omp",
+      "P",
+      8,
+      0.35,
+      6
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "driver_omp",
+      "P",
+      8,
+      0.4,
+      6
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "driver_omp",
+      "P",
+      8,
+      0.45,
+      6
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "driver_omp",
+      "P",
+      8,
+      0.5,
+      6
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "top_attribution",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "top_attribution",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "top_attribution",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "top_attribution",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "top_attribution",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "top_attribution",
+      "P",
+      8,
+      0.3,
+      8
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "top_attribution",
+      "P",
+      8,
+      0.35,
+      8
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "top_attribution",
+      "P",
+      8,
+      0.4,
+      8
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "top_attribution",
+      "P",
+      8,
+      0.45,
+      8
+    ],
+    [
+      "mcqa_stem_head_scalar_heldout",
+      "mcqa_stem",
+      "top_attribution",
+      "P",
+      8,
+      0.5,
+      8
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "actual_gain_greedy",
+      "P",
+      3,
+      0.3,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "actual_gain_greedy",
+      "P",
+      3,
+      0.35,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "actual_gain_greedy",
+      "P",
+      3,
+      0.4,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "actual_gain_greedy",
+      "P",
+      3,
+      0.45,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "actual_gain_greedy",
+      "P",
+      3,
+      0.5,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "coverage_driver",
+      "P",
+      3,
+      0.3,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "coverage_driver",
+      "P",
+      3,
+      0.35,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "coverage_driver",
+      "P",
+      3,
+      0.4,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "coverage_driver",
+      "P",
+      3,
+      0.45,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "coverage_driver",
+      "P",
+      3,
+      0.5,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "driver_omp",
+      "P",
+      3,
+      0.3,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "driver_omp",
+      "P",
+      3,
+      0.35,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "driver_omp",
+      "P",
+      3,
+      0.4,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "driver_omp",
+      "P",
+      3,
+      0.45,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "driver_omp",
+      "P",
+      3,
+      0.5,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "random_matched",
+      "P",
+      3,
+      0.3,
+      0
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "random_matched",
+      "P",
+      3,
+      0.35,
+      0
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "random_matched",
+      "P",
+      3,
+      0.4,
+      0
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "random_matched",
+      "P",
+      3,
+      0.45,
+      1
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "random_matched",
+      "P",
+      3,
+      0.5,
+      1
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "top_attribution",
+      "P",
+      3,
+      0.3,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "top_attribution",
+      "P",
+      3,
+      0.35,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "top_attribution",
+      "P",
+      3,
+      0.4,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "top_attribution",
+      "P",
+      3,
+      0.45,
+      3
+    ],
+    [
+      "mcqa_stem_module_option_logits_same_panel",
+      "mcqa_stem",
+      "top_attribution",
+      "P",
+      3,
+      0.5,
+      3
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "coverage_driver",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "coverage_driver",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "coverage_driver",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "coverage_driver",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "coverage_driver",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "coverage_driver",
+      "P",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "coverage_driver",
+      "P",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "coverage_driver",
+      "P",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "coverage_driver",
+      "P",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "coverage_driver",
+      "P",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "driver_omp",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "driver_omp",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "driver_omp",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "driver_omp",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "driver_omp",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "driver_omp",
+      "P",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "driver_omp",
+      "P",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "driver_omp",
+      "P",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "driver_omp",
+      "P",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "driver_omp",
+      "P",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "top_attribution",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "top_attribution",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "top_attribution",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "top_attribution",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "top_attribution",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "top_attribution",
+      "P",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "top_attribution",
+      "P",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "top_attribution",
+      "P",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "top_attribution",
+      "P",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "refusal_head_scalar_heldout",
+      "refusal",
+      "top_attribution",
+      "P",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "coverage_driver",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "coverage_driver",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "coverage_driver",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "coverage_driver",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "coverage_driver",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "coverage_driver",
+      "P",
+      8,
+      0.3,
+      7
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "coverage_driver",
+      "P",
+      8,
+      0.35,
+      7
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "coverage_driver",
+      "P",
+      8,
+      0.4,
+      8
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "coverage_driver",
+      "P",
+      8,
+      0.45,
+      8
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "coverage_driver",
+      "P",
+      8,
+      0.5,
+      8
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "driver_omp",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "driver_omp",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "driver_omp",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "driver_omp",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "driver_omp",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "driver_omp",
+      "P",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "driver_omp",
+      "P",
+      8,
+      0.35,
+      1
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "driver_omp",
+      "P",
+      8,
+      0.4,
+      3
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "driver_omp",
+      "P",
+      8,
+      0.45,
+      4
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "driver_omp",
+      "P",
+      8,
+      0.5,
+      6
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "top_attribution",
+      "F",
+      8,
+      0.3,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "top_attribution",
+      "F",
+      8,
+      0.35,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "top_attribution",
+      "F",
+      8,
+      0.4,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "top_attribution",
+      "F",
+      8,
+      0.45,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "top_attribution",
+      "F",
+      8,
+      0.5,
+      0
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "top_attribution",
+      "P",
+      8,
+      0.3,
+      7
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "top_attribution",
+      "P",
+      8,
+      0.35,
+      7
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "top_attribution",
+      "P",
+      8,
+      0.4,
+      8
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "top_attribution",
+      "P",
+      8,
+      0.45,
+      8
+    ],
+    [
+      "sentiment_paired_heldout",
+      "sentiment",
+      "top_attribution",
+      "P",
+      8,
+      0.5,
+      8
+    ]
+  ],
+  "numeric_rows": [
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.3,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.35,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.4,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.45,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.5,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.3,
+      "passes": 7
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.35,
+      "passes": 9
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.4,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.45,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.5,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.3,
+      "passes": 9
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.35,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.4,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.45,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.5,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.4,
+      "passes": 1
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.45,
+      "passes": 2
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.5,
+      "passes": 2
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.3,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.35,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.4,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.45,
+      "passes": 10
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 10,
+      "epsilon": 0.5,
+      "passes": 10
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 5
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 5
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 6
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 6
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 6
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_humanities_head_scalar_heldout",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.3,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.35,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.4,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.45,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.5,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.3,
+      "passes": 2
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.35,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.4,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.45,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.5,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.3,
+      "passes": 2
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.35,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.4,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.45,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.5,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.3,
+      "passes": 1
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.35,
+      "passes": 1
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.4,
+      "passes": 2
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.45,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.5,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 7
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 4
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 6
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 6
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 6
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 6
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_stem_head_scalar_heldout",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 8
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.3,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.35,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.4,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.45,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.5,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.3,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.35,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.4,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.45,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.5,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.3,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.35,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.4,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.45,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.5,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.45,
+      "passes": 1
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.5,
+      "passes": 1
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.3,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.35,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.4,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.45,
+      "passes": 3
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "epsilon": 0.5,
+      "passes": 3
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "refusal_head_scalar_heldout",
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 7
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 7
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 8
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 8
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 8
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 1
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 3
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 4
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 6
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "F",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 0
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.3,
+      "passes": 7
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.35,
+      "passes": 7
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.4,
+      "passes": 8
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.45,
+      "passes": 8
+    },
+    {
+      "series": "sentiment_paired_heldout",
+      "task": "sentiment",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 8,
+      "epsilon": 0.5,
+      "passes": 8
+    }
+  ]
+}

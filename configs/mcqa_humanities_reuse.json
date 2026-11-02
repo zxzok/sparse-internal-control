@@ -1,0 +1,80 @@
+{
+  "experiment_id": "mcqa_humanities_reuse",
+  "model": "Qwen3-4B",
+  "panel": "32 Humanities questions, fit/eval=16/16",
+  "settings": "module library; sample-normalized ridge=1; signed mean-margin recovery",
+  "direction_conditions": "refit-P; fully frozen-F",
+  "seed_ids": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "record_paths": [
+    "data/measurements/mcqa_humanities_reuse/reuse.jsonl"
+  ],
+  "input_manifest": "data/inputs/mcqa_humanities_reuse/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 8,
+  "nominal_dose": 1.0,
+  "interventions": "data/interventions/mcqa_humanities_reuse/interventions.jsonl",
+  "full_run": {
+    "module": "sparse_control.runners.implementations.module_reuse",
+    "arguments": [
+      "--model",
+      "Qwen/Qwen3-4B",
+      "--device",
+      "mps",
+      "--category",
+      "humanities",
+      "--batch-size",
+      "32",
+      "--seeds",
+      "0,1,2,3",
+      "--ks",
+      "3,5,8",
+      "--ridge",
+      "1",
+      "--refit-mode",
+      "ridge"
+    ],
+    "output_flag": "--out",
+    "seed_argument": "--seeds"
+  },
+  "configuration_identity": "saved_command",
+  "model_asset_id": "Qwen/Qwen3-4B",
+  "execution_profiles": [
+    "mps_module_bf16",
+    "cuda_module_bf16"
+  ],
+  "dtype": "bfloat16",
+  "readout": "correct_minus_mean_wrong_margin",
+  "refit": {
+    "implementation": "module_normalized_ridge",
+    "lambda": 1.0,
+    "row_normalization": "sqrt(nrow)",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "fixed_evaluation_available": false,
+  "available_stages": [
+    "full",
+    "fit"
+  ],
+  "fit_examples": 16,
+  "eval_examples": 16,
+  "candidate_count": 108,
+  "candidate_library": "resid_post_mlp_out_attn_out",
+  "direction_cache_microbatch": 16,
+  "direction_modes": [
+    "P",
+    "F"
+  ],
+  "methods": [
+    "driver_omp",
+    "coverage_driver",
+    "top_attribution",
+    "random_matched"
+  ]
+}

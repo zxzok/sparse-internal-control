@@ -1,0 +1,55 @@
+{
+  "experiment_id": "formal_reachability",
+  "model": "task-specific models",
+  "panel": "the seven applicable nominal/held-out series",
+  "settings": "gamma=1; complete stacked vectors; xi=1e-6; eps=.30,.35,.40,.45,.50",
+  "direction_conditions": "P or P,F by series",
+  "seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "record_paths": [
+    "data/measurements/formal_reachability/readouts.jsonl"
+  ],
+  "input_manifest": "data/inputs/formal_reachability/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 8,
+  "nominal_dose": 1.0,
+  "interventions": "data/interventions/formal_reachability/interventions.jsonl",
+  "model_asset_id": null,
+  "execution_profiles": [
+    "mps_head_fp32",
+    "cuda_head_fp32"
+  ],
+  "dtype": "float32",
+  "readout": "series_specific_complete_source_target_patched_vectors",
+  "refit": {
+    "implementation": "coefficient_ridge",
+    "lambda": 1.0,
+    "row_normalization": "none",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "fixed_evaluation_available": true,
+  "available_stages": [],
+  "methods": [
+    "driver_omp",
+    "coverage_driver",
+    "top_attribution",
+    "random_matched",
+    "actual_gain_greedy"
+  ],
+  "direction_modes": [
+    "P",
+    "F"
+  ]
+}

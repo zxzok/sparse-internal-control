@@ -1,0 +1,100 @@
+{
+  "experiment_id": "ioi_nominal",
+  "model": "GPT-2 small",
+  "panel": "64 paired prompts; fitting/evaluation same panel",
+  "settings": "margin; 576 head-position candidates; k<=8; ridge=1; raw dictionary",
+  "direction_conditions": "P",
+  "seed_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "record_paths": [
+    "data/measurements/ioi_nominal/nominal.jsonl",
+    "data/measurements/ioi_nominal/readouts.jsonl",
+    "data/measurements/ioi_nominal/reversal.jsonl",
+    "data/measurements/ioi_nominal/run_metadata.json"
+  ],
+  "input_manifest": "data/inputs/ioi_nominal/manifest.json",
+  "measurement_status": "saved_records_available",
+  "fresh_full_experiment_status": "not_executed_in_release_validation",
+  "max_support": 8,
+  "nominal_dose": 1.0,
+  "interventions": "data/interventions/ioi_nominal/interventions.jsonl",
+  "full_run": {
+    "module": "sparse_control.runners.implementations.nominal_context",
+    "arguments": [
+      "--preset",
+      "ioi_gpt2",
+      "--model",
+      "gpt2",
+      "--device",
+      "mps",
+      "--batch-size",
+      "64",
+      "--seeds",
+      "0,1,2,3,4,5,6,7,8,9",
+      "--ks",
+      "8,12",
+      "--epsilon",
+      ".1",
+      "--eap-edges",
+      "40",
+      "--ridge",
+      "1",
+      "--coverage-target",
+      ".95",
+      "--include-sota",
+      "--include-ep-full",
+      "--ep-full-steps",
+      "150"
+    ],
+    "output_flag": "--out",
+    "seed_argument": "--seeds"
+  },
+  "configuration_identity": "producer_and_record_parameters",
+  "model_asset_id": "gpt2",
+  "execution_profiles": [
+    "mps_head_fp32",
+    "cuda_head_fp32"
+  ],
+  "dtype": "float32",
+  "readout": "io_minus_subject_margin",
+  "refit": {
+    "implementation": "coefficient_ridge",
+    "lambda": 1.0,
+    "row_normalization": "none",
+    "energy_constraint": null,
+    "off_target_penalty": 0.0
+  },
+  "fixed_evaluation_available": true,
+  "available_stages": [
+    "full",
+    "fit",
+    "nominal",
+    "reversal"
+  ],
+  "fit_examples": 64,
+  "eval_examples": 64,
+  "candidate_count": 576,
+  "candidate_library": "head_position",
+  "direction_cache_microbatch": 1,
+  "direction_modes": [
+    "P"
+  ],
+  "methods": [
+    "driver_omp",
+    "coverage_driver",
+    "top_attribution",
+    "random_matched",
+    "actual_gain_greedy"
+  ],
+  "stage_scope": "Stages correspond to this experimental series; IOI and unpaired Sentiment dose producers are separate configurations."
+}

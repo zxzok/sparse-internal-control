@@ -1,0 +1,23 @@
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.23\linewidth}>{\raggedright\arraybackslash}p{0.37\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}@{}}
+\toprule
+Series & Readout and panel & Repetitions and reporting unit \\
+\midrule
+IOI nominal & IO--S margin; 64 pairs, same panel & 10 seeds; stacked $R_{\rm clean}$ and $\mathrm{Rel}_{\rm tar}(1)$ \\
+MCQA nominal & Four option logits; 8 questions/category, same panel & 3 seeds/category; stacked $R_{\rm clean}$ and $\mathrm{Rel}_{\rm tar}(1)$ \\
+MCQA control & Scalar mean-wrong margin; 24 questions/category, 12/12; head library; P/F & 8 seeds; $8\times6=48$ feedback endpoints/selector/mode; 8 reversal ratios; 8 nominal-dose $\mathrm{Rel}_{\rm tar}(1)$ values/selector/mode \\
+Refusal control & Lexical margin; 20 pairs, 10/10; head library; P/F & 8 seeds; $8\times5=40$ feedback endpoints/selector/mode; 8 reversal ratios; 8 nominal-dose $\mathrm{Rel}_{\rm tar}(1)$ values/selector/mode \\
+IOI reversal & Saved nominal interventions; same 64 pairs; P & 10 seed-level ratios/selector \\
+Sentiment reversal & Saved $k=8$ paired interventions; 16 pairs, 8/8; P/F & 8 seed-level ratios/selector/mode; 8 nominal-dose $\mathrm{Rel}_{\rm tar}(1)$ values/selector/mode \\
+Independent dose & Humanities, STEM, Refusal; control evaluation splits; P/F & 8 seeds, 10 doses; 48 curves and 480 points/task \\
+Preservation & Fixed 32-prompt MMLU panel; MCQA P, Sentiment/Refusal F; nominal dose & 8 seeds; 256 prompt--seed observations/selector on 32 unique prompts \\
+MCQA module reuse & Signed margin recovery; 32 questions/category, 16/16 & 4 seeds/category; evaluation-side coefficient refit or fully frozen \\
+Sentiment reuse & Signed margin recovery; 16 pairs, 8/8; P/F; $k=3,5,8$ & 8 seeds; fixed-dose recovery \\
+IOI reuse & Pointwise clean-normalized recovery; fitting/test split & 3 seeds; refit or fixed coefficients, both with evaluation-pair directions \\
+IOI dose & 64 pairs, same panel; mean-margin progress and non-answer-position \(\Delta\)KL & Driver-OMP: 2 seeds, $k=4$; Random: 3 seeds, $k=8$ \\
+Sentiment unpaired dose & Word-set margin; unpaired prompt pools; seven doses & 3 seeds/method; progress and same-prompt KL \\
+IOI feedback & Batch-mean IO--S margin; same 64-prompt panel & 3 seeds, 8 targets; 24 endpoints \\
+IOI supporting analyses & Recurrence: $k=3,5,8,12,16$. Backup: separate 64-prompt panel & Recurrence: 5 seeds, 25 configurations. Backup: one to seven sites \\
+Model comparison & Four Humanities questions, same panel; four option logits & Qwen3-8B: 5 seeds, residual-only; Mistral-7B: 3 seeds, three module types \\
+Refusal continuations & 10 harmful evaluation prompts/seed; 16 greedy tokens; unpatched + 3 selectors & 8 seeds; 320 continuations on 20 reused prompt identities \\
+\bottomrule
+\end{longtable}

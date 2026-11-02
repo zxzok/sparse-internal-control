@@ -1,0 +1,243 @@
+{
+  "artifact_id": "feedback_hits",
+  "columns": [
+    "Task",
+    "Mode",
+    "Driver-OMP",
+    "Coverage-Driver",
+    "Top-k"
+  ],
+  "cells": [
+    [
+      "IOI",
+      "P",
+      "24/24",
+      "---",
+      "---"
+    ],
+    [
+      "Humanities",
+      "P",
+      "38/48",
+      "46/48",
+      "45/48"
+    ],
+    [
+      "Humanities",
+      "F",
+      "8/48",
+      "8/48",
+      "8/48"
+    ],
+    [
+      "STEM",
+      "P",
+      "39/48",
+      "47/48",
+      "47/48"
+    ],
+    [
+      "STEM",
+      "F",
+      "8/48",
+      "7/48",
+      "7/48"
+    ],
+    [
+      "Refusal",
+      "P",
+      "12/40",
+      "21/40",
+      "21/40"
+    ],
+    [
+      "Refusal",
+      "F",
+      "12/40",
+      "21/40",
+      "22/40"
+    ]
+  ],
+  "numeric_rows": [
+    {
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "hits": 38,
+      "total": 48,
+      "initial_hits": 6,
+      "mean_absolute_error": 1.0025864314908783,
+      "mean_evaluations": 6.125
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "F",
+      "hits": 8,
+      "total": 48,
+      "initial_hits": 6,
+      "mean_absolute_error": 2.2640988156708772,
+      "mean_evaluations": 11.479166666666666
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "hits": 46,
+      "total": 48,
+      "initial_hits": 6,
+      "mean_absolute_error": 0.23778301718023917,
+      "mean_evaluations": 4.416666666666667
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "F",
+      "hits": 8,
+      "total": 48,
+      "initial_hits": 6,
+      "mean_absolute_error": 1.9238882295321673,
+      "mean_evaluations": 11.479166666666666
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "hits": 45,
+      "total": 48,
+      "initial_hits": 6,
+      "mean_absolute_error": 0.26790133374743164,
+      "mean_evaluations": 4.583333333333333
+    },
+    {
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "F",
+      "hits": 8,
+      "total": 48,
+      "initial_hits": 6,
+      "mean_absolute_error": 1.8825253423128743,
+      "mean_evaluations": 11.4375
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "hits": 39,
+      "total": 48,
+      "initial_hits": 3,
+      "mean_absolute_error": 1.0743141089721273,
+      "mean_evaluations": 5.354166666666667
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "F",
+      "hits": 8,
+      "total": 48,
+      "initial_hits": 3,
+      "mean_absolute_error": 2.1874517640681006,
+      "mean_evaluations": 11.895833333333334
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "hits": 47,
+      "total": 48,
+      "initial_hits": 3,
+      "mean_absolute_error": 0.13213498432499668,
+      "mean_evaluations": 3.8541666666666665
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "F",
+      "hits": 7,
+      "total": 48,
+      "initial_hits": 3,
+      "mean_absolute_error": 2.44937834283337,
+      "mean_evaluations": 11.916666666666666
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "hits": 47,
+      "total": 48,
+      "initial_hits": 3,
+      "mean_absolute_error": 0.1363514099502936,
+      "mean_evaluations": 3.7708333333333335
+    },
+    {
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "F",
+      "hits": 7,
+      "total": 48,
+      "initial_hits": 3,
+      "mean_absolute_error": 2.4310326240956783,
+      "mean_evaluations": 11.9375
+    },
+    {
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "P",
+      "hits": 12,
+      "total": 40,
+      "initial_hits": 10,
+      "mean_absolute_error": 0.188488547205925,
+      "mean_evaluations": 10.1
+    },
+    {
+      "task": "refusal",
+      "method": "driver_omp",
+      "direction": "F",
+      "hits": 12,
+      "total": 40,
+      "initial_hits": 10,
+      "mean_absolute_error": 0.18697872877120975,
+      "mean_evaluations": 10.1
+    },
+    {
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "P",
+      "hits": 21,
+      "total": 40,
+      "initial_hits": 10,
+      "mean_absolute_error": 0.11670592844486238,
+      "mean_evaluations": 9.45
+    },
+    {
+      "task": "refusal",
+      "method": "coverage_driver",
+      "direction": "F",
+      "hits": 21,
+      "total": 40,
+      "initial_hits": 10,
+      "mean_absolute_error": 0.11738553166389468,
+      "mean_evaluations": 9.375
+    },
+    {
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "P",
+      "hits": 21,
+      "total": 40,
+      "initial_hits": 10,
+      "mean_absolute_error": 0.10838858604431154,
+      "mean_evaluations": 9.225
+    },
+    {
+      "task": "refusal",
+      "method": "top_attribution",
+      "direction": "F",
+      "hits": 22,
+      "total": 40,
+      "initial_hits": 10,
+      "mean_absolute_error": 0.10982896208763124,
+      "mean_evaluations": 9.225
+    }
+  ]
+}

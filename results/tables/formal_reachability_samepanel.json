@@ -1,0 +1,223 @@
+{
+  "artifact_id": "formal_reachability_samepanel",
+  "columns": [
+    "Method",
+    "IOI",
+    "Humanities",
+    "STEM"
+  ],
+  "cells": [
+    [
+      "Driver-OMP",
+      "0.201 ± 0.058 (10/10)",
+      "0.279 ± 0.032 (3/3)",
+      "0.175 ± 0.035 (3/3)"
+    ],
+    [
+      "Coverage-Driver",
+      "0.294 ± 0.029 (10/10)",
+      "0.152 ± 0.154 (3/3)",
+      "0.061 ± 0.033 (3/3)"
+    ],
+    [
+      "Top-k",
+      "0.240 ± 0.035 (10/10)",
+      "0.333 ± 0.117 (2/3)",
+      "0.221 ± 0.046 (3/3)"
+    ],
+    [
+      "Random",
+      "0.747 ± 0.240 (1/10)",
+      "1.209 ± 0.949 (0/3)",
+      "1.167 ± 1.141 (0/3)"
+    ],
+    [
+      "Nonlinear greedy",
+      "0.151 ± 0.037 (10/10)",
+      "0.073 ± 0.093 (3/3)",
+      "0.020 ± 0.012 (3/3)"
+    ]
+  ],
+  "numeric_rows": [
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 10,
+      "Rel_tar_mean": 0.15050730827567776,
+      "Rel_tar_sample_sd": 0.037306885283355046,
+      "passes_0p4": 10,
+      "R_clean_mean": 0.2891281824524962,
+      "R_clean_sample_sd": 0.06797358744122343
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 10,
+      "Rel_tar_mean": 0.2942906432084553,
+      "Rel_tar_sample_sd": 0.029409640780850232,
+      "passes_0p4": 10,
+      "R_clean_mean": 0.566503356871878,
+      "R_clean_sample_sd": 0.059022672816231685
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 10,
+      "Rel_tar_mean": 0.20053639163503933,
+      "Rel_tar_sample_sd": 0.05841668147523512,
+      "passes_0p4": 10,
+      "R_clean_mean": 0.3860743614552542,
+      "R_clean_sample_sd": 0.11359092343779487
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 10,
+      "Rel_tar_mean": 0.7466111562245885,
+      "Rel_tar_sample_sd": 0.2400832353451195,
+      "passes_0p4": 1,
+      "R_clean_mean": 1.4302238533460865,
+      "R_clean_sample_sd": 0.4422943075496048
+    },
+    {
+      "series": "ioi_nominal_same_panel",
+      "task": "ioi",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 10,
+      "Rel_tar_mean": 0.2402884853413966,
+      "Rel_tar_sample_sd": 0.034965053357334526,
+      "passes_0p4": 10,
+      "R_clean_mean": 0.46376692312091833,
+      "R_clean_sample_sd": 0.07835162351514997
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "Rel_tar_mean": 0.07279740531840227,
+      "Rel_tar_sample_sd": 0.0932252190374962,
+      "passes_0p4": 3,
+      "R_clean_mean": 0.01334386852369509,
+      "R_clean_sample_sd": 0.01822284438650138
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "Rel_tar_mean": 0.1515448348710951,
+      "Rel_tar_sample_sd": 0.15421986817003017,
+      "passes_0p4": 3,
+      "R_clean_mean": 0.02704706305321669,
+      "R_clean_sample_sd": 0.03131305946068784
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "Rel_tar_mean": 0.27899831142667386,
+      "Rel_tar_sample_sd": 0.031841848368262426,
+      "passes_0p4": 3,
+      "R_clean_mean": 0.04506289665425848,
+      "R_clean_sample_sd": 0.013175847096817036
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "Rel_tar_mean": 1.2094658522159494,
+      "Rel_tar_sample_sd": 0.9491339000351846,
+      "passes_0p4": 0,
+      "R_clean_mean": 0.18493696301347348,
+      "R_clean_sample_sd": 0.1320315254876703
+    },
+    {
+      "series": "mcqa_humanities_module_option_logits_same_panel",
+      "task": "mcqa_humanities",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "Rel_tar_mean": 0.3332866162846743,
+      "Rel_tar_sample_sd": 0.11717409971181514,
+      "passes_0p4": 2,
+      "R_clean_mean": 0.05415821229929577,
+      "R_clean_sample_sd": 0.024470902301888475
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "actual_gain_greedy",
+      "direction": "P",
+      "seeds": 3,
+      "Rel_tar_mean": 0.019524790061047462,
+      "Rel_tar_sample_sd": 0.011605466484889934,
+      "passes_0p4": 3,
+      "R_clean_mean": 0.0032051729884096957,
+      "R_clean_sample_sd": 0.0016501641519875152
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "coverage_driver",
+      "direction": "P",
+      "seeds": 3,
+      "Rel_tar_mean": 0.06111587818048452,
+      "Rel_tar_sample_sd": 0.03286923424986841,
+      "passes_0p4": 3,
+      "R_clean_mean": 0.010152571669066144,
+      "R_clean_sample_sd": 0.00464223524946879
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "driver_omp",
+      "direction": "P",
+      "seeds": 3,
+      "Rel_tar_mean": 0.1749989278985792,
+      "Rel_tar_sample_sd": 0.03512666981981333,
+      "passes_0p4": 3,
+      "R_clean_mean": 0.030035224086773563,
+      "R_clean_sample_sd": 0.007648493362756043
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "random_matched",
+      "direction": "P",
+      "seeds": 3,
+      "Rel_tar_mean": 1.166985130717139,
+      "Rel_tar_sample_sd": 1.1409849941511028,
+      "passes_0p4": 0,
+      "R_clean_mean": 0.19599309273465781,
+      "R_clean_sample_sd": 0.18465100059205264
+    },
+    {
+      "series": "mcqa_stem_module_option_logits_same_panel",
+      "task": "mcqa_stem",
+      "method": "top_attribution",
+      "direction": "P",
+      "seeds": 3,
+      "Rel_tar_mean": 0.22118592342471058,
+      "Rel_tar_sample_sd": 0.04644260238687183,
+      "passes_0p4": 3,
+      "R_clean_mean": 0.03822212996471274,
+      "R_clean_sample_sd": 0.011686436200154911
+    }
+  ]
+}
