@@ -1,0 +1,16 @@
+Sparse Internal Control of Language Models
+Copyright 2026 Xizhe Zhang
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Versions up to and including 1.1.0 of this repository were distributed under
+the MIT License with the copyright notice "Copyright (c) 2026 The Driver
+Circuits Authors". The copyright holder relicensed the work under the Apache
+License, Version 2.0 as of version 1.2.0; copies obtained under the earlier
+license keep the terms under which they were obtained.
+
+Patent status and the copyright holder's patent commitments are stated in
+PATENTS.md.
+
+Third-party datasets and models used by the experiments retain their own
+licenses; see docs/third_party_assets.md.
