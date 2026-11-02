@@ -103,7 +103,7 @@ The author of the accompanying paper is Xizhe Zhang. To cite this software relea
   author  = {Zhang, Xizhe},
   title   = {Sparse Internal Control of Language Models},
   year    = {2026},
-  version = {1.1.0},
+  version = {1.2.0},
   url     = {https://github.com/zxzok/sparse-internal-control}
 }
 ```
@@ -112,6 +112,6 @@ Machine-readable metadata is in [CITATION.cff](CITATION.cff).
 
 ## License and questions
 
-The code uses the [MIT license](LICENSE), retaining the implementation's original copyright notice. Third-party datasets and models retain their respective licenses; see [attribution](docs/third_party_assets.md).
+The code is licensed under the [Apache License, Version 2.0](LICENSE); [NOTICE](NOTICE) records the copyright and relicensing history (versions up to 1.1.0 were MIT), and [PATENTS.md](PATENTS.md) states the copyright holder's patent commitments. Third-party datasets and models retain their respective licenses; see [attribution](docs/third_party_assets.md).
 
 For reproducibility questions or bugs, [open an issue](https://github.com/zxzok/sparse-internal-control/issues) with the experiment ID, command, software profile and relevant error or numerical difference.

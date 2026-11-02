@@ -59,6 +59,6 @@ Windows PowerShell 使用 `..\sic-replay-env\Scripts\Activate.ps1` 激活环境�
 
 [数据字典](docs/data_dictionary.md) · [方法说明](docs/methods.md) · [实验配置](docs/experiments.md) · [第三方素材](docs/third_party_assets.md)
 
-引用信息见 [CITATION.cff](CITATION.cff) 和 [英文 README](README.md#citation)。代码采用 [MIT 许可证](LICENSE) 并保留原实现版权通知；第三方数据和模型遵循各自许可证。
+引用信息见 [CITATION.cff](CITATION.cff) 和 [英文 README](README.md#citation)。代码采用 [Apache License 2.0](LICENSE)，版权与许可证变更历史见 [NOTICE](NOTICE)（1.1.0 及以前版本为 MIT），专利相关承诺见 [PATENTS.md](PATENTS.md)；第三方数据和模型遵循各自许可证。
 
 问题反馈请使用 [GitHub Issues](https://github.com/zxzok/sparse-internal-control/issues)，附实验 ID、命令、环境及错误或数值差异。
