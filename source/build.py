@@ -5,7 +5,7 @@ src/page.html is the single source. It produces:
   dist/artifact.html  preview version (no document skeleton, absolute paper link)
   dist/site/          deployable static site for GitHub Pages
 """
-import json, pathlib, shutil, sys
+import base64, json, pathlib, re, shutil, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent
 SRC = ROOT / "src" / "page.html"
@@ -55,12 +55,39 @@ a:hover{transform:translateY(-1px)}a:active{transform:scale(.98)}a:focus-visible
 """
 
 
+KATEX_V = "0.16.11"
+KATEX_LINK = f'<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@{KATEX_V}/dist/katex.min.css" crossorigin="anonymous">'
+
+
+def katex_inline_css():
+    """KaTeX stylesheet with the fonts it needs embedded as data URIs (the preview host blocks CDN stylesheets)."""
+    kdir = ROOT / "assets" / "katex"
+    css = (kdir / "katex.min.css").read_text(encoding="utf-8")
+
+    def face(m):
+        block = m.group(0)
+        f = re.search(r"url\(fonts/(KaTeX_[A-Za-z0-9_-]+)\.woff2\)", block)
+        path = kdir / "fonts" / (f.group(1) + ".woff2") if f else None
+        if not path or not path.exists():
+            return ""
+        data = base64.b64encode(path.read_bytes()).decode()
+        return re.sub(r"src:[^}]*", f'src:url(data:font/woff2;base64,{data}) format("woff2")', block)
+
+    css = re.sub(r"@font-face\{[^}]*\}", face, css)
+    return "<style>" + css + "</style>"
+
+
 def main():
     src = SRC.read_text(encoding="utf-8")
+    zh_path = ROOT / "src" / "zh.json"
+    zh = json.loads(zh_path.read_text(encoding="utf-8")) if zh_path.exists() else {}
+    src = src.replace("/*ZH_DICT*/{}", json.dumps(zh, ensure_ascii=False).replace("</", "<\\/"))
     DIST.mkdir(exist_ok=True)
 
     # Preview version for the Artifact tool
-    (DIST / "artifact.html").write_text(src.replace("{{PAPER_URL}}", URL + "paper.pdf"), encoding="utf-8")
+    (DIST / "artifact.html").write_text(
+        src.replace("{{PAPER_URL}}", URL + "paper.pdf").replace("<!--KATEX_CSS-->", katex_inline_css()), encoding="utf-8")
+    src = src.replace("<!--KATEX_CSS-->", KATEX_LINK)
 
     # Deployable version
     if SITE.exists():

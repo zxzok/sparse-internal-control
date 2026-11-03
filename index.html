@@ -7,7 +7,8 @@
 <meta name="description" content="Sparse internal control steers a frozen language model through a few internal sites at inference time, and a six axis protocol measures the control it provides.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
 <style>
 /* Layout: one 1152px column told as a long story. Instruments (canvas, SVG) carry the ideas; prose keeps a 680px measure.
    Color follows the paper's Figure 1: orange = intervention, blue = frozen model, red = source behavior, green = target behavior. */
@@ -19,8 +20,8 @@
   --src:#C93A2E; --tgt:#0A7F55;
   --nav-bg:rgba(255,255,255,.74); --panel-bg:rgba(250,250,248,.94);
   --h1-a:#000000; --h1-b:#666666;
-  --font:"Geist","Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font:"Geist","Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,"Noto Sans SC",monospace;
   --s-25:2px; --s-50:4px; --s-75:8px; --s-100:12px; --s-200:16px; --s-300:24px; --s-400:32px; --s-500:40px; --s-600:48px; --s-700:64px; --s-800:80px; --s-900:96px;
   --r-sm:2px; --r:4px; --r-md:6px; --r-lg:8px; --r-xl:12px; --r-2xl:16px; --r-3xl:24px; --r-full:9999px;
   --ease:cubic-bezier(0.22,1,0.36,1);
@@ -146,7 +147,7 @@ body.menu-open{overflow:hidden}
 .chip{display:inline-flex; align-items:center; gap:var(--s-50); padding:var(--s-50) var(--s-100); border:1px solid var(--line-strong); border-radius:var(--r-full); background:var(--surface)}
 .chip .dot{width:6px; height:6px; border-radius:var(--r-full); background:var(--drive)}
 .h1-grad{background:linear-gradient(90deg,var(--h1-a),var(--h1-b)); -webkit-background-clip:text; background-clip:text; color:transparent}
-.h1-grad span{display:block}
+.h1-grad .ln{display:block}
 .hero-sub{color:var(--muted)}
 .cta-row{display:flex; flex-wrap:wrap; align-items:center; gap:var(--s-100)}
 .proof{color:var(--muted)}
@@ -184,7 +185,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:var(--s-3
 input[type=range]::-moz-range-thumb{width:var(--s-200); height:var(--s-200); border-radius:var(--r-full); background:var(--drive); border:4px solid var(--surface); box-shadow:0 0 0 1px var(--drive)}
 input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .slider-ticks{position:absolute; left:var(--s-100); right:var(--s-100); bottom:0; height:var(--s-200)}
-.slider-ticks span{position:absolute; transform:translateX(-50%); white-space:nowrap; color:var(--faint)}
+.slider-ticks > span{position:absolute; transform:translateX(-50%); white-space:nowrap; color:var(--faint)}
 .legend{display:flex; flex-wrap:wrap; gap:var(--s-100) var(--s-300); color:var(--muted)}
 .legend i{display:inline-block; width:10px; height:10px; border-radius:var(--r-full); margin-right:var(--s-75); vertical-align:-1px}
 .lg-drive{background:var(--drive)}
@@ -212,7 +213,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .step.on .step-n{background:var(--drive); border-color:var(--drive); color:var(--on-drive)}
 .step p{color:var(--muted)}
 .fx{font-family:var(--mono); font-size:.875rem; line-height:1.25rem; padding:var(--s-100) var(--s-200); border-radius:var(--r-lg); background:var(--raised); border:1px solid var(--line); overflow-x:auto; white-space:nowrap; color:var(--ink)}
-.fx.terms{display:flex; flex-wrap:wrap; gap:var(--s-50) var(--s-300); white-space:normal; overflow-x:visible}
+.fx.terms{display:flex; flex-wrap:wrap; gap:var(--s-50) var(--s-300); white-space:normal; overflow-x:auto}
 .fx.terms > span{white-space:nowrap}
 .pipe{display:flex; flex-wrap:wrap; align-items:center; gap:var(--s-75)}
 .pipe span.p{padding:var(--s-25) var(--s-75); border:1px solid var(--line-strong); border-radius:var(--r-full); white-space:nowrap}
@@ -393,6 +394,104 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 .reveal{transition:opacity 700ms var(--ease), transform 700ms var(--ease)}
 .reveal.pre{opacity:0; transform:translateY(var(--s-400))}
 
+
+/* Theory */
+.ctl{display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); margin-top:var(--s-600); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); overflow:hidden}
+.ctl-plot{position:relative; min-height:28rem; border-right:1px solid var(--line)}
+.ctl-plot canvas{position:absolute; inset:0; width:100%; height:100%}
+.ctl-side{display:grid; gap:var(--s-300); padding:var(--s-300); align-content:start}
+.ctl-head{display:grid; gap:var(--s-75)}
+.ctl-group{display:grid; gap:var(--s-100)}
+.ctl-row{display:flex; justify-content:space-between; align-items:center; gap:var(--s-100)}
+.chips{display:flex; flex-wrap:wrap; gap:var(--s-75)}
+.cchip{min-width:var(--s-600); padding:var(--s-50) var(--s-100); border-radius:var(--r-full); border:1px solid var(--line-strong); background:var(--surface); color:var(--ink); font-family:var(--mono); font-size:.875rem; line-height:1.25rem; cursor:pointer; transition:background-color 300ms var(--ease), border-color 300ms var(--ease), color 300ms var(--ease), transform 300ms var(--ease)}
+.cchip:hover{border-color:var(--ink); transform:translateY(-1px)}
+.cchip:active{transform:scale(.97)}
+.cchip[aria-pressed="true"]{background:var(--drive); border-color:var(--drive); color:var(--on-drive)}
+.ctl-read{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--s-100); margin:0}
+.ctl-read div{display:grid; gap:var(--s-25); padding:var(--s-100); border:1px solid var(--line); border-radius:var(--r-lg); background:var(--raised)}
+.ctl-read dt{color:var(--muted)}
+.ctl-read dd{margin:0; font-size:1rem; line-height:1.5rem; font-variant-numeric:tabular-nums}
+.ctl-status{padding:var(--s-100) var(--s-200); border-radius:var(--r-lg); border:1px solid currentColor; color:var(--src); background:var(--surface)}
+.ctl-status.ok{color:var(--tgt)}
+.ctl-status.mid{color:var(--drive-ink)}
+.thm{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s-200); margin-top:var(--s-600)}
+.thm li{display:grid; gap:var(--s-100); align-content:start; padding:var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); min-width:0}
+.thm .k{color:var(--drive-ink)}
+.thm p{color:var(--muted)}
+.thm-foot{margin-top:var(--s-300); max-width:680px; color:var(--ink)}
+/* Protocol map */
+.pmap{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:var(--s-500); margin-top:var(--s-600); align-items:center}
+.pmap-eq{display:grid; gap:var(--s-100)}
+.pmap-scroll{overflow-x:auto}
+.pmap-grid{display:grid; gap:var(--s-75); min-width:36rem}
+.pr{display:grid; grid-template-columns:8.5rem repeat(4,minmax(0,1fr)); gap:var(--s-75)}
+.ph{color:var(--muted); padding:0 var(--s-75)}
+.rh{color:var(--muted); align-self:center}
+.pc{display:flex; align-items:center; gap:var(--s-75); padding:var(--s-100); min-height:var(--s-700); text-align:left; border:1px solid var(--line-strong); border-radius:var(--r-xl); background:var(--surface); color:var(--ink); font-size:.875rem; line-height:1.25rem; font-weight:500; cursor:pointer; transition:border-color 300ms var(--ease), background-color 300ms var(--ease), transform 300ms var(--ease)}
+.pc:hover{border-color:var(--ink); transform:translateY(-1px)}
+.pc:active{transform:scale(.98)}
+.pc .n{display:grid; place-items:center; width:1.5rem; height:1.5rem; flex:none; border-radius:var(--r-full); border:1px solid var(--line-strong); font-family:var(--mono); font-size:.75rem; transition:background-color 300ms var(--ease), color 300ms var(--ease), border-color 300ms var(--ease)}
+.pc[aria-current="true"]{border-color:var(--drive); background:var(--drive-soft)}
+.pc[aria-current="true"] .n{background:var(--drive); border-color:var(--drive); color:var(--on-drive)}
+.pe{border:1px dashed var(--line); border-radius:var(--r-xl); min-height:var(--s-700)}
+
+
+/* Math typesetting (KaTeX) */
+.katex{font-size:1.06em; line-height:1.2}
+.fx{font-family:var(--font); font-size:1rem; line-height:1.75rem}
+.fx .katex{font-size:1.12em}
+.mi{font-family:KaTeX_Math,"Times New Roman",serif; font-style:italic}
+.mr{font-family:KaTeX_Main,"Times New Roman",serif}
+.dose-val.mr{font-size:1.125rem; line-height:1.75rem}
+.fw-svg .fo{display:grid; gap:2px; font-family:var(--font); font-size:13px; line-height:18px; color:var(--ink)}
+.fw-svg .fo b{font-weight:600}
+.fw-svg .fo span{font-size:12px; line-height:17px; color:var(--muted)}
+.fw-svg .fo .mt{color:var(--model)}
+.fw-svg .fo .dt{color:var(--drive-ink)}
+.fw-svg .fo .katex{font-size:1.1em}
+.hex-core{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:grid; justify-items:center; gap:2px; max-width:5.75rem; pointer-events:none; text-align:center; font-size:.875rem; line-height:1.25rem; color:var(--ink)}
+.hex-core small{font-family:var(--mono); font-size:.75rem; line-height:1rem; letter-spacing:.06em; color:var(--faint)}
+.t1-card .ro{font-family:var(--font); font-size:.875rem; line-height:1.25rem}
+.cchip{font-family:var(--font)}
+.meta-link{color:var(--muted); text-decoration:none; transition:color 300ms var(--ease)}
+.meta-link:hover{color:var(--ink); text-decoration:underline}
+.sep{color:var(--faint)}
+
+
+/* Six axis grid */
+.ax-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s-200); margin-top:var(--s-500)}
+.ax-card{position:relative; display:grid; gap:var(--s-100); align-content:start; padding:var(--s-200) var(--s-200) var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); min-width:0}
+.ax-card::after{content:""; position:absolute; inset:-1px; border:2px solid var(--drive); border-radius:var(--r-2xl); opacity:0; pointer-events:none}
+.ax-card.flash::after{animation:flash 1400ms var(--ease)}
+@keyframes flash{0%{opacity:0} 20%{opacity:1} 100%{opacity:0}}
+.ax-top{display:flex; align-items:center; gap:var(--s-100)}
+.ax-n{display:grid; place-items:center; width:var(--s-400); height:var(--s-400); flex:none; border-radius:var(--r-full); background:var(--drive); color:var(--on-drive); font-family:var(--mono); font-size:.875rem; font-weight:600}
+.ax-t{display:grid; min-width:0}
+.ax-g{color:var(--faint)}
+.ax-q{color:var(--ink)}
+.ax-scope{position:relative; height:13.75rem; border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface); overflow:hidden}
+.ax-scope canvas{position:absolute; inset:0; width:100%; height:100%}
+.ax-fx{font-size:.875rem; padding:var(--s-75) var(--s-100)}
+.ax-meta{display:grid; gap:var(--s-100); margin:var(--s-50) 0 0}
+.ax-meta div{display:grid; gap:var(--s-25)}
+.ax-meta dt{color:var(--drive-ink); letter-spacing:.06em; text-transform:uppercase}
+.ax-meta dd{margin:0; color:var(--muted)}
+.fx,.pmap-scroll,.tbl-wrap,.fig-scroll,.code,.ctl-read div,.thm li{position:relative}
+.lg-sq{border-radius:var(--r-sm)!important}
+.lg-mlp{border-radius:var(--r)!important; width:12px!important; height:12px!important}
+.lg-res{width:16px!important; height:2px!important; border-radius:0!important; background:var(--line-strong); vertical-align:3px!important}
+/* Language */
+.lang-btn{display:inline-grid; place-items:center; white-space:nowrap; flex:none; min-width:2.5rem; height:2rem; padding:0 var(--s-100); border-radius:var(--r-full); border:1px solid var(--line-strong); background:var(--surface); color:var(--ink); cursor:pointer; transition:border-color 300ms var(--ease), transform 300ms var(--ease)}
+.lang-btn:hover{border-color:var(--ink)}
+.lang-btn:active{transform:scale(.96)}
+[data-only="zh"]{display:none}
+html[data-lang="zh"] [data-only="zh"]{display:block}
+html[data-lang="zh"] [data-only="en"]{display:none}
+html[data-lang="zh"] .heading-1, html[data-lang="zh"] .heading-2, html[data-lang="zh"] .heading-3, html[data-lang="zh"] .heading-4{letter-spacing:0}
+html[data-lang="zh"] .eyebrow, html[data-lang="zh"] .io-label, html[data-lang="zh"] .ax-meta dt{letter-spacing:.1em}
+html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
+
 /* Responsive */
 @media (max-width:1040px){
   .nav-links{display:none}
@@ -403,7 +502,9 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
   .fw-fig{position:relative; top:0; grid-row:1}
   .axes{grid-template-columns:minmax(0,1fr)}
   .hex-col{position:relative; top:0}
-  .ev-grid,.ev-lower,.use-grid,.cite-grid,.idea-grid{grid-template-columns:minmax(0,1fr)}
+  .ev-grid,.ev-lower,.use-grid,.cite-grid,.idea-grid,.ctl,.pmap{grid-template-columns:minmax(0,1fr)}
+  .ctl-plot{border-right:0; border-bottom:1px solid var(--line); min-height:24rem}
+  .thm,.ax-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:720px){
   .section,.tagline{padding-block:var(--s-700)}
@@ -420,7 +521,8 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
   .controls .slider-box{grid-column:1 / -1; grid-row:2}
   .controls .btn{grid-column:1 / -1; justify-self:start}
   .hide-sm{display:none}
-  .t1{grid-template-columns:minmax(0,1fr)}
+  .t1,.thm,.ax-grid{grid-template-columns:minmax(0,1fr)}
+  .ctl-plot{min-height:20rem}
   .facts{grid-template-columns:minmax(0,1fr)}
   .scope{height:20rem}
   .panel-head{flex-direction:column}
@@ -492,6 +594,7 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
     <div class="nav-links body-5">
       <a href="#idea">Idea</a>
       <a href="#framework">Framework</a>
+      <a href="#theory">Theory</a>
       <a href="#axes">Six axes</a>
       <a href="#evidence">Evidence</a>
       <a href="#use">Use it</a>
@@ -499,12 +602,14 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
       <a href="#cite">Cite</a>
     </div>
     <a class="icon-btn" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener" aria-label="Code on GitHub"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-gh"/></svg></a>
+    <button class="lang-btn button-sm" type="button" lang="zh" aria-label="切换到中文">中文</button>
     <button class="icon-btn menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu" aria-label="Open menu"><span></span><span></span></button>
   </nav>
   <div class="menu" id="menu" aria-hidden="true">
     <ul class="heading-5">
       <li><a class="m-link" href="#idea">Idea</a></li>
       <li><a class="m-link" href="#framework">Framework</a></li>
+      <li><a class="m-link" href="#theory">Theory</a></li>
       <li><a class="m-link" href="#axes">Six axes</a></li>
       <li><a class="m-link" href="#evidence">Evidence</a></li>
       <li><a class="m-link" href="#use">Use it</a></li>
@@ -526,10 +631,10 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
     <div class="hero-text">
       <div class="hero-meta">
         <span class="chip caption-3"><span class="dot"></span>NeurIPS 2026</span>
-        <span class="caption-1 muted">Xizhe Zhang · Independent researcher</span>
+        <span class="caption-1">Xizhe Zhang</span><span class="sep" aria-hidden="true">·</span><a class="meta-link caption-1" href="mailto:zhangxizhe@gmail.com">zhangxizhe@gmail.com</a><span class="sep" aria-hidden="true">·</span><a class="meta-link caption-1" href="https://orcid.org/0000-0002-8684-4591" target="_blank" rel="noopener">ORCID 0000-0002-8684-4591</a>
       </div>
-      <h1 class="heading-1 h1-grad" id="h-title"><span>Sparse</span><span>Internal Control</span><span>of Language Models</span></h1>
-      <p class="title-1 hero-sub">Pick a few internal sites in a frozen model, patch them at inference time, and steer one behavior while you track what else moves. Then measure the result on six axes of control.</p>
+      <h1 class="heading-1 h1-grad no-i18n" id="h-title"><span data-only="en"><span class="ln">Sparse</span><span class="ln">Internal Control</span><span class="ln">of Language Models</span></span><span data-only="zh"><span class="ln">语言模型的</span><span class="ln">稀疏内部控制</span></span></h1>
+      <p class="title-1 hero-sub">A control theoretic account of steering frozen language models. A few internal sites act as actuators, a local controllability analysis says what they can reach and at what energy, and a six axis protocol measures the control you actually get.</p>
       <div class="cta-row">
         <a class="btn btn-primary button-md" href="paper.pdf" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Read the paper</a>
         <a class="btn btn-text button-md" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-gh"/></svg>Code on GitHub</a>
@@ -540,7 +645,7 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
     <div class="console" aria-label="Interactive illustration of sparse internal control">
       <div class="console-top">
         <span class="caption-3 io-label">Try it · the paper's Figure 1 setting</span>
-        <span class="caption-4 mono muted hide-sm">weights θ frozen · 4 driver nodes · h ← h + γ Σ β<sub>v</sub>u<sub>v</sub></span>
+        <span class="caption-1 muted hide-sm">weights \(\theta\) frozen · 4 driver nodes · \(h \leftarrow h + \gamma \textstyle\sum_v \beta_v u_v\)</span>
       </div>
       <div class="console-grid">
         <div class="io">
@@ -563,26 +668,28 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
           </div>
           <div class="gauge" aria-hidden="true">
             <div class="gauge-track"></div>
-            <div class="gauge-tick" style="left:48.9%"><i class="caption-5 mono">b(x)</i></div>
-            <div class="gauge-tick" style="left:93.3%"><i class="caption-5 mono">τ</i></div>
+            <div class="gauge-tick" style="left:48.9%"><i class="caption-5">\(b(x)\)</i></div>
+            <div class="gauge-tick" style="left:93.3%"><i class="caption-5">\(\tau\)</i></div>
             <div class="gauge-mark" id="gauge-mark"></div>
           </div>
         </div>
       </div>
       <div class="controls">
-        <label class="title-4" for="dose">Dose γ</label>
+        <label class="title-4" for="dose">Dose \(\gamma\)</label>
         <div class="slider-box">
           <input type="range" id="dose" min="-1" max="2" step="0.01" value="1" aria-describedby="dose-help">
           <div class="slider-ticks caption-5 mono" aria-hidden="true">
             <span style="left:0%">−1</span><span style="left:33.333%">0<span class="hide-sm"> · unpatched</span></span><span style="left:66.667%">1<span class="hide-sm"> · nominal</span></span><span style="left:100%">2</span>
           </div>
         </div>
-        <output class="dose-val mono body-5" id="dose-out" for="dose">γ = 1.00</output>
+        <output class="dose-val mr" id="dose-out" for="dose"><span class="mi">γ</span> = <span id="dose-num">1.00</span></output>
         <button class="btn btn-line button-sm" id="sweep" type="button"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-play"/></svg>Replay sweep</button>
       </div>
       <div class="legend caption-4">
-        <span><i class="lg-drive"></i>driver node, patched</span>
-        <span><i class="lg-site"></i>candidate site, untouched</span>
+        <span><i class="lg-drive lg-sq"></i>driver site, patched</span>
+        <span><i class="lg-site lg-sq"></i>attention head</span>
+        <span><i class="lg-site lg-mlp"></i>MLP</span>
+        <span><i class="lg-res"></i>residual stream</span>
         <span><i class="lg-model"></i>forward pass</span>
         <span id="dose-help" class="note">A schematic of Figure 1. The two outputs are the figure’s example texts, not live model output.</span>
       </div>
@@ -604,7 +711,7 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
         <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-cross"/></svg></span><div><h3 class="title-3">Localized</h3><p class="body-6">Act through a sparse set of internal nodes chosen from a candidate library.</p></div></li>
         <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-undo"/></svg></span><div><h3 class="title-3">Signed reversal</h3><p class="body-6">The opposite patch on target inputs moves behavior back toward the source.</p></div></li>
         <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-funnel"/></svg></span><div><h3 class="title-3">Selective</h3><p class="body-6">Change the targeted behavior, as measured by a task readout.</p></div></li>
-        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg></span><div><h3 class="title-3">Bounded</h3><p class="body-6">Keep intervention strength inside an explicit energy budget κ.</p></div></li>
+        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg></span><div><h3 class="title-3">Bounded</h3><p class="body-6">Keep intervention strength inside an explicit energy budget \(\kappa\).</p></div></li>
         <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></span><div><h3 class="title-3">Off-target preservation</h3><p class="body-6">Leave unrelated behavior alone, such as refusing malicious requests.</p></div></li>
         <li class="obj-cap caption-5">The five control objectives from Figure 1 of the paper.</li>
       </ul>
@@ -624,21 +731,21 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
       <div class="steps" id="steps">
         <article class="step on" data-step="1" tabindex="0" aria-label="Step 1, specify the behavior">
           <div class="step-head"><span class="step-n">1</span><h3 class="heading-6">Specify the behavior</h3></div>
-          <p class="body-6">Choose a readout b<sub>θ</sub>(x) for the behavior: a logit margin, a sentiment score, a refusal score, or the four option logits of a multiple choice question. Pair each target prompt with the readout you want, and set aside disjoint prompts whose outputs should not move.</p>
-          <div class="fx terms"><span>q<sub>i</sub> = τ<sub>i</sub> − b<sub>θ</sub>(x<sub>i</sub>)</span><span>D<sub>tar</sub> = {(x<sub>i</sub>, τ<sub>i</sub>)}</span><span>D<sub>off</sub> = {x̃<sub>j</sub>}</span></div>
+          <p class="body-6">Choose a readout \(b_\theta(x)\) for the behavior: a logit margin, a sentiment score, a refusal score, or the four option logits of a multiple choice question. Pair each target prompt with the readout you want, and set aside disjoint prompts whose outputs should not move.</p>
+          <div class="fx terms"><span>\(q_i = \tau_i - b_\theta(x_i)\)</span><span>\(\mathcal{D}_{\mathrm{tar}} = \{(x_i, \tau_i)\}_{i=1}^{n}\)</span><span>\(\mathcal{D}_{\mathrm{off}} = \{\tilde{x}_j\}_{j=1}^{n_{\mathrm{off}}}\)</span></div>
         </article>
         <article class="step" data-step="2" tabindex="0" aria-label="Step 2, select sparse drivers">
           <div class="step-head"><span class="step-n">2</span><h3 class="heading-6">Select sparse drivers</h3></div>
-          <p class="body-6">A candidate control node v = (s<sub>v</sub>, u<sub>v</sub>, c<sub>v</sub>) pairs a physical site (layer, component, token position, slice) with a direction and a selection cost. The intervention adds scaled directions to the chosen sites during the forward pass. The nonzero entries of β form the driver set.</p>
-          <div class="fx terms"><span>h<sub>s</sub>(x) ← h<sub>s</sub>(x) + Σ<sub>v: s<sub>v</sub>=s</sub> β<sub>v</sub> u<sub>v</sub>(x)</span><span>‖β‖<sub>0,c</sub> = Σ c<sub>v</sub></span><span>E(β) = β<sup>⊤</sup>Wβ</span></div>
+          <p class="body-6">A candidate control node \(v = (s_v, u_v, c_v)\) pairs a physical site (layer, component, token position, slice) with a direction and a selection cost. The intervention adds scaled directions to the chosen sites during the forward pass. The nonzero entries of \(\beta\) form the driver set \(S_\beta = \operatorname{supp}(\beta)\).</p>
+          <div class="fx terms"><span>\(h_s(x) \leftarrow h_s(x) + \sum_{v:\,s_v = s} \beta_v u_v(x)\)</span><span>\(\|\beta\|_{0,c} = \sum_{v \in S_\beta} c_v\)</span><span>\(E(\beta) = \beta^{\top} W \beta\)</span></div>
           <p class="body-6"><b class="body-4" style="color:var(--ink)">Driver-OMP</b> fits the requested displacement by sparse residual fitting. <b class="body-4" style="color:var(--ink)">Coverage-Driver</b> adds candidates by saturated coverage across prompts. Both follow the same three stages.</p>
           <div class="pipe caption-4"><span class="p">Local proposal</span><svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="p">Shared refit</span><svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="p">Nonlinear validation</span></div>
         </article>
         <article class="step" data-step="3" tabindex="0" aria-label="Step 3, certify then characterize">
           <div class="step-head"><span class="step-n">3</span><h3 class="heading-6">Certify, then characterize</h3></div>
-          <p class="body-6">An intervention is an (ε, δ, κ) control certificate when it reaches the target, preserves off-target outputs and stays inside the energy budget, all checked in the original nonlinear model. Sparse internal control looks for the cheapest such intervention.</p>
-          <div class="fx terms"><span>‖q − F(β)‖<sub>2</sub> / (‖q‖<sub>2</sub> + ξ) ≤ ε</span><span>L<sub>off</sub>(β) ≤ δ</span><span>E(β) ≤ κ</span></div>
-          <div class="fx">min<sub>β</sub> ‖β‖<sub>0,c</sub> + λ<sub>E</sub> E(β)&nbsp;&nbsp;subject to the certificate</div>
+          <p class="body-6">An intervention is an \((\varepsilon, \delta, \kappa)\) control certificate when it reaches the target, preserves off-target outputs and stays inside the energy budget, all checked in the original nonlinear model. Sparse internal control looks for the cheapest such intervention.</p>
+          <div class="fx terms"><span>\(\dfrac{\|q - F(\beta)\|_2}{\|q\|_2 + \xi} \le \varepsilon\)</span><span>\(L_{\mathrm{off}}(\beta) \le \delta\)</span><span>\(E(\beta) \le \kappa\)</span></div>
+          <div class="fx">\(\displaystyle\min_{\beta \in \mathbb{R}^M}\ \|\beta\|_{0,c} + \lambda_E\, E(\beta) \quad \text{s.t. } \beta \text{ is an } (\varepsilon, \delta, \kappa) \text{ certificate}\)</div>
           <p class="body-6">The six axes below then describe what kind of control the intervention provides beyond this one check.</p>
         </article>
       </div>
@@ -654,19 +761,17 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
             <!-- inputs -->
             <g data-s="1">
               <rect class="b" x="16" y="138" width="124" height="60" rx="8"/>
-              <text class="t" x="30" y="163">Prompt x<tspan dy="3" font-size="10">i</tspan></text>
-              <text class="c" x="30" y="183">from D<tspan dy="3" font-size="9">tar</tspan></text>
+              <foreignObject x="26" y="143" width="112" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Prompt \(x_i\)</b><span>from \(\mathcal{D}_{\mathrm{tar}}\)</span></div></foreignObject>
               <path class="w" d="M140 168 H174" marker-end="url(#ah)"/>
             </g>
             <g data-s="1">
               <rect class="b" x="16" y="294" width="124" height="60" rx="8"/>
-              <text class="t" x="30" y="319">Off-target x̃<tspan dy="3" font-size="10">j</tspan></text>
-              <text class="c" x="30" y="339">from D<tspan dy="3" font-size="9">off</tspan></text>
+              <foreignObject x="26" y="299" width="112" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Off-target \(\tilde{x}_j\)</b><span>from \(\mathcal{D}_{\mathrm{off}}\)</span></div></foreignObject>
               <path class="w" d="M140 324 H174" marker-end="url(#ah)"/>
             </g>
             <!-- model -->
             <rect class="model" x="176" y="104" width="296" height="284" rx="16"/>
-            <text class="t mt" x="194" y="131">Frozen model f<tspan dy="3" font-size="10">θ</tspan></text>
+            <foreignObject x="190" y="112" width="230" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b class="mt">Frozen model \(f_\theta\)</b></div></foreignObject>
             <svg x="440" y="116" width="18" height="18" viewBox="0 0 256 256"><use href="#i-snow" class="mt" style="fill:var(--model)"/></svg>
             <!-- forward flow dots -->
             <circle class="flow" r="3.5"><animateMotion dur="2.6s" repeatCount="indefinite" path="M140 168 H668"/></circle>
@@ -681,7 +786,7 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
                 <circle class="cand" cx="218" cy="272" r="8"/><circle class="cand" cx="262" cy="272" r="8"/><circle class="cand" cx="306" cy="272" r="8"/><circle class="cand" cx="350" cy="272" r="8"/><circle class="cand" cx="438" cy="272" r="8"/>
                 <circle class="cand" cx="218" cy="324" r="8"/><circle class="cand" cx="262" cy="324" r="8"/><circle class="cand" cx="350" cy="324" r="8"/><circle class="cand" cx="394" cy="324" r="8"/><circle class="cand" cx="438" cy="324" r="8"/>
               </g>
-              <text class="c" x="194" y="370">candidate sites v = (s, u, c)</text>
+              <foreignObject x="190" y="354" width="270" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><span>candidate sites \(v = (s_v, u_v, c_v)\)</span></div></foreignObject>
             </g>
             <!-- drivers -->
             <g data-s="2 3" style="--dim:.55">
@@ -691,22 +796,19 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
             <!-- strengths and cost -->
             <g data-s="2">
               <rect class="b drive-b" x="230" y="20" width="200" height="52" rx="8"/>
-              <text class="t dt" x="244" y="42">Strengths β</text>
-              <text class="c" x="244" y="61">β<tspan dy="3" font-size="9">v</tspan><tspan dy="-3"> = m</tspan><tspan dy="3" font-size="9">v</tspan><tspan dy="-3">α</tspan><tspan dy="3" font-size="9">v</tspan><tspan dy="-3">, few nonzero</tspan></text>
+              <foreignObject x="240" y="24" width="188" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b class="dt">Strengths \(\beta\)</b><span>\(\beta_v = m_v \alpha_v\), few nonzero</span></div></foreignObject>
               <path class="wd" d="M330 72 V102" marker-end="url(#ahd)"/>
-              <text class="c dt" x="338" y="94">+ Σ β u</text>
+              <foreignObject x="336" y="76" width="100" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><span class="dt">\(+\,\textstyle\sum_v \beta_v u_v\)</span></div></foreignObject>
               <path class="wd" d="M246 204 L254 212 M290 308 L298 316 M334 152 L342 160 M378 256 L386 264" marker-end="url(#ahd)"/>
               <circle class="flow-d" r="3"><animateMotion dur="1.4s" repeatCount="indefinite" path="M330 72 V102"/></circle>
               <rect class="b" x="452" y="20" width="150" height="52" rx="8"/>
-              <text class="t" x="466" y="42">Cost</text>
-              <text class="c" x="466" y="61">‖β‖<tspan dy="3" font-size="9">0,c</tspan><tspan dy="-3"> and E(β)</tspan></text>
+              <foreignObject x="462" y="24" width="138" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Cost</b><span>\(\|\beta\|_{0,c}\) and \(E(\beta)\)</span></div></foreignObject>
               <path class="w" d="M430 46 H450" marker-end="url(#ah)"/>
             </g>
             <!-- energy check -->
             <g data-s="3">
               <rect class="b chk" x="624" y="20" width="122" height="52" rx="8"/>
-              <text class="t" x="638" y="42">Energy</text>
-              <text class="c" x="638" y="61">E(β) ≤ κ</text>
+              <foreignObject x="634" y="24" width="88" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Energy</b><span>\(E(\beta) \le \kappa\)</span></div></foreignObject>
               <path class="w" d="M602 46 H622" marker-end="url(#ah)"/>
               <svg x="722" y="28" width="14" height="14" viewBox="0 0 256 256"><use href="#i-check" class="ck" style="fill:var(--drive)"/></svg>
             </g>
@@ -714,39 +816,35 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
             <g data-s="1">
               <path class="w" d="M472 168 H498" marker-end="url(#ah)"/>
               <rect class="b" x="500" y="138" width="112" height="60" rx="8"/>
-              <text class="t" x="514" y="163">Readout</text>
-              <text class="c" x="514" y="183">b(f<tspan dy="-5" font-size="9">β</tspan><tspan dy="8" font-size="9">θ</tspan><tspan dy="-3">, x</tspan><tspan dy="3" font-size="9">i</tspan><tspan dy="-3">)</tspan></text>
+              <foreignObject x="510" y="143" width="100" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Readout</b><span>\(b(f_\theta^{\beta}, x_i)\)</span></div></foreignObject>
               <path class="w" d="M612 168 H666" marker-end="url(#ah)"/>
               <rect class="b" x="636" y="92" width="100" height="32" rx="8"/>
-              <text class="t" x="650" y="113">Target τ<tspan dy="3" font-size="10">i</tspan></text>
+              <foreignObject x="646" y="95" width="88" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Target \(\tau_i\)</b></div></foreignObject>
               <path class="w" d="M686 124 V148" marker-end="url(#ah)"/>
               <circle class="b" cx="686" cy="168" r="18"/>
               <text class="t" x="686" y="173" text-anchor="middle">−</text>
-              <text class="c" x="696" y="212">q − F(β)</text>
+              <foreignObject x="694" y="194" width="66" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><span>\(q - F(\beta)\)</span></div></foreignObject>
             </g>
             <g data-s="1 3">
               <path class="w" d="M686 186 V222" marker-end="url(#ah)"/>
               <rect class="b chk" x="626" y="224" width="120" height="52" rx="8"/>
-              <text class="t" x="640" y="246">Target error</text>
-              <text class="c" x="640" y="265">Rel ≤ ε</text>
+              <foreignObject x="636" y="228" width="86" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Target error</b><span>\(\mathrm{Rel}_{\mathrm{tar}} \le \varepsilon\)</span></div></foreignObject>
               <svg x="722" y="232" width="14" height="14" viewBox="0 0 256 256" data-s="3"><use href="#i-check" style="fill:var(--drive)"/></svg>
             </g>
             <!-- off-target path -->
             <g data-s="1">
               <path class="w" d="M472 324 H498" marker-end="url(#ah)"/>
               <rect class="b" x="500" y="294" width="112" height="60" rx="8"/>
-              <text class="t" x="514" y="319">Observable</text>
-              <text class="c" x="514" y="339">o(f<tspan dy="-5" font-size="9">β</tspan><tspan dy="8" font-size="9">θ</tspan><tspan dy="-3">, x̃</tspan><tspan dy="3" font-size="9">j</tspan><tspan dy="-3">)</tspan></text>
+              <foreignObject x="510" y="299" width="100" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Observable</b><span>\(o(f_\theta^{\beta}, \tilde{x}_j)\)</span></div></foreignObject>
             </g>
             <g data-s="1 3">
               <path class="w" d="M612 324 H634" marker-end="url(#ah)"/>
               <rect class="b chk" x="636" y="298" width="110" height="52" rx="8"/>
-              <text class="t" x="650" y="320">Off-target</text>
-              <text class="c" x="650" y="339">L<tspan dy="3" font-size="9">off</tspan><tspan dy="-3"> ≤ δ</tspan></text>
+              <foreignObject x="646" y="302" width="80" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Off-target</b><span>\(L_{\mathrm{off}} \le \delta\)</span></div></foreignObject>
               <svg x="722" y="306" width="14" height="14" viewBox="0 0 256 256" data-s="3"><use href="#i-check" style="fill:var(--drive)"/></svg>
             </g>
             <g data-s="3">
-              <text class="t dt" x="500" y="400">(ε, δ, κ) control certificate</text>
+              <foreignObject x="496" y="384" width="256" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b class="dt">\((\varepsilon, \delta, \kappa)\) control certificate</b></div></foreignObject>
             </g>
           </svg>
         </div>
@@ -756,10 +854,99 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
   </div>
 </section>
 
+
+<!-- Theory -->
+<section class="section reveal" id="theory" aria-labelledby="h-th">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Theory</span>
+      <h2 class="heading-2" id="h-th">The mathematics of internal control</h2>
+      <p class="body-3">Near the unpatched model, a frozen Transformer acts as a linear map from intervention strengths to behavior. Choosing drivers then becomes a controllability question: can the selected actuators reach the requested displacement, and at what energy? The local analysis proposes a support and strengths. The nonlinear certificate decides whether to accept them.</p>
+    </div>
+
+    <div class="ctl" id="ctl">
+      <div class="ctl-plot"><canvas id="ctl-canvas" role="img" aria-label="Controllability explorer: target displacement, selected effect columns, their energy limited reachable set and the residual"></canvas></div>
+      <div class="ctl-side">
+        <div class="ctl-head">
+          <span class="caption-3 io-label">Controllability explorer</span>
+          <p class="body-6 muted">Two target prompts with scalar readouts, so the requested displacement \(\bar q\) lives in a plane. Each candidate contributes one column of \(\bar G\), its first order effect on both prompts. Energy uses \(W = I\).</p>
+        </div>
+        <div class="ctl-group" role="group" aria-labelledby="ctl-s-l">
+          <span class="title-4" id="ctl-s-l">Support S</span>
+          <div class="chips" id="ctl-chips">
+            <button class="cchip" data-v="0" aria-pressed="true">\(v_1\)</button>
+            <button class="cchip" data-v="1" aria-pressed="true">\(v_2\)</button>
+            <button class="cchip" data-v="2" aria-pressed="false">\(v_3\)</button>
+            <button class="cchip" data-v="3" aria-pressed="false">\(v_4\)</button>
+            <button class="cchip" data-v="4" aria-pressed="false">\(v_5\)</button>
+          </div>
+        </div>
+        <div class="ctl-group">
+          <div class="ctl-row"><label class="title-4" for="kappa">Energy budget \(\kappa\)</label><output class="mr dose-val" id="kappa-out" for="kappa"><span class="mi">κ</span> = <span id="kappa-num">4.00</span></output></div>
+          <input type="range" id="kappa" min="0.25" max="9" step="0.05" value="4">
+        </div>
+        <dl class="ctl-read">
+          <div><dt class="caption-4">\(\operatorname{rank}\bar G_S\)</dt><dd class="mr" id="r-rank">2</dd></div>
+          <div><dt class="caption-4">\(\bar q \in \operatorname{range}(\bar G_S)\)</dt><dd class="mr" id="r-range">yes</dd></div>
+          <div><dt class="caption-4">\(E_{\min}(S)\)</dt><dd class="mr" id="r-emin">5.11</dd></div>
+          <div><dt class="caption-4">\(\chi_\kappa(S)\)</dt><dd class="mr" id="r-chi">0.05</dd></div>
+        </dl>
+        <p class="ctl-status body-5" id="ctl-status">In the span, but the cheapest exact fit needs more energy than κ.</p>
+        <div class="cta-row">
+          <button class="btn btn-primary button-sm" id="omp-run" type="button"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-play"/></svg>Run Driver-OMP, k = 2</button>
+          <button class="btn btn-text button-sm" id="ctl-reset" type="button">Reset</button>
+        </div>
+      </div>
+    </div>
+    <p class="caption-5 note" style="margin-top:var(--s-100)">The reachable set \(\{\bar G_S\beta : \beta^{\top}\beta \le \kappa\}\) is an ellipse, symmetric about the unpatched model. The orange point is the energy constrained best fit; the red dashes are the residual that \(\chi_\kappa(S)\) normalizes.</p>
+
+    <ul class="thm">
+      <li>
+        <span class="k caption-4 mono">Definition · B.1</span>
+        <h3 class="heading-6">Local effect dictionary</h3>
+        <div class="fx terms"><span>\(g_{i,v} = J_{i,s_v}\, u_v(x_i)\)</span><span>\(J_{i,s_v} = \dfrac{\partial b(f_\theta, x_i)}{\partial h_{s_v}(x_i)}\)</span><span>\(q \approx G\beta\)</span></div>
+        <p class="body-6">Each candidate’s first order effect on every target readout is one column of \(G\), taken at the unpatched model. A preservation dictionary \(H\) is built the same way from a differentiable surrogate of the off-target observable.</p>
+      </li>
+      <li>
+        <span class="k caption-4 mono">Theorem 1</span>
+        <h3 class="heading-6">Local linearization error</h3>
+        <div class="fx terms"><span>\(\|\Phi_S(\beta_S) - G_S\beta_S\|_2 \le \dfrac{L_S}{2}\, \beta_S^{\top} W_{SS}\, \beta_S\)</span></div>
+        <p class="body-6">Inside the energy ball the model departs from its linearization by at most the curvature bound \(L_S\) times half the energy. Target recovery therefore holds whenever \(\|q - G_S\beta_S\|_2 + L_S\kappa/2 \le \varepsilon(\|q\|_2 + \xi)\).</p>
+      </li>
+      <li>
+        <span class="k caption-4 mono">Equation B.19</span>
+        <h3 class="heading-6">Local target controllability</h3>
+        <div class="fx terms"><span>\(\chi_\kappa(S) = \displaystyle\min_{\beta_S^{\top} W_{SS}\beta_S \le \kappa} \frac{\|\bar q - \bar G_S\beta_S\|_2}{\|\bar q\|_2 + \xi}\)</span></div>
+        <p class="body-6">A support reaches the target exactly at first order within budget if and only if two conditions hold: \(\bar q \in \operatorname{range}(\bar G_S)\), a span condition, and \(E_{\min}(S) \le \kappa\), an energy condition.</p>
+      </li>
+      <li>
+        <span class="k caption-4 mono">Theorem 2</span>
+        <h3 class="heading-6">Minimum energy interpolation</h3>
+        <div class="fx terms"><span>\(\beta_S^{\dagger} = W_{SS}^{-1/2}\, \tilde G_S^{+}\, \bar q\)</span><span>\((\beta_S^{\dagger})^{\top} W_{SS}\, \beta_S^{\dagger} \le \dfrac{\|\bar q\|_2^2}{\sigma_{\min}^{+}(\tilde G_S)^2}\)</span></div>
+        <p class="body-6">In whitened coordinates \(\tilde G_S = \bar G_S W_{SS}^{-1/2}\), the cheapest exact fit is a pseudoinverse. A support with a small nonzero singular value can demand far more energy to reach the same target.</p>
+      </li>
+      <li>
+        <span class="k caption-4 mono">Proposition 1</span>
+        <h3 class="heading-6">Energy constrained refit</h3>
+        <div class="fx terms"><span>\(\beta_S^{\star}(\nu) = \big(\hat G_S^{\top}\hat G_S + (\lambda + \nu) W_{SS}\big)^{-1} \hat G_S^{\top}\hat q\)</span></div>
+        <p class="body-6">Target fit and a quadratic preservation term are refit jointly on the chosen support. Energy decreases monotonically in the multiplier \(\nu\), so the budget \(\kappa\) is met exactly by bisection.</p>
+      </li>
+      <li>
+        <span class="k caption-4 mono">Proposition 2</span>
+        <h3 class="heading-6">Saturated coverage</h3>
+        <div class="fx terms"><span>\(C(S) = \sum_j w_j \min\Big(1, \sum_{v \in S} a_{jv}\Big)\)</span><span>\(C(S_{\mathrm{greedy}}) \ge (1 - 1/e)\, C(S^{\star})\)</span></div>
+        <p class="body-6">Coverage is monotone submodular, so greedy selection under a pure cardinality budget is within \(1 - 1/e\) of optimal. In its simplest setting Driver-OMP reduces to orthogonal matching pursuit.</p>
+      </li>
+    </ul>
+    <p class="thm-foot body-5">Local results only propose. An intervention is accepted when the \((\varepsilon, \delta, \kappa)\) certificate holds in the original nonlinear model, and the six axes then characterize the control it provides.</p>
+  </div>
+</section>
+
 <!-- Tagline -->
 <section class="tagline" aria-label="Summary">
   <div class="wrap">
-    <p class="heading-3" id="tagline">One push is a demo. Control means you can <span class="k">hit</span> a target, <span class="k">undo</span> it, <span class="k">dial</span> it, <span class="k">track</span> it, <span class="k">spare</span> everything else, and <span class="k">reuse</span> it on prompts you have never seen.</p>
+    <p class="heading-3 tagline-p no-i18n" data-only="en">One push is a demo. Control means you can <span class="k">hit</span> a target, <span class="k">undo</span> it, <span class="k">dial</span> it, <span class="k">track</span> it, <span class="k">spare</span> everything else, and <span class="k">reuse</span> it on prompts you have never seen.</p>
+    <p class="heading-3 tagline-p no-i18n" data-only="zh">推动一次只是演示。控制意味着你能<span class="k">命中</span>目标、<span class="k">撤销</span>它、<span class="k">调节</span>它、<span class="k">跟踪</span>它、<span class="k">不扰动</span>其余一切，并在从未见过的提示上<span class="k">复用</span>它。</p>
   </div>
 </section>
 
@@ -769,72 +956,108 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
     <div class="sec-head">
       <span class="eyebrow">Evaluation protocol</span>
       <h2 class="heading-2" id="h-axes">Six axes of control</h2>
-      <p class="body-3">Target recovery at a single dose describes one property of an intervention. The protocol fixes the support S, the base strengths β<sub>S</sub> and the direction rule u<sub>v</sub>(x), then asks six separate questions of the patched model. Each axis has an operational definition and a quantitative readout, so interventions built by different methods can be compared on equal terms.</p>
+      <p class="body-3">Target recovery at a single dose describes one property of an intervention. The protocol fixes the support \(S\), the base strengths \(\beta_S\) and the direction rule \(u_v(x)\), then asks six separate questions of the patched model. Each axis has an operational definition and a quantitative readout, so interventions built by different methods can be compared on equal terms.</p>
     </div>
 
-    <div class="axes" id="axes-mod">
-      <div class="hex-col">
-        <div class="hex" role="tablist" aria-label="Six evaluation axes" id="hex">
-          <svg class="hex-svg" viewBox="0 0 400 350" aria-hidden="true">
-            <path class="hg" data-g="0" d="M200 175 L200 79 L283.1 127Z"/>
-            <path class="hg" data-g="1" d="M200 175 L283.1 223 L200 271Z"/>
-            <path class="hg" data-g="2" d="M200 175 L116.9 223 L116.9 127Z"/>
-            <polygon class="ring2" points="200,111 255.4,143 255.4,207 200,239 144.6,207 144.6,143"/>
-            <path class="spk" d="M200 175 L200 79 M200 175 L283.1 127 M200 175 L283.1 223 M200 175 L200 271 M200 175 L116.9 223 M200 175 L116.9 127"/>
-            <polygon class="ring1" points="200,79 283.1,127 283.1,223 200,271 116.9,223 116.9,127"/>
-            <g class="ptr" id="hex-ptr"><line x1="200" y1="175" x2="200" y2="96"/></g>
-            <circle class="core" cx="200" cy="175" r="38"/>
-            <text class="core-t" id="core-t" x="200" y="176" text-anchor="middle">Rel<tspan dy="3" font-size="9">tar</tspan><tspan dy="-3">(1)</tspan></text>
-            <text class="core-s" x="200" y="193" text-anchor="middle">READOUT</text>
-          </svg>
-          <button class="hx hx-t" role="tab" id="tab-0" aria-controls="axis-panel" aria-selected="true" style="left:50%;top:22.571%"><span class="n">1</span><span>Reachability</span></button>
-          <button class="hx hx-r" role="tab" id="tab-1" aria-controls="axis-panel" aria-selected="false" tabindex="-1" style="left:70.775%;top:36.286%"><span class="n">2</span><span>Signed<br>reversal</span></button>
-          <button class="hx hx-r" role="tab" id="tab-2" aria-controls="axis-panel" aria-selected="false" tabindex="-1" style="left:70.775%;top:63.714%"><span class="n">3</span><span>Dose<br>response</span></button>
-          <button class="hx hx-b" role="tab" id="tab-3" aria-controls="axis-panel" aria-selected="false" tabindex="-1" style="left:50%;top:77.429%"><span class="n">4</span><span>Feedback<br>controllability</span></button>
-          <button class="hx hx-l" role="tab" id="tab-4" aria-controls="axis-panel" aria-selected="false" tabindex="-1" style="left:29.225%;top:63.714%"><span class="n">5</span><span>Off-target<br>preservation</span></button>
-          <button class="hx hx-l" role="tab" id="tab-5" aria-controls="axis-panel" aria-selected="false" tabindex="-1" style="left:29.225%;top:36.286%"><span class="n">6</span><span>Held-out<br>reuse</span></button>
-        </div>
-        <ul class="hex-legend caption-1" id="hex-legend">
-          <li data-g="0" class="on"><span class="sw"></span><span class="k">1–2</span>At a fixed dose</li>
-          <li data-g="1"><span class="sw"></span><span class="k">3–4</span>Across doses</li>
-          <li data-g="2"><span class="sw"></span><span class="k">5–6</span>Beyond the target set</li>
-        </ul>
+    <div class="pmap">
+      <div class="pmap-eq">
+        <span class="caption-3 io-label">One object, six probes</span>
+        <div class="fx">\(f_\theta^{\gamma\beta}:\quad h_s(x) \leftarrow h_s(x) + \gamma \sum_{v:\,s_v = s} \beta_v u_v(x)\)</div>
+        <p class="body-6 muted">The support \(S\), base strengths \(\beta_S\) and direction rule stay fixed. Every axis reads this one dose family; what changes is the dose \(\gamma\) and the inputs it is read on. \(\gamma = 0\) is the unpatched model and \(\gamma = 1\) the nominal dose.</p>
       </div>
-
-      <div class="panel" id="axis-panel" role="tabpanel" aria-labelledby="tab-0">
-        <div class="panel-head">
-          <div class="ttl swap" id="ax-ttl">
-            <span class="caption-3 io-label" id="ax-kicker">Axis 1 of 6 · At a fixed dose</span>
-            <h3 class="heading-4" id="ax-name">Reachability</h3>
-            <p class="title-2" id="ax-q">Does the nominal dose land on the requested target?</p>
+      <div class="pmap-scroll">
+        <div class="pmap-grid" role="table" aria-label="Where each axis probes the dose family">
+          <div role="row" class="pr">
+            <span role="columnheader" class="ph"></span>
+            <span role="columnheader" class="ph caption-1">\(\gamma = 1\)</span>
+            <span role="columnheader" class="ph caption-1">\(-\beta\) on \(x^{c}\)</span>
+            <span role="columnheader" class="ph caption-1">\(\gamma \in \Gamma\), ten doses</span>
+            <span role="columnheader" class="ph caption-1">\(\gamma_t\) from feedback</span>
           </div>
-          <div class="panel-btns">
-            <button class="icon-btn" id="ax-prev" type="button" aria-label="Previous axis"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-prev"/></svg></button>
-            <button class="icon-btn" id="ax-next" type="button" aria-label="Next axis"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-next"/></svg></button>
-            <button class="btn btn-line button-sm" id="ax-tour" type="button" aria-pressed="true"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-pause"/></svg><span>Pause tour</span></button>
+          <div role="row" class="pr">
+            <span role="rowheader" class="rh caption-4">target prompts \(\mathcal{D}_{\mathrm{tar}}\)</span>
+            <button role="cell" class="pc axis-link" data-i="0"><span class="n">1</span>Reachability</button>
+            <button role="cell" class="pc axis-link" data-i="1"><span class="n">2</span>Signed reversal</button>
+            <button role="cell" class="pc axis-link" data-i="2"><span class="n">3</span>Dose response</button>
+            <button role="cell" class="pc axis-link" data-i="3"><span class="n">4</span>Feedback</button>
           </div>
-        </div>
-        <div class="tour-bar" aria-hidden="true"><i id="tour-fill"></i></div>
-        <div class="scope"><canvas id="axis-canvas" role="img" aria-label="Animated illustration of the selected axis"></canvas></div>
-        <p class="scope-read caption-5 swap" id="ax-read">Orange path: patched readout at γ = 1. Dashed circle: tolerance ε around the target. Three cases; the last one misses.</p>
-        <div class="panel-body swap" id="ax-body">
-          <div class="fx" id="ax-fx">Rel<sub>tar</sub>(γ) = ‖q − F(γβ)‖<sub>2</sub> / (‖q‖<sub>2</sub> + ξ),&nbsp; evaluated at γ = 1</div>
-          <div class="facts">
-            <div><h4 class="title-4">Pass criterion in the paper</h4><p class="body-6" id="ax-crit">Rel<sub>tar</sub>(1) ≤ ε, with ε = 0.4 on stacked held out readouts and at most eight candidates.</p></div>
-            <div class="find"><h4 class="title-4">What the paper found</h4><p class="body-6" id="ax-find">Coverage-Driver and Top-k pass 8/8 seeds on Humanities, STEM and Sentiment with evaluation pair directions (P), and 0/8 with training mean directions (F). Refusal passes 0/8 for every selector.</p></div>
+          <div role="row" class="pr">
+            <span role="rowheader" class="rh caption-4">off-target prompts \(\mathcal{D}_{\mathrm{off}}\)</span>
+            <button role="cell" class="pc axis-link" data-i="4"><span class="n">5</span>Off-target preservation</button>
+            <span role="cell" class="pe"></span><span role="cell" class="pe"></span><span role="cell" class="pe"></span>
+          </div>
+          <div role="row" class="pr">
+            <span role="rowheader" class="rh caption-4">unseen prompts</span>
+            <button role="cell" class="pc axis-link" data-i="5"><span class="n">6</span>Held-out reuse</button>
+            <span role="cell" class="pe"></span><span role="cell" class="pe"></span><span role="cell" class="pe"></span>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="t1" id="t1">
-      <button class="t1-card" data-i="0" aria-current="true"><span class="top caption-4 mono"><span>Axis 1</span><span>fixed dose</span></span><span class="title-3">Reachability</span><span class="d body-6">Proximity to the target.</span><span class="ro">Rel<sub>tar</sub>(1)</span></button>
-      <button class="t1-card" data-i="1"><span class="top caption-4 mono"><span>Axis 2</span><span>fixed dose</span></span><span class="title-3">Signed reversal</span><span class="d body-6">Return toward the source under the opposite patch.</span><span class="ro">Reversal(β)</span></button>
-      <button class="t1-card" data-i="2"><span class="top caption-4 mono"><span>Axis 3</span><span>across doses</span></span><span class="title-3">Dose response</span><span class="d body-6">Target progress across intervention doses.</span><span class="ro">progress P(γ) and signed ρ</span></button>
-      <button class="t1-card" data-i="3"><span class="top caption-4 mono"><span>Axis 4</span><span>across doses</span></span><span class="title-3">Feedback controllability</span><span class="d body-6">Tracking targets through feedback adjusted doses.</span><span class="ro">error, hit rate, evaluations</span></button>
-      <button class="t1-card" data-i="4"><span class="top caption-4 mono"><span>Axis 5</span><span>beyond targets</span></span><span class="title-3">Off-target preservation</span><span class="d body-6">Output changes on non target prompts.</span><span class="ro">L<sub>off</sub>(γβ)</span></button>
-      <button class="t1-card" data-i="5"><span class="top caption-4 mono"><span>Axis 6</span><span>beyond targets</span></span><span class="title-3">Held-out reuse</span><span class="d body-6">Reuse of sites or whole interventions on unseen prompts.</span><span class="ro">held out residual or recovery</span></button>
+    <div class="ax-grid" id="ax-grid">
+      <article class="ax-card" id="axis-1" aria-labelledby="axn-1">
+        <header class="ax-top"><span class="ax-n">1</span><div class="ax-t"><h3 class="heading-6" id="axn-1">Reachability</h3><span class="caption-4 ax-g">At a fixed dose</span></div></header>
+        <p class="body-5 ax-q">Does the nominal dose land on the requested target?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(\mathrm{Rel}_{\mathrm{tar}}(1) = \dfrac{\|q - F(\beta)\|_2}{\|q\|_2 + \xi}\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\mathrm{Rel}_{\mathrm{tar}}(1) \le \varepsilon = 0.4\) on held out readouts.</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">Coverage-Driver passes 8/8 seeds with evaluation pair directions and 0/8 with training mean directions, on both MCQA and Sentiment.</dd></div>
+        </dl>
+      </article>
+      <article class="ax-card" id="axis-2" aria-labelledby="axn-2">
+        <header class="ax-top"><span class="ax-n">2</span><div class="ax-t"><h3 class="heading-6" id="axn-2">Signed reversal</h3><span class="caption-4 ax-g">At a fixed dose</span></div></header>
+        <p class="body-5 ax-q">Does the opposite patch send a target input back toward its source?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(\mathrm{Reversal}(\beta) = \dfrac{\mathrm{Rel}_{\mathrm{dis}\to\mathrm{clean}}}{\mathrm{Rel}_{\mathrm{dis}\to\mathrm{src}}}\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\mathrm{Reversal}(\beta) \ge 2\): twice as far from the target as from the source.</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">MCQA passes 21/24 (Humanities) and 23/24 (STEM) cells with P directions and none with F. Refusal never passes.</dd></div>
+        </dl>
+      </article>
+      <article class="ax-card" id="axis-3" aria-labelledby="axn-3">
+        <header class="ax-top"><span class="ax-n">3</span><div class="ax-t"><h3 class="heading-6" id="axn-3">Dose response</h3><span class="caption-4 ax-g">Across doses</span></div></header>
+        <p class="body-5 ax-q">As the dose grows, does progress toward the target grow in order?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(P(\gamma) = \dfrac{\langle q, F(\gamma\beta)\rangle}{\|q\|_2^2 + \xi},\ \ \rho = \mathrm{Spearman}(\gamma, P)\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\rho \ge 0.95\) over ten doses \(\gamma \in \Gamma = \{-1, \dots, 2\}\).</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">All 48 Refusal curves have \(\rho = 1\), yet none passes signed reversal. Order and reversibility are different properties.</dd></div>
+        </dl>
+      </article>
+      <article class="ax-card" id="axis-4" aria-labelledby="axn-4">
+        <header class="ax-top"><span class="ax-n">4</span><div class="ax-t"><h3 class="heading-6" id="axn-4">Feedback controllability</h3><span class="caption-4 ax-g">Across doses</span></div></header>
+        <p class="body-5 ax-q">Keeping the sites fixed, can a feedback loop on the dose track new targets?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(\gamma_{t+1} = \gamma_t + \eta\,\big(m^{\star} - M(\gamma_t)\big)\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(|m^{\star} - M(\gamma_{\mathrm{end}})| \le \tau_{\mathrm{ctrl}}\): 0.3 for IOI and MCQA, 0.1 for Refusal.</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">Coverage-Driver hits 46/48 Humanities and 47/48 STEM targets with P directions, and 8/48 and 7/48 with F.</dd></div>
+        </dl>
+      </article>
+      <article class="ax-card" id="axis-5" aria-labelledby="axn-5">
+        <header class="ax-top"><span class="ax-n">5</span><div class="ax-t"><h3 class="heading-6" id="axn-5">Off-target preservation</h3><span class="caption-4 ax-g">Beyond the target set</span></div></header>
+        <p class="body-5 ax-q">Does the patch leave unrelated prompts alone?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(L_{\mathrm{off}}(\beta) = \tfrac{1}{n_{\mathrm{off}}}\sum_j \mathrm{KL}\big(p_\theta(\cdot\,|\,\tilde x_j)\,\|\,p_\theta^{\beta}(\cdot\,|\,\tilde x_j)\big)\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\mathrm{KL} \le \delta = 0.001\), as a seed mean and on every prompt.</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">No MCQA or Sentiment seed passes. On Refusal, Driver-OMP passes 4/8 seeds by the mean rule.</dd></div>
+        </dl>
+      </article>
+      <article class="ax-card" id="axis-6" aria-labelledby="axn-6">
+        <header class="ax-top"><span class="ax-n">6</span><div class="ax-t"><h3 class="heading-6" id="axn-6">Held-out reuse</h3><span class="caption-4 ax-g">Beyond the target set</span></div></header>
+        <p class="body-5 ax-q">Do the chosen sites, or the whole intervention, carry over to new prompts?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(\mathrm{recovery} = \dfrac{\bar b_{\mathrm{patched}} - \bar b_{\mathrm{source}}}{\bar b_{\mathrm{target}} - \bar b_{\mathrm{source}}}\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">No pass flag. Recovery is reported with its condition: refit \(\beta\) or frozen \(\beta\).</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">MCQA with refit strengths recovers 0.992 (Humanities); the fully frozen intervention recovers 0.021.</dd></div>
+        </dl>
+      </article>
     </div>
+    <p class="caption-5 note" style="margin-top:var(--s-200)">Each panel is a schematic of one axis. Chips show whether the case shown would pass the paper’s criterion; the numbers under each panel are the paper’s measured results.</p>
   </div>
 </section>
 
@@ -888,21 +1111,21 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
               </tr>
             </tbody>
           </table>
-          <p class="tbl-note caption-5">Coverage-Driver with at most eight candidates. Seeds passing: held out Rel<sub>tar</sub>(1) ≤ 0.4; reversal ratio ≥ 2; Spearman ρ ≥ 0.95 over ten doses (under F, 3/8 Humanities and 4/8 STEM seeds are strongly negative); feedback counts seed and target endpoints; off-target uses seed mean KL ≤ 0.001, with P directions for MCQA and F for Sentiment and Refusal. Source: Tables 3, G.4, G.6, G.7, G.9.</p>
+          <p class="tbl-note caption-5">Coverage-Driver with at most eight candidates. Seeds passing: held out \(\mathrm{Rel}_{\mathrm{tar}}(1) \le 0.4\); reversal ratio \(\ge 2\); Spearman \(\rho \ge 0.95\) over ten doses (under F, 3/8 Humanities and 4/8 STEM seeds are strongly negative); feedback counts seed and target endpoints; off-target uses seed mean \(\mathrm{KL} \le 0.001\), with P directions for MCQA and F for Sentiment and Refusal. Source: Tables 3, G.4, G.6, G.7, G.9.</p>
         </div>
         <div class="key caption-4" style="margin-top:var(--s-100)"><span><i style="background:var(--drive)"></i>P · evaluation pair directions</span><span><i style="background:var(--model)"></i>F · training mean directions</span></div>
       </div>
       <ul class="take">
         <li><h3 class="title-3">Direction information sets the profile</h3><p class="body-6">On MCQA and Sentiment, reachability and reversal pass in 8/8 seeds with P directions and in none with F. Feedback on MCQA drops from 46/48 to 8/48 hits.</p></li>
-        <li><h3 class="title-3">Ordered is not reversible</h3><p class="body-6">All 48 Refusal dose curves have ρ = 1, yet Refusal never passes signed reversal or held out reachability. Each axis measures something the others miss.</p></li>
-        <li><h3 class="title-3">Preservation is not free</h3><p class="body-6">No MCQA or Sentiment seed keeps KL ≤ 0.001 on the off-target panel. Median MCQA KL sits around 0.05.</p></li>
+        <li><h3 class="title-3">Ordered is not reversible</h3><p class="body-6">All 48 Refusal dose curves have \(\rho = 1\), yet Refusal never passes signed reversal or held out reachability. Each axis measures something the others miss.</p></li>
+        <li><h3 class="title-3">Preservation is not free</h3><p class="body-6">No MCQA or Sentiment seed keeps \(\mathrm{KL} \le 0.001\) on the off-target panel. Median MCQA KL sits around 0.05.</p></li>
       </ul>
     </div>
 
     <div class="ev-lower">
       <div>
         <h3 class="heading-6" style="margin-bottom:var(--s-100)">Nominal dose target recovery</h3>
-        <p class="body-6 muted" style="margin-bottom:var(--s-200)">Table 2. Rel<sub>tar</sub>(1) on the fitting panel, mean ± sample SD, lower is better. At most eight candidates with evaluation pair directions.</p>
+        <p class="body-6 muted" style="margin-bottom:var(--s-200)">Table 2. \(\mathrm{Rel}_{\mathrm{tar}}(1)\) on the fitting panel, mean ± sample SD, lower is better. At most eight candidates with evaluation pair directions.</p>
         <div class="tbl-wrap">
           <table class="rt">
             <thead><tr><th scope="col">Method</th><th scope="col">IOI · 10 seeds</th><th scope="col">Humanities · 3 seeds</th><th scope="col">STEM · 3 seeds</th></tr></thead>
@@ -920,7 +1143,7 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
       <div class="prose" style="gap:var(--s-100)">
         <h3 class="heading-6">Sites travel, frozen interventions do not</h3>
         <p class="body-6 muted">Held-out reuse stays a continuous number with its information condition attached, never a pass flag. In module level MCQA, Driver-OMP keeps its selected sites and refits strengths on held out targets to recover 0.992 ± 0.009 (Humanities) and 0.987 ± 0.034 (STEM). Freeze the whole intervention and recovery falls to 0.021 ± 0.026 and 0.024 ± 0.066.</p>
-        <p class="body-6 muted">Sentiment shows the opposite pattern at k = 8: training mean directions give a mean margin recovery of 0.942 ± 0.535 for Coverage-Driver, yet no F seed passes signed reversal.</p>
+        <p class="body-6 muted">Sentiment shows the opposite pattern at \(k = 8\): training mean directions give a mean margin recovery of 0.942 ± 0.535 for Coverage-Driver, yet no F seed passes signed reversal.</p>
       </div>
     </div>
   </div>
@@ -971,8 +1194,8 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
       <h2 class="heading-2" id="h-faq">Frequently asked</h2>
     </div>
     <div class="faq">
-      <details><summary class="title-2">Does sparse internal control change the model’s weights?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">No. The parameters θ stay frozen. An intervention adds scaled directions to a few activations during the forward pass, and setting β = 0 recovers the original model exactly.</div></details>
-      <details><summary class="title-2">What is a driver node?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">A candidate control node is a triple of a physical site, an intervention direction and a selection cost. The candidates that receive a nonzero strength form the driver set S<sub>β</sub> = supp(β). One site can host several candidates with different directions.</div></details>
+      <details><summary class="title-2">Does sparse internal control change the model’s weights?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">No. The parameters \(\theta\) stay frozen. An intervention adds scaled directions to a few activations during the forward pass, and setting \(\beta = 0\) recovers the original model exactly.</div></details>
+      <details><summary class="title-2">What is a driver node?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">A candidate control node is a triple of a physical site, an intervention direction and a selection cost. The candidates that receive a nonzero strength form the driver set \(S_\beta = \operatorname{supp}(\beta)\). One site can host several candidates with different directions.</div></details>
       <details><summary class="title-2">How is this different from activation steering?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">Activation steering shows that internal directions can change behavior. Sparse internal control adds the control problem around it: which compact set of sites to use, under a bounded energy, with explicit requirements for target recovery and off-target preservation, followed by an evaluation on six axes.</div></details>
       <details><summary class="title-2">Why six axes instead of one score?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">Because the properties separate in practice. Refusal responds to dose in perfect order and still fails reversal. MCQA sites transfer when strengths are refit, while the fully frozen intervention barely moves held out prompts. One number would hide both facts.</div></details>
       <details><summary class="title-2">What do P and F mean?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">They describe the direction information. P uses evaluation pair directions, computed from the activation contrast of each evaluation pair. F uses training mean directions, averaged over the fitting split and shared across inputs.</div></details>
@@ -1026,7 +1249,7 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
       <div class="foot-links body-5">
         <a href="paper.pdf" target="_blank" rel="noopener">Paper</a>
         <a href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener">Code</a>
-        <a href="https://orcid.org/0000-0002-8684-4591" target="_blank" rel="noopener">ORCID</a>
+        <a href="https://orcid.org/0000-0002-8684-4591" target="_blank" rel="noopener">ORCID 0000-0002-8684-4591</a>
         <a href="#cite">Cite</a>
       </div>
     </div>
@@ -1034,9 +1257,40 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script>
 (() => {
 'use strict';
+const renderMath = el => { if (el && window.renderMathInElement) { try { renderMathInElement(el, { delimiters: [{ left: '\\(', right: '\\)', display: false }], throwOnError: false }); } catch (e) {} } };
+/* ---------- language ---------- */
+const ZH = {"Skip to content": "跳到正文", "Sparse control": "稀疏控制", "Idea": "思路", "Framework": "框架", "Theory": "理论", "Six axes": "六轴", "Evidence": "证据", "Use it": "使用", "FAQ": "问答", "Cite": "引用", "Read the paper": "阅读论文", "Code": "代码", "A control theoretic account of steering frozen language models. A few internal sites act as actuators, a local controllability analysis says what they can reach and at what energy, and a six axis protocol measures the control you actually get.": "用控制论的视角引导冻结的语言模型：少数内部位点充当执行器，局部可控性分析告诉你它们能到达哪里、需要多少能量，六轴评估协议则度量你实际得到的控制。", "Code on GitHub": "GitHub 上的代码", "Tested on": "实验模型：", "and": " 和 ", "across indirect object identification, MMLU question answering, sentiment and refusal steering.": "；任务涵盖间接宾语识别、MMLU 问答、情感引导与拒答引导。", "Try it · the paper's Figure 1 setting": "试一试 · 论文图 1 的设定", "weights \\(\\theta\\) frozen · 4 driver nodes · \\(h \\leftarrow h + \\gamma \\textstyle\\sum_v \\beta_v u_v\\)": "权重 \\(\\theta\\) 冻结 · 4 个驱动节点 · \\(h \\leftarrow h + \\gamma \\textstyle\\sum_v \\beta_v u_v\\)", "Input prompt": "输入提示", "How can I check SSH login logs on a company server?": "如何查看公司服务器上的 SSH 登录日志？", "Authorized audit context": "已授权的审计场景", "Model output": "模型输出", "“I can’t help with server access or hacking related requests.”": "“我无法协助服务器访问或与黑客相关的请求。”", "Source behavior · over refusal": "源行为 · 过度拒答", "“For an authorized audit, review SSH login records and document suspicious login attempts.”": "“在已授权的审计中，请检查 SSH 登录记录，并记录可疑的登录尝试。”", "Target behavior · helpful": "目标行为 · 有帮助", "Dose \\(\\gamma\\)": "剂量 \\(\\gamma\\)", "· unpatched": " · 未干预", "· nominal": " · 标称", "Replay sweep": "重播扫描", "driver site, patched": "驱动位点（被干预）", "attention head": "注意力头", "residual stream": "残差流", "forward pass": "前向传播", "A schematic of Figure 1. The two outputs are the figure’s example texts, not live model output.": "图 1 的示意。两段输出是论文图中的示例文本，并非模型实时生成。", "The idea": "核心思路", "Treat a few activations as actuators": "把少数激活当作执行器", "Activation steering has shown that patching internal states can change what a frozen model does. Sparse internal control asks the engineering question that follows. Which few sites should be patched, with what strength, and what evidence shows that the change behaves like control?": "激活引导已经表明，修补内部状态可以改变冻结模型的行为。稀疏内部控制追问随之而来的工程问题：应当修补哪几个位点，用多大强度，又有什么证据表明这种改变真正具有控制的性质？", "Selected activations become temporary, adjustable control inputs while the learned parameters stay fixed. Goals are written as task readouts, so control can be studied on single prompts and on objectives shared across prompts. The question is no longer only whether an intervention moves the output, but how accurately it reaches the target, how the response changes as the intervention is adjusted, and what else it disturbs.": "被选中的激活成为临时、可调的控制输入，而模型学到的参数保持不变。目标以任务读出的形式给出，因此既能在单个提示上研究控制，也能研究跨提示共享的目标。问题不再只是干预能否推动输出，还包括它多准确地到达目标、调节干预时响应如何变化，以及它还扰动了什么。", "Localized": "局部化", "Act through a sparse set of internal nodes chosen from a candidate library.": "只通过从候选库中选出的少量内部节点施加作用。", "Signed reversal": "符号反转", "The opposite patch on target inputs moves behavior back toward the source.": "在目标输入上施加反向干预，行为会回到源行为附近。", "Selective": "选择性", "Change the targeted behavior, as measured by a task readout.": "改变目标行为，并用任务读出来度量。", "Bounded": "有界", "Keep intervention strength inside an explicit energy budget \\(\\kappa\\).": "把干预强度限制在明确的能量预算 \\(\\kappa\\) 之内。", "Off-target preservation": "非目标保持", "Leave unrelated behavior alone, such as refusing malicious requests.": "不影响无关行为，例如继续拒绝恶意请求。", "The five control objectives from Figure 1 of the paper.": "论文图 1 中的五个控制目标。", "Specify, select, certify": "设定、选择、认证", "The framework separates what you ask for from how drivers are chosen. Any selector can be plugged into the same specification and judged by the same certificate.": "框架把“要什么”与“如何选择驱动节点”分开。任何选择算法都可以接入同一份设定，并由同一个证书评判。", "Specify the behavior": "设定行为", "Choose a readout \\(b_\\theta(x)\\) for the behavior: a logit margin, a sentiment score, a refusal score, or the four option logits of a multiple choice question. Pair each target prompt with the readout you want, and set aside disjoint prompts whose outputs should not move.": "为行为选择一个读出 \\(b_\\theta(x)\\)：logit 差值、情感分数、拒答分数，或多项选择题四个选项的 logit。为每个目标提示配上期望的读出，并另取一组不相交的提示，它们的输出不应改变。", "Select sparse drivers": "选择稀疏驱动节点", "A candidate control node \\(v = (s_v, u_v, c_v)\\) pairs a physical site (layer, component, token position, slice) with a direction and a selection cost. The intervention adds scaled directions to the chosen sites during the forward pass. The nonzero entries of \\(\\beta\\) form the driver set \\(S_\\beta = \\operatorname{supp}(\\beta)\\).": "候选控制节点 \\(v = (s_v, u_v, c_v)\\) 由一个物理位点（层、组件、token 位置、切片）、一个方向和一个选择代价组成。干预在前向传播中把缩放后的方向加到所选位点上。\\(\\beta\\) 的非零分量构成驱动集 \\(S_\\beta = \\operatorname{supp}(\\beta)\\)。", "fits the requested displacement by sparse residual fitting.": " 通过稀疏残差拟合逼近所需位移。", "adds candidates by saturated coverage across prompts. Both follow the same three stages.": " 依据跨提示的饱和覆盖逐个加入候选。两者遵循相同的三个阶段。", "Local proposal": "局部提议", "Shared refit": "共享重拟合", "Nonlinear validation": "非线性验证", "Certify, then characterize": "先认证，再刻画", "An intervention is an \\((\\varepsilon, \\delta, \\kappa)\\) control certificate when it reaches the target, preserves off-target outputs and stays inside the energy budget, all checked in the original nonlinear model. Sparse internal control looks for the cheapest such intervention.": "若一个干预能到达目标、保持非目标输出，并且不超出能量预算，且这些都在原始非线性模型中得到验证，它就是一个 \\((\\varepsilon, \\delta, \\kappa)\\) 控制证书。稀疏内部控制寻找代价最小的此类干预。", "\\(\\displaystyle\\min_{\\beta \\in \\mathbb{R}^M}\\ \\|\\beta\\|_{0,c} + \\lambda_E\\, E(\\beta) \\quad \\text{s.t. } \\beta \\text{ is an } (\\varepsilon, \\delta, \\kappa) \\text{ certificate}\\)": "\\(\\displaystyle\\min_{\\beta \\in \\mathbb{R}^M}\\ \\|\\beta\\|_{0,c} + \\lambda_E\\, E(\\beta)\\)，约束：\\(\\beta\\) 为 \\((\\varepsilon, \\delta, \\kappa)\\) 证书", "The six axes below then describe what kind of control the intervention provides beyond this one check.": "随后，下面的六轴评估描述该干预在这一检验之外提供了何种控制。", "Prompt \\(x_i\\)": "提示 \\(x_i\\)", "from \\(\\mathcal{D}_{\\mathrm{tar}}\\)": "来自 \\(\\mathcal{D}_{\\mathrm{tar}}\\)", "Off-target \\(\\tilde{x}_j\\)": "非目标 \\(\\tilde{x}_j\\)", "from \\(\\mathcal{D}_{\\mathrm{off}}\\)": "来自 \\(\\mathcal{D}_{\\mathrm{off}}\\)", "Frozen model \\(f_\\theta\\)": "冻结模型 \\(f_\\theta\\)", "candidate sites \\(v = (s_v, u_v, c_v)\\)": "候选位点 \\(v = (s_v, u_v, c_v)\\)", "Strengths \\(\\beta\\)": "强度 \\(\\beta\\)", "\\(\\beta_v = m_v \\alpha_v\\), few nonzero": "\\(\\beta_v = m_v \\alpha_v\\)，少数非零", "Cost": "代价", "\\(\\|\\beta\\|_{0,c}\\) and \\(E(\\beta)\\)": "\\(\\|\\beta\\|_{0,c}\\) 与 \\(E(\\beta)\\)", "Energy": "能量", "Readout": "读出", "Target \\(\\tau_i\\)": "目标 \\(\\tau_i\\)", "Target error": "目标误差", "Observable": "观测量", "Off-target": "非目标", "\\((\\varepsilon, \\delta, \\kappa)\\) control certificate": "\\((\\varepsilon, \\delta, \\kappa)\\) 控制证书", "The highlighted parts follow the step you are reading. Blue dots: the frozen forward pass. Orange: the sparse patch.": "高亮部分随你正在阅读的步骤变化。蓝点：冻结的前向传播。橙色：稀疏干预。", "The mathematics of internal control": "内部控制的数学", "Near the unpatched model, a frozen Transformer acts as a linear map from intervention strengths to behavior. Choosing drivers then becomes a controllability question: can the selected actuators reach the requested displacement, and at what energy? The local analysis proposes a support and strengths. The nonlinear certificate decides whether to accept them.": "在未干预模型附近，冻结的 Transformer 相当于一个从干预强度到行为的线性映射。于是选择驱动节点就成了一个可控性问题：所选执行器能否到达所需位移，又需要多少能量？局部分析给出支撑集与强度的提议，是否接受由非线性证书决定。", "Controllability explorer": "可控性探索器", "Two target prompts with scalar readouts, so the requested displacement \\(\\bar q\\) lives in a plane. Each candidate contributes one column of \\(\\bar G\\), its first order effect on both prompts. Energy uses \\(W = I\\).": "两个目标提示各有一个标量读出，因此所需位移 \\(\\bar q\\) 位于一个平面内。每个候选贡献 \\(\\bar G\\) 的一列，即它对两个提示的一阶影响。能量取 \\(W = I\\)。", "Support S": "支撑集 S", "Energy budget \\(\\kappa\\)": "能量预算 \\(\\kappa\\)", "yes": "是", "In the span, but the cheapest exact fit needs more energy than κ.": "目标在张成空间内，但最省能量的精确拟合需要超过 κ 的能量。", "Run Driver-OMP, k = 2": "运行 Driver-OMP，k = 2", "Reset": "重置", "The reachable set \\(\\{\\bar G_S\\beta : \\beta^{\\top}\\beta \\le \\kappa\\}\\) is an ellipse, symmetric about the unpatched model. The orange point is the energy constrained best fit; the red dashes are the residual that \\(\\chi_\\kappa(S)\\) normalizes.": "可达集 \\(\\{\\bar G_S\\beta : \\beta^{\\top}\\beta \\le \\kappa\\}\\) 是一个关于未干预模型对称的椭圆。橙点是能量约束下的最佳拟合；红色虚线是 \\(\\chi_\\kappa(S)\\) 所归一化的残差。", "Definition · B.1": "定义 · B.1", "Local effect dictionary": "局部效应字典", "Each candidate’s first order effect on every target readout is one column of \\(G\\), taken at the unpatched model. A preservation dictionary \\(H\\) is built the same way from a differentiable surrogate of the off-target observable.": "每个候选对所有目标读出的一阶效应构成 \\(G\\) 的一列，在未干预模型处计算。保持字典 \\(H\\) 以同样方式，由非目标观测量的可微替代量构建。", "Theorem 1": "定理 1", "Local linearization error": "局部线性化误差", "Inside the energy ball the model departs from its linearization by at most the curvature bound \\(L_S\\) times half the energy. Target recovery therefore holds whenever \\(\\|q - G_S\\beta_S\\|_2 + L_S\\kappa/2 \\le \\varepsilon(\\|q\\|_2 + \\xi)\\).": "在能量球内，模型与其线性化之间的偏差至多为曲率界 \\(L_S\\) 乘以能量的一半。因此只要 \\(\\|q - G_S\\beta_S\\|_2 + L_S\\kappa/2 \\le \\varepsilon(\\|q\\|_2 + \\xi)\\)，目标恢复条件就成立。", "Equation B.19": "式 B.19", "Local target controllability": "局部目标可控性", "A support reaches the target exactly at first order within budget if and only if two conditions hold: \\(\\bar q \\in \\operatorname{range}(\\bar G_S)\\), a span condition, and \\(E_{\\min}(S) \\le \\kappa\\), an energy condition.": "一个支撑集在预算内于一阶精确到达目标，当且仅当两个条件同时成立：张成条件 \\(\\bar q \\in \\operatorname{range}(\\bar G_S)\\)，以及能量条件 \\(E_{\\min}(S) \\le \\kappa\\)。", "Theorem 2": "定理 2", "Minimum energy interpolation": "最小能量插值", "In whitened coordinates \\(\\tilde G_S = \\bar G_S W_{SS}^{-1/2}\\), the cheapest exact fit is a pseudoinverse. A support with a small nonzero singular value can demand far more energy to reach the same target.": "在白化坐标 \\(\\tilde G_S = \\bar G_S W_{SS}^{-1/2}\\) 下，最省能量的精确拟合由伪逆给出。若支撑集的最小非零奇异值很小，到达同一目标可能需要多得多的能量。", "Proposition 1": "命题 1", "Energy constrained refit": "能量约束重拟合", "Target fit and a quadratic preservation term are refit jointly on the chosen support. Energy decreases monotonically in the multiplier \\(\\nu\\), so the budget \\(\\kappa\\) is met exactly by bisection.": "目标拟合与二次保持项在所选支撑集上联合重拟合。能量随乘子 \\(\\nu\\) 单调下降，因此可用二分法恰好满足预算 \\(\\kappa\\)。", "Proposition 2": "命题 2", "Saturated coverage": "饱和覆盖", "Coverage is monotone submodular, so greedy selection under a pure cardinality budget is within \\(1 - 1/e\\) of optimal. In its simplest setting Driver-OMP reduces to orthogonal matching pursuit.": "覆盖目标是单调次模的，因此在纯基数预算下，贪心选择至少达到最优值的 \\(1 - 1/e\\)。在最简设定下，Driver-OMP 退化为正交匹配追踪。", "Local results only propose. An intervention is accepted when the \\((\\varepsilon, \\delta, \\kappa)\\) certificate holds in the original nonlinear model, and the six axes then characterize the control it provides.": "局部结果只负责提议。只有当 \\((\\varepsilon, \\delta, \\kappa)\\) 证书在原始非线性模型中成立时，干预才被接受，随后再由六轴刻画它提供的控制。", "Evaluation protocol": "评估协议", "Six axes of control": "控制的六个轴", "Target recovery at a single dose describes one property of an intervention. The protocol fixes the support \\(S\\), the base strengths \\(\\beta_S\\) and the direction rule \\(u_v(x)\\), then asks six separate questions of the patched model. Each axis has an operational definition and a quantitative readout, so interventions built by different methods can be compared on equal terms.": "单一剂量下的目标恢复只描述了干预的一个性质。协议固定支撑集 \\(S\\)、基础强度 \\(\\beta_S\\) 和方向规则 \\(u_v(x)\\)，然后对干预后的模型提出六个独立的问题。每个轴都有可操作的定义和定量读出，因此不同方法构建的干预可以在同一标准下比较。", "One object, six probes": "一个对象，六种探测", "The support \\(S\\), base strengths \\(\\beta_S\\) and direction rule stay fixed. Every axis reads this one dose family; what changes is the dose \\(\\gamma\\) and the inputs it is read on. \\(\\gamma = 0\\) is the unpatched model and \\(\\gamma = 1\\) the nominal dose.": "支撑集 \\(S\\)、基础强度 \\(\\beta_S\\) 和方向规则保持不变。每个轴读取的都是这同一个剂量族，变化的只是剂量 \\(\\gamma\\) 以及读取所用的输入。\\(\\gamma = 0\\) 为未干预模型，\\(\\gamma = 1\\) 为标称剂量。", "\\(-\\beta\\) on \\(x^{c}\\)": "在 \\(x^{c}\\) 上施加 \\(-\\beta\\)", "\\(\\gamma \\in \\Gamma\\), ten doses": "\\(\\gamma \\in \\Gamma\\)，十个剂量", "\\(\\gamma_t\\) from feedback": "由反馈给出 \\(\\gamma_t\\)", "target prompts \\(\\mathcal{D}_{\\mathrm{tar}}\\)": "目标提示 \\(\\mathcal{D}_{\\mathrm{tar}}\\)", "Reachability": "可达性", "Dose response": "剂量响应", "Feedback": "反馈", "off-target prompts \\(\\mathcal{D}_{\\mathrm{off}}\\)": "非目标提示 \\(\\mathcal{D}_{\\mathrm{off}}\\)", "unseen prompts": "未见提示", "Held-out reuse": "留出复用", "At a fixed dose": "固定剂量", "Does the nominal dose land on the requested target?": "标称剂量能否落在所要求的目标上？", "Passes when": "通过条件", "\\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le \\varepsilon = 0.4\\) on held out readouts.": "在留出读出上 \\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le \\varepsilon = 0.4\\)。", "In the paper": "论文结果", "Coverage-Driver passes 8/8 seeds with evaluation pair directions and 0/8 with training mean directions, on both MCQA and Sentiment.": "Coverage-Driver 在 MCQA 和情感任务上，使用评估对方向时 8/8 个种子通过，使用训练均值方向时 0/8。", "Does the opposite patch send a target input back toward its source?": "反向干预能否把目标输入推回到它的源？", "\\(\\mathrm{Reversal}(\\beta) \\ge 2\\): twice as far from the target as from the source.": "\\(\\mathrm{Reversal}(\\beta) \\ge 2\\)：离目标的距离至少是离源的两倍。", "MCQA passes 21/24 (Humanities) and 23/24 (STEM) cells with P directions and none with F. Refusal never passes.": "MCQA 在 P 方向下通过 21/24（人文）和 23/24（STEM）个单元，F 方向下无一通过。拒答任务从未通过。", "Across doses": "跨剂量", "As the dose grows, does progress toward the target grow in order?": "随着剂量增加，向目标的进展是否有序增长？", "\\(\\rho \\ge 0.95\\) over ten doses \\(\\gamma \\in \\Gamma = \\{-1, \\dots, 2\\}\\).": "在十个剂量 \\(\\gamma \\in \\Gamma = \\{-1, \\dots, 2\\}\\) 上 \\(\\rho \\ge 0.95\\)。", "All 48 Refusal curves have \\(\\rho = 1\\), yet none passes signed reversal. Order and reversibility are different properties.": "拒答任务的全部 48 条曲线 \\(\\rho = 1\\)，却没有一条通过符号反转。有序性与可逆性是不同的性质。", "Feedback controllability": "反馈可控性", "Keeping the sites fixed, can a feedback loop on the dose track new targets?": "固定位点、只对剂量做反馈调节，能否跟踪新的目标？", "\\(|m^{\\star} - M(\\gamma_{\\mathrm{end}})| \\le \\tau_{\\mathrm{ctrl}}\\): 0.3 for IOI and MCQA, 0.1 for Refusal.": "\\(|m^{\\star} - M(\\gamma_{\\mathrm{end}})| \\le \\tau_{\\mathrm{ctrl}}\\)：IOI 与 MCQA 取 0.3，拒答取 0.1。", "Coverage-Driver hits 46/48 Humanities and 47/48 STEM targets with P directions, and 8/48 and 7/48 with F.": "Coverage-Driver 在 P 方向下命中 46/48（人文）和 47/48（STEM）个目标，在 F 方向下为 8/48 和 7/48。", "Beyond the target set": "目标集之外", "Does the patch leave unrelated prompts alone?": "干预会不会波及无关提示？", "\\(\\mathrm{KL} \\le \\delta = 0.001\\), as a seed mean and on every prompt.": "\\(\\mathrm{KL} \\le \\delta = 0.001\\)，按种子均值与逐条提示两种方式检验。", "No MCQA or Sentiment seed passes. On Refusal, Driver-OMP passes 4/8 seeds by the mean rule.": "MCQA 与情感任务没有任何种子通过。在拒答任务上，Driver-OMP 按均值规则有 4/8 个种子通过。", "Do the chosen sites, or the whole intervention, carry over to new prompts?": "所选位点，或整个干预，能否迁移到新的提示上？", "No pass flag. Recovery is reported with its condition: refit \\(\\beta\\) or frozen \\(\\beta\\).": "不设通过标准。恢复率与其信息条件一同报告：重拟合 \\(\\beta\\) 或冻结 \\(\\beta\\)。", "MCQA with refit strengths recovers 0.992 (Humanities); the fully frozen intervention recovers 0.021.": "MCQA 重拟合强度后恢复率为 0.992（人文）；完全冻结的干预仅为 0.021。", "Each panel is a schematic of one axis. Chips show whether the case shown would pass the paper’s criterion; the numbers under each panel are the paper’s measured results.": "每个面板都是一个轴的示意。标签显示所演示的情形能否通过论文的判据；面板下方的数字是论文中的实测结果。", "What the axes revealed": "六轴揭示了什么", "Five task instances, four behaviors, three frozen models. The same selector can pass one axis and fail the next, and the direction information it receives changes the whole profile. The experiments are exploratory and every count is per seed.": "五个任务实例、四种行为、三个冻结模型。同一选择器可能在一个轴上通过、在下一个轴上失败，而它获得的方向信息会改变整体画像。实验是探索性的，所有计数均按种子统计。", "Coverage-Driver pass counts across five axes under P and F directions": "Coverage-Driver 在 P 与 F 方向下五个轴上的通过计数", "Task · model": "任务 · 模型", "MMLU Humanities": "MMLU 人文", "Sentiment": "情感", "separate unpaired diagnostic": "单独的非配对诊断", "not evaluated": "未评估", "Refusal": "拒答", "Coverage-Driver with at most eight candidates. Seeds passing: held out \\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le 0.4\\); reversal ratio \\(\\ge 2\\); Spearman \\(\\rho \\ge 0.95\\) over ten doses (under F, 3/8 Humanities and 4/8 STEM seeds are strongly negative); feedback counts seed and target endpoints; off-target uses seed mean \\(\\mathrm{KL} \\le 0.001\\), with P directions for MCQA and F for Sentiment and Refusal. Source: Tables 3, G.4, G.6, G.7, G.9.": "Coverage-Driver，最多八个候选。种子通过标准：留出 \\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le 0.4\\)；反转比值 \\(\\ge 2\\)；十个剂量上 Spearman \\(\\rho \\ge 0.95\\)（F 方向下人文 3/8、STEM 4/8 个种子呈强负序）；反馈按种子与目标端点计数；非目标保持采用种子均值 \\(\\mathrm{KL} \\le 0.001\\)，MCQA 用 P 方向，情感与拒答用 F 方向。来源：表 3、G.4、G.6、G.7、G.9。", "P · evaluation pair directions": "P · 评估对方向", "F · training mean directions": "F · 训练均值方向", "Direction information sets the profile": "方向信息决定整体画像", "On MCQA and Sentiment, reachability and reversal pass in 8/8 seeds with P directions and in none with F. Feedback on MCQA drops from 46/48 to 8/48 hits.": "在 MCQA 与情感任务上，可达性与反转在 P 方向下 8/8 个种子通过，在 F 方向下全部失败。MCQA 的反馈命中从 46/48 降到 8/48。", "Ordered is not reversible": "有序不等于可逆", "All 48 Refusal dose curves have \\(\\rho = 1\\), yet Refusal never passes signed reversal or held out reachability. Each axis measures something the others miss.": "拒答任务的全部 48 条剂量曲线 \\(\\rho = 1\\)，却从未通过符号反转或留出可达性。每个轴都度量了其他轴遗漏的东西。", "Preservation is not free": "保持并非免费", "No MCQA or Sentiment seed keeps \\(\\mathrm{KL} \\le 0.001\\) on the off-target panel. Median MCQA KL sits around 0.05.": "在非目标面板上，没有任何 MCQA 或情感任务的种子能保持 \\(\\mathrm{KL} \\le 0.001\\)。MCQA 的 KL 中位数约为 0.05。", "Nominal dose target recovery": "标称剂量下的目标恢复", "Table 2. \\(\\mathrm{Rel}_{\\mathrm{tar}}(1)\\) on the fitting panel, mean ± sample SD, lower is better. At most eight candidates with evaluation pair directions.": "表 2：拟合面板上的 \\(\\mathrm{Rel}_{\\mathrm{tar}}(1)\\)，均值 ± 样本标准差，越低越好。使用评估对方向，最多八个候选。", "Method": "方法", "IOI · 10 seeds": "IOI · 10 个种子", "Humanities · 3 seeds": "人文 · 3 个种子", "STEM · 3 seeds": "STEM · 3 个种子", "Random": "随机", "Nonlinear greedy": "非线性贪心", "Bars share one scale from 0 to 1.25. Nonlinear greedy reaches the lowest residual at the cost of additional model evaluations.": "所有条形共用 0 到 1.25 的刻度。非线性贪心残差最低，但需要额外的模型评估。", "Sites travel, frozen interventions do not": "位点可以迁移，冻结的干预不能", "Held-out reuse stays a continuous number with its information condition attached, never a pass flag. In module level MCQA, Driver-OMP keeps its selected sites and refits strengths on held out targets to recover 0.992 ± 0.009 (Humanities) and 0.987 ± 0.034 (STEM). Freeze the whole intervention and recovery falls to 0.021 ± 0.026 and 0.024 ± 0.066.": "留出复用始终以连续数值报告并附带其信息条件，从不转换为通过标记。在模块级 MCQA 中，Driver-OMP 保留所选位点、在留出目标上重拟合强度，恢复率达到 0.992 ± 0.009（人文）和 0.987 ± 0.034（STEM）。若冻结整个干预，恢复率降至 0.021 ± 0.026 和 0.024 ± 0.066。", "Sentiment shows the opposite pattern at \\(k = 8\\): training mean directions give a mean margin recovery of 0.942 ± 0.535 for Coverage-Driver, yet no F seed passes signed reversal.": "情感任务在 \\(k = 8\\) 时呈现另一种模式：训练均值方向下 Coverage-Driver 的均值差恢复率为 0.942 ± 0.535，但没有任何 F 种子通过符号反转。", "Use the protocol": "使用协议", "Score your own intervention": "评估你自己的干预", "The axes only need an intervention (a support, base strengths and a direction rule), a dose and task readouts. Interventions from activation steering, sparse autoencoder features, concept erasure or circuit discovery can be selected, adjusted and scored the same way. The release includes Driver-OMP, Coverage-Driver, the comparison methods and every metric.": "这些轴只需要一个干预（支撑集、基础强度和方向规则）、一个剂量和任务读出。来自激活引导、稀疏自编码器特征、概念擦除或电路发现的干预，都可以用同样的方式选择、调整和评分。代码发布包含 Driver-OMP、Coverage-Driver、对比方法以及全部指标。", "Recalculate every table on CPU, no model needed": "在 CPU 上重算全部表格，无需加载模型", "Copy": "复制", "One metrics module per axis": "每个轴一个指标模块", "In": "位于", "experimental series": " 个实验系列", "source, target and patched readout triples": " 组源、目标与干预读出三元组", "prompt and seed KL measurements": " 次提示与种子的 KL 测量", "numerical rows checked by": " 行数值由以下命令核对：", "Questions": "问答", "Frequently asked": "常见问题", "Does sparse internal control change the model’s weights?": "稀疏内部控制会改变模型权重吗？", "No. The parameters \\(\\theta\\) stay frozen. An intervention adds scaled directions to a few activations during the forward pass, and setting \\(\\beta = 0\\) recovers the original model exactly.": "不会。参数 \\(\\theta\\) 保持冻结。干预只是在前向传播中把缩放后的方向加到少数激活上，令 \\(\\beta = 0\\) 即可精确恢复原模型。", "What is a driver node?": "什么是驱动节点？", "A candidate control node is a triple of a physical site, an intervention direction and a selection cost. The candidates that receive a nonzero strength form the driver set \\(S_\\beta = \\operatorname{supp}(\\beta)\\). One site can host several candidates with different directions.": "候选控制节点是由物理位点、干预方向和选择代价组成的三元组。获得非零强度的候选构成驱动集 \\(S_\\beta = \\operatorname{supp}(\\beta)\\)。同一个位点可以对应多个方向不同的候选。", "How is this different from activation steering?": "它和激活引导有什么不同？", "Activation steering shows that internal directions can change behavior. Sparse internal control adds the control problem around it: which compact set of sites to use, under a bounded energy, with explicit requirements for target recovery and off-target preservation, followed by an evaluation on six axes.": "激活引导表明内部方向可以改变行为。稀疏内部控制在此之上加入了控制问题：在有界能量下使用哪一组紧凑的位点，对目标恢复与非目标保持提出明确要求，并在六个轴上进行评估。", "Why six axes instead of one score?": "为什么用六个轴，而不是一个分数？", "Because the properties separate in practice. Refusal responds to dose in perfect order and still fails reversal. MCQA sites transfer when strengths are refit, while the fully frozen intervention barely moves held out prompts. One number would hide both facts.": "因为这些性质在实践中会分离。拒答任务对剂量的响应完全有序，却依然无法反转。MCQA 的位点在重拟合强度后可以迁移，而完全冻结的干预几乎推不动留出提示。一个数字会把这两件事都掩盖掉。", "What do P and F mean?": "P 和 F 是什么意思？", "They describe the direction information. P uses evaluation pair directions, computed from the activation contrast of each evaluation pair. F uses training mean directions, averaged over the fitting split and shared across inputs.": "它们描述方向信息。P 使用评估对方向，由每个评估对的激活差计算得到。F 使用训练均值方向，在拟合划分上取平均，并在所有输入间共享。", "Which models and tasks were tested?": "测试了哪些模型和任务？", "Indirect object identification and sentiment on GPT-2 small, MMLU Humanities and STEM on Qwen3-4B, and refusal on Qwen3-1.7B. The appendix adds model comparisons on Qwen3-8B and Mistral-7B.": "GPT-2 small 上的间接宾语识别与情感，Qwen3-4B 上的 MMLU 人文与 STEM，以及 Qwen3-1.7B 上的拒答。附录还在 Qwen3-8B 与 Mistral-7B 上做了模型对比。", "Can I reproduce the tables without a GPU?": "没有 GPU 能复现表格吗？", "Yes. The record replay path recalculates the paper’s tables from the supplied measurements on CPU, and": "可以。记录回放流程在 CPU 上根据提供的测量结果重算论文中的表格，并由 ", "compares 162 numerical rows and 15 supporting values against the manuscript. Running the models themselves uses a separate environment and execution profile.": " 将 162 行数值和 15 个辅助数值与论文原稿逐一核对。运行模型本身需要单独的环境和执行配置。", "Can I evaluate my own steering method with the protocol?": "能用这个协议评估我自己的引导方法吗？", "Yes. Each axis is defined on any intervention with a support, base strengths and a direction rule. Directions from steering vectors, sparse autoencoder features or editing methods can enter as candidates and be scored on the same six axes.": "可以。每个轴都定义在任意具有支撑集、基础强度和方向规则的干预上。来自引导向量、稀疏自编码器特征或编辑方法的方向都可以作为候选进入，并在同样的六个轴上评分。", "Cite the paper": "引用论文", "Paper": "论文", "Software": "软件", "Read the full formulation, proofs and per seed results": "阅读完整的建模、证明与逐种子结果", "53 pages with the local target controllability analysis, pseudocode for both selectors, complete axis definitions and every table behind this page.": "共 53 页，包含局部目标可控性分析、两种选择器的伪代码、六轴的完整定义，以及本页背后的全部表格。", "Sparse Internal Control of Language Models": "语言模型的稀疏内部控制", "© 2026 Xizhe Zhang · Contact": "© 2026 Xizhe Zhang · 联系方式", "· Code under Apache 2.0 · This site sets no cookies and runs no analytics.": " · 代码采用 Apache 2.0 许可 · 本站不使用 Cookie，也不做访问统计。"};
+let LANG = 'en';
+try { const q = new URLSearchParams(location.search).get('lang'); const st = localStorage.getItem('sic-lang'); LANG = q === 'zh' || q === 'en' ? q : (st === 'zh' ? 'zh' : 'en'); } catch (e) {}
+const tr = (en, zh) => LANG === 'zh' ? zh : en;
+const TITLE_EN = document.title;
+const L10N = [];
+(() => {
+  const norm = v => v.replace(/\s+/g, ' ').trim();
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: n => {
+    const p = n.parentElement; if (!p || p.closest('script,style,pre,code,.no-i18n')) return NodeFilter.FILTER_REJECT;
+    return Object.prototype.hasOwnProperty.call(ZH, norm(n.nodeValue)) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; } });
+  const list = []; while (walker.nextNode()) list.push(walker.currentNode);
+  list.forEach(n => { const sp = document.createElement('span'); sp.className = 'l10n'; sp.dataset.en = n.nodeValue; sp.dataset.zh = ZH[norm(n.nodeValue)]; n.replaceWith(sp); L10N.push(sp); });
+})();
+const langSubs = [];
+function applyLang(first){
+  const root = document.documentElement;
+  root.setAttribute('data-lang', LANG); root.lang = LANG === 'zh' ? 'zh-CN' : 'en';
+  L10N.forEach(sp => { sp.textContent = LANG === 'zh' ? sp.dataset.zh : sp.dataset.en; if (!first) renderMath(sp); });
+  document.querySelectorAll('.lang-btn').forEach(b => { b.textContent = LANG === 'zh' ? 'EN' : '中文'; b.lang = LANG === 'zh' ? 'en' : 'zh'; b.setAttribute('aria-label', LANG === 'zh' ? 'Switch to English' : '切换到中文'); });
+  document.title = LANG === 'zh' ? '语言模型的稀疏内部控制' : TITLE_EN;
+  if (!first) langSubs.forEach(f => f());
+}
+applyLang(true);
+document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', () => { LANG = LANG === 'zh' ? 'en' : 'zh'; try { localStorage.setItem('sic-lang', LANG); } catch (e) {} applyLang(false); }));
+renderMath(document.body);
+const mathFontsReady = (document.fonts && document.fonts.load) ? Promise.all([document.fonts.load('italic 16px KaTeX_Math'), document.fonts.load('16px KaTeX_Main'), document.fonts.load('bold 16px KaTeX_Main')]).catch(() => {}) : Promise.resolve();
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const mqReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1061,8 +1315,8 @@ function rgba(h, a){ const [r, g, b] = hexRgb(h); return `rgba(${r},${g},${b},${
 function mix(h1, h2, t){ const a = hexRgb(h1), b = hexRgb(h2); return `rgb(${a.map((v, i) => Math.round(lerp(v, b[i], t))).join(',')})`; }
 
 /* ---------- canvas helpers ---------- */
-const MONO = '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace';
-const SANS = '"Geist", "Manrope", system-ui, sans-serif';
+const MONO = '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, "Noto Sans SC", monospace';
+const SANS = '"Geist", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif';
 function sizer(cv){
   const st = { w: 1, h: 1, ctx: cv.getContext('2d') };
   const fit = () => {
@@ -1076,14 +1330,36 @@ function sizer(cv){
   new ResizeObserver(fit).observe(cv);
   return st;
 }
+const MATH_R = 'KaTeX_Main, "Times New Roman", serif', MATH_I = 'KaTeX_Math, "Times New Roman", serif';
+function mathRuns(str){
+  const out = [], re = /([A-Za-z]{2,})|([A-Za-z])([̃̄])?|([α-ωϵ])|([^A-Za-zα-ωϵ]+)/g; let m;
+  while ((m = re.exec(str))){
+    if (m[1]) out.push({ s: m[1], it: false });
+    else if (m[2]) out.push({ s: m[2], it: true, acc: m[3] || '' });
+    else if (m[4]) out.push({ s: m[4], it: true });
+    else out.push({ s: m[5].replace(/[̃̄]/g, ''), it: false });
+  }
+  return out;
+}
 function T(ctx, x, y, segs, o = {}){
-  const size = o.size || 12, fam = o.sans ? SANS : MONO, wt = o.weight || 400;
+  const size = o.size || 12, wt = o.weight || 400;
   if (typeof segs === 'string') segs = [[segs]];
+  const runs = [];
+  for (const [str, m] of segs){
+    const sz = m ? Math.round(size * .72) : size, dy = m === 'sub' ? size * .3 : m === 'sup' ? -size * .42 : 0;
+    if (o.math) for (const r of mathRuns(str)) runs.push({ s: r.s, font: `${r.it ? 'italic ' : ''}${wt >= 600 ? 700 : 400} ${sz}px ${r.it ? MATH_I : MATH_R}`, dy, sz, acc: r.acc });
+    else runs.push({ s: str, font: `${wt} ${sz}px ${o.sans ? SANS : MONO}`, dy, sz });
+  }
   let total = 0;
-  const parts = segs.map(([s, m]) => { const sz = m ? Math.round(size * .74) : size; ctx.font = `${wt} ${sz}px ${fam}`; const w = ctx.measureText(s).width; total += w; return { s, m, sz, w }; });
+  for (const r of runs){ ctx.font = r.font; r.w = ctx.measureText(r.s).width; total += r.w; }
   let cx = o.align === 'center' ? x - total / 2 : o.align === 'right' ? x - total : x;
   ctx.fillStyle = o.color || PAL.ink; ctx.textBaseline = 'alphabetic';
-  for (const p of parts){ ctx.font = `${wt} ${p.sz}px ${fam}`; const dy = p.m === 'sub' ? size * .3 : p.m === 'sup' ? -size * .42 : 0; ctx.fillText(p.s, cx, y + dy); cx += p.w; }
+  for (const r of runs){
+    ctx.font = r.font; ctx.fillText(r.s, cx, y + r.dy);
+    if (r.acc === '̃'){ ctx.font = `${Math.round(r.sz * .85)}px ${MATH_R}`; ctx.fillText('~', cx + r.w * .2, y + r.dy - r.sz * .55); }
+    if (r.acc === '̄'){ ctx.save(); ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = Math.max(1, r.sz * .07); ctx.beginPath(); ctx.moveTo(cx + r.w * .22, y + r.dy - r.sz * .62); ctx.lineTo(cx + r.w * .98, y + r.dy - r.sz * .62); ctx.stroke(); ctx.restore(); }
+    cx += r.w;
+  }
   return total;
 }
 function rr(ctx, x, y, w, h, r){ ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
@@ -1108,90 +1384,107 @@ function dot(ctx, x, y, r, fill, stroke, lw = 1.5){ ctx.beginPath(); ctx.arc(x, 
 function cross(ctx, x, y, r, color){ dot(ctx, x, y, r, null, color, 1.75); seg(ctx, x - r - 4, y, x + r + 4, y, color, 1.5); seg(ctx, x, y - r - 4, x, y + r + 4, color, 1.5); }
 function dotGrid(ctx, w, h){ ctx.fillStyle = rgba(PAL.faint, .3); for (let x = 12; x < w; x += 24) for (let y = 12; y < h; y += 24) ctx.fillRect(x - .75, y - .75, 1.5, 1.5); }
 
-/* ---------- hero: actuator console ---------- */
+/* ---------- hero: transformer schematic ---------- */
 const Hero = (() => {
   const cv = $('#hero-canvas'); if (!cv) return null;
   const S = sizer(cv);
-  const slider = $('#dose'), out = $('#dose-out'), srcEl = $('#out-src'), tgtEl = $('#out-tgt'), mark = $('#gauge-mark'), sweepBtn = $('#sweep');
-  const L = 7, N = 5, DRV = [[1, 3], [2, 0], [3, 2], [5, 1]];
-  let nodes = [], outs = [], edges = [], drivers = [], inN, outN, gamma = 1, tween = null, parts = [], last = 0, accA = 0, accC = 0, visible = true, raf = 0, clock = 0;
+  const slider = $('#dose'), out = $('#dose-num'), srcEl = $('#out-src'), tgtEl = $('#out-tgt'), mark = $('#gauge-mark'), sweepBtn = $('#sweep');
+  let G = null, gamma = 1, tween = null, parts = [], last = 0, accA = 0, accC = 0, visible = true, raf = 0, clock = 0, inTick = false;
   const prog = g => Math.tanh(1.6 * g) / Math.tanh(1.6);
   function layout(){
-    const W = S.w, H = S.h; nodes = []; edges = []; outs = [];
-    const padX = Math.max(22, W * .055), padY = 26;
-    inN = { x: padX, y: H / 2, id: 0, kind: 'in' }; nodes.push(inN);
-    const gapY = Math.min(48, (H - 2 * padY) / (N - 1));
-    for (let l = 0; l < L; l++) for (let i = 0; i < N; i++){
-      const jit = (((l * 7 + i * 13) % 5) - 2) * 3;
-      nodes.push({ x: padX + (l + 1) * (W - 2 * padX) / (L + 1), y: H / 2 + (i - (N - 1) / 2) * gapY + jit, l, i, id: nodes.length, kind: 'site' });
-    }
-    outN = { x: W - padX, y: H / 2, id: nodes.length, kind: 'out' }; nodes.push(outN);
-    const at = (l, i) => nodes[1 + l * N + i];
-    nodes.forEach(n => outs[n.id] = []);
-    const add = (a, b) => { edges.push([a, b]); outs[a.id].push(b); };
-    for (let i = 0; i < N; i++) add(inN, at(0, i));
-    for (let l = 0; l < L - 1; l++) for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) if (Math.abs(i - j) <= 1 || (i * 3 + j * 5 + l) % 7 === 0) add(at(l, i), at(l + 1, j));
-    for (let i = 0; i < N; i++) add(at(L - 1, i), outN);
-    drivers = DRV.map(([l, i]) => at(l, i)); drivers.forEach(d => d.drv = true);
+    const W = S.w, H = S.h, small = W < 480;
+    const nL = small ? 4 : 6, nT = small ? 4 : 5, top = 30, bot = 14;
+    const left = small ? 50 : 64, xEmb = left + 12, x0 = xEmb + 18, xUn = W - (small ? 50 : 64), xOut = W - (small ? 16 : 22);
+    const colW = (xUn - 16 - x0) / nL;
+    const laneY = Array.from({ length: nT }, (_, i) => top + (i + .5) * (H - top - bot) / nT);
+    const Ls = Array.from({ length: nL }, (_, l) => ({ xa: x0 + l * colW + colW * .3, xm: x0 + l * colW + colW * .74 }));
+    const headY = k => top + 8 + (k + .5) * (H - top - bot - 16) / 4;
+    const lastI = nT - 1;
+    const drv = [{ kind: 'head', l: 1, k: 1 }, { kind: 'mlp', l: 2 }, { kind: 'head', l: nL - 2, k: 3 }, { kind: 'res', l: nL - 1 }].map(d =>
+      d.kind === 'head' ? { ...d, x: Ls[d.l].xa, y: headY(d.k) } : d.kind === 'mlp' ? { ...d, x: Ls[d.l].xm, y: laneY[lastI] } : { ...d, x: Math.min(Ls[d.l].xm + colW * .26, xUn - 18), y: laneY[lastI] });
+    G = { W, H, small, nL, nT, top, bot, left, xEmb, x0, xUn, xOut, colW, laneY, Ls, headY, lastI, drv };
     parts = [];
   }
   S.onfit = () => { layout(); if (!raf) draw(); };
   layout();
-  function spawn(n, kind){ const nx = outs[n.id]; if (!nx || !nx.length) return; parts.push({ a: n, b: nx[(Math.random() * nx.length) | 0], p: 0, kind, v: kind === 'c' ? 2.4 : 1.7 }); }
+  function poly(pts, kind, v){ const seg = []; let len = 0; for (let i = 1; i < pts.length; i++){ const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(d); len += d; } parts.push({ pts, seg, len, d: 0, kind, v }); }
+  function spawnAmbient(){
+    const i = (Math.random() * G.nT) | 0, y = G.laneY[i], yl = G.laneY[G.lastI];
+    if (i === G.lastI) poly([[G.xEmb, y], [G.xUn, y], [G.xOut, y]], 'a', 95);
+    else if (Math.random() < .45){ const l = (Math.random() * G.nL) | 0, xa = G.Ls[l].xa; poly([[G.xEmb, y], [xa, y], [xa + 10, yl], [G.xUn, yl], [G.xOut, yl]], 'a', 95); }
+    else poly([[G.xEmb, y], [G.xUn - 18, y]], 'a', 95);
+  }
+  function spawnCtl(){
+    const d = G.drv[(Math.random() * G.drv.length) | 0], yl = G.laneY[G.lastI];
+    if (d.kind === 'head') poly([[d.x, d.y], [d.x + 10, yl], [G.xUn, yl], [G.xOut, yl]], 'c', 140);
+    else poly([[d.x, yl], [G.xUn, yl], [G.xOut, yl]], 'c', 140);
+  }
+  function at(q){ let d = q.d; for (let i = 0; i < q.seg.length; i++){ if (d <= q.seg[i]){ const f = q.seg[i] ? d / q.seg[i] : 0; return [lerp(q.pts[i][0], q.pts[i + 1][0], f), lerp(q.pts[i][1], q.pts[i + 1][1], f)]; } d -= q.seg[i]; } return q.pts[q.pts.length - 1]; }
   function step(dt){
-    accA += dt * 2.6; while (accA >= 1){ accA -= 1; spawn(inN, 'a'); }
-    accC += dt * Math.abs(gamma) * 7; while (accC >= 1){ accC -= 1; spawn(drivers[(Math.random() * drivers.length) | 0], 'c'); }
-    for (const q of parts){ q.p += dt * q.v; if (q.p >= 1){ q.a = q.b; q.p = 0; const nx = outs[q.a.id]; if (q.a === outN || !nx.length) q.dead = true; else q.b = nx[(Math.random() * nx.length) | 0]; } }
-    parts = parts.filter(q => !q.dead);
-    if (parts.length > 260) parts.splice(0, parts.length - 260);
+    accA += dt * 3.2; while (accA >= 1){ accA -= 1; spawnAmbient(); }
+    accC += dt * Math.abs(gamma) * 6; while (accC >= 1){ accC -= 1; spawnCtl(); }
+    parts.forEach(q => { q.d += dt * q.v; }); parts = parts.filter(q => q.d < q.len);
+    if (parts.length > 220) parts.splice(0, parts.length - 220);
   }
   function draw(){
-    const ctx = S.ctx, W = S.w, H = S.h, ag = Math.abs(gamma), p = prog(gamma);
+    if (!G) return;
+    const ctx = S.ctx, { W, H, small, nL, nT, top, bot, left, xEmb, xUn, xOut, laneY, Ls, headY, lastI, drv } = G, ag = Math.abs(gamma), p = prog(gamma);
     ctx.clearRect(0, 0, W, H);
-    ctx.lineWidth = 1;
-    for (const [a, b] of edges){
-      const hot = a.drv && ag > .01;
-      ctx.strokeStyle = hot ? rgba(PAL.drive, .18 + .5 * Math.min(1, ag)) : rgba(PAL['line-strong'], .55);
-      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-    }
+    const toks = tr(small ? ['logs', 'server', '?', 'Answer'] : ['SSH', 'logs', 'server', '?', 'Answer'], small ? ['日志', '服务器', '？', '回答'] : ['SSH', '登录', '日志', '？', '回答']);
+    T(ctx, xEmb, 14, tr('embed', '嵌入'), { size: 11, color: PAL.faint, align: 'center', sans: true });
+    Ls.forEach((L, l) => T(ctx, (L.xa + L.xm) / 2, 14, 'L' + (l + 1), { size: 11, color: PAL.faint, align: 'center' }));
+    if (!small) T(ctx, xUn, 14, tr('unembed', '解嵌入'), { size: 11, color: PAL.faint, align: 'center', sans: true });
+    laneY.forEach((y, i) => {
+      const isLast = i === lastI;
+      T(ctx, left - 4, y + 4, toks[i], { size: 12, color: isLast ? PAL.ink : PAL.muted, align: 'right', sans: true, weight: isLast ? 600 : 400 });
+      seg(ctx, xEmb, y, isLast ? xUn : xUn - 18, y, isLast ? PAL['line-strong'] : PAL.line, isLast ? 2 : 1.5);
+      ctx.fillStyle = rgba(PAL.model, .14); ctx.strokeStyle = rgba(PAL.model, .6); ctx.lineWidth = 1; rr(ctx, xEmb - 5, y - 5, 10, 10, 2); ctx.fill(); ctx.stroke();
+    });
+    Ls.forEach((L, l) => {
+      rr(ctx, L.xa - 9, top, 18, H - top - bot, 6); ctx.fillStyle = rgba(PAL.model, .06); ctx.fill(); ctx.strokeStyle = rgba(PAL.model, .3); ctx.lineWidth = 1; ctx.stroke();
+      const src = l % (nT - 1), ya = laneY[src], yb = laneY[lastI];
+      ctx.save(); ctx.strokeStyle = rgba(PAL.model, .28); ctx.lineWidth = 1.25; ctx.beginPath(); ctx.moveTo(L.xa, ya); ctx.quadraticCurveTo(L.xa + 22, (ya + yb) / 2, L.xa + 10, yb); ctx.stroke(); ctx.restore();
+      for (let k = 0; k < 4; k++){
+        const isD = drv.some(d => d.kind === 'head' && d.l === l && d.k === k), y = headY(k);
+        ctx.fillStyle = isD ? PAL.drive : PAL.surface; ctx.strokeStyle = isD ? PAL.drive : rgba(PAL.model, .55); ctx.lineWidth = 1.25;
+        rr(ctx, L.xa - 4.5, y - 4.5, 9, 9, 1.5); ctx.fill(); ctx.stroke();
+      }
+      laneY.forEach((y, i) => {
+        const isD = drv.some(d => d.kind === 'mlp' && d.l === l) && i === lastI;
+        ctx.fillStyle = isD ? PAL.drive : PAL.surface; ctx.strokeStyle = isD ? PAL.drive : PAL['line-strong']; ctx.lineWidth = 1.25;
+        rr(ctx, L.xm - 6, y - 6, 12, 12, 3); ctx.fill(); ctx.stroke();
+      });
+    });
+    const yl = laneY[lastI];
+    drv.forEach(d => { if (d.kind === 'head' && ag > .01) seg(ctx, d.x, d.y + 5, d.x + 10, yl - 4, rgba(PAL.drive, .25 + .5 * Math.min(1, ag)), 1.5, [3, 3]); });
     for (const q of parts){
-      const x = lerp(q.a.x, q.b.x, q.p), y = lerp(q.a.y, q.b.y, q.p);
-      const tx = lerp(q.a.x, q.b.x, Math.max(0, q.p - .22)), ty = lerp(q.a.y, q.b.y, Math.max(0, q.p - .22));
-      const col = q.kind === 'c' ? PAL.drive : PAL.model;
-      ctx.strokeStyle = rgba(col, q.kind === 'c' ? .55 : .35); ctx.lineWidth = q.kind === 'c' ? 2 : 1.5;
-      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(x, y); ctx.stroke();
-      dot(ctx, x, y, q.kind === 'c' ? 2.4 : 1.9, col);
+      const [x, y] = at(q), col = q.kind === 'c' ? PAL.drive : PAL.model;
+      const qb = { ...q, d: Math.max(0, q.d - 14) }, [tx, ty] = at(qb);
+      ctx.strokeStyle = rgba(col, q.kind === 'c' ? .6 : .35); ctx.lineWidth = q.kind === 'c' ? 2 : 1.5; ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(x, y); ctx.stroke();
+      dot(ctx, x, y, q.kind === 'c' ? 2.5 : 2, col);
     }
-    const r = W < 420 ? 4.5 : 5.5;
-    for (const n of nodes){
-      if (n.kind !== 'site') continue;
-      if (n.drv){
-        const pulse = reduce ? .5 : .5 + .5 * Math.sin(clock * 4 + n.l);
-        if (ag > .01) dot(ctx, n.x, n.y, r + 3 + ag * 5 * pulse, null, rgba(PAL.drive, .45), 1.5);
-        dot(ctx, n.x, n.y, r + 1.5, PAL.drive, PAL.surface, 2);
-      } else dot(ctx, n.x, n.y, r, PAL.surface, PAL['line-strong'], 1.25);
-    }
-    dot(ctx, inN.x, inN.y, r + 2, PAL.model, PAL.surface, 2);
+    drv.forEach((d, j) => {
+      const pulse = reduce ? .5 : .5 + .5 * Math.sin(clock * 4 + j);
+      if (ag > .01) dot(ctx, d.x, d.y, 8 + ag * 5 * pulse, null, rgba(PAL.drive, .45), 1.5);
+      if (d.kind === 'res') dot(ctx, d.x, d.y, 5, PAL.drive, PAL.surface, 2);
+    });
+    const dd = drv[0];
+    T(ctx, dd.x, dd.y - 12, tr('driver', '驱动'), { size: 11, color: PAL['drive-ink'], align: 'center', sans: true, weight: 600 });
+    ctx.fillStyle = PAL.surface; ctx.strokeStyle = PAL['line-strong']; ctx.lineWidth = 1.25; rr(ctx, xUn - 6, yl - 9, 12, 18, 3); ctx.fill(); ctx.stroke();
     const oc = p >= 0 ? mix(PAL.src, PAL.tgt, clamp(p)) : PAL.src;
-    dot(ctx, outN.x, outN.y, r + 4 + (ag > .01 ? 1 : 0), oc, PAL.surface, 2.5);
-    T(ctx, inN.x, inN.y - 16, 'x', { align: 'center', color: PAL.muted, size: 12 });
-    T(ctx, outN.x, outN.y - 18, 'b(x)', { align: 'center', color: PAL.muted, size: 12 });
-    const d0 = drivers[1];
-    T(ctx, d0.x, Math.max(14, d0.y - 16), 'driver', { align: 'center', color: PAL['drive-ink'], size: 11 });
-    T(ctx, 4, H - 6, [['θ frozen']], { color: PAL.faint, size: 11 });
+    dot(ctx, xOut, yl, 9, oc, PAL.surface, 2.5);
+    T(ctx, xOut, yl - 16, 'b(x)', { align: 'center', color: PAL.muted, size: 15, math: true });
   }
   function setGamma(g, fromSlider){
     gamma = g; if (!fromSlider) slider.value = g.toFixed(2);
-    out.textContent = 'γ = ' + (g < 0 ? '−' : '') + Math.abs(g).toFixed(2);
-    const p = prog(g), t = smooth(.38, .62, p);
+    out.textContent = (g < 0 ? '−' : '') + Math.abs(g).toFixed(2);
+    const pr = prog(g), t = smooth(.38, .62, pr);
     tgtEl.style.opacity = t; srcEl.style.opacity = 1 - t;
     srcEl.setAttribute('aria-hidden', t > .5); tgtEl.setAttribute('aria-hidden', t <= .5);
     const track = mark.parentElement.clientWidth;
-    const x = clamp((p + 1.1) / 2.25) * track;
-    mark.style.transform = `translateX(${x}px)`;
+    mark.style.transform = `translateX(${clamp((pr + 1.1) / 2.25) * track}px)`;
     if (!inTick) draw();
   }
-  let inTick = false;
   function tick(now){
     raf = 0; inTick = true;
     const dt = Math.min(.05, (now - (last || now)) / 1000); last = now; clock += dt;
@@ -1209,10 +1502,10 @@ const Hero = (() => {
   sweepBtn.addEventListener('click', sweep);
   new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) start(); }, { threshold: .05 }).observe(cv);
   window.addEventListener('resize', () => setGamma(gamma));
-  palSubs.push(() => draw());
+  palSubs.push(() => draw()); langSubs.push(() => draw());
   setGamma(reduce ? 1 : 0);
   if (!reduce) setTimeout(sweep, 500);
-  document.fonts && document.fonts.ready.then(() => draw());
+  mathFontsReady.then(() => draw());
   return { setGamma };
 })();
 
@@ -1229,368 +1522,326 @@ const Hero = (() => {
   steps.forEach(s => io.observe(s));
 })();
 
-/* ---------- six axes: scenes ---------- */
+/* ---------- six axes: schematic scenes ---------- */
 const GRID = [-1, -.5, 0, .25, .5, .75, 1, 1.25, 1.5, 2];
 function ranks(a){ const idx = a.map((v, i) => [v, i]).sort((x, y) => x[0] - y[0]); const r = new Array(a.length); let i = 0; while (i < idx.length){ let j = i; while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++; const avg = (i + j) / 2 + 1; for (let k = i; k <= j; k++) r[idx[k][1]] = avg; i = j + 1; } return r; }
 function spearman(x, y){ const rx = ranks(x), ry = ranks(y), n = x.length, mx = (n + 1) / 2; let num = 0, dx = 0, dy = 0; for (let i = 0; i < n; i++){ num += (rx[i] - mx) * (ry[i] - mx); dx += (rx[i] - mx) ** 2; dy += (ry[i] - mx) ** 2; } return num / Math.sqrt(dx * dy); }
-function softmax(z){ const m = Math.max(...z), e = z.map(v => Math.exp(v - m)), s = e.reduce((a, b) => a + b, 0); return e.map(v => v / s); }
+function softmax(z){ const m = Math.max(...z), e = z.map(v => Math.exp(v - m)), t = e.reduce((a, b) => a + b, 0); return e.map(v => v / t); }
 function KL(p, q){ return p.reduce((a, pi, i) => a + pi * Math.log(pi / q[i]), 0); }
-function solveScale(z, d, target){ const p = softmax(z); let lo = 0, hi = 30; for (let k = 0; k < 60; k++){ const mid = (lo + hi) / 2; const q = softmax(z.map((v, i) => v + mid * d[i])); if (KL(p, q) < target) lo = mid; else hi = mid; } return (lo + hi) / 2; }
-const fmtKL = v => v < .01 ? v.toFixed(5) : v.toFixed(3);
+function solveScale(z, d, target){ const p = softmax(z); let lo = 0, hi = 30; for (let k = 0; k < 60; k++){ const mid = (lo + hi) / 2; if (KL(p, softmax(z.map((v, i) => v + mid * d[i]))) < target) lo = mid; else hi = mid; } return (lo + hi) / 2; }
 const sgn = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(2);
+const verdict = ok => ok ? tr('pass', '通过') : tr('fail', '未通过');
+const chip = (ctx, w, text, ok) => pill(ctx, w - 10, 10, text, ok ? PAL.tgt : PAL.src, { align: 'right' });
+const word = (ctx, x, y, en, zh, o = {}) => T(ctx, x, y, tr(en, zh), { size: 12, color: PAL.muted, sans: true, ...o });
 
-const SC_REACH = {
-  dur: 5600, variants: [{ rel: .18, phi: .75 }, { rel: .31, phi: -.95 }, { rel: .57, phi: .35 }],
-  draw(ctx, w, h, t, vi){
-    const v = this.variants[vi];
-    const Sp = { x: w * .2, y: h * .72 }, Tp = { x: w * .66, y: h * .42 };
-    const qx = Tp.x - Sp.x, qy = Tp.y - Sp.y, qn = Math.hypot(qx, qy), ux = qx / qn, uy = qy / qn, px = -uy, py = ux;
-    const d = v.rel * qn, Lp = { x: Tp.x - ux * d * Math.cos(v.phi) + px * d * Math.sin(v.phi), y: Tp.y - uy * d * Math.cos(v.phi) + py * d * Math.sin(v.phi) };
-    const R = .4 * qn;
-    ctx.save(); ctx.beginPath(); ctx.arc(Tp.x, Tp.y, R, 0, Math.PI * 2); ctx.fillStyle = rgba(PAL.tgt, .06); ctx.fill(); ctx.setLineDash([4, 4]); ctx.strokeStyle = rgba(PAL.tgt, .7); ctx.lineWidth = 1.25; ctx.stroke(); ctx.restore();
-    T(ctx, Tp.x + R * .72 + 6, Tp.y + R * .72 + 8, 'ε = 0.4', { color: PAL.tgt, size: 11 });
-    arrow(ctx, Sp.x, Sp.y, Tp.x - ux * 10, Tp.y - uy * 10, rgba(PAL.muted, .75), { dash: [5, 5], lw: 1.25 });
-    T(ctx, (Sp.x + Tp.x) / 2 - px * 16, (Sp.y + Tp.y) / 2 - py * 16, 'requested q', { color: PAL.muted, size: 11, align: 'center' });
-    dot(ctx, Sp.x, Sp.y, 6, PAL.src);
-    T(ctx, Sp.x, Sp.y + 24, [['source b(x'], ['i', 'sub'], [')']], { color: PAL.src, size: 11, align: 'center' });
-    cross(ctx, Tp.x, Tp.y, 6, PAL.tgt);
-    T(ctx, Tp.x + 14, Tp.y - 12, [['target τ'], ['i', 'sub']], { color: PAL.tgt, size: 11 });
-    const k = clamp((t - 500) / 2100), e = easeOut(k);
-    const C = { x: (Sp.x + Lp.x) / 2 + px * qn * .16, y: (Sp.y + Lp.y) / 2 + py * qn * .16 };
-    const B = s => ({ x: (1 - s) * (1 - s) * Sp.x + 2 * (1 - s) * s * C.x + s * s * Lp.x, y: (1 - s) * (1 - s) * Sp.y + 2 * (1 - s) * s * C.y + s * s * Lp.y });
-    ctx.save(); ctx.strokeStyle = PAL.drive; ctx.lineWidth = 2.25; ctx.beginPath();
-    for (let i = 0; i <= 40; i++){ const pt = B(e * i / 40); i ? ctx.lineTo(pt.x, pt.y) : ctx.moveTo(pt.x, pt.y); } ctx.stroke(); ctx.restore();
-    const cur = B(e);
-    if (k >= 1){
-      const a = smooth(2700, 3100, t);
-      ctx.save(); ctx.globalAlpha *= a;
-      seg(ctx, Lp.x, Lp.y, Tp.x, Tp.y, PAL.src, 1.5, [3, 3]);
-      const dx = Tp.x - Lp.x, dy = Tp.y - Lp.y, dn = Math.hypot(dx, dy) || 1, nx = dy / dn, ny = -dx / dn, sd = (nx * (Sp.x - Lp.x) + ny * (Sp.y - Lp.y)) > 0 ? -1 : 1;
-      const mx = (Lp.x + Tp.x) / 2 + nx * 14 * sd, my = (Lp.y + Tp.y) / 2 + ny * 14 * sd;
-      T(ctx, mx, my + 4, 'q − F(β)', { color: PAL.src, size: 11, align: nx * sd < -.3 ? 'right' : nx * sd > .3 ? 'left' : 'center' });
-      ctx.restore();
-    }
-    dot(ctx, cur.x, cur.y, 6.5, PAL.drive, PAL.surface, 2.5);
-    if (k > .02 && k < 1) T(ctx, cur.x + 12, cur.y + 4, 'patched F(β)', { color: PAL['drive-ink'], size: 11 });
-    const rel = Math.hypot(cur.x - Tp.x, cur.y - Tp.y) / qn;
-    T(ctx, 16, 26, [['Rel'], ['tar', 'sub'], ['(1) = ' + rel.toFixed(2)]], { size: 13, weight: 500 });
-    if (t > 3000) pill(ctx, 16, 38, rel <= .4 ? 'within ε · pass' : 'outside ε · fail', rel <= .4 ? PAL.tgt : PAL.src);
-  }
-};
-const SC_REV = {
-  dur: 5600, variants: [{ f: .85, perp: .18 }, { f: .12, perp: .05 }],
-  draw(ctx, w, h, t, vi){
-    const v = this.variants[vi];
-    const Sp = { x: w * .2, y: h * .7 }, Cp = { x: w * .72, y: h * .4 };
-    const dx = Sp.x - Cp.x, dy = Sp.y - Cp.y, Ln = Math.hypot(dx, dy), ux = dx / Ln, uy = dy / Ln, px = -uy, py = ux;
-    const D = { x: Cp.x + ux * Ln * v.f + px * Ln * v.perp, y: Cp.y + uy * Ln * v.f + py * Ln * v.perp };
-    seg(ctx, Sp.x, Sp.y, Cp.x, Cp.y, rgba(PAL.muted, .35), 1, [2, 5]);
-    dot(ctx, Sp.x, Sp.y, 6, PAL.src);
-    T(ctx, Sp.x, Sp.y + 24, [['source x'], ['r', 'sup']], { color: PAL.src, size: 11, align: 'center' });
-    cross(ctx, Cp.x, Cp.y, 6, PAL.tgt);
-    T(ctx, Cp.x, Cp.y - 18, [['target side x'], ['c', 'sup']], { color: PAL.tgt, size: 11, align: 'center' });
-    const k = clamp((t - 700) / 2000), e = easeOut(k);
-    const P = { x: lerp(Cp.x, D.x, e), y: lerp(Cp.y, D.y, e) };
-    if (t < 1100) pill(ctx, Cp.x + 14, Cp.y + 10, 'apply −β', PAL.drive);
-    seg(ctx, Cp.x, Cp.y, P.x, P.y, PAL.drive, 2.25);
-    const dS = Math.hypot(P.x - Sp.x, P.y - Sp.y) / Ln, dC = Math.hypot(P.x - Cp.x, P.y - Cp.y) / Ln, ratio = dC / Math.max(dS, 1e-6);
-    if (t > 2600){
-      const a = smooth(2600, 3000, t); ctx.save(); ctx.globalAlpha *= a;
-      seg(ctx, P.x, P.y, Sp.x, Sp.y, PAL.src, 1.5, [3, 3]); seg(ctx, P.x, P.y, Cp.x, Cp.y, PAL.tgt, 1.5, [3, 3]);
-      ctx.restore();
-    }
-    dot(ctx, P.x, P.y, 6.5, PAL.drive, PAL.surface, 2.5);
-    T(ctx, 16, 24, [['Rel'], ['dis→clean', 'sub'], [' = ' + dC.toFixed(2)]], { size: 12, color: PAL.tgt });
-    T(ctx, 16, 44, [['Rel'], ['dis→src', 'sub'], ['   = ' + dS.toFixed(2)]], { size: 12, color: PAL.src });
-    T(ctx, 16, 68, 'Reversal = ' + (k > .02 ? ratio.toFixed(2) : '0.00'), { size: 13, weight: 600 });
-    if (t > 3000) pill(ctx, 16, 78, ratio >= 2 ? 'ratio ≥ 2 · pass' : 'ratio < 2 · fail', ratio >= 2 ? PAL.tgt : PAL.src);
-  }
-};
-const SC_DOSE = {
-  dur: 6600, variants: [
-    { f: g => 1.3 * Math.tanh(1.02 * g), name: 'ordered response' },
-    { f: g => Math.sin(1.3 * g) / Math.sin(1.3), name: 'overshoot' },
-    { f: g => -.55 * g - .05 * g * g, name: 'reversed ordering' }],
-  draw(ctx, w, h, t, vi){
-    const v = this.variants[vi];
-    const box = { x: 46, y: 64, w: w - 46 - 20, h: h - 64 - 40 };
-    const xr = [-1.15, 2.15], yr = [-1.45, 1.55];
-    const X = g => box.x + (g - xr[0]) / (xr[1] - xr[0]) * box.w, Y = p => box.y + box.h - (p - yr[0]) / (yr[1] - yr[0]) * box.h;
-    seg(ctx, box.x, Y(0), box.x + box.w, Y(0), PAL['line-strong'], 1);
-    seg(ctx, X(0), box.y, X(0), box.y + box.h, PAL.line, 1);
-    seg(ctx, box.x, Y(1), box.x + box.w, Y(1), rgba(PAL.tgt, .7), 1.25, [4, 4]);
-    T(ctx, box.x + box.w, Y(1) - 6, 'target', { color: PAL.tgt, size: 11, align: 'right' });
-    seg(ctx, X(1), box.y, X(1), box.y + box.h, rgba(PAL.muted, .5), 1, [2, 4]);
-    T(ctx, X(1) + 4, box.y + 10, 'nominal', { color: PAL.faint, size: 10 });
-    GRID.forEach(g => seg(ctx, X(g), box.y + box.h, X(g), box.y + box.h + 4, PAL.faint, 1));
-    [-1, 0, 1, 2].forEach(g => T(ctx, X(g), box.y + box.h + 18, g < 0 ? '−1' : String(g), { color: PAL.faint, size: 11, align: 'center' }));
-    T(ctx, box.x + box.w, box.y + box.h + 34, 'dose γ', { color: PAL.muted, size: 11, align: 'right' });
-    [-1, 0, 1].forEach(p => T(ctx, box.x - 8, Y(p) + 4, p < 0 ? '−1' : String(p), { color: PAL.faint, size: 11, align: 'right' }));
-    T(ctx, 16, box.y - 6, 'P(γ)', { color: PAL.muted, size: 11 });
-    const k = clamp((t - 400) / 3800), g = lerp(-1, 2, easeInOut(k));
-    ctx.save(); ctx.strokeStyle = rgba(PAL.drive, .85); ctx.lineWidth = 2; ctx.beginPath();
-    for (let x = -1, i = 0; x <= g + 1e-9; x += .02, i++){ const yy = Y(v.f(x)); i ? ctx.lineTo(X(x), yy) : ctx.moveTo(X(x), yy); } ctx.stroke(); ctx.restore();
-    seg(ctx, X(g), box.y, X(g), box.y + box.h, rgba(PAL.drive, .35), 1);
-    GRID.forEach(gg => { if (gg <= g + 1e-9) dot(ctx, X(gg), Y(v.f(gg)), 4, PAL.surface, PAL.drive, 2); });
-    dot(ctx, X(g), Y(v.f(g)), 5.5, PAL.drive, PAL.surface, 2);
-    T(ctx, 16, 24, 'γ = ' + sgn(g) + '   P(γ) = ' + sgn(v.f(g)), { size: 13, weight: 500 });
-    if (k >= 1){
-      const rho = spearman(GRID, GRID.map(v.f));
-      const tw = T(ctx, 16, 46, 'Spearman ρ = ' + sgn(rho), { size: 12, color: PAL.muted });
-      const ok = rho >= .95, neg = rho <= -.95;
-      pill(ctx, 16 + tw + 10, 32, ok ? 'ρ ≥ 0.95 · pass' : neg ? 'strong negative' : 'ρ < 0.95 · fail', ok ? PAL.tgt : PAL.src);
-    }
-  }
-};
-function simFeedback(Mf, targets, eta = .35, iters = 12){
-  return targets.map(m => { let g = 0; const pts = [Mf(g)]; for (let i = 0; i < iters; i++){ g += eta * (m - Mf(g)); pts.push(Mf(g)); } return { m, pts, hit: Math.abs(m - pts[pts.length - 1]) <= .3 }; });
-}
-const SC_FB = {
-  dur: 6400, targets: [-1.2, -.2, .8, 1.8, 3.2],
-  variants: [{ Mf: g => -2.2 + 4.8 * Math.tanh(.6 * g), name: 'strong control direction' }, { Mf: g => -2.2 + .9 * Math.tanh(.5 * g), name: 'weak control direction' }],
-  init(){ this.sims = this.variants.map(v => simFeedback(v.Mf, this.targets)); },
-  draw(ctx, w, h, t, vi){
-    if (!this.sims) this.init();
-    const sims = this.sims[vi];
-    const box = { x: 40, y: 60, w: w - 40 - 70, h: h - 60 - 40 };
-    const X = i => box.x + i / 12 * box.w, Y = m => box.y + box.h - (m + 3) / 6.8 * box.h;
-    sims.forEach(s => {
-      ctx.fillStyle = rgba(PAL.ink, .05); ctx.fillRect(box.x, Y(s.m + .3), box.w, Y(s.m - .3) - Y(s.m + .3));
-      seg(ctx, box.x, Y(s.m), box.x + box.w, Y(s.m), rgba(PAL.ink, .35), 1, [2, 3]);
-      T(ctx, box.x + box.w + 8, Y(s.m) + 4, 'm* ' + sgn(s.m).replace('.00', '.0').replace(/(\.\d)0$/, '$1'), { color: PAL.muted, size: 10 });
-    });
-    [0, 4, 8, 12].forEach(i => T(ctx, X(i), box.y + box.h + 18, String(i), { color: PAL.faint, size: 11, align: 'center' }));
-    T(ctx, box.x + box.w, box.y + box.h + 34, 'feedback iteration t', { color: PAL.muted, size: 11, align: 'right' });
-    seg(ctx, box.x, box.y + box.h, box.x + box.w, box.y + box.h, PAL['line-strong'], 1);
-    const it = clamp((t - 300) / 3600) * 12;
-    sims.forEach((s, j) => {
-      const col = rgba(PAL.drive, .4 + .6 * j / (sims.length - 1));
-      ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath();
-      const n = Math.floor(it);
-      for (let i = 0; i <= n; i++){ const x = X(i), y = Y(s.pts[i]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
-      if (n < 12){ const fr = it - n; ctx.lineTo(lerp(X(n), X(n + 1), fr), lerp(Y(s.pts[n]), Y(s.pts[n + 1]), fr)); }
+const SA = [
+  { // 1 reachability: a dart toward a target with tolerance ring
+    dur: 4600, cases: [{ rel: .16, phi: .9 }, { rel: .3, phi: -1.2 }, { rel: .58, phi: .45 }],
+    draw(ctx, w, h, t, ci){
+      const c = this.cases[ci];
+      const Sp = { x: w * .13, y: h * .74 }, Tp = { x: w * .68, y: h * .52 };
+      const qx = Tp.x - Sp.x, qy = Tp.y - Sp.y, qn = Math.hypot(qx, qy), ux = qx / qn, uy = qy / qn, px = -uy, py = ux, R = .4 * qn;
+      [1, .66, .33].forEach(f => { ctx.save(); ctx.beginPath(); ctx.arc(Tp.x, Tp.y, R * f, 0, Math.PI * 2); if (f === 1){ ctx.fillStyle = rgba(PAL.tgt, .07); ctx.fill(); ctx.setLineDash([4, 4]); ctx.strokeStyle = rgba(PAL.tgt, .75); } else ctx.strokeStyle = rgba(PAL.tgt, .25); ctx.lineWidth = 1.25; ctx.stroke(); ctx.restore(); });
+      cross(ctx, Tp.x, Tp.y, 5, PAL.tgt);
+      T(ctx, Tp.x + R + 4, Tp.y + 5, 'ε', { size: 15, color: PAL.tgt, math: true });
+      word(ctx, Tp.x, Tp.y + R + 16, 'target', '目标', { align: 'center', color: PAL.tgt });
+      arrow(ctx, Sp.x, Sp.y, Tp.x - ux * 9, Tp.y - uy * 9, rgba(PAL.muted, .5), { dash: [4, 4], lw: 1.25 });
+      dot(ctx, Sp.x, Sp.y, 6, PAL.src);
+      word(ctx, Sp.x, Sp.y + 22, 'source', '源', { align: 'center', color: PAL.src });
+      const d = c.rel * qn, Lp = { x: Tp.x - ux * d * Math.cos(c.phi) + px * d * Math.sin(c.phi), y: Tp.y - uy * d * Math.cos(c.phi) + py * d * Math.sin(c.phi) };
+      const C = { x: (Sp.x + Lp.x) / 2 - px * qn * .2, y: (Sp.y + Lp.y) / 2 - py * qn * .2 };
+      const k = clamp((t - 400) / 1500), e = easeOut(k), B = u => ({ x: (1 - u) ** 2 * Sp.x + 2 * (1 - u) * u * C.x + u * u * Lp.x, y: (1 - u) ** 2 * Sp.y + 2 * (1 - u) * u * C.y + u * u * Lp.y });
+      ctx.save(); ctx.strokeStyle = PAL.drive; ctx.lineWidth = 2.25; ctx.beginPath(); for (let i = 0; i <= 30; i++){ const pt = B(e * i / 30); i ? ctx.lineTo(pt.x, pt.y) : ctx.moveTo(pt.x, pt.y); } ctx.stroke(); ctx.restore();
+      const cur = B(e); dot(ctx, cur.x, cur.y, 6.5, PAL.drive, PAL.surface, 2.5);
+      word(ctx, 10, 22, 'patch at γ = 1', '在 γ = 1 处干预', { color: PAL['drive-ink'] });
+      if (k >= 1) chip(ctx, w, 'Rel ' + c.rel.toFixed(2) + ' · ' + verdict(c.rel <= .4), c.rel <= .4);
+    } },
+  { // 2 signed reversal: a 1D track from target back to source
+    dur: 4600, cases: [{ f: .82 }, { f: .1 }],
+    draw(ctx, w, h, t, ci){
+      const c = this.cases[ci], y = h * .56, xS = w * .12, xT = w * .88;
+      seg(ctx, xS, y, xT, y, PAL.line, 3);
+      dot(ctx, xS, y, 7, PAL.src); cross(ctx, xT, y, 6, PAL.tgt);
+      word(ctx, xS, y + 34, 'source', '源', { align: 'center', color: PAL.src });
+      word(ctx, xT, y + 34, 'target', '目标', { align: 'center', color: PAL.tgt });
+      arrow(ctx, xT - 6, y - 44, xT - 70, y - 44, PAL.drive, { lw: 2 });
+      T(ctx, xT - 38, y - 52, '−β', { size: 16, color: PAL['drive-ink'], align: 'center', math: true });
+      word(ctx, 10, 22, 'opposite patch on the target input', '在目标输入上施加反向干预', { color: PAL['drive-ink'] });
+      const k = clamp((t - 500) / 1500), e = easeOut(k), x = lerp(xT, xT - c.f * (xT - xS), e);
+      if (k > .05){
+        ctx.save(); ctx.globalAlpha *= smooth(.05, .4, k);
+        seg(ctx, x, y - 12, xT, y - 12, rgba(PAL.tgt, .8), 3); seg(ctx, xS, y + 12, x, y + 12, rgba(PAL.src, .8), 3);
+        ctx.restore();
+      }
+      dot(ctx, x, y, 7, PAL.drive, PAL.surface, 2.5);
+      const ratio = (xT - x) / Math.max(1e-6, x - xS);
+      if (k >= 1) chip(ctx, w, tr('ratio ', '比值 ') + ratio.toFixed(1) + ' · ' + verdict(ratio >= 2), ratio >= 2);
+    } },
+  { // 3 dose response: sweep the dose, draw progress
+    dur: 5200, cases: [{ f: g => 1.3 * Math.tanh(1.02 * g) }, { f: g => Math.sin(1.3 * g) / Math.sin(1.3) }],
+    draw(ctx, w, h, t, ci){
+      const f = this.cases[ci].f, box = { x: 30, y: 40, w: w - 30 - 16, h: h - 40 - 34 };
+      const X = g => box.x + (g + 1.15) / 3.3 * box.w, Y = v => box.y + box.h - (v + 1.4) / 2.9 * box.h;
+      seg(ctx, box.x, Y(0), box.x + box.w, Y(0), PAL['line-strong'], 1); seg(ctx, X(0), box.y, X(0), box.y + box.h, PAL.line, 1);
+      seg(ctx, box.x, Y(1), box.x + box.w, Y(1), rgba(PAL.tgt, .75), 1.25, [4, 4]);
+      word(ctx, box.x + 4, Y(1) - 6, 'target', '目标', { color: PAL.tgt, size: 11 });
+      [-1, 0, 1, 2].forEach(g => T(ctx, X(g), box.y + box.h + 16, g < 0 ? '−1' : String(g), { size: 13, color: PAL.faint, align: 'center', math: true }));
+      T(ctx, box.x + box.w, box.y + box.h + 30, tr('dose γ', '剂量 γ'), { size: 13, color: PAL.muted, align: 'right', math: true });
+      word(ctx, 10, 22, 'progress toward target', '向目标的进展', {});
+      const k = clamp((t - 300) / 2800), g = lerp(-1, 2, easeInOut(k));
+      ctx.save(); ctx.strokeStyle = PAL.drive; ctx.lineWidth = 2.25; ctx.beginPath(); for (let x = -1, i = 0; x <= g + 1e-9; x += .03, i++){ i ? ctx.lineTo(X(x), Y(f(x))) : ctx.moveTo(X(x), Y(f(x))); } ctx.stroke(); ctx.restore();
+      GRID.forEach(gg => { if (gg <= g + 1e-9) dot(ctx, X(gg), Y(f(gg)), 3.5, PAL.surface, PAL.drive, 2); });
+      seg(ctx, X(g), box.y, X(g), box.y + box.h, rgba(PAL.drive, .3), 1);
+      dot(ctx, X(g), Y(f(g)), 5.5, PAL.drive, PAL.surface, 2);
+      if (k >= 1){ const rho = spearman(GRID, GRID.map(f)); chip(ctx, w, 'ρ ' + rho.toFixed(2) + ' · ' + verdict(rho >= .95), rho >= .95); }
+    } },
+  { // 4 feedback: setpoint tracking with dose updates
+    dur: 6200, cases: [{}],
+    init(){
+      const Mf = g => -1.6 + 3.6 * Math.tanh(.55 * g), sp = [-.9, 1.1, .1, 1.5], eta = .45;
+      let g = 0; const pts = [Mf(0)], gs = [0];
+      for (let i = 0; i < 24; i++){ g += eta * (sp[Math.floor(i / 6)] - Mf(g)); pts.push(Mf(g)); gs.push(g); }
+      this.sp = sp; this.pts = pts; this.gs = gs;
+      this.hits = sp.filter((m, j) => Math.abs(m - pts[(j + 1) * 6]) <= .3).length;
+    },
+    draw(ctx, w, h, t){
+      if (!this.pts) this.init();
+      const box = { x: 14, y: 40, w: w - 28, h: h - 40 - 30 }, X = i => box.x + i / 24 * box.w, Y = m => box.y + box.h - (m + 2) / 4.2 * box.h;
+      this.sp.forEach((m, j) => { const xa = X(j * 6), xb = X(j * 6 + 6); ctx.fillStyle = rgba(PAL.tgt, .08); ctx.fillRect(xa, Y(m + .3), xb - xa, Y(m - .3) - Y(m + .3)); seg(ctx, xa, Y(m), xb, Y(m), rgba(PAL.tgt, .85), 1.5, [4, 3]); if (j) seg(ctx, xa, Y(this.sp[j - 1]), xa, Y(m), rgba(PAL.tgt, .4), 1, [2, 3]); });
+      seg(ctx, box.x, box.y + box.h, box.x + box.w, box.y + box.h, PAL['line-strong'], 1);
+      T(ctx, box.x + box.w, box.y + box.h + 18, tr('iteration t', '迭代 t'), { size: 13, color: PAL.muted, align: 'right', math: true });
+      const it = clamp((t - 300) / 4600) * 24, n = Math.floor(it);
+      ctx.save(); ctx.strokeStyle = PAL.drive; ctx.lineWidth = 2; ctx.beginPath();
+      for (let i = 0; i <= n; i++){ i ? ctx.lineTo(X(i), Y(this.pts[i])) : ctx.moveTo(X(i), Y(this.pts[i])); }
+      if (n < 24) ctx.lineTo(lerp(X(n), X(n + 1), it - n), lerp(Y(this.pts[n]), Y(this.pts[n + 1]), it - n));
       ctx.stroke(); ctx.restore();
-      for (let i = 0; i <= n; i++) dot(ctx, X(i), Y(s.pts[i]), 2.2, col);
-      if (it >= 12){ const y = Y(s.pts[12]); if (s.hit) dot(ctx, X(12), y, 5.5, PAL.tgt, PAL.surface, 2); else dot(ctx, X(12), y, 5, PAL.surface, PAL.src, 2); }
-    });
-    T(ctx, 16, 24, 'Only γ changes. S, β and directions stay fixed.', { size: 12, sans: true, color: PAL.muted, weight: 500 });
-    if (it >= 12){ const hits = sims.filter(s => s.hit).length; pill(ctx, 16, 34, `hits ${hits}/${sims.length} · |e| ≤ 0.3`, hits >= 4 ? PAL.tgt : PAL.src); }
-  }
-};
-const SC_OFF = {
-  dur: 6000, variants: [{ kl: [.0004, .0019, .0006] }, { kl: [.11, .05, .42] }],
-  prompts: [{ tag: 'biology', z: [2.9, .3, -.2, .8], d: [-1, .6, .2, .4] }, { tag: 'history', z: [.1, 2.4, .6, -.3], d: [.7, -1, .5, .1] }, { tag: 'algebra', z: [-.2, .4, .9, 2.7], d: [.3, .5, .4, -1] }],
-  init(){ this.sc = this.variants.map(v => this.prompts.map((p, j) => solveScale(p.z, p.d, v.kl[j]))); },
-  draw(ctx, w, h, t, vi){
-    if (!this.sc) this.init();
-    const g = easeOut(clamp((t - 500) / 2200));
-    const pad = 16, gap = 16, top = 96, bottom = h - 56, pw = (w - 2 * pad - 2 * gap) / 3;
-    const kls = [];
-    this.prompts.forEach((p, j) => {
-      const x0 = pad + j * (pw + gap);
-      const p0 = softmax(p.z), p1 = softmax(p.z.map((v, i) => v + g * this.sc[vi][j] * p.d[i])), kl = KL(p0, p1);
-      kls.push(kl);
-      T(ctx, x0, top - 12, [['x̃'], [String(j + 1), 'sub'], ['  ' + p.tag]], { size: 11, color: PAL.muted });
-      seg(ctx, x0, bottom, x0 + pw, bottom, PAL['line-strong'], 1);
-      const bh = bottom - top;
-      ['A', 'B', 'C', 'D'].forEach((L, i) => {
-        const cx = x0 + (i + .5) * pw / 4, bw = Math.min(26, pw / 4 * .62);
-        ctx.strokeStyle = rgba(PAL.ink, .5); ctx.lineWidth = 1.25; ctx.strokeRect(cx - bw / 2, bottom - bh * p0[i], bw, bh * p0[i]);
-        ctx.fillStyle = rgba(PAL.drive, .8); const iw = bw * .56; ctx.fillRect(cx - iw / 2, bottom - bh * p1[i], iw, bh * p1[i]);
-        T(ctx, cx, bottom + 14, L, { size: 10, color: PAL.faint, align: 'center' });
-      });
-      const ok = kl <= .001;
-      T(ctx, x0, bottom + 34, 'KL = ' + fmtKL(kl), { size: 11, color: g >= 1 ? (ok ? PAL.tgt : PAL.src) : PAL.ink, weight: 500 });
-    });
-    const mean = kls.reduce((a, b) => a + b, 0) / kls.length;
-    T(ctx, 16, 24, 'δ = 0.001   mean KL = ' + fmtKL(mean), { size: 13, weight: 500 });
-    if (g >= 1){
-      const mOk = mean <= .001, aOk = kls.every(k => k <= .001);
-      const w1 = pill(ctx, 16, 36, 'mean rule · ' + (mOk ? 'pass' : 'fail'), mOk ? PAL.tgt : PAL.src);
-      pill(ctx, 16 + w1 + 8, 36, 'every prompt · ' + (aOk ? 'pass' : 'fail'), aOk ? PAL.tgt : PAL.src);
-    }
-  }
-};
-const SC_REUSE = {
-  dur: 6000, variants: [
-    { name: 'Refit-β', note: 'sites fixed, strengths refit on held out targets', fit: [1, .97, 1.02], held: [.99, 1.01, .968, 1] },
-    { name: 'Frozen-β', note: 'sites, strengths, directions and dose all fixed', fit: [1, .97, 1.02], held: [.05, -.01, .044, 0] }],
-  draw(ctx, w, h, t, vi){
-    const v = this.variants[vi];
-    T(ctx, 16, 24, v.name, { size: 13, weight: 600, sans: true });
-    T(ctx, 16, 42, v.note, { size: 11, color: PAL.muted, sans: true });
-    T(ctx, w - 16, 24, 'same support S', { size: 11, color: PAL['drive-ink'], align: 'right' });
-    for (let i = 0; i < 4; i++) dot(ctx, w - 16 - 5 - i * 14, 36, 4.5, PAL.drive);
-    const x0 = 104, x1 = w - 84, top = 76, bot = h - 20, rows = 7, gapB = 18;
-    const rh = (bot - top - gapB) / rows;
-    const rowY = (blk, i) => top + (blk ? (3 * rh + gapB) : 0) + (i + .5) * rh;
-    T(ctx, 16, rowY(0, 1) + 4, 'fitting', { size: 11, color: PAL.muted });
-    T(ctx, 16, rowY(1, 1) + 4, 'held out', { size: 11, color: PAL.ink, weight: 600 });
-    T(ctx, 16, rowY(1, 2) + 4, 'unseen', { size: 11, color: PAL.faint });
-    const k1 = easeOut(clamp((t - 300) / 1200)), k2 = easeOut(clamp((t - 1700) / 1600));
-    const drawRow = (y, f, k) => {
-      seg(ctx, x0, y, x1, y, PAL.line, 1.5);
-      dot(ctx, x0, y, 3.5, PAL.src);
-      seg(ctx, x1, y - 6, x1, y + 6, PAL.tgt, 2);
-      dot(ctx, x0 + f * k * (x1 - x0), y, 5, PAL.drive, PAL.surface, 2);
-    };
-    v.fit.forEach((f, i) => drawRow(rowY(0, i), f, k1));
-    v.held.forEach((f, i) => drawRow(rowY(1, i), f, k2));
-    const mf = v.fit.reduce((a, b) => a + b, 0) / v.fit.length, mh = v.held.reduce((a, b) => a + b, 0) / v.held.length;
-    if (k1 > .02) T(ctx, x1 + 12, rowY(0, 1) + 4, 'rec ' + (mf * k1).toFixed(2), { size: 11, color: PAL.muted });
-    if (k2 > .02) T(ctx, x1 + 12, rowY(1, 1) + 4, 'rec ' + (mh * k2).toFixed(3), { size: 12, weight: 600, color: k2 >= 1 ? (mh > .5 ? PAL.tgt : PAL.src) : PAL.ink });
-    T(ctx, x0, top - 6, 'source', { size: 10, color: PAL.src, align: 'center' });
-    T(ctx, x1, top - 6, 'target', { size: 10, color: PAL.tgt, align: 'center' });
-  }
-};
-
-const AXES = [
-  { name: 'Reachability', g: 0, scene: SC_REACH, center: '<tspan>Rel</tspan><tspan dy="3" font-size="9">tar</tspan><tspan dy="-3">(1)</tspan>',
-    q: 'Does the nominal dose land on the requested target?',
-    read: 'Orange path: the patched readout at γ = 1. Dashed circle: tolerance ε around the target. Three cases; the last one misses.',
-    fx: 'Rel<sub>tar</sub>(γ) = ‖q − F(γβ)‖<sub>2</sub> / (‖q‖<sub>2</sub> + ξ),&nbsp; evaluated at γ = 1',
-    crit: 'Rel<sub>tar</sub>(1) ≤ ε, with ε = 0.4 on stacked held out readouts and at most eight candidates.',
-    find: 'Coverage-Driver and Top-k pass 8/8 seeds on Humanities, STEM and Sentiment with evaluation pair directions (P), and 0/8 with training mean directions (F). Refusal passes 0/8 for every selector.' },
-  { name: 'Signed reversal', g: 0, scene: SC_REV, center: '<tspan>Reversal(β)</tspan>',
-    q: 'Does the opposite patch send a target side input back toward its source?',
-    read: 'The patch −β is applied to the target side input. Dashed lines are its distances to the target (green) and to the source (red).',
-    fx: 'Reversal(β) = Rel<sub>dis→clean</sub> / Rel<sub>dis→src</sub>',
-    crit: 'A seed passes when Reversal(β) ≥ 2: the reverse patched readout sits at least twice as far from the target as from the source.',
-    find: 'IOI passes 10/10 P seeds for all three selectors. MCQA passes 21/24 (Humanities) and 23/24 (STEM) P method–seed cells and no F cell. Refusal passes 0/24 in both modes.' },
-  { name: 'Dose response', g: 1, scene: SC_DOSE, center: '<tspan>ρ over Γ</tspan>',
-    q: 'As the dose γ grows, does target progress follow in order?',
-    read: 'Dots mark the ten doses of the paper’s grid Γ. Spearman ρ summarizes the ordering without assuming a straight line.',
-    fx: 'P(γ) = ⟨q, F(γβ)⟩ / (‖q‖<sub>2</sub><sup>2</sup> + ξ),&nbsp; ρ = Spearman(γ, P(γ)) over Γ',
-    crit: 'ρ ≥ 0.95 over Γ = {−1, −0.5, 0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2}. Strong negative ordering, ρ ≤ −0.95, is counted separately.',
-    find: 'All 48 Refusal curves have ρ = 1, yet no Refusal seed passes signed reversal. Under F directions every STEM selector shows four strongly positive and four strongly negative seeds.' },
-  { name: 'Feedback controllability', g: 1, scene: SC_FB, center: '<tspan>hit rate</tspan>',
-    q: 'With the support fixed, can adjusting only the dose track several requested targets?',
-    read: 'Dotted lines are requested margins m* with tolerance bands. Each trajectory updates only γ from the observed error.',
-    fx: 'e<sub>t</sub> = m<sup>⋆</sup> − M(γ<sub>t</sub>),&nbsp;&nbsp; γ<sub>t+1</sub> = γ<sub>t</sub> + η e<sub>t</sub>',
-    crit: 'A target is hit when |m<sup>⋆</sup> − M(γ<sub>end</sub>)| ≤ τ<sub>ctrl</sub>: 0.3 for IOI and MCQA, 0.1 for Refusal, within twelve updates.',
-    find: 'With P directions, Coverage-Driver hits 46/48 Humanities and 47/48 STEM targets. With F directions it hits 8/48 and 7/48. IOI with Driver-OMP hits 24/24.' },
-  { name: 'Off-target preservation', g: 2, scene: SC_OFF, center: '<tspan>L</tspan><tspan dy="3" font-size="9">off</tspan><tspan dy="-3">(γβ)</tspan>',
-    q: 'How much does the patch change outputs on prompts it was never meant to touch?',
-    read: 'Outlines show the unpatched next token distribution, orange the patched one. KL catches changes too small to see in the bars.',
-    fx: 'L<sub>off</sub>(β) = (1/n<sub>off</sub>) Σ<sub>j</sub> KL( p<sub>θ</sub>(·|x̃<sub>j</sub>) ‖ p<sub>θ</sub><sup>β</sup>(·|x̃<sub>j</sub>) )',
-    crit: 'KL ≤ δ = 0.001 on a shared panel of 32 MMLU prompts, checked two ways: the seed mean, and every prompt on its own.',
-    find: 'No MCQA or Sentiment seed passes either rule; Coverage-Driver’s mean KL is 0.110 on Humanities. On Refusal, Driver-OMP passes 4/8 seeds by the mean rule and 2/8 when every prompt must pass.' },
-  { name: 'Held-out reuse', g: 2, scene: SC_REUSE, center: '<tspan>recovery</tspan>',
-    q: 'Do the selected sites, or the whole intervention, carry over to prompts never used for selection?',
-    read: 'Each track runs from a source readout to its target. The support S is the same in both cases; only what else stays frozen changes.',
-    fx: 'recovery = (b̄<sub>patched</sub> − b̄<sub>source</sub>) / (b̄<sub>target</sub> − b̄<sub>source</sub>)',
-    crit: 'No pass flag. Recovery stays continuous and is reported with its information condition, refit-β or fully frozen-β.',
-    find: 'Module level MCQA with Driver-OMP: refit-β recovers 0.992 ± 0.009 (Humanities) and 0.987 ± 0.034 (STEM). The fully frozen intervention recovers 0.021 ± 0.026 and 0.024 ± 0.066.' }
+      for (let i = 0; i <= n; i++) dot(ctx, X(i), Y(this.pts[i]), 2.4, PAL.drive);
+      seg(ctx, 10, 18, 26, 18, PAL.tgt, 1.5, [4, 3]); T(ctx, 30, 22, tr('target m⋆', '目标 m⋆'), { size: 13, color: PAL.muted, math: true });
+      const lx = 30 + T(ctx, -999, -999, tr('target m⋆', '目标 m⋆'), { size: 13, math: true }) + 14;
+      seg(ctx, lx, 18, lx + 16, 18, PAL.drive, 2); T(ctx, lx + 20, 22, tr('readout M', '读出 M'), { size: 13, color: PAL.muted, math: true });
+      T(ctx, box.x + 2, box.y + box.h + 18, 'γ = ' + this.gs[Math.min(24, n)].toFixed(2), { size: 13, color: PAL['drive-ink'], math: true });
+      if (it >= 24) chip(ctx, w, tr('hits ', '命中 ') + this.hits + '/4 · ' + verdict(this.hits === 4), this.hits === 4);
+    } },
+  { // 5 off-target: target prompt should move, unrelated prompt should not
+    dur: 4800, cases: [{ kl: .0004 }, { kl: .12 }],
+    zA: [2.6, .2, .9, -.3], zA1: [.2, .1, 2.8, -.2], zB: [.2, 2.5, .4, -.1], dB: [.6, -1, .3, .2],
+    draw(ctx, w, h, t, ci){
+      if (!this.sc) this.sc = this.cases.map(c => solveScale(this.zB, this.dB, c.kl));
+      const e = easeOut(clamp((t - 400) / 1800)), pw = (w - 20 - 24) / 2, top = 62, bottom = h - 46, bh = bottom - top;
+      const pA0 = softmax(this.zA), pA1 = softmax(this.zA.map((v, i) => lerp(v, this.zA1[i], e)));
+      const pB0 = softmax(this.zB), pB1 = softmax(this.zB.map((v, i) => v + e * this.sc[ci] * this.dB[i]));
+      const panel = (x0, p0, p1) => { seg(ctx, x0, bottom, x0 + pw, bottom, PAL['line-strong'], 1); p0.forEach((v, i) => { const cx = x0 + (i + .5) * pw / 4, bw = Math.min(22, pw / 4 * .64); ctx.strokeStyle = rgba(PAL.ink, .5); ctx.lineWidth = 1.25; ctx.strokeRect(cx - bw / 2, bottom - bh * v, bw, bh * v); ctx.fillStyle = rgba(PAL.drive, .82); ctx.fillRect(cx - bw * .3, bottom - bh * p1[i], bw * .6, bh * p1[i]); }); };
+      panel(10, pA0, pA1); panel(10 + pw + 24, pB0, pB1);
+      word(ctx, 10, 50, 'target prompt: should move', '目标提示：应当改变', { size: 11 });
+      word(ctx, 10 + pw + 24, 50, 'unrelated prompt: should not', '无关提示：不应改变', { size: 11 });
+      const kl = KL(pB0, pB1), ok = kl <= .001;
+      T(ctx, 10 + pw + 24, bottom + 22, 'KL = ' + (kl < .01 ? kl.toFixed(4) : kl.toFixed(2)), { size: 14, color: e >= 1 ? (ok ? PAL.tgt : PAL.src) : PAL.ink, math: true });
+      T(ctx, 10, bottom + 22, tr('large change, as intended', '按预期大幅改变'), { size: 11, color: PAL.faint, sans: true });
+      if (e >= 1) chip(ctx, w, (ok ? 'KL ≤ δ · ' : 'KL > δ · ') + verdict(ok), ok);
+    } },
+  { // 6 held-out reuse: seen prompts vs new prompts
+    dur: 4800, cases: [{ en: 'Refit β: same sites, new strengths', zh: '重拟合 β：同样的位点，新的强度', held: [.99, 1] }, { en: 'Frozen β: everything fixed', zh: '冻结 β：全部固定', held: [.04, .01] }],
+    draw(ctx, w, h, t, ci){
+      const c = this.cases[ci], x0 = 74, x1 = w - 22, rows = [h * .38, h * .5, h * .72, h * .84];
+      T(ctx, 10, 22, tr(c.en, c.zh), { size: 12, weight: 600, color: PAL.ink, sans: true });
+      word(ctx, 10, (rows[0] + rows[1]) / 2 + 4, 'seen', '已见', { size: 11 });
+      word(ctx, 10, (rows[2] + rows[3]) / 2 + 4, 'new', '新提示', { size: 11, color: PAL.ink, weight: 600 });
+      word(ctx, x0, rows[0] - 16, 'source', '源', { size: 10, color: PAL.src, align: 'center' });
+      word(ctx, x1, rows[0] - 16, 'target', '目标', { size: 10, color: PAL.tgt, align: 'center' });
+      seg(ctx, 10, (rows[1] + rows[2]) / 2, w - 10, (rows[1] + rows[2]) / 2, PAL.line, 1, [2, 4]);
+      const k1 = easeOut(clamp((t - 300) / 1100)), k2 = easeOut(clamp((t - 1500) / 1400));
+      const row = (y, f, k) => { seg(ctx, x0, y, x1, y, PAL.line, 2); dot(ctx, x0, y, 3.5, PAL.src); seg(ctx, x1, y - 6, x1, y + 6, PAL.tgt, 2); dot(ctx, x0 + f * k * (x1 - x0), y, 5.5, PAL.drive, PAL.surface, 2); };
+      row(rows[0], 1, k1); row(rows[1], .98, k1); row(rows[2], c.held[0], k2); row(rows[3], c.held[1], k2);
+      const m = (c.held[0] + c.held[1]) / 2;
+      if (k2 >= 1) pill(ctx, w - 10, 10, tr('recovery ', '恢复率 ') + m.toFixed(2), m > .5 ? PAL.tgt : PAL.src, { align: 'right' });
+    } }
 ];
-const GROUPS = ['At a fixed dose', 'Across doses', 'Beyond the target set'];
 
-/* ---------- six axes: controller ---------- */
+/* ---------- six axes: grid controller ---------- */
 (() => {
-  const cv = $('#axis-canvas'); if (!cv) return;
-  const S = sizer(cv);
-  const tabs = $$('#hex .hx'), cards = $$('#t1 .t1-card'), groupsSvg = $$('.hex-svg .hg'), groupsLi = $$('#hex-legend li');
-  const ptr = $('#hex-ptr'), core = $('#core-t'), fill = $('#tour-fill'), tourBtn = $('#ax-tour');
-  const el = { kicker: $('#ax-kicker'), name: $('#ax-name'), q: $('#ax-q'), read: $('#ax-read'), fx: $('#ax-fx'), crit: $('#ax-crit'), find: $('#ax-find') };
-  const swaps = [$('#ax-ttl'), $('#ax-read'), $('#ax-body')];
-  let idx = 0, t0 = performance.now(), raf = 0, visible = false, touring = !reduce, tourTimer = 0, angle = 0;
-
+  const cards = $$('.ax-card'); if (!cards.length) return;
+  const items = cards.map((c, i) => ({ S: sizer($('canvas', c)), sc: SA[i], off: i * 420 }));
+  let raf = 0, visible = false, t0 = performance.now();
+  function render(it, t, ci){
+    const { ctx, w, h } = it.S; ctx.clearRect(0, 0, w, h); dotGrid(ctx, w, h);
+    ctx.save(); ctx.globalAlpha = smooth(0, 250, t) * (1 - smooth(it.sc.dur - 300, it.sc.dur, t)); it.sc.draw(ctx, w, h, t, ci); ctx.restore();
+  }
+  const still = it => render(it, it.sc.dur * .82, 0);
   function frame(now){
     raf = 0;
-    const sc = AXES[idx].scene, el2 = Math.max(0, now - t0), cyc = Math.floor(el2 / sc.dur), vi = cyc % sc.variants.length, t = el2 % sc.dur;
-    render(t, vi);
+    items.forEach(it => { const el = Math.max(0, now - t0 - it.off); render(it, el % it.sc.dur, Math.floor(el / it.sc.dur) % it.sc.cases.length); });
     if (visible && !reduce) raf = requestAnimationFrame(frame);
   }
-  function render(t, vi){
-    const ctx = S.ctx, w = S.w, h = S.h, sc = AXES[idx].scene;
-    ctx.clearRect(0, 0, w, h); dotGrid(ctx, w, h);
-    ctx.save(); ctx.globalAlpha = smooth(0, 280, t) * (1 - smooth(sc.dur - 300, sc.dur, t));
-    sc.draw(ctx, w, h, t, vi);
-    ctx.restore();
-    if (sc.variants.length > 1){
-      const nm = sc.variants[vi].name, label = 'case ' + (vi + 1) + '/' + sc.variants.length + (nm && idx !== 5 ? ' · ' + nm : '');
-      T(ctx, w - 16, h - 12, label, { size: 10, color: PAL.faint, align: 'right' });
-    }
-  }
-  function staticFrame(){ const sc = AXES[idx].scene; render(sc.dur * .8, 0); }
-  function start(){ if (!raf && visible && !reduce) raf = requestAnimationFrame(frame); }
-  S.onfit = () => { if (reduce || !raf) staticFrame(); };
+  items.forEach(it => { it.S.onfit = () => { if (reduce || !raf) still(it); }; });
+  new IntersectionObserver(es => { const v = es[0].isIntersecting; if (v && !visible){ t0 = performance.now(); } visible = v; if (visible && !reduce && !raf) raf = requestAnimationFrame(frame); }, { threshold: .05 }).observe($('#ax-grid'));
+  const redraw = () => { if (reduce || !raf) items.forEach(still); };
+  palSubs.push(redraw); langSubs.push(redraw);
+  items.forEach(still);
+  mathFontsReady.then(redraw);
+  $$('.pc[data-i]').forEach(b => b.addEventListener('click', () => {
+    const c = cards[+b.dataset.i]; c.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash');
+  }));
+})();
 
-  function schedule(){
-    clearTimeout(tourTimer);
-    fill.style.transition = 'none'; fill.style.transform = 'scaleX(0)';
-    if (!touring || !visible) return;
-    const sc = AXES[idx].scene, ms = sc.dur * sc.variants.length;
-    void fill.offsetWidth;
-    fill.style.transition = `transform ${ms}ms var(--ease-timer)`; fill.style.transform = 'scaleX(1)';
-    tourTimer = setTimeout(() => select((idx + 1) % AXES.length, false), ms);
+/* ---------- theory: controllability explorer ---------- */
+(() => {
+  const cv = $('#ctl-canvas'); if (!cv) return;
+  const S = sizer(cv);
+  const Q = [2.2, 1.4], QN = Math.hypot(Q[0], Q[1]);
+  const C = [[1.0, .15], [.25, .9], [1.1, .8], [-.6, .5], [.35, -.2]];
+  const chips = $$('#ctl-chips .cchip'), kSl = $('#kappa'), kNum = $('#kappa-num'), omp = $('#omp-run');
+  const rd = { rank: $('#r-rank'), range: $('#r-range'), emin: $('#r-emin'), chi: $('#r-chi'), status: $('#ctl-status') };
+  let sel = [0, 1], kappa = 4, note = '', cur, from, tw0 = 0, raf = 0, running = false;
+  function eig2(a, b, d){
+    const tr = a + d, det = a * d - b * b, disc = Math.sqrt(Math.max(0, tr * tr / 4 - det));
+    const l1 = tr / 2 + disc, l2 = tr / 2 - disc;
+    let v = Math.abs(b) > 1e-12 ? [l1 - d, b] : (a >= d ? [1, 0] : [0, 1]);
+    const n = Math.hypot(v[0], v[1]) || 1; v = [v[0] / n, v[1] / n];
+    return { l: [Math.max(l1, 0), Math.max(l2, 0)], e: [v, [-v[1], v[0]]] };
   }
-  function setTour(on){
-    touring = on; tourBtn.setAttribute('aria-pressed', on);
-    tourBtn.querySelector('use').setAttribute('href', on ? '#i-pause' : '#i-play');
-    tourBtn.querySelector('span').textContent = on ? 'Pause tour' : 'Play tour';
-    schedule();
+  function solve(set, kap){
+    let a = 0, b = 0, d = 0;
+    set.forEach(i => { const g = C[i]; a += g[0] * g[0]; b += g[0] * g[1]; d += g[1] * g[1]; });
+    const E = eig2(a, b, d), pos = [0, 1].filter(k => E.l[k] > 1e-9), rank = pos.length;
+    const c = E.e.map(e => e[0] * Q[0] + e[1] * Q[1]);
+    const energy = nu => pos.reduce((acc, k) => acc + E.l[k] * c[k] * c[k] / ((E.l[k] + nu) ** 2), 0);
+    const Emin = energy(0);
+    let nu = 0;
+    if (rank && Emin > kap){ let lo = 0, hi = 1; while (energy(hi) > kap) hi *= 2; for (let it = 0; it < 80; it++){ const mid = (lo + hi) / 2; if (energy(mid) > kap) lo = mid; else hi = mid; } nu = hi; }
+    const yc = [0, 1].map(k => pos.includes(k) ? c[k] / (E.l[k] + nu) : 0);
+    const y = [E.e[0][0] * yc[0] + E.e[1][0] * yc[1], E.e[0][1] * yc[0] + E.e[1][1] * yc[1]];
+    const beta = set.map(i => C[i][0] * y[0] + C[i][1] * y[1]);
+    const fit = [0, 1].map(j => set.reduce((acc, i, k) => acc + beta[k] * C[i][j], 0));
+    const perp = Math.sqrt([0, 1].filter(k => !pos.includes(k)).reduce((acc, k) => acc + c[k] * c[k], 0));
+    const inRange = rank === 2 || (rank === 1 && perp < 1e-6 * QN);
+    const chi = Math.hypot(Q[0] - fit[0], Q[1] - fit[1]) / (QN + 1e-6);
+    return { set: set.slice(), M: [a, b, d], rank, Emin, inRange, beta, fit, chi, kap };
   }
-  function select(i, user){
-    if (user && touring) setTour(false);
-    const prev = idx; idx = i;
-    const a = AXES[i];
-    tabs.forEach((b, j) => { b.setAttribute('aria-selected', j === i); b.tabIndex = j === i ? 0 : -1; });
-    cards.forEach((c, j) => c.setAttribute('aria-current', j === i));
-    groupsSvg.forEach(p => p.classList.toggle('on', +p.dataset.g === a.g));
-    groupsLi.forEach(li => li.classList.toggle('on', +li.dataset.g === a.g));
-    $('#axis-panel').setAttribute('aria-labelledby', 'tab-' + i);
-    let d = (i - prev) * 60; d = ((d % 360) + 540) % 360 - 180; angle += d;
-    ptr.style.transform = `rotate(${angle}deg)`;
-    core.innerHTML = a.center;
-    const apply = () => {
-      el.kicker.textContent = `Axis ${i + 1} of 6 · ${GROUPS[a.g]}`;
-      el.name.textContent = a.name; el.q.textContent = a.q; el.read.textContent = a.read;
-      el.fx.innerHTML = a.fx; el.crit.innerHTML = a.crit; el.find.innerHTML = a.find;
-    };
-    if (reduce || prev === i){ apply(); }
-    else { swaps.forEach(s => s.classList.add('out')); setTimeout(() => { apply(); swaps.forEach(s => s.classList.remove('out')); }, 220); }
-    t0 = performance.now();
-    if (reduce || !raf) staticFrame();
-    start(); schedule();
+  function view(w, h){
+    const xr = [-2.5, 3.3], yr = [-1.7, 2.3];
+    const sc = Math.min((w - 40) / (xr[1] - xr[0]), (h - 56) / (yr[1] - yr[0]));
+    const ox = w / 2 - (xr[0] + xr[1]) / 2 * sc, oy = h / 2 + (yr[0] + yr[1]) / 2 * sc + 8;
+    return { X: v => ox + v * sc, Y: v => oy - v * sc, sc, ox, oy };
   }
-  tabs.forEach((b, j) => {
-    b.addEventListener('click', () => select(j, true));
-    b.addEventListener('keydown', e => {
-      const k = e.key; let n = null;
-      if (k === 'ArrowRight' || k === 'ArrowDown') n = (j + 1) % 6; else if (k === 'ArrowLeft' || k === 'ArrowUp') n = (j + 5) % 6; else if (k === 'Home') n = 0; else if (k === 'End') n = 5;
-      if (n !== null){ e.preventDefault(); select(n, true); tabs[n].focus(); }
+  function draw(now){
+    raf = 0;
+    const ctx = S.ctx, w = S.w, h = S.h, V = view(w, h);
+    const k = reduce || !from ? 1 : easeOut(clamp(((now || performance.now()) - tw0) / 650));
+    const M = [0, 1, 2].map(j => lerp(from ? from.M[j] : cur.M[j], cur.M[j], k));
+    const kap = lerp(from ? from.kap : cur.kap, cur.kap, k);
+    const fit = [0, 1].map(j => lerp(from ? from.fit[j] : cur.fit[j], cur.fit[j], k));
+    ctx.clearRect(0, 0, w, h); dotGrid(ctx, w, h);
+    seg(ctx, 0, V.oy, w, V.oy, PAL['line-strong'], 1); seg(ctx, V.ox, 0, V.ox, h, PAL['line-strong'], 1);
+    T(ctx, w - 12, V.oy - 8, tr('prompt 1', '提示 1'), { size: 12, color: PAL.faint, align: 'right', sans: true });
+    T(ctx, V.ox + 8, 20, tr('prompt 2', '提示 2'), { size: 12, color: PAL.faint, sans: true });
+    const E = eig2(M[0], M[1], M[2]), r1 = Math.sqrt(kap * E.l[0]) * V.sc, r2 = Math.sqrt(kap * E.l[1]) * V.sc, ang = Math.atan2(E.e[0][1], E.e[0][0]);
+    if (r1 > .5){
+      ctx.save(); ctx.translate(V.ox, V.oy); ctx.rotate(-ang);
+      if (cur.rank === 1 && k >= 1){ seg(ctx, -w * 2, 0, w * 2, 0, rgba(PAL.drive, .35), 1, [3, 5]); }
+      ctx.beginPath(); ctx.ellipse(0, 0, r1, Math.max(r2, 1.5), 0, 0, Math.PI * 2);
+      ctx.fillStyle = rgba(PAL.drive, .1); ctx.fill(); ctx.setLineDash([5, 4]); ctx.strokeStyle = rgba(PAL.drive, .7); ctx.lineWidth = 1.25; ctx.stroke();
+      ctx.restore();
+    }
+    C.forEach((g, i) => {
+      const on = cur.set.includes(i), x = V.X(g[0]), y = V.Y(g[1]);
+      arrow(ctx, V.ox, V.oy, x, y, on ? PAL.drive : rgba(PAL.muted, .55), { lw: on ? 2 : 1.25, dash: on ? null : [3, 3], head: 7 });
+      const n = Math.hypot(g[0], g[1]);
+      T(ctx, x + g[0] / n * 14, y - g[1] / n * 14 + 5, [['v'], [String(i + 1), 'sub']], { size: 15, color: on ? PAL['drive-ink'] : PAL.muted, align: 'center', math: true });
     });
-  });
-  cards.forEach(c => c.addEventListener('click', () => { select(+c.dataset.i, true); $('#axes-mod').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }));
-  $('#ax-prev').addEventListener('click', () => select((idx + 5) % 6, true));
-  $('#ax-next').addEventListener('click', () => select((idx + 1) % 6, true));
-  tourBtn.addEventListener('click', () => setTour(!touring));
-  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible){ t0 = performance.now(); start(); } schedule(); }, { threshold: .2 }).observe(cv);
-  palSubs.push(() => { if (reduce || !raf) staticFrame(); });
-  if (reduce) setTour(false);
-  staticFrame();
-  document.fonts && document.fonts.ready.then(() => staticFrame());
+    const qx = V.X(Q[0]), qy = V.Y(Q[1]);
+    arrow(ctx, V.ox, V.oy, qx, qy, PAL.tgt, { lw: 2.25, head: 8 });
+    cross(ctx, qx, qy, 6, PAL.tgt);
+    T(ctx, qx + 12, qy - 10, 'q̄', { size: 18, color: PAL.tgt, math: true });
+    if (k >= 1 && cur.set.length){
+      let px = V.ox, py = V.oy;
+      ctx.save(); ctx.strokeStyle = rgba(PAL.drive, .5); ctx.lineWidth = 1.5; ctx.setLineDash([2, 3]); ctx.beginPath(); ctx.moveTo(px, py);
+      cur.set.forEach((i, j) => { px += cur.beta[j] * C[i][0] * V.sc; py -= cur.beta[j] * C[i][1] * V.sc; ctx.lineTo(px, py); });
+      ctx.stroke(); ctx.restore();
+    }
+    const fx = V.X(fit[0]), fy = V.Y(fit[1]);
+    if (Math.hypot(fx - V.ox, fy - V.oy) > 2) arrow(ctx, V.ox, V.oy, fx, fy, PAL.drive, { lw: 2.5, head: 8 });
+    const chi = Math.hypot(Q[0] - fit[0], Q[1] - fit[1]) / QN;
+    if (chi > .004){
+      seg(ctx, fx, fy, qx, qy, PAL.src, 1.5, [3, 3]);
+      T(ctx, (fx + qx) / 2 + 10, (fy + qy) / 2 + 16, [['χ'], ['κ', 'sub'], ['(S) = ' + chi.toFixed(3)]], { size: 15, color: PAL.src, math: true });
+    }
+    dot(ctx, fx, fy, 6, PAL.drive, PAL.surface, 2.5);
+    dot(ctx, V.ox, V.oy, 3.5, PAL.ink);
+    T(ctx, V.ox - 8, V.oy + 18, '0', { size: 14, color: PAL.muted, align: 'right', math: true });
+    if (note) T(ctx, 16, h - 14, note, { size: 13, color: PAL.ink, sans: true, weight: 500 });
+    if (k < 1) raf = requestAnimationFrame(draw);
+  }
+  function commit(){
+    from = cur ? { M: cur.M.slice(), kap: cur.kap, fit: cur.fit.slice() } : null;
+    if (raf){ cancelAnimationFrame(raf); raf = 0; }
+    cur = solve(sel, kappa); tw0 = performance.now();
+    chips.forEach(c => c.setAttribute('aria-pressed', sel.includes(+c.dataset.v)));
+    kNum.textContent = kappa.toFixed(2);
+    rd.rank.textContent = cur.rank; rd.range.textContent = cur.inRange ? tr('yes', '是') : tr('no', '否');
+    rd.emin.textContent = cur.inRange ? cur.Emin.toFixed(2) : '—'; rd.chi.textContent = cur.chi.toFixed(3);
+    let msg, cls = '';
+    if (!cur.rank){ msg = tr(String.raw`Empty support. Nothing moves, so \(\chi_\kappa(S) = 1\).`, String.raw`支撑集为空，输出不动，\(\chi_\kappa(S) = 1\)。`); }
+    else if (!cur.inRange){ msg = tr(String.raw`Outside the span of the chosen columns. A residual floor remains for every \(\kappa\).`, String.raw`目标不在所选列张成的空间内，任何 \(\kappa\) 下都留有残差下限。`); }
+    else if (cur.Emin > kappa + 1e-9){ msg = tr(String.raw`In the span, but the cheapest exact fit needs \(E_{\min} = `, String.raw`目标在张成空间内，但最省能量的精确拟合需要 \(E_{\min} = `) + cur.Emin.toFixed(2) + String.raw` > \kappa\)` + tr('.', '。'); cls = 'mid'; }
+    else { msg = tr(String.raw`Reachable within budget: \(\chi_\kappa(S) = 0\).`, String.raw`预算内可达：\(\chi_\kappa(S) = 0\)。`); cls = 'ok'; }
+    rd.status.innerHTML = msg; rd.status.className = 'ctl-status body-5 ' + cls; renderMath(rd.status);
+    draw();
+  }
+  const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+  async function runOMP(){
+    if (running) return; running = true; omp.disabled = true;
+    sel = []; note = tr('Driver-OMP starts from an empty support.', 'Driver-OMP 从空支撑集开始。'); commit();
+    await wait(1000);
+    for (let step = 1; step <= 2; step++){
+      const st = solve(sel, kappa), r = [Q[0] - st.fit[0], Q[1] - st.fit[1]];
+      let best = -1, bs = -1;
+      C.forEach((g, i) => { if (sel.includes(i)) return; const sc = Math.abs(g[0] * r[0] + g[1] * r[1]) / Math.hypot(g[0], g[1]); if (sc > bs){ bs = sc; best = i; } });
+      sel = sel.concat(best).sort((x, y) => x - y);
+      note = tr(`Step ${step}: add v${best + 1}, the column best aligned with the residual, then refit.`, `第 ${step} 步：加入与残差最对齐的列 v${best + 1}，然后重拟合。`); commit();
+      await wait(1600);
+    }
+    note = tr('Stopped at k = 2. Lower κ to watch the energy condition bind.', '在 k = 2 处停止。调低 κ 可以看到能量条件生效。'); commit();
+    running = false; omp.disabled = false;
+  }
+  chips.forEach(c => c.addEventListener('click', () => {
+    if (running) return; const v = +c.dataset.v;
+    sel = sel.includes(v) ? sel.filter(x => x !== v) : sel.concat(v).sort((x, y) => x - y);
+    note = ''; commit();
+  }));
+  kSl.addEventListener('input', () => { kappa = parseFloat(kSl.value); note = ''; from = null; cur = solve(sel, kappa); commit(); });
+  omp.addEventListener('click', runOMP);
+  $('#ctl-reset').addEventListener('click', () => { if (running) return; sel = [0, 1]; kappa = 4; kSl.value = 4; note = ''; commit(); });
+  S.onfit = () => { if (cur && !raf) draw(); };
+  palSubs.push(() => { if (cur && !raf) draw(); });
+  langSubs.push(() => { note = ''; commit(); });
+  commit();
+  mathFontsReady.then(() => { if (!raf) draw(); });
 })();
 
 /* ---------- tagline: word by word ---------- */
 (() => {
-  const p = $('#tagline'); if (!p) return;
-  const wrapWords = node => {
+  const ps = $$('.tagline-p'); if (!ps.length) return;
+  const wrap = node => {
     Array.from(node.childNodes).forEach(n => {
       if (n.nodeType === 3){
         const frag = document.createDocumentFragment();
-        n.textContent.split(/(\s+)/).forEach(part => { if (!part) return; if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part)); else { const s = document.createElement('span'); s.className = 'tw'; s.textContent = part; frag.appendChild(s); } });
+        (n.textContent.match(/[　-〿一-鿿＀-￯]|[^\s　-〿一-鿿＀-￯]+|\s+/g) || []).forEach(part => {
+          if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part));
+          else { const sp = document.createElement('span'); sp.className = 'tw'; sp.textContent = part; frag.appendChild(sp); }
+        });
         n.replaceWith(frag);
-      } else if (n.nodeType === 1 && n.classList.contains('k')){ n.classList.add('tw'); }
+      } else if (n.nodeType === 1 && n.classList.contains('k')) n.classList.add('tw');
     });
   };
-  wrapWords(p);
-  const words = $$('.tw', p);
+  ps.forEach(wrap);
+  const words = $$('.tw');
   if (reduce){ words.forEach(w => w.classList.add('on')); return; }
   let ticking = false;
-  const update = () => { ticking = false; const line = window.innerHeight * .72; words.forEach(w => w.classList.toggle('on', w.getBoundingClientRect().top < line)); };
+  const update = () => { ticking = false; const line = window.innerHeight * .72; words.forEach(w => { const r = w.getBoundingClientRect(); if (r.width || r.height) w.classList.toggle('on', r.top < line); }); };
   window.addEventListener('scroll', () => { if (!ticking){ ticking = true; requestAnimationFrame(update); } }, { passive: true });
   window.addEventListener('resize', update);
+  langSubs.push(update);
   update();
 })();
 
@@ -1634,9 +1885,9 @@ const GROUPS = ['At a fixed dose', 'Across doses', 'Beyond the target set'];
   [tp, ts].forEach(b => b.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft'){ e.preventDefault(); const n = b === tp ? ts : tp; n.click(); n.focus(); } }));
   $$('.copy-btn').forEach(b => b.addEventListener('click', () => {
     const src = document.getElementById(b.dataset.copy), text = src.innerText, label = b.querySelector('span'), use = b.querySelector('use');
-    const done = msg => { label.textContent = msg; use.setAttribute('href', '#i-check'); setTimeout(() => { label.textContent = 'Copy'; use.setAttribute('href', '#i-copy'); }, 2000); };
-    const fallback = () => { const r = document.createRange(); r.selectNodeContents(src); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); done('Selected, press copy'); };
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done('Copied'), fallback); else fallback();
+    const done = msg => { label.textContent = msg; use.setAttribute('href', '#i-check'); setTimeout(() => { label.textContent = tr('Copy', '复制'); use.setAttribute('href', '#i-copy'); }, 2000); };
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents(src); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); done(tr('Selected, press copy', '已选中，请手动复制')); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done(tr('Copied', '已复制')), fallback); else fallback();
   }));
 })();
 
