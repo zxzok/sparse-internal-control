@@ -25,6 +25,7 @@
   --s-25:2px; --s-50:4px; --s-75:8px; --s-100:12px; --s-200:16px; --s-300:24px; --s-400:32px; --s-500:40px; --s-600:48px; --s-700:64px; --s-800:80px; --s-900:96px;
   --r-sm:2px; --r:4px; --r-md:6px; --r-lg:8px; --r-xl:12px; --r-2xl:16px; --r-3xl:24px; --r-full:9999px;
   --ease:cubic-bezier(0.22,1,0.36,1);
+  --art-bg:#0B1626; --art-ink:#F4F1EA; --art-muted:rgba(244,241,234,.74); --art-faint:rgba(244,241,234,.52);
   --ease-timer:cubic-bezier(0.3,0.1,0.7,0.9);
 }
 @media (prefers-color-scheme: dark){
@@ -175,7 +176,7 @@ body.menu-open{overflow:hidden}
 .gauge-tick{position:absolute; top:var(--s-100); width:1px; height:var(--s-100); background:var(--faint)}
 .gauge-tick i{position:absolute; top:var(--s-200); left:0; transform:translateX(-50%); font-style:normal; white-space:nowrap; color:var(--faint)}
 .gauge-mark{position:absolute; left:0; top:var(--s-75); width:var(--s-200); height:var(--s-200); margin-left:calc(var(--s-75) * -1); border-radius:var(--r-full); background:var(--drive); border:3px solid var(--surface); box-shadow:0 0 0 1px var(--drive)}
-.controls{display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center; gap:var(--s-200); padding-top:var(--s-200); border-top:1px solid var(--line)}
+.controls{display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center; gap:var(--s-200); padding:var(--s-200) var(--s-200) var(--s-100); border-radius:var(--r-lg); background:var(--raised)}
 .dose-val{min-width:5.5rem; text-align:right; font-variant-numeric:tabular-nums}
 .slider-box{position:relative; padding-bottom:var(--s-300)}
 input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:var(--s-300); background:transparent; margin:0; cursor:pointer}
@@ -194,13 +195,6 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .note{color:var(--faint)}
 
 /* Idea */
-.idea-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--s-700); align-items:start}
-.obj-list{display:grid; border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
-.obj{display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--s-200); padding:var(--s-200) var(--s-300)}
-.obj + .obj{border-top:1px solid var(--line)}
-.obj-ic{display:grid; place-items:center; width:var(--s-500); height:var(--s-500); border-radius:var(--r-lg); border:1px solid var(--line); background:var(--raised); color:var(--drive)}
-.obj p{color:var(--muted)}
-.obj-cap{padding:var(--s-100) var(--s-300); color:var(--faint); border-top:1px solid var(--line)}
 
 /* Framework */
 .fw{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:var(--s-600); margin-top:var(--s-600); align-items:start}
@@ -252,60 +246,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .tw.k{color:var(--drive-ink)}
 
 /* Six axes */
-.axes{display:grid; grid-template-columns:minmax(0,25rem) minmax(0,1fr); gap:var(--s-600); margin-top:var(--s-600); align-items:start}
-.hex-col{display:grid; gap:var(--s-300); position:sticky; top:calc(env(safe-area-inset-top,0px) + var(--s-900))}
-.hex{position:relative; width:100%; max-width:25rem; aspect-ratio:400/350; margin-inline:auto}
-.hex-svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible}
-.hex-svg .hg{fill:transparent; transition:fill 500ms var(--ease)}
-.hex-svg .hg.on{fill:var(--drive-soft)}
-.hex-svg .ring1{fill:none; stroke:var(--line-strong); stroke-width:1.25}
-.hex-svg .ring2{fill:none; stroke:var(--line); stroke-width:1; stroke-dasharray:3 4}
-.hex-svg .spk{stroke:var(--line); stroke-width:1}
-.hex-svg .ptr{transform-box:view-box; transform-origin:200px 175px; transition:transform 500ms var(--ease)}
-.hex-svg .ptr line{stroke:var(--drive); stroke-width:2; stroke-linecap:round}
-.hex-svg .core{fill:var(--surface); stroke:var(--line-strong); stroke-width:1.25}
-.hex-svg .core-t{font-family:var(--mono); font-size:12px; font-weight:500; fill:var(--ink)}
-.hex-svg .core-s{font-family:var(--mono); font-size:10px; fill:var(--faint); letter-spacing:.06em}
-.hx{position:absolute; display:flex; align-items:center; gap:var(--s-75); padding:0; border:0; background:none; cursor:pointer; color:var(--muted); font-size:.75rem; line-height:1rem; font-weight:500; text-align:left; border-radius:var(--r-lg)}
-.hx .n{display:grid; place-items:center; width:1.75rem; height:1.75rem; flex:none; border-radius:var(--r-full); border:1px solid var(--line-strong); background:var(--surface); color:var(--ink); font-family:var(--mono); font-size:.75rem; font-weight:600; transition:transform 500ms var(--ease), background-color 300ms var(--ease), border-color 300ms var(--ease), color 300ms var(--ease)}
-.hx:hover .n{transform:scale(1.08); border-color:var(--ink)}
-.hx[aria-selected="true"]{color:var(--ink)}
-.hx[aria-selected="true"] .n{background:var(--drive); border-color:var(--drive); color:var(--on-drive); transform:scale(1.15)}
-.hx-r{transform:translate(-0.875rem,-50%)}
-.hx-l{transform:translate(calc(-100% + 0.875rem),-50%); flex-direction:row-reverse; text-align:right}
-.hx-t{transform:translate(-50%,calc(-100% + 0.875rem)); flex-direction:column-reverse; text-align:center}
-.hx-b{transform:translate(-50%,-0.875rem); flex-direction:column; text-align:center}
-.hex-legend{display:grid; gap:var(--s-75)}
-.hex-legend li{display:flex; align-items:center; gap:var(--s-100); color:var(--muted)}
-.hex-legend .k{font-family:var(--mono); color:var(--ink); min-width:2.5rem}
-.hex-legend li.on{color:var(--ink)}
-.hex-legend li.on .sw{background:var(--drive)}
 .sw{width:var(--s-100); height:var(--s-100); border-radius:var(--r-sm); background:var(--line-strong); transition:background-color 300ms var(--ease)}
-.panel{border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); display:grid; min-width:0; overflow:hidden}
-.panel-head{display:flex; justify-content:space-between; gap:var(--s-200); padding:var(--s-300) var(--s-300) var(--s-200)}
-.panel-head .ttl{display:grid; gap:var(--s-50); min-width:0}
-.panel-head .ttl p{color:var(--muted)}
-.panel-btns{display:flex; gap:var(--s-75); align-items:flex-start}
-.tour-bar{height:2px; background:var(--line); position:relative; overflow:hidden}
-.tour-bar i{position:absolute; inset:0; background:var(--drive); transform:scaleX(0); transform-origin:left}
-.swap{transition:opacity 300ms var(--ease), transform 300ms var(--ease)}
-.swap.out{opacity:0; transform:translateY(var(--s-75))}
-.scope{position:relative; height:22.5rem; border-bottom:1px solid var(--line); background:var(--surface)}
-.scope canvas{position:absolute; inset:0; width:100%; height:100%}
-.scope-read{padding:var(--s-100) var(--s-300); color:var(--faint); border-bottom:1px solid var(--line)}
-.panel-body{display:grid; gap:var(--s-200); padding:var(--s-300)}
-.facts{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--s-300)}
-.facts > div{display:grid; gap:var(--s-75); align-content:start}
-.facts p{color:var(--muted)}
-.facts .find p{color:var(--ink)}
-.t1{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s-200); margin-top:var(--s-600)}
-.t1-card{display:grid; gap:var(--s-75); align-content:start; text-align:left; padding:var(--s-200) var(--s-300) var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); cursor:pointer; transition:border-color 300ms var(--ease), transform 300ms var(--ease)}
-.t1-card:hover{border-color:var(--ink); transform:translateY(-2px)}
-.t1-card:active{transform:scale(.98)}
-.t1-card[aria-current="true"]{border-color:var(--drive)}
-.t1-card .top{display:flex; justify-content:space-between; gap:var(--s-100); color:var(--faint)}
-.t1-card .d{display:block; color:var(--muted)}
-.t1-card .ro{font-family:var(--mono); font-size:.75rem; line-height:1rem; color:var(--ink); padding-top:var(--s-75); border-top:1px solid var(--line); margin-top:var(--s-50)}
 
 /* Evidence */
 .ev-grid{display:grid; grid-template-columns:minmax(0,8fr) minmax(0,4fr); gap:var(--s-500); margin-top:var(--s-600); align-items:start}
@@ -317,7 +258,7 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 .mx{min-width:46rem}
 .mx td:first-child{white-space:nowrap}
 .mx td:first-child small{display:block; color:var(--faint); font-size:.75rem; line-height:1rem}
-.pf{display:grid; grid-template-columns:.875rem 3.5rem auto; align-items:center; gap:var(--s-75); font-family:var(--mono); font-size:.75rem; line-height:1.25rem; white-space:nowrap}
+.pf{display:grid; grid-template-columns:.875rem 3.5rem auto; align-items:center; gap:var(--s-75); padding-block:var(--s-25); font-family:var(--mono); font-size:.75rem; line-height:1rem; white-space:nowrap}
 .pf .k{color:var(--faint)}
 .trk{height:var(--s-75); border-radius:var(--r-full); background:var(--raised); border:1px solid var(--line); overflow:hidden}
 .fill{display:block; height:100%; width:100%; border-radius:var(--r-full); transform:scaleX(var(--f)); transform-origin:left; transition:transform 800ms var(--ease)}
@@ -325,10 +266,9 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 .fill.f{background:var(--model)}
 .reveal.pre .fill{transform:scaleX(0)}
 .na{font-size:.75rem; line-height:1rem; color:var(--faint)}
-.tbl-note{padding:var(--s-100) var(--s-200); color:var(--faint); border-top:1px solid var(--line)}
-.take{display:grid; gap:var(--s-200)}
-.take li{display:grid; gap:var(--s-50); padding-bottom:var(--s-200); border-bottom:1px solid var(--line)}
-.take li:last-child{border-bottom:0}
+.tbl-note{padding:var(--s-100) var(--s-200) var(--s-200); color:var(--faint)}
+.take{display:grid; gap:var(--s-300)}
+.take li{display:grid; gap:var(--s-50)}
 .take p{color:var(--muted)}
 .key{display:inline-flex; gap:var(--s-100); flex-wrap:wrap; color:var(--muted)}
 .key i{display:inline-block; width:var(--s-100); height:var(--s-75); border-radius:var(--r-full); margin-right:var(--s-50)}
@@ -346,23 +286,24 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 /* Use */
 .use-grid{display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:var(--s-500); margin-top:var(--s-600); align-items:start}
 .code{border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); overflow:hidden; min-width:0}
-.code-head{display:flex; justify-content:space-between; align-items:center; gap:var(--s-100); padding:var(--s-75) var(--s-75) var(--s-75) var(--s-200); border-bottom:1px solid var(--line); color:var(--muted)}
-.code pre{margin:0; padding:var(--s-200); overflow-x:auto; font-family:var(--mono); font-size:.8125rem; line-height:1.25rem; color:var(--ink)}
+.code-head{display:flex; justify-content:space-between; align-items:center; gap:var(--s-100); padding:var(--s-75) var(--s-75) var(--s-75) var(--s-200); background:var(--raised); color:var(--muted)}
+.code pre{margin:0; padding:var(--s-200); overflow-x:auto; font-family:var(--mono); font-size:.875rem; line-height:1.25rem; color:var(--ink)}
 .code pre .cm{color:var(--faint)}
 .code pre .pr{color:var(--drive-ink)}
-.mods{border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
-.mods li{display:flex; justify-content:space-between; gap:var(--s-200); padding:var(--s-100) var(--s-200); border-bottom:1px solid var(--line)}
-.mods li:last-child{border-bottom:0}
-.mods code{font-family:var(--mono); font-size:.8125rem; color:var(--ink)}
+.mods{display:grid; gap:var(--s-75); padding:var(--s-75); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
+.mods ul{display:grid; gap:var(--s-50)}
+.mods li{display:flex; justify-content:space-between; gap:var(--s-200); padding:var(--s-100) var(--s-200); border-radius:var(--r-lg); background:var(--raised)}
+.mods code{font-family:var(--mono); font-size:.875rem; line-height:1.25rem; color:var(--ink)}
 .mods span{color:var(--muted); text-align:right}
-.mods-head{padding:var(--s-200); border-bottom:1px solid var(--line); display:grid; gap:var(--s-50)}
+.mods-head{padding:var(--s-100) var(--s-100) var(--s-50); display:grid; gap:var(--s-50)}
 .mods-head p{color:var(--muted)}
 .stats{display:flex; flex-wrap:wrap; gap:var(--s-100) var(--s-300); margin-top:var(--s-300); color:var(--muted)}
 .stats b{font-family:var(--mono); font-weight:500; color:var(--ink)}
 
 /* FAQ */
-.faq{display:grid; margin-top:var(--s-600); max-width:52rem; border-top:1px solid var(--line)}
-.faq details{border-bottom:1px solid var(--line)}
+.faq{display:grid; gap:var(--s-75); margin-top:var(--s-600); max-width:52rem}
+.faq details{padding:0 var(--s-300); border:1px solid var(--line); border-radius:var(--r-xl); background:var(--surface); transition:border-color 300ms var(--ease)}
+.faq details[open]{border-color:var(--line-strong)}
 .faq summary{display:flex; justify-content:space-between; align-items:center; gap:var(--s-200); padding:var(--s-200) 0; cursor:pointer; list-style:none}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary .pm{position:relative; width:var(--s-200); height:var(--s-200); flex:none; transition:transform 500ms var(--ease)}
@@ -382,7 +323,7 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 .final p{color:var(--muted)}
 
 /* Footer */
-.foot{border-top:1px solid var(--line); padding-block:var(--s-500) var(--s-600)}
+.foot{background:var(--raised); padding-block:var(--s-500) var(--s-600)}
 .foot-row{display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--s-300)}
 .foot-links{display:flex; flex-wrap:wrap; gap:var(--s-100) var(--s-300)}
 .foot-links a{text-decoration:none; color:var(--muted)}
@@ -396,10 +337,10 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 
 
 /* Theory */
-.ctl{display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); margin-top:var(--s-600); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); overflow:hidden}
-.ctl-plot{position:relative; min-height:28rem; border-right:1px solid var(--line)}
+.ctl{display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:var(--s-75); padding:var(--s-75); margin-top:var(--s-600); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
+.ctl-plot{position:relative; min-height:28rem; border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface); overflow:hidden}
 .ctl-plot canvas{position:absolute; inset:0; width:100%; height:100%}
-.ctl-side{display:grid; gap:var(--s-300); padding:var(--s-300); align-content:start}
+.ctl-side{display:grid; gap:var(--s-300); padding:var(--s-200); align-content:start}
 .ctl-head{display:grid; gap:var(--s-75)}
 .ctl-group{display:grid; gap:var(--s-100)}
 .ctl-row{display:flex; justify-content:space-between; align-items:center; gap:var(--s-100)}
@@ -438,21 +379,16 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 
 
 /* Math typesetting (KaTeX) */
-.katex{font-size:1.06em; line-height:1.2}
-.fx{font-family:var(--font); font-size:1rem; line-height:1.75rem}
-.fx .katex{font-size:1.12em}
+.katex{font-size:1em; line-height:1.2}
+.fx{font-family:var(--font); font-size:1.125rem; line-height:1.75rem}
 .mi{font-family:KaTeX_Math,"Times New Roman",serif; font-style:italic}
 .mr{font-family:KaTeX_Main,"Times New Roman",serif}
 .dose-val.mr{font-size:1.125rem; line-height:1.75rem}
-.fw-svg .fo{display:grid; gap:2px; font-family:var(--font); font-size:13px; line-height:18px; color:var(--ink)}
+.fw-svg .fo{display:grid; gap:2px; font-family:var(--font); font-size:14px; line-height:20px; color:var(--ink)}
 .fw-svg .fo b{font-weight:600}
-.fw-svg .fo span{font-size:12px; line-height:17px; color:var(--muted)}
+.fw-svg .fo span{font-size:12px; line-height:16px; color:var(--muted)}
 .fw-svg .fo .mt{color:var(--model)}
 .fw-svg .fo .dt{color:var(--drive-ink)}
-.fw-svg .fo .katex{font-size:1.1em}
-.hex-core{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:grid; justify-items:center; gap:2px; max-width:5.75rem; pointer-events:none; text-align:center; font-size:.875rem; line-height:1.25rem; color:var(--ink)}
-.hex-core small{font-family:var(--mono); font-size:.75rem; line-height:1rem; letter-spacing:.06em; color:var(--faint)}
-.t1-card .ro{font-family:var(--font); font-size:.875rem; line-height:1.25rem}
 .cchip{font-family:var(--font)}
 .meta-link{color:var(--muted); text-decoration:none; transition:color 300ms var(--ease)}
 .meta-link:hover{color:var(--ink); text-decoration:underline}
@@ -461,18 +397,20 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 
 /* Six axis grid */
 .ax-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s-200); margin-top:var(--s-500)}
-.ax-card{position:relative; display:grid; gap:var(--s-100); align-content:start; padding:var(--s-200) var(--s-200) var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); min-width:0}
+.ax-card{position:relative; display:grid; gap:var(--s-100); align-content:start; padding:var(--s-75) var(--s-75) var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); min-width:0}
 .ax-card::after{content:""; position:absolute; inset:-1px; border:2px solid var(--drive); border-radius:var(--r-2xl); opacity:0; pointer-events:none}
 .ax-card.flash::after{animation:flash 1400ms var(--ease)}
 @keyframes flash{0%{opacity:0} 20%{opacity:1} 100%{opacity:0}}
-.ax-top{display:flex; align-items:center; gap:var(--s-100)}
+.ax-top{display:flex; align-items:center; gap:var(--s-100); padding:var(--s-100) var(--s-100) 0}
+.ax-q,.ax-meta{padding-inline:var(--s-100)}
+.ax-fx{margin-inline:var(--s-100)}
 .ax-n{display:grid; place-items:center; width:var(--s-400); height:var(--s-400); flex:none; border-radius:var(--r-full); background:var(--drive); color:var(--on-drive); font-family:var(--mono); font-size:.875rem; font-weight:600}
 .ax-t{display:grid; min-width:0}
 .ax-g{color:var(--faint)}
 .ax-q{color:var(--ink)}
 .ax-scope{position:relative; height:13.75rem; border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface); overflow:hidden}
 .ax-scope canvas{position:absolute; inset:0; width:100%; height:100%}
-.ax-fx{font-size:.875rem; padding:var(--s-75) var(--s-100)}
+.ax-fx{font-size:1rem; line-height:1.5rem; padding:var(--s-100)}
 .ax-meta{display:grid; gap:var(--s-100); margin:var(--s-50) 0 0}
 .ax-meta div{display:grid; gap:var(--s-25)}
 .ax-meta dt{color:var(--drive-ink); letter-spacing:.06em; text-transform:uppercase}
@@ -492,21 +430,63 @@ html[data-lang="zh"] .heading-1, html[data-lang="zh"] .heading-2, html[data-lang
 html[data-lang="zh"] .eyebrow, html[data-lang="zh"] .io-label, html[data-lang="zh"] .ax-meta dt{letter-spacing:.1em}
 html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 
+
+/* Hero artwork: a frozen tower on a few strings (single dark scene in both themes) */
+.hero-art{position:relative; overflow:hidden; background:var(--art-bg); color:var(--art-ink)}
+.art-canvas{position:absolute; inset:0; width:100%; height:100%}
+.hero-inner{position:relative; display:grid; grid-template-rows:1fr auto; gap:var(--s-700); min-height:46rem; padding-block:calc(var(--s-900) + var(--s-400)) var(--s-500)}
+.hero-art .hero-text{display:grid; gap:var(--s-300); max-width:680px; align-self:center}
+.hero-art .h1-grad{background:linear-gradient(90deg,#FFFFFF,#9B9B9B); -webkit-background-clip:text; background-clip:text; color:transparent}
+.hero-art .hero-sub{color:var(--art-muted); max-width:36rem}
+.hero-art .meta-link{color:var(--art-muted)}
+.hero-art .meta-link:hover{color:var(--art-ink)}
+.hero-art .sep{color:var(--art-faint)}
+.on-art{color:var(--art-ink)}
+.chip-dark{background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.22); color:var(--art-ink)}
+.btn-light{background:#FFFFFF; color:#0B1626; padding-inline:var(--s-200)}
+.btn-light:hover{opacity:.9}
+.btn-ghost-light{color:var(--art-ink); border-color:rgba(255,255,255,.26); background:rgba(255,255,255,.04)}
+.btn-ghost-light:hover{border-color:rgba(255,255,255,.6)}
+.hero-art :focus-visible{outline-color:#FFB37A}
+.hero-foot{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:var(--s-300)}
+.proof-stats{display:flex; flex-wrap:wrap; gap:var(--s-300) var(--s-600)}
+.proof-stats li{display:grid; gap:var(--s-25)}
+.proof-stats b{font-family:var(--mono); font-weight:500; color:var(--art-ink)}
+.proof-stats span{color:var(--art-faint)}
+.tested{color:var(--art-faint)}
+.tested span{color:var(--art-muted)}
+/* Problem to solution and benefits */
+.ps{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,6fr); gap:var(--s-600); align-items:end}
+.benefits{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--s-200); margin-top:var(--s-600)}
+.benefit{display:grid; grid-template-rows:auto auto 1fr auto; gap:var(--s-100); padding:var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); transition:border-color 300ms var(--ease), transform 500ms var(--ease)}
+.benefit:hover{border-color:var(--line-strong); transform:translateY(-2px)}
+.benefit p{color:var(--muted)}
+.b-ic{display:grid; place-items:center; width:var(--s-500); height:var(--s-500); margin-bottom:var(--s-75); border-radius:var(--r-lg); background:var(--drive-soft); color:var(--drive)}
+.more{display:inline-flex; align-items:center; gap:var(--s-50); justify-self:start; margin-top:var(--s-75); color:var(--drive-ink); text-decoration:none; border-radius:var(--r)}
+.more svg{transition:transform 300ms var(--ease)}
+.more:hover svg{transform:translateX(var(--s-50))}
+
 /* Responsive */
-@media (max-width:1040px){
+@media (max-width:1100px){
+  .ps{grid-template-columns:minmax(0,1fr)}
+  .benefits{grid-template-columns:repeat(2,minmax(0,1fr))}
   .nav-links{display:none}
   .menu-btn{display:inline-grid}
   .console-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .net-wrap{grid-column:1 / -1; grid-row:1}
   .fw{grid-template-columns:minmax(0,1fr)}
   .fw-fig{position:relative; top:0; grid-row:1}
-  .axes{grid-template-columns:minmax(0,1fr)}
-  .hex-col{position:relative; top:0}
   .ev-grid,.ev-lower,.use-grid,.cite-grid,.idea-grid,.ctl,.pmap{grid-template-columns:minmax(0,1fr)}
-  .ctl-plot{border-right:0; border-bottom:1px solid var(--line); min-height:24rem}
+  .ctl-plot{min-height:24rem}
   .thm,.ax-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:720px){
+  .thm,.ax-grid{grid-template-columns:minmax(0,1fr)}
+  .benefits{grid-template-columns:minmax(0,1fr)}
+  .hero-inner{min-height:0; padding-block:calc(var(--s-900) + var(--s-200)) 20rem; gap:var(--s-500)}
+  .hero-art .hero-meta .sep{display:none}
+  .hero-art .hero-meta{gap:var(--s-75) var(--s-200)}
+  .proof-stats{gap:var(--s-200) var(--s-400)}
   .section,.tagline{padding-block:var(--s-700)}
   .hero{padding-top:calc(var(--s-900) + var(--s-200)); padding-bottom:var(--s-500)}
   .heading-1{font-size:2.25rem; line-height:2.5rem}
@@ -521,15 +501,10 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   .controls .slider-box{grid-column:1 / -1; grid-row:2}
   .controls .btn{grid-column:1 / -1; justify-self:start}
   .hide-sm{display:none}
-  .t1,.thm,.ax-grid{grid-template-columns:minmax(0,1fr)}
   .ctl-plot{min-height:20rem}
-  .facts{grid-template-columns:minmax(0,1fr)}
-  .scope{height:20rem}
-  .panel-head{flex-direction:column}
   .final{padding:var(--s-300)}
 }
 @media (min-width:721px) and (max-width:1040px){
-  .t1{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:400px){
   .heading-1{font-size:1.875rem; line-height:2.25rem}
@@ -592,14 +567,11 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   <nav class="nav" aria-label="Primary">
     <a class="brand title-4" href="#top" aria-label="Sparse internal control, back to top"><svg aria-hidden="true"><use href="#logo"/></svg>Sparse control</a>
     <div class="nav-links body-5">
-      <a href="#idea">Idea</a>
+      <a href="#demo">Try it</a>
       <a href="#framework">Framework</a>
       <a href="#theory">Theory</a>
       <a href="#axes">Six axes</a>
-      <a href="#evidence">Evidence</a>
-      <a href="#use">Use it</a>
-      <a href="#faq">FAQ</a>
-      <a href="#cite">Cite</a>
+      <a href="#evidence">Results</a>
     </div>
     <a class="icon-btn" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener" aria-label="Code on GitHub"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-gh"/></svg></a>
     <button class="lang-btn button-sm" type="button" lang="zh" aria-label="切换到中文">中文</button>
@@ -607,11 +579,11 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   </nav>
   <div class="menu" id="menu" aria-hidden="true">
     <ul class="heading-5">
-      <li><a class="m-link" href="#idea">Idea</a></li>
+      <li><a class="m-link" href="#demo">Try it</a></li>
       <li><a class="m-link" href="#framework">Framework</a></li>
       <li><a class="m-link" href="#theory">Theory</a></li>
       <li><a class="m-link" href="#axes">Six axes</a></li>
-      <li><a class="m-link" href="#evidence">Evidence</a></li>
+      <li><a class="m-link" href="#evidence">Results</a></li>
       <li><a class="m-link" href="#use">Use it</a></li>
       <li><a class="m-link" href="#faq">FAQ</a></li>
       <li><a class="m-link" href="#cite">Cite</a></li>
@@ -626,25 +598,44 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 <main id="main">
 
 <!-- Hero -->
-<section class="hero" id="top" aria-labelledby="h-title">
-  <div class="wrap">
+<section class="hero-art" id="top" aria-labelledby="h-title">
+  <canvas class="art-canvas" id="art" aria-hidden="true"></canvas>
+  <div class="wrap hero-inner">
     <div class="hero-text">
       <div class="hero-meta">
-        <span class="chip caption-3"><span class="dot"></span>NeurIPS 2026</span>
-        <span class="caption-1">Xizhe Zhang</span><span class="sep" aria-hidden="true">·</span><a class="meta-link caption-1" href="mailto:zhangxizhe@gmail.com">zhangxizhe@gmail.com</a><span class="sep" aria-hidden="true">·</span><a class="meta-link caption-1" href="https://orcid.org/0000-0002-8684-4591" target="_blank" rel="noopener">ORCID 0000-0002-8684-4591</a>
+        <span class="chip chip-dark caption-3"><span class="dot"></span>NeurIPS 2026</span>
+        <span class="caption-1 on-art">Xizhe Zhang</span><span class="sep" aria-hidden="true">·</span><a class="meta-link caption-1" href="mailto:zhangxizhe@gmail.com">zhangxizhe@gmail.com</a><span class="sep" aria-hidden="true">·</span><a class="meta-link caption-1" href="https://orcid.org/0000-0002-8684-4591" target="_blank" rel="noopener">ORCID 0000-0002-8684-4591</a>
       </div>
       <h1 class="heading-1 h1-grad no-i18n" id="h-title"><span data-only="en"><span class="ln">Sparse</span><span class="ln">Internal Control</span><span class="ln">of Language Models</span></span><span data-only="zh"><span class="ln">语言模型的</span><span class="ln">稀疏内部控制</span></span></h1>
-      <p class="title-1 hero-sub">A control theoretic account of steering frozen language models. A few internal sites act as actuators, a local controllability analysis says what they can reach and at what energy, and a six axis protocol measures the control you actually get.</p>
+      <p class="title-1 hero-sub">A framework for researchers who steer language models from the inside. Pick a few internal sites as actuators, certify the control within an energy budget, and measure it on six axes.</p>
       <div class="cta-row">
-        <a class="btn btn-primary button-md" href="paper.pdf" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Read the paper</a>
-        <a class="btn btn-text button-md" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-gh"/></svg>Code on GitHub</a>
+        <a class="btn btn-light button-md" href="paper.pdf" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Read the paper</a>
+        <a class="btn btn-ghost-light button-md" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-gh"/></svg>Code on GitHub</a>
       </div>
-      <p class="caption-2 proof">Tested on <b>GPT-2 small</b>, <b>Qwen3-1.7B</b> and <b>Qwen3-4B</b> across indirect object identification, MMLU question answering, sentiment and refusal steering.</p>
     </div>
+    <div class="hero-foot">
+      <ul class="proof-stats" aria-label="At a glance">
+        <li><b class="heading-4">5</b><span class="caption-2">task instances</span></li>
+        <li><b class="heading-4">3</b><span class="caption-2">frozen models</span></li>
+        <li><b class="heading-4">6</b><span class="caption-2">control axes</span></li>
+        <li><b class="heading-4">162</b><span class="caption-2">table rows verified on CPU</span></li>
+      </ul>
+      <p class="tested caption-2"><span>Tested on</span> GPT-2 small · Qwen3-1.7B · Qwen3-4B</p>
+    </div>
+  </div>
+</section>
 
+<!-- Demo -->
+<section class="section reveal" id="demo" aria-labelledby="h-demo">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Try it</span>
+      <h2 class="heading-2" id="h-demo">Move a frozen model through four sites</h2>
+      <p class="body-3">Drag the dose. In this schematic, four driver sites in attention heads, an MLP and the residual stream are patched while every weight stays frozen. The readout at the answer position moves from the source behavior toward the target.</p>
+    </div>
     <div class="console" aria-label="Interactive illustration of sparse internal control">
       <div class="console-top">
-        <span class="caption-3 io-label">Try it · the paper's Figure 1 setting</span>
+        <span class="caption-3 io-label">Schematic · the paper's Figure 1 setting</span>
         <span class="caption-1 muted hide-sm">weights \(\theta\) frozen · 4 driver nodes · \(h \leftarrow h + \gamma \textstyle\sum_v \beta_v u_v\)</span>
       </div>
       <div class="console-grid">
@@ -699,23 +690,31 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 
 <!-- Idea -->
 <section class="section reveal" id="idea" aria-labelledby="h-idea">
-  <div class="wrap idea-grid">
-    <div class="prose">
-      <span class="eyebrow">The idea</span>
-      <h2 class="heading-2" id="h-idea">Treat a few activations as actuators</h2>
-      <p class="body-3 muted">Activation steering has shown that patching internal states can change what a frozen model does. Sparse internal control asks the engineering question that follows. Which few sites should be patched, with what strength, and what evidence shows that the change behaves like control?</p>
-      <p class="body-3 muted">Selected activations become temporary, adjustable control inputs while the learned parameters stay fixed. Goals are written as task readouts, so control can be studied on single prompts and on objectives shared across prompts. The question is no longer only whether an intervention moves the output, but how accurately it reaches the target, how the response changes as the intervention is adjusted, and what else it disturbs.</p>
+  <div class="wrap">
+    <div class="ps">
+      <div class="sec-head">
+        <span class="eyebrow">The idea</span>
+        <h2 class="heading-2" id="h-idea">Steering is easy to show. Control is hard to prove.</h2>
+      </div>
+      <div class="prose">
+        <p class="title-2 muted">Activation steering shows that patching internal states can move a frozen model. It leaves three questions open: which few sites to patch, how hard to push, and what evidence shows that the change behaves like control.</p>
+        <p class="body-3 muted">Sparse internal control answers them as a control problem. Selected activations become temporary, adjustable inputs, the weights never change, and success is defined by task readouts, an energy budget and a certificate checked in the full model.</p>
+      </div>
     </div>
-    <div>
-      <ul class="obj-list">
-        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-cross"/></svg></span><div><h3 class="title-3">Localized</h3><p class="body-6">Act through a sparse set of internal nodes chosen from a candidate library.</p></div></li>
-        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-undo"/></svg></span><div><h3 class="title-3">Signed reversal</h3><p class="body-6">The opposite patch on target inputs moves behavior back toward the source.</p></div></li>
-        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-funnel"/></svg></span><div><h3 class="title-3">Selective</h3><p class="body-6">Change the targeted behavior, as measured by a task readout.</p></div></li>
-        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg></span><div><h3 class="title-3">Bounded</h3><p class="body-6">Keep intervention strength inside an explicit energy budget \(\kappa\).</p></div></li>
-        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></span><div><h3 class="title-3">Off-target preservation</h3><p class="body-6">Leave unrelated behavior alone, such as refusing malicious requests.</p></div></li>
-        <li class="obj-cap caption-5">The five control objectives from Figure 1 of the paper.</li>
-      </ul>
-    </div>
+    <ul class="benefits">
+      <li class="benefit"><span class="b-ic"><svg class="ic" aria-hidden="true"><use href="#i-cross"/></svg></span><h3 class="heading-6">Few sites, chosen on purpose</h3><p class="body-6">Driver-OMP and Coverage-Driver select at most eight sites from a library of attention heads, MLP outputs and residual positions.</p><a class="more button-sm" href="#framework">How it works<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      <li class="benefit"><span class="b-ic"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></span><h3 class="heading-6">A certificate for every intervention</h3><p class="body-6">Target recovery, off-target change and energy are checked together in the original nonlinear model.</p><a class="more button-sm" href="#framework">See the certificate<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      <li class="benefit"><span class="b-ic"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg></span><h3 class="heading-6">Controllability you can compute</h3><p class="body-6">Near the unpatched model, reaching a target reduces to a span test and a minimum energy, with a bound on linearization error.</p><a class="more button-sm" href="#theory">Explore the theory<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      <li class="benefit"><span class="b-ic"><svg class="ic" aria-hidden="true"><use href="#logo"/></svg></span><h3 class="heading-6">Six axes instead of one score</h3><p class="body-6">Reachability, reversal, dose response, feedback, preservation and reuse are measured separately, so one strong number cannot hide a failure.</p><a class="more button-sm" href="#axes">See the six axes<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- Tagline -->
+<section class="tagline" aria-label="Summary">
+  <div class="wrap">
+    <p class="heading-3 tagline-p no-i18n" data-only="en">One push is a demo. Control means you can <span class="k">hit</span> a target, <span class="k">undo</span> it, <span class="k">dial</span> it, <span class="k">track</span> it, <span class="k">spare</span> everything else, and <span class="k">reuse</span> it on prompts you have never seen.</p>
+    <p class="heading-3 tagline-p no-i18n" data-only="zh">推动一次只是演示。控制意味着你能<span class="k">命中</span>目标、<span class="k">撤销</span>它、<span class="k">调节</span>它、<span class="k">跟踪</span>它、<span class="k">不扰动</span>其余一切，并在从未见过的提示上<span class="k">复用</span>它。</p>
   </div>
 </section>
 
@@ -942,14 +941,6 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   </div>
 </section>
 
-<!-- Tagline -->
-<section class="tagline" aria-label="Summary">
-  <div class="wrap">
-    <p class="heading-3 tagline-p no-i18n" data-only="en">One push is a demo. Control means you can <span class="k">hit</span> a target, <span class="k">undo</span> it, <span class="k">dial</span> it, <span class="k">track</span> it, <span class="k">spare</span> everything else, and <span class="k">reuse</span> it on prompts you have never seen.</p>
-    <p class="heading-3 tagline-p no-i18n" data-only="zh">推动一次只是演示。控制意味着你能<span class="k">命中</span>目标、<span class="k">撤销</span>它、<span class="k">调节</span>它、<span class="k">跟踪</span>它、<span class="k">不扰动</span>其余一切，并在从未见过的提示上<span class="k">复用</span>它。</p>
-  </div>
-</section>
-
 <!-- Six axes -->
 <section class="section reveal" id="axes" aria-labelledby="h-axes">
   <div class="wrap">
@@ -1065,7 +1056,7 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 <section class="section reveal" id="evidence" aria-labelledby="h-ev">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">Evidence</span>
+      <span class="eyebrow">Results</span>
       <h2 class="heading-2" id="h-ev">What the axes revealed</h2>
       <p class="body-3">Five task instances, four behaviors, three frozen models. The same selector can pass one axis and fail the next, and the direction information it receives changes the whole profile. The experiments are exploratory and every count is per seed.</p>
     </div>
@@ -1264,7 +1255,7 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 'use strict';
 const renderMath = el => { if (el && window.renderMathInElement) { try { renderMathInElement(el, { delimiters: [{ left: '\\(', right: '\\)', display: false }], throwOnError: false }); } catch (e) {} } };
 /* ---------- language ---------- */
-const ZH = {"Skip to content": "跳到正文", "Sparse control": "稀疏控制", "Idea": "思路", "Framework": "框架", "Theory": "理论", "Six axes": "六轴", "Evidence": "证据", "Use it": "使用", "FAQ": "问答", "Cite": "引用", "Read the paper": "阅读论文", "Code": "代码", "A control theoretic account of steering frozen language models. A few internal sites act as actuators, a local controllability analysis says what they can reach and at what energy, and a six axis protocol measures the control you actually get.": "用控制论的视角引导冻结的语言模型：少数内部位点充当执行器，局部可控性分析告诉你它们能到达哪里、需要多少能量，六轴评估协议则度量你实际得到的控制。", "Code on GitHub": "GitHub 上的代码", "Tested on": "实验模型：", "and": " 和 ", "across indirect object identification, MMLU question answering, sentiment and refusal steering.": "；任务涵盖间接宾语识别、MMLU 问答、情感引导与拒答引导。", "Try it · the paper's Figure 1 setting": "试一试 · 论文图 1 的设定", "weights \\(\\theta\\) frozen · 4 driver nodes · \\(h \\leftarrow h + \\gamma \\textstyle\\sum_v \\beta_v u_v\\)": "权重 \\(\\theta\\) 冻结 · 4 个驱动节点 · \\(h \\leftarrow h + \\gamma \\textstyle\\sum_v \\beta_v u_v\\)", "Input prompt": "输入提示", "How can I check SSH login logs on a company server?": "如何查看公司服务器上的 SSH 登录日志？", "Authorized audit context": "已授权的审计场景", "Model output": "模型输出", "“I can’t help with server access or hacking related requests.”": "“我无法协助服务器访问或与黑客相关的请求。”", "Source behavior · over refusal": "源行为 · 过度拒答", "“For an authorized audit, review SSH login records and document suspicious login attempts.”": "“在已授权的审计中，请检查 SSH 登录记录，并记录可疑的登录尝试。”", "Target behavior · helpful": "目标行为 · 有帮助", "Dose \\(\\gamma\\)": "剂量 \\(\\gamma\\)", "· unpatched": " · 未干预", "· nominal": " · 标称", "Replay sweep": "重播扫描", "driver site, patched": "驱动位点（被干预）", "attention head": "注意力头", "residual stream": "残差流", "forward pass": "前向传播", "A schematic of Figure 1. The two outputs are the figure’s example texts, not live model output.": "图 1 的示意。两段输出是论文图中的示例文本，并非模型实时生成。", "The idea": "核心思路", "Treat a few activations as actuators": "把少数激活当作执行器", "Activation steering has shown that patching internal states can change what a frozen model does. Sparse internal control asks the engineering question that follows. Which few sites should be patched, with what strength, and what evidence shows that the change behaves like control?": "激活引导已经表明，修补内部状态可以改变冻结模型的行为。稀疏内部控制追问随之而来的工程问题：应当修补哪几个位点，用多大强度，又有什么证据表明这种改变真正具有控制的性质？", "Selected activations become temporary, adjustable control inputs while the learned parameters stay fixed. Goals are written as task readouts, so control can be studied on single prompts and on objectives shared across prompts. The question is no longer only whether an intervention moves the output, but how accurately it reaches the target, how the response changes as the intervention is adjusted, and what else it disturbs.": "被选中的激活成为临时、可调的控制输入，而模型学到的参数保持不变。目标以任务读出的形式给出，因此既能在单个提示上研究控制，也能研究跨提示共享的目标。问题不再只是干预能否推动输出，还包括它多准确地到达目标、调节干预时响应如何变化，以及它还扰动了什么。", "Localized": "局部化", "Act through a sparse set of internal nodes chosen from a candidate library.": "只通过从候选库中选出的少量内部节点施加作用。", "Signed reversal": "符号反转", "The opposite patch on target inputs moves behavior back toward the source.": "在目标输入上施加反向干预，行为会回到源行为附近。", "Selective": "选择性", "Change the targeted behavior, as measured by a task readout.": "改变目标行为，并用任务读出来度量。", "Bounded": "有界", "Keep intervention strength inside an explicit energy budget \\(\\kappa\\).": "把干预强度限制在明确的能量预算 \\(\\kappa\\) 之内。", "Off-target preservation": "非目标保持", "Leave unrelated behavior alone, such as refusing malicious requests.": "不影响无关行为，例如继续拒绝恶意请求。", "The five control objectives from Figure 1 of the paper.": "论文图 1 中的五个控制目标。", "Specify, select, certify": "设定、选择、认证", "The framework separates what you ask for from how drivers are chosen. Any selector can be plugged into the same specification and judged by the same certificate.": "框架把“要什么”与“如何选择驱动节点”分开。任何选择算法都可以接入同一份设定，并由同一个证书评判。", "Specify the behavior": "设定行为", "Choose a readout \\(b_\\theta(x)\\) for the behavior: a logit margin, a sentiment score, a refusal score, or the four option logits of a multiple choice question. Pair each target prompt with the readout you want, and set aside disjoint prompts whose outputs should not move.": "为行为选择一个读出 \\(b_\\theta(x)\\)：logit 差值、情感分数、拒答分数，或多项选择题四个选项的 logit。为每个目标提示配上期望的读出，并另取一组不相交的提示，它们的输出不应改变。", "Select sparse drivers": "选择稀疏驱动节点", "A candidate control node \\(v = (s_v, u_v, c_v)\\) pairs a physical site (layer, component, token position, slice) with a direction and a selection cost. The intervention adds scaled directions to the chosen sites during the forward pass. The nonzero entries of \\(\\beta\\) form the driver set \\(S_\\beta = \\operatorname{supp}(\\beta)\\).": "候选控制节点 \\(v = (s_v, u_v, c_v)\\) 由一个物理位点（层、组件、token 位置、切片）、一个方向和一个选择代价组成。干预在前向传播中把缩放后的方向加到所选位点上。\\(\\beta\\) 的非零分量构成驱动集 \\(S_\\beta = \\operatorname{supp}(\\beta)\\)。", "fits the requested displacement by sparse residual fitting.": " 通过稀疏残差拟合逼近所需位移。", "adds candidates by saturated coverage across prompts. Both follow the same three stages.": " 依据跨提示的饱和覆盖逐个加入候选。两者遵循相同的三个阶段。", "Local proposal": "局部提议", "Shared refit": "共享重拟合", "Nonlinear validation": "非线性验证", "Certify, then characterize": "先认证，再刻画", "An intervention is an \\((\\varepsilon, \\delta, \\kappa)\\) control certificate when it reaches the target, preserves off-target outputs and stays inside the energy budget, all checked in the original nonlinear model. Sparse internal control looks for the cheapest such intervention.": "若一个干预能到达目标、保持非目标输出，并且不超出能量预算，且这些都在原始非线性模型中得到验证，它就是一个 \\((\\varepsilon, \\delta, \\kappa)\\) 控制证书。稀疏内部控制寻找代价最小的此类干预。", "\\(\\displaystyle\\min_{\\beta \\in \\mathbb{R}^M}\\ \\|\\beta\\|_{0,c} + \\lambda_E\\, E(\\beta) \\quad \\text{s.t. } \\beta \\text{ is an } (\\varepsilon, \\delta, \\kappa) \\text{ certificate}\\)": "\\(\\displaystyle\\min_{\\beta \\in \\mathbb{R}^M}\\ \\|\\beta\\|_{0,c} + \\lambda_E\\, E(\\beta)\\)，约束：\\(\\beta\\) 为 \\((\\varepsilon, \\delta, \\kappa)\\) 证书", "The six axes below then describe what kind of control the intervention provides beyond this one check.": "随后，下面的六轴评估描述该干预在这一检验之外提供了何种控制。", "Prompt \\(x_i\\)": "提示 \\(x_i\\)", "from \\(\\mathcal{D}_{\\mathrm{tar}}\\)": "来自 \\(\\mathcal{D}_{\\mathrm{tar}}\\)", "Off-target \\(\\tilde{x}_j\\)": "非目标 \\(\\tilde{x}_j\\)", "from \\(\\mathcal{D}_{\\mathrm{off}}\\)": "来自 \\(\\mathcal{D}_{\\mathrm{off}}\\)", "Frozen model \\(f_\\theta\\)": "冻结模型 \\(f_\\theta\\)", "candidate sites \\(v = (s_v, u_v, c_v)\\)": "候选位点 \\(v = (s_v, u_v, c_v)\\)", "Strengths \\(\\beta\\)": "强度 \\(\\beta\\)", "\\(\\beta_v = m_v \\alpha_v\\), few nonzero": "\\(\\beta_v = m_v \\alpha_v\\)，少数非零", "Cost": "代价", "\\(\\|\\beta\\|_{0,c}\\) and \\(E(\\beta)\\)": "\\(\\|\\beta\\|_{0,c}\\) 与 \\(E(\\beta)\\)", "Energy": "能量", "Readout": "读出", "Target \\(\\tau_i\\)": "目标 \\(\\tau_i\\)", "Target error": "目标误差", "Observable": "观测量", "Off-target": "非目标", "\\((\\varepsilon, \\delta, \\kappa)\\) control certificate": "\\((\\varepsilon, \\delta, \\kappa)\\) 控制证书", "The highlighted parts follow the step you are reading. Blue dots: the frozen forward pass. Orange: the sparse patch.": "高亮部分随你正在阅读的步骤变化。蓝点：冻结的前向传播。橙色：稀疏干预。", "The mathematics of internal control": "内部控制的数学", "Near the unpatched model, a frozen Transformer acts as a linear map from intervention strengths to behavior. Choosing drivers then becomes a controllability question: can the selected actuators reach the requested displacement, and at what energy? The local analysis proposes a support and strengths. The nonlinear certificate decides whether to accept them.": "在未干预模型附近，冻结的 Transformer 相当于一个从干预强度到行为的线性映射。于是选择驱动节点就成了一个可控性问题：所选执行器能否到达所需位移，又需要多少能量？局部分析给出支撑集与强度的提议，是否接受由非线性证书决定。", "Controllability explorer": "可控性探索器", "Two target prompts with scalar readouts, so the requested displacement \\(\\bar q\\) lives in a plane. Each candidate contributes one column of \\(\\bar G\\), its first order effect on both prompts. Energy uses \\(W = I\\).": "两个目标提示各有一个标量读出，因此所需位移 \\(\\bar q\\) 位于一个平面内。每个候选贡献 \\(\\bar G\\) 的一列，即它对两个提示的一阶影响。能量取 \\(W = I\\)。", "Support S": "支撑集 S", "Energy budget \\(\\kappa\\)": "能量预算 \\(\\kappa\\)", "yes": "是", "In the span, but the cheapest exact fit needs more energy than κ.": "目标在张成空间内，但最省能量的精确拟合需要超过 κ 的能量。", "Run Driver-OMP, k = 2": "运行 Driver-OMP，k = 2", "Reset": "重置", "The reachable set \\(\\{\\bar G_S\\beta : \\beta^{\\top}\\beta \\le \\kappa\\}\\) is an ellipse, symmetric about the unpatched model. The orange point is the energy constrained best fit; the red dashes are the residual that \\(\\chi_\\kappa(S)\\) normalizes.": "可达集 \\(\\{\\bar G_S\\beta : \\beta^{\\top}\\beta \\le \\kappa\\}\\) 是一个关于未干预模型对称的椭圆。橙点是能量约束下的最佳拟合；红色虚线是 \\(\\chi_\\kappa(S)\\) 所归一化的残差。", "Definition · B.1": "定义 · B.1", "Local effect dictionary": "局部效应字典", "Each candidate’s first order effect on every target readout is one column of \\(G\\), taken at the unpatched model. A preservation dictionary \\(H\\) is built the same way from a differentiable surrogate of the off-target observable.": "每个候选对所有目标读出的一阶效应构成 \\(G\\) 的一列，在未干预模型处计算。保持字典 \\(H\\) 以同样方式，由非目标观测量的可微替代量构建。", "Theorem 1": "定理 1", "Local linearization error": "局部线性化误差", "Inside the energy ball the model departs from its linearization by at most the curvature bound \\(L_S\\) times half the energy. Target recovery therefore holds whenever \\(\\|q - G_S\\beta_S\\|_2 + L_S\\kappa/2 \\le \\varepsilon(\\|q\\|_2 + \\xi)\\).": "在能量球内，模型与其线性化之间的偏差至多为曲率界 \\(L_S\\) 乘以能量的一半。因此只要 \\(\\|q - G_S\\beta_S\\|_2 + L_S\\kappa/2 \\le \\varepsilon(\\|q\\|_2 + \\xi)\\)，目标恢复条件就成立。", "Equation B.19": "式 B.19", "Local target controllability": "局部目标可控性", "A support reaches the target exactly at first order within budget if and only if two conditions hold: \\(\\bar q \\in \\operatorname{range}(\\bar G_S)\\), a span condition, and \\(E_{\\min}(S) \\le \\kappa\\), an energy condition.": "一个支撑集在预算内于一阶精确到达目标，当且仅当两个条件同时成立：张成条件 \\(\\bar q \\in \\operatorname{range}(\\bar G_S)\\)，以及能量条件 \\(E_{\\min}(S) \\le \\kappa\\)。", "Theorem 2": "定理 2", "Minimum energy interpolation": "最小能量插值", "In whitened coordinates \\(\\tilde G_S = \\bar G_S W_{SS}^{-1/2}\\), the cheapest exact fit is a pseudoinverse. A support with a small nonzero singular value can demand far more energy to reach the same target.": "在白化坐标 \\(\\tilde G_S = \\bar G_S W_{SS}^{-1/2}\\) 下，最省能量的精确拟合由伪逆给出。若支撑集的最小非零奇异值很小，到达同一目标可能需要多得多的能量。", "Proposition 1": "命题 1", "Energy constrained refit": "能量约束重拟合", "Target fit and a quadratic preservation term are refit jointly on the chosen support. Energy decreases monotonically in the multiplier \\(\\nu\\), so the budget \\(\\kappa\\) is met exactly by bisection.": "目标拟合与二次保持项在所选支撑集上联合重拟合。能量随乘子 \\(\\nu\\) 单调下降，因此可用二分法恰好满足预算 \\(\\kappa\\)。", "Proposition 2": "命题 2", "Saturated coverage": "饱和覆盖", "Coverage is monotone submodular, so greedy selection under a pure cardinality budget is within \\(1 - 1/e\\) of optimal. In its simplest setting Driver-OMP reduces to orthogonal matching pursuit.": "覆盖目标是单调次模的，因此在纯基数预算下，贪心选择至少达到最优值的 \\(1 - 1/e\\)。在最简设定下，Driver-OMP 退化为正交匹配追踪。", "Local results only propose. An intervention is accepted when the \\((\\varepsilon, \\delta, \\kappa)\\) certificate holds in the original nonlinear model, and the six axes then characterize the control it provides.": "局部结果只负责提议。只有当 \\((\\varepsilon, \\delta, \\kappa)\\) 证书在原始非线性模型中成立时，干预才被接受，随后再由六轴刻画它提供的控制。", "Evaluation protocol": "评估协议", "Six axes of control": "控制的六个轴", "Target recovery at a single dose describes one property of an intervention. The protocol fixes the support \\(S\\), the base strengths \\(\\beta_S\\) and the direction rule \\(u_v(x)\\), then asks six separate questions of the patched model. Each axis has an operational definition and a quantitative readout, so interventions built by different methods can be compared on equal terms.": "单一剂量下的目标恢复只描述了干预的一个性质。协议固定支撑集 \\(S\\)、基础强度 \\(\\beta_S\\) 和方向规则 \\(u_v(x)\\)，然后对干预后的模型提出六个独立的问题。每个轴都有可操作的定义和定量读出，因此不同方法构建的干预可以在同一标准下比较。", "One object, six probes": "一个对象，六种探测", "The support \\(S\\), base strengths \\(\\beta_S\\) and direction rule stay fixed. Every axis reads this one dose family; what changes is the dose \\(\\gamma\\) and the inputs it is read on. \\(\\gamma = 0\\) is the unpatched model and \\(\\gamma = 1\\) the nominal dose.": "支撑集 \\(S\\)、基础强度 \\(\\beta_S\\) 和方向规则保持不变。每个轴读取的都是这同一个剂量族，变化的只是剂量 \\(\\gamma\\) 以及读取所用的输入。\\(\\gamma = 0\\) 为未干预模型，\\(\\gamma = 1\\) 为标称剂量。", "\\(-\\beta\\) on \\(x^{c}\\)": "在 \\(x^{c}\\) 上施加 \\(-\\beta\\)", "\\(\\gamma \\in \\Gamma\\), ten doses": "\\(\\gamma \\in \\Gamma\\)，十个剂量", "\\(\\gamma_t\\) from feedback": "由反馈给出 \\(\\gamma_t\\)", "target prompts \\(\\mathcal{D}_{\\mathrm{tar}}\\)": "目标提示 \\(\\mathcal{D}_{\\mathrm{tar}}\\)", "Reachability": "可达性", "Dose response": "剂量响应", "Feedback": "反馈", "off-target prompts \\(\\mathcal{D}_{\\mathrm{off}}\\)": "非目标提示 \\(\\mathcal{D}_{\\mathrm{off}}\\)", "unseen prompts": "未见提示", "Held-out reuse": "留出复用", "At a fixed dose": "固定剂量", "Does the nominal dose land on the requested target?": "标称剂量能否落在所要求的目标上？", "Passes when": "通过条件", "\\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le \\varepsilon = 0.4\\) on held out readouts.": "在留出读出上 \\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le \\varepsilon = 0.4\\)。", "In the paper": "论文结果", "Coverage-Driver passes 8/8 seeds with evaluation pair directions and 0/8 with training mean directions, on both MCQA and Sentiment.": "Coverage-Driver 在 MCQA 和情感任务上，使用评估对方向时 8/8 个种子通过，使用训练均值方向时 0/8。", "Does the opposite patch send a target input back toward its source?": "反向干预能否把目标输入推回到它的源？", "\\(\\mathrm{Reversal}(\\beta) \\ge 2\\): twice as far from the target as from the source.": "\\(\\mathrm{Reversal}(\\beta) \\ge 2\\)：离目标的距离至少是离源的两倍。", "MCQA passes 21/24 (Humanities) and 23/24 (STEM) cells with P directions and none with F. Refusal never passes.": "MCQA 在 P 方向下通过 21/24（人文）和 23/24（STEM）个单元，F 方向下无一通过。拒答任务从未通过。", "Across doses": "跨剂量", "As the dose grows, does progress toward the target grow in order?": "随着剂量增加，向目标的进展是否有序增长？", "\\(\\rho \\ge 0.95\\) over ten doses \\(\\gamma \\in \\Gamma = \\{-1, \\dots, 2\\}\\).": "在十个剂量 \\(\\gamma \\in \\Gamma = \\{-1, \\dots, 2\\}\\) 上 \\(\\rho \\ge 0.95\\)。", "All 48 Refusal curves have \\(\\rho = 1\\), yet none passes signed reversal. Order and reversibility are different properties.": "拒答任务的全部 48 条曲线 \\(\\rho = 1\\)，却没有一条通过符号反转。有序性与可逆性是不同的性质。", "Feedback controllability": "反馈可控性", "Keeping the sites fixed, can a feedback loop on the dose track new targets?": "固定位点、只对剂量做反馈调节，能否跟踪新的目标？", "\\(|m^{\\star} - M(\\gamma_{\\mathrm{end}})| \\le \\tau_{\\mathrm{ctrl}}\\): 0.3 for IOI and MCQA, 0.1 for Refusal.": "\\(|m^{\\star} - M(\\gamma_{\\mathrm{end}})| \\le \\tau_{\\mathrm{ctrl}}\\)：IOI 与 MCQA 取 0.3，拒答取 0.1。", "Coverage-Driver hits 46/48 Humanities and 47/48 STEM targets with P directions, and 8/48 and 7/48 with F.": "Coverage-Driver 在 P 方向下命中 46/48（人文）和 47/48（STEM）个目标，在 F 方向下为 8/48 和 7/48。", "Beyond the target set": "目标集之外", "Does the patch leave unrelated prompts alone?": "干预会不会波及无关提示？", "\\(\\mathrm{KL} \\le \\delta = 0.001\\), as a seed mean and on every prompt.": "\\(\\mathrm{KL} \\le \\delta = 0.001\\)，按种子均值与逐条提示两种方式检验。", "No MCQA or Sentiment seed passes. On Refusal, Driver-OMP passes 4/8 seeds by the mean rule.": "MCQA 与情感任务没有任何种子通过。在拒答任务上，Driver-OMP 按均值规则有 4/8 个种子通过。", "Do the chosen sites, or the whole intervention, carry over to new prompts?": "所选位点，或整个干预，能否迁移到新的提示上？", "No pass flag. Recovery is reported with its condition: refit \\(\\beta\\) or frozen \\(\\beta\\).": "不设通过标准。恢复率与其信息条件一同报告：重拟合 \\(\\beta\\) 或冻结 \\(\\beta\\)。", "MCQA with refit strengths recovers 0.992 (Humanities); the fully frozen intervention recovers 0.021.": "MCQA 重拟合强度后恢复率为 0.992（人文）；完全冻结的干预仅为 0.021。", "Each panel is a schematic of one axis. Chips show whether the case shown would pass the paper’s criterion; the numbers under each panel are the paper’s measured results.": "每个面板都是一个轴的示意。标签显示所演示的情形能否通过论文的判据；面板下方的数字是论文中的实测结果。", "What the axes revealed": "六轴揭示了什么", "Five task instances, four behaviors, three frozen models. The same selector can pass one axis and fail the next, and the direction information it receives changes the whole profile. The experiments are exploratory and every count is per seed.": "五个任务实例、四种行为、三个冻结模型。同一选择器可能在一个轴上通过、在下一个轴上失败，而它获得的方向信息会改变整体画像。实验是探索性的，所有计数均按种子统计。", "Coverage-Driver pass counts across five axes under P and F directions": "Coverage-Driver 在 P 与 F 方向下五个轴上的通过计数", "Task · model": "任务 · 模型", "MMLU Humanities": "MMLU 人文", "Sentiment": "情感", "separate unpaired diagnostic": "单独的非配对诊断", "not evaluated": "未评估", "Refusal": "拒答", "Coverage-Driver with at most eight candidates. Seeds passing: held out \\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le 0.4\\); reversal ratio \\(\\ge 2\\); Spearman \\(\\rho \\ge 0.95\\) over ten doses (under F, 3/8 Humanities and 4/8 STEM seeds are strongly negative); feedback counts seed and target endpoints; off-target uses seed mean \\(\\mathrm{KL} \\le 0.001\\), with P directions for MCQA and F for Sentiment and Refusal. Source: Tables 3, G.4, G.6, G.7, G.9.": "Coverage-Driver，最多八个候选。种子通过标准：留出 \\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le 0.4\\)；反转比值 \\(\\ge 2\\)；十个剂量上 Spearman \\(\\rho \\ge 0.95\\)（F 方向下人文 3/8、STEM 4/8 个种子呈强负序）；反馈按种子与目标端点计数；非目标保持采用种子均值 \\(\\mathrm{KL} \\le 0.001\\)，MCQA 用 P 方向，情感与拒答用 F 方向。来源：表 3、G.4、G.6、G.7、G.9。", "P · evaluation pair directions": "P · 评估对方向", "F · training mean directions": "F · 训练均值方向", "Direction information sets the profile": "方向信息决定整体画像", "On MCQA and Sentiment, reachability and reversal pass in 8/8 seeds with P directions and in none with F. Feedback on MCQA drops from 46/48 to 8/48 hits.": "在 MCQA 与情感任务上，可达性与反转在 P 方向下 8/8 个种子通过，在 F 方向下全部失败。MCQA 的反馈命中从 46/48 降到 8/48。", "Ordered is not reversible": "有序不等于可逆", "All 48 Refusal dose curves have \\(\\rho = 1\\), yet Refusal never passes signed reversal or held out reachability. Each axis measures something the others miss.": "拒答任务的全部 48 条剂量曲线 \\(\\rho = 1\\)，却从未通过符号反转或留出可达性。每个轴都度量了其他轴遗漏的东西。", "Preservation is not free": "保持并非免费", "No MCQA or Sentiment seed keeps \\(\\mathrm{KL} \\le 0.001\\) on the off-target panel. Median MCQA KL sits around 0.05.": "在非目标面板上，没有任何 MCQA 或情感任务的种子能保持 \\(\\mathrm{KL} \\le 0.001\\)。MCQA 的 KL 中位数约为 0.05。", "Nominal dose target recovery": "标称剂量下的目标恢复", "Table 2. \\(\\mathrm{Rel}_{\\mathrm{tar}}(1)\\) on the fitting panel, mean ± sample SD, lower is better. At most eight candidates with evaluation pair directions.": "表 2：拟合面板上的 \\(\\mathrm{Rel}_{\\mathrm{tar}}(1)\\)，均值 ± 样本标准差，越低越好。使用评估对方向，最多八个候选。", "Method": "方法", "IOI · 10 seeds": "IOI · 10 个种子", "Humanities · 3 seeds": "人文 · 3 个种子", "STEM · 3 seeds": "STEM · 3 个种子", "Random": "随机", "Nonlinear greedy": "非线性贪心", "Bars share one scale from 0 to 1.25. Nonlinear greedy reaches the lowest residual at the cost of additional model evaluations.": "所有条形共用 0 到 1.25 的刻度。非线性贪心残差最低，但需要额外的模型评估。", "Sites travel, frozen interventions do not": "位点可以迁移，冻结的干预不能", "Held-out reuse stays a continuous number with its information condition attached, never a pass flag. In module level MCQA, Driver-OMP keeps its selected sites and refits strengths on held out targets to recover 0.992 ± 0.009 (Humanities) and 0.987 ± 0.034 (STEM). Freeze the whole intervention and recovery falls to 0.021 ± 0.026 and 0.024 ± 0.066.": "留出复用始终以连续数值报告并附带其信息条件，从不转换为通过标记。在模块级 MCQA 中，Driver-OMP 保留所选位点、在留出目标上重拟合强度，恢复率达到 0.992 ± 0.009（人文）和 0.987 ± 0.034（STEM）。若冻结整个干预，恢复率降至 0.021 ± 0.026 和 0.024 ± 0.066。", "Sentiment shows the opposite pattern at \\(k = 8\\): training mean directions give a mean margin recovery of 0.942 ± 0.535 for Coverage-Driver, yet no F seed passes signed reversal.": "情感任务在 \\(k = 8\\) 时呈现另一种模式：训练均值方向下 Coverage-Driver 的均值差恢复率为 0.942 ± 0.535，但没有任何 F 种子通过符号反转。", "Use the protocol": "使用协议", "Score your own intervention": "评估你自己的干预", "The axes only need an intervention (a support, base strengths and a direction rule), a dose and task readouts. Interventions from activation steering, sparse autoencoder features, concept erasure or circuit discovery can be selected, adjusted and scored the same way. The release includes Driver-OMP, Coverage-Driver, the comparison methods and every metric.": "这些轴只需要一个干预（支撑集、基础强度和方向规则）、一个剂量和任务读出。来自激活引导、稀疏自编码器特征、概念擦除或电路发现的干预，都可以用同样的方式选择、调整和评分。代码发布包含 Driver-OMP、Coverage-Driver、对比方法以及全部指标。", "Recalculate every table on CPU, no model needed": "在 CPU 上重算全部表格，无需加载模型", "Copy": "复制", "One metrics module per axis": "每个轴一个指标模块", "In": "位于", "experimental series": " 个实验系列", "source, target and patched readout triples": " 组源、目标与干预读出三元组", "prompt and seed KL measurements": " 次提示与种子的 KL 测量", "numerical rows checked by": " 行数值由以下命令核对：", "Questions": "问答", "Frequently asked": "常见问题", "Does sparse internal control change the model’s weights?": "稀疏内部控制会改变模型权重吗？", "No. The parameters \\(\\theta\\) stay frozen. An intervention adds scaled directions to a few activations during the forward pass, and setting \\(\\beta = 0\\) recovers the original model exactly.": "不会。参数 \\(\\theta\\) 保持冻结。干预只是在前向传播中把缩放后的方向加到少数激活上，令 \\(\\beta = 0\\) 即可精确恢复原模型。", "What is a driver node?": "什么是驱动节点？", "A candidate control node is a triple of a physical site, an intervention direction and a selection cost. The candidates that receive a nonzero strength form the driver set \\(S_\\beta = \\operatorname{supp}(\\beta)\\). One site can host several candidates with different directions.": "候选控制节点是由物理位点、干预方向和选择代价组成的三元组。获得非零强度的候选构成驱动集 \\(S_\\beta = \\operatorname{supp}(\\beta)\\)。同一个位点可以对应多个方向不同的候选。", "How is this different from activation steering?": "它和激活引导有什么不同？", "Activation steering shows that internal directions can change behavior. Sparse internal control adds the control problem around it: which compact set of sites to use, under a bounded energy, with explicit requirements for target recovery and off-target preservation, followed by an evaluation on six axes.": "激活引导表明内部方向可以改变行为。稀疏内部控制在此之上加入了控制问题：在有界能量下使用哪一组紧凑的位点，对目标恢复与非目标保持提出明确要求，并在六个轴上进行评估。", "Why six axes instead of one score?": "为什么用六个轴，而不是一个分数？", "Because the properties separate in practice. Refusal responds to dose in perfect order and still fails reversal. MCQA sites transfer when strengths are refit, while the fully frozen intervention barely moves held out prompts. One number would hide both facts.": "因为这些性质在实践中会分离。拒答任务对剂量的响应完全有序，却依然无法反转。MCQA 的位点在重拟合强度后可以迁移，而完全冻结的干预几乎推不动留出提示。一个数字会把这两件事都掩盖掉。", "What do P and F mean?": "P 和 F 是什么意思？", "They describe the direction information. P uses evaluation pair directions, computed from the activation contrast of each evaluation pair. F uses training mean directions, averaged over the fitting split and shared across inputs.": "它们描述方向信息。P 使用评估对方向，由每个评估对的激活差计算得到。F 使用训练均值方向，在拟合划分上取平均，并在所有输入间共享。", "Which models and tasks were tested?": "测试了哪些模型和任务？", "Indirect object identification and sentiment on GPT-2 small, MMLU Humanities and STEM on Qwen3-4B, and refusal on Qwen3-1.7B. The appendix adds model comparisons on Qwen3-8B and Mistral-7B.": "GPT-2 small 上的间接宾语识别与情感，Qwen3-4B 上的 MMLU 人文与 STEM，以及 Qwen3-1.7B 上的拒答。附录还在 Qwen3-8B 与 Mistral-7B 上做了模型对比。", "Can I reproduce the tables without a GPU?": "没有 GPU 能复现表格吗？", "Yes. The record replay path recalculates the paper’s tables from the supplied measurements on CPU, and": "可以。记录回放流程在 CPU 上根据提供的测量结果重算论文中的表格，并由 ", "compares 162 numerical rows and 15 supporting values against the manuscript. Running the models themselves uses a separate environment and execution profile.": " 将 162 行数值和 15 个辅助数值与论文原稿逐一核对。运行模型本身需要单独的环境和执行配置。", "Can I evaluate my own steering method with the protocol?": "能用这个协议评估我自己的引导方法吗？", "Yes. Each axis is defined on any intervention with a support, base strengths and a direction rule. Directions from steering vectors, sparse autoencoder features or editing methods can enter as candidates and be scored on the same six axes.": "可以。每个轴都定义在任意具有支撑集、基础强度和方向规则的干预上。来自引导向量、稀疏自编码器特征或编辑方法的方向都可以作为候选进入，并在同样的六个轴上评分。", "Cite the paper": "引用论文", "Paper": "论文", "Software": "软件", "Read the full formulation, proofs and per seed results": "阅读完整的建模、证明与逐种子结果", "53 pages with the local target controllability analysis, pseudocode for both selectors, complete axis definitions and every table behind this page.": "共 53 页，包含局部目标可控性分析、两种选择器的伪代码、六轴的完整定义，以及本页背后的全部表格。", "Sparse Internal Control of Language Models": "语言模型的稀疏内部控制", "© 2026 Xizhe Zhang · Contact": "© 2026 Xizhe Zhang · 联系方式", "· Code under Apache 2.0 · This site sets no cookies and runs no analytics.": " · 代码采用 Apache 2.0 许可 · 本站不使用 Cookie，也不做访问统计。"};
+const ZH = {"Skip to content": "跳到正文", "Sparse control": "稀疏控制", "Idea": "思路", "Framework": "框架", "Theory": "理论", "Six axes": "六轴", "Evidence": "证据", "Use it": "使用", "FAQ": "问答", "Cite": "引用", "Read the paper": "阅读论文", "Code": "代码", "A control theoretic account of steering frozen language models. A few internal sites act as actuators, a local controllability analysis says what they can reach and at what energy, and a six axis protocol measures the control you actually get.": "用控制论的视角引导冻结的语言模型：少数内部位点充当执行器，局部可控性分析告诉你它们能到达哪里、需要多少能量，六轴评估协议则度量你实际得到的控制。", "Code on GitHub": "GitHub 上的代码", "Tested on": "测试模型", "and": " 和 ", "across indirect object identification, MMLU question answering, sentiment and refusal steering.": "；任务涵盖间接宾语识别、MMLU 问答、情感引导与拒答引导。", "Try it · the paper's Figure 1 setting": "试一试 · 论文图 1 的设定", "weights \\(\\theta\\) frozen · 4 driver nodes · \\(h \\leftarrow h + \\gamma \\textstyle\\sum_v \\beta_v u_v\\)": "权重 \\(\\theta\\) 冻结 · 4 个驱动节点 · \\(h \\leftarrow h + \\gamma \\textstyle\\sum_v \\beta_v u_v\\)", "Input prompt": "输入提示", "How can I check SSH login logs on a company server?": "如何查看公司服务器上的 SSH 登录日志？", "Authorized audit context": "已授权的审计场景", "Model output": "模型输出", "“I can’t help with server access or hacking related requests.”": "“我无法协助服务器访问或与黑客相关的请求。”", "Source behavior · over refusal": "源行为 · 过度拒答", "“For an authorized audit, review SSH login records and document suspicious login attempts.”": "“在已授权的审计中，请检查 SSH 登录记录，并记录可疑的登录尝试。”", "Target behavior · helpful": "目标行为 · 有帮助", "Dose \\(\\gamma\\)": "剂量 \\(\\gamma\\)", "· unpatched": " · 未干预", "· nominal": " · 标称", "Replay sweep": "重播扫描", "driver site, patched": "驱动位点（被干预）", "attention head": "注意力头", "residual stream": "残差流", "forward pass": "前向传播", "A schematic of Figure 1. The two outputs are the figure’s example texts, not live model output.": "图 1 的示意。两段输出是论文图中的示例文本，并非模型实时生成。", "The idea": "核心思路", "Treat a few activations as actuators": "把少数激活当作执行器", "Activation steering has shown that patching internal states can change what a frozen model does. Sparse internal control asks the engineering question that follows. Which few sites should be patched, with what strength, and what evidence shows that the change behaves like control?": "激活引导已经表明，修补内部状态可以改变冻结模型的行为。稀疏内部控制追问随之而来的工程问题：应当修补哪几个位点，用多大强度，又有什么证据表明这种改变真正具有控制的性质？", "Selected activations become temporary, adjustable control inputs while the learned parameters stay fixed. Goals are written as task readouts, so control can be studied on single prompts and on objectives shared across prompts. The question is no longer only whether an intervention moves the output, but how accurately it reaches the target, how the response changes as the intervention is adjusted, and what else it disturbs.": "被选中的激活成为临时、可调的控制输入，而模型学到的参数保持不变。目标以任务读出的形式给出，因此既能在单个提示上研究控制，也能研究跨提示共享的目标。问题不再只是干预能否推动输出，还包括它多准确地到达目标、调节干预时响应如何变化，以及它还扰动了什么。", "Localized": "局部化", "Act through a sparse set of internal nodes chosen from a candidate library.": "只通过从候选库中选出的少量内部节点施加作用。", "Signed reversal": "符号反转", "The opposite patch on target inputs moves behavior back toward the source.": "在目标输入上施加反向干预，行为会回到源行为附近。", "Selective": "选择性", "Change the targeted behavior, as measured by a task readout.": "改变目标行为，并用任务读出来度量。", "Bounded": "有界", "Keep intervention strength inside an explicit energy budget \\(\\kappa\\).": "把干预强度限制在明确的能量预算 \\(\\kappa\\) 之内。", "Off-target preservation": "非目标保持", "Leave unrelated behavior alone, such as refusing malicious requests.": "不影响无关行为，例如继续拒绝恶意请求。", "The five control objectives from Figure 1 of the paper.": "论文图 1 中的五个控制目标。", "Specify, select, certify": "设定、选择、认证", "The framework separates what you ask for from how drivers are chosen. Any selector can be plugged into the same specification and judged by the same certificate.": "框架把“要什么”与“如何选择驱动节点”分开。任何选择算法都可以接入同一份设定，并由同一个证书评判。", "Specify the behavior": "设定行为", "Choose a readout \\(b_\\theta(x)\\) for the behavior: a logit margin, a sentiment score, a refusal score, or the four option logits of a multiple choice question. Pair each target prompt with the readout you want, and set aside disjoint prompts whose outputs should not move.": "为行为选择一个读出 \\(b_\\theta(x)\\)：logit 差值、情感分数、拒答分数，或多项选择题四个选项的 logit。为每个目标提示配上期望的读出，并另取一组不相交的提示，它们的输出不应改变。", "Select sparse drivers": "选择稀疏驱动节点", "A candidate control node \\(v = (s_v, u_v, c_v)\\) pairs a physical site (layer, component, token position, slice) with a direction and a selection cost. The intervention adds scaled directions to the chosen sites during the forward pass. The nonzero entries of \\(\\beta\\) form the driver set \\(S_\\beta = \\operatorname{supp}(\\beta)\\).": "候选控制节点 \\(v = (s_v, u_v, c_v)\\) 由一个物理位点（层、组件、token 位置、切片）、一个方向和一个选择代价组成。干预在前向传播中把缩放后的方向加到所选位点上。\\(\\beta\\) 的非零分量构成驱动集 \\(S_\\beta = \\operatorname{supp}(\\beta)\\)。", "fits the requested displacement by sparse residual fitting.": " 通过稀疏残差拟合逼近所需位移。", "adds candidates by saturated coverage across prompts. Both follow the same three stages.": " 依据跨提示的饱和覆盖逐个加入候选。两者遵循相同的三个阶段。", "Local proposal": "局部提议", "Shared refit": "共享重拟合", "Nonlinear validation": "非线性验证", "Certify, then characterize": "先认证，再刻画", "An intervention is an \\((\\varepsilon, \\delta, \\kappa)\\) control certificate when it reaches the target, preserves off-target outputs and stays inside the energy budget, all checked in the original nonlinear model. Sparse internal control looks for the cheapest such intervention.": "若一个干预能到达目标、保持非目标输出，并且不超出能量预算，且这些都在原始非线性模型中得到验证，它就是一个 \\((\\varepsilon, \\delta, \\kappa)\\) 控制证书。稀疏内部控制寻找代价最小的此类干预。", "\\(\\displaystyle\\min_{\\beta \\in \\mathbb{R}^M}\\ \\|\\beta\\|_{0,c} + \\lambda_E\\, E(\\beta) \\quad \\text{s.t. } \\beta \\text{ is an } (\\varepsilon, \\delta, \\kappa) \\text{ certificate}\\)": "\\(\\displaystyle\\min_{\\beta \\in \\mathbb{R}^M}\\ \\|\\beta\\|_{0,c} + \\lambda_E\\, E(\\beta)\\)，约束：\\(\\beta\\) 为 \\((\\varepsilon, \\delta, \\kappa)\\) 证书", "The six axes below then describe what kind of control the intervention provides beyond this one check.": "随后，下面的六轴评估描述该干预在这一检验之外提供了何种控制。", "Prompt \\(x_i\\)": "提示 \\(x_i\\)", "from \\(\\mathcal{D}_{\\mathrm{tar}}\\)": "来自 \\(\\mathcal{D}_{\\mathrm{tar}}\\)", "Off-target \\(\\tilde{x}_j\\)": "非目标 \\(\\tilde{x}_j\\)", "from \\(\\mathcal{D}_{\\mathrm{off}}\\)": "来自 \\(\\mathcal{D}_{\\mathrm{off}}\\)", "Frozen model \\(f_\\theta\\)": "冻结模型 \\(f_\\theta\\)", "candidate sites \\(v = (s_v, u_v, c_v)\\)": "候选位点 \\(v = (s_v, u_v, c_v)\\)", "Strengths \\(\\beta\\)": "强度 \\(\\beta\\)", "\\(\\beta_v = m_v \\alpha_v\\), few nonzero": "\\(\\beta_v = m_v \\alpha_v\\)，少数非零", "Cost": "代价", "\\(\\|\\beta\\|_{0,c}\\) and \\(E(\\beta)\\)": "\\(\\|\\beta\\|_{0,c}\\) 与 \\(E(\\beta)\\)", "Energy": "能量", "Readout": "读出", "Target \\(\\tau_i\\)": "目标 \\(\\tau_i\\)", "Target error": "目标误差", "Observable": "观测量", "Off-target": "非目标", "\\((\\varepsilon, \\delta, \\kappa)\\) control certificate": "\\((\\varepsilon, \\delta, \\kappa)\\) 控制证书", "The highlighted parts follow the step you are reading. Blue dots: the frozen forward pass. Orange: the sparse patch.": "高亮部分随你正在阅读的步骤变化。蓝点：冻结的前向传播。橙色：稀疏干预。", "The mathematics of internal control": "内部控制的数学", "Near the unpatched model, a frozen Transformer acts as a linear map from intervention strengths to behavior. Choosing drivers then becomes a controllability question: can the selected actuators reach the requested displacement, and at what energy? The local analysis proposes a support and strengths. The nonlinear certificate decides whether to accept them.": "在未干预模型附近，冻结的 Transformer 相当于一个从干预强度到行为的线性映射。于是选择驱动节点就成了一个可控性问题：所选执行器能否到达所需位移，又需要多少能量？局部分析给出支撑集与强度的提议，是否接受由非线性证书决定。", "Controllability explorer": "可控性探索器", "Two target prompts with scalar readouts, so the requested displacement \\(\\bar q\\) lives in a plane. Each candidate contributes one column of \\(\\bar G\\), its first order effect on both prompts. Energy uses \\(W = I\\).": "两个目标提示各有一个标量读出，因此所需位移 \\(\\bar q\\) 位于一个平面内。每个候选贡献 \\(\\bar G\\) 的一列，即它对两个提示的一阶影响。能量取 \\(W = I\\)。", "Support S": "支撑集 S", "Energy budget \\(\\kappa\\)": "能量预算 \\(\\kappa\\)", "yes": "是", "In the span, but the cheapest exact fit needs more energy than κ.": "目标在张成空间内，但最省能量的精确拟合需要超过 κ 的能量。", "Run Driver-OMP, k = 2": "运行 Driver-OMP，k = 2", "Reset": "重置", "The reachable set \\(\\{\\bar G_S\\beta : \\beta^{\\top}\\beta \\le \\kappa\\}\\) is an ellipse, symmetric about the unpatched model. The orange point is the energy constrained best fit; the red dashes are the residual that \\(\\chi_\\kappa(S)\\) normalizes.": "可达集 \\(\\{\\bar G_S\\beta : \\beta^{\\top}\\beta \\le \\kappa\\}\\) 是一个关于未干预模型对称的椭圆。橙点是能量约束下的最佳拟合；红色虚线是 \\(\\chi_\\kappa(S)\\) 所归一化的残差。", "Definition · B.1": "定义 · B.1", "Local effect dictionary": "局部效应字典", "Each candidate’s first order effect on every target readout is one column of \\(G\\), taken at the unpatched model. A preservation dictionary \\(H\\) is built the same way from a differentiable surrogate of the off-target observable.": "每个候选对所有目标读出的一阶效应构成 \\(G\\) 的一列，在未干预模型处计算。保持字典 \\(H\\) 以同样方式，由非目标观测量的可微替代量构建。", "Theorem 1": "定理 1", "Local linearization error": "局部线性化误差", "Inside the energy ball the model departs from its linearization by at most the curvature bound \\(L_S\\) times half the energy. Target recovery therefore holds whenever \\(\\|q - G_S\\beta_S\\|_2 + L_S\\kappa/2 \\le \\varepsilon(\\|q\\|_2 + \\xi)\\).": "在能量球内，模型与其线性化之间的偏差至多为曲率界 \\(L_S\\) 乘以能量的一半。因此只要 \\(\\|q - G_S\\beta_S\\|_2 + L_S\\kappa/2 \\le \\varepsilon(\\|q\\|_2 + \\xi)\\)，目标恢复条件就成立。", "Equation B.19": "式 B.19", "Local target controllability": "局部目标可控性", "A support reaches the target exactly at first order within budget if and only if two conditions hold: \\(\\bar q \\in \\operatorname{range}(\\bar G_S)\\), a span condition, and \\(E_{\\min}(S) \\le \\kappa\\), an energy condition.": "一个支撑集在预算内于一阶精确到达目标，当且仅当两个条件同时成立：张成条件 \\(\\bar q \\in \\operatorname{range}(\\bar G_S)\\)，以及能量条件 \\(E_{\\min}(S) \\le \\kappa\\)。", "Theorem 2": "定理 2", "Minimum energy interpolation": "最小能量插值", "In whitened coordinates \\(\\tilde G_S = \\bar G_S W_{SS}^{-1/2}\\), the cheapest exact fit is a pseudoinverse. A support with a small nonzero singular value can demand far more energy to reach the same target.": "在白化坐标 \\(\\tilde G_S = \\bar G_S W_{SS}^{-1/2}\\) 下，最省能量的精确拟合由伪逆给出。若支撑集的最小非零奇异值很小，到达同一目标可能需要多得多的能量。", "Proposition 1": "命题 1", "Energy constrained refit": "能量约束重拟合", "Target fit and a quadratic preservation term are refit jointly on the chosen support. Energy decreases monotonically in the multiplier \\(\\nu\\), so the budget \\(\\kappa\\) is met exactly by bisection.": "目标拟合与二次保持项在所选支撑集上联合重拟合。能量随乘子 \\(\\nu\\) 单调下降，因此可用二分法恰好满足预算 \\(\\kappa\\)。", "Proposition 2": "命题 2", "Saturated coverage": "饱和覆盖", "Coverage is monotone submodular, so greedy selection under a pure cardinality budget is within \\(1 - 1/e\\) of optimal. In its simplest setting Driver-OMP reduces to orthogonal matching pursuit.": "覆盖目标是单调次模的，因此在纯基数预算下，贪心选择至少达到最优值的 \\(1 - 1/e\\)。在最简设定下，Driver-OMP 退化为正交匹配追踪。", "Local results only propose. An intervention is accepted when the \\((\\varepsilon, \\delta, \\kappa)\\) certificate holds in the original nonlinear model, and the six axes then characterize the control it provides.": "局部结果只负责提议。只有当 \\((\\varepsilon, \\delta, \\kappa)\\) 证书在原始非线性模型中成立时，干预才被接受，随后再由六轴刻画它提供的控制。", "Evaluation protocol": "评估协议", "Six axes of control": "控制的六个轴", "Target recovery at a single dose describes one property of an intervention. The protocol fixes the support \\(S\\), the base strengths \\(\\beta_S\\) and the direction rule \\(u_v(x)\\), then asks six separate questions of the patched model. Each axis has an operational definition and a quantitative readout, so interventions built by different methods can be compared on equal terms.": "单一剂量下的目标恢复只描述了干预的一个性质。协议固定支撑集 \\(S\\)、基础强度 \\(\\beta_S\\) 和方向规则 \\(u_v(x)\\)，然后对干预后的模型提出六个独立的问题。每个轴都有可操作的定义和定量读出，因此不同方法构建的干预可以在同一标准下比较。", "One object, six probes": "一个对象，六种探测", "The support \\(S\\), base strengths \\(\\beta_S\\) and direction rule stay fixed. Every axis reads this one dose family; what changes is the dose \\(\\gamma\\) and the inputs it is read on. \\(\\gamma = 0\\) is the unpatched model and \\(\\gamma = 1\\) the nominal dose.": "支撑集 \\(S\\)、基础强度 \\(\\beta_S\\) 和方向规则保持不变。每个轴读取的都是这同一个剂量族，变化的只是剂量 \\(\\gamma\\) 以及读取所用的输入。\\(\\gamma = 0\\) 为未干预模型，\\(\\gamma = 1\\) 为标称剂量。", "\\(-\\beta\\) on \\(x^{c}\\)": "在 \\(x^{c}\\) 上施加 \\(-\\beta\\)", "\\(\\gamma \\in \\Gamma\\), ten doses": "\\(\\gamma \\in \\Gamma\\)，十个剂量", "\\(\\gamma_t\\) from feedback": "由反馈给出 \\(\\gamma_t\\)", "target prompts \\(\\mathcal{D}_{\\mathrm{tar}}\\)": "目标提示 \\(\\mathcal{D}_{\\mathrm{tar}}\\)", "Reachability": "可达性", "Dose response": "剂量响应", "Feedback": "反馈", "off-target prompts \\(\\mathcal{D}_{\\mathrm{off}}\\)": "非目标提示 \\(\\mathcal{D}_{\\mathrm{off}}\\)", "unseen prompts": "未见提示", "Held-out reuse": "留出复用", "At a fixed dose": "固定剂量", "Does the nominal dose land on the requested target?": "标称剂量能否落在所要求的目标上？", "Passes when": "通过条件", "\\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le \\varepsilon = 0.4\\) on held out readouts.": "在留出读出上 \\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le \\varepsilon = 0.4\\)。", "In the paper": "论文结果", "Coverage-Driver passes 8/8 seeds with evaluation pair directions and 0/8 with training mean directions, on both MCQA and Sentiment.": "Coverage-Driver 在 MCQA 和情感任务上，使用评估对方向时 8/8 个种子通过，使用训练均值方向时 0/8。", "Does the opposite patch send a target input back toward its source?": "反向干预能否把目标输入推回到它的源？", "\\(\\mathrm{Reversal}(\\beta) \\ge 2\\): twice as far from the target as from the source.": "\\(\\mathrm{Reversal}(\\beta) \\ge 2\\)：离目标的距离至少是离源的两倍。", "MCQA passes 21/24 (Humanities) and 23/24 (STEM) cells with P directions and none with F. Refusal never passes.": "MCQA 在 P 方向下通过 21/24（人文）和 23/24（STEM）个单元，F 方向下无一通过。拒答任务从未通过。", "Across doses": "跨剂量", "As the dose grows, does progress toward the target grow in order?": "随着剂量增加，向目标的进展是否有序增长？", "\\(\\rho \\ge 0.95\\) over ten doses \\(\\gamma \\in \\Gamma = \\{-1, \\dots, 2\\}\\).": "在十个剂量 \\(\\gamma \\in \\Gamma = \\{-1, \\dots, 2\\}\\) 上 \\(\\rho \\ge 0.95\\)。", "All 48 Refusal curves have \\(\\rho = 1\\), yet none passes signed reversal. Order and reversibility are different properties.": "拒答任务的全部 48 条曲线 \\(\\rho = 1\\)，却没有一条通过符号反转。有序性与可逆性是不同的性质。", "Feedback controllability": "反馈可控性", "Keeping the sites fixed, can a feedback loop on the dose track new targets?": "固定位点、只对剂量做反馈调节，能否跟踪新的目标？", "\\(|m^{\\star} - M(\\gamma_{\\mathrm{end}})| \\le \\tau_{\\mathrm{ctrl}}\\): 0.3 for IOI and MCQA, 0.1 for Refusal.": "\\(|m^{\\star} - M(\\gamma_{\\mathrm{end}})| \\le \\tau_{\\mathrm{ctrl}}\\)：IOI 与 MCQA 取 0.3，拒答取 0.1。", "Coverage-Driver hits 46/48 Humanities and 47/48 STEM targets with P directions, and 8/48 and 7/48 with F.": "Coverage-Driver 在 P 方向下命中 46/48（人文）和 47/48（STEM）个目标，在 F 方向下为 8/48 和 7/48。", "Beyond the target set": "目标集之外", "Does the patch leave unrelated prompts alone?": "干预会不会波及无关提示？", "\\(\\mathrm{KL} \\le \\delta = 0.001\\), as a seed mean and on every prompt.": "\\(\\mathrm{KL} \\le \\delta = 0.001\\)，按种子均值与逐条提示两种方式检验。", "No MCQA or Sentiment seed passes. On Refusal, Driver-OMP passes 4/8 seeds by the mean rule.": "MCQA 与情感任务没有任何种子通过。在拒答任务上，Driver-OMP 按均值规则有 4/8 个种子通过。", "Do the chosen sites, or the whole intervention, carry over to new prompts?": "所选位点，或整个干预，能否迁移到新的提示上？", "No pass flag. Recovery is reported with its condition: refit \\(\\beta\\) or frozen \\(\\beta\\).": "不设通过标准。恢复率与其信息条件一同报告：重拟合 \\(\\beta\\) 或冻结 \\(\\beta\\)。", "MCQA with refit strengths recovers 0.992 (Humanities); the fully frozen intervention recovers 0.021.": "MCQA 重拟合强度后恢复率为 0.992（人文）；完全冻结的干预仅为 0.021。", "Each panel is a schematic of one axis. Chips show whether the case shown would pass the paper’s criterion; the numbers under each panel are the paper’s measured results.": "每个面板都是一个轴的示意。标签显示所演示的情形能否通过论文的判据；面板下方的数字是论文中的实测结果。", "What the axes revealed": "六轴揭示了什么", "Five task instances, four behaviors, three frozen models. The same selector can pass one axis and fail the next, and the direction information it receives changes the whole profile. The experiments are exploratory and every count is per seed.": "五个任务实例、四种行为、三个冻结模型。同一选择器可能在一个轴上通过、在下一个轴上失败，而它获得的方向信息会改变整体画像。实验是探索性的，所有计数均按种子统计。", "Coverage-Driver pass counts across five axes under P and F directions": "Coverage-Driver 在 P 与 F 方向下五个轴上的通过计数", "Task · model": "任务 · 模型", "MMLU Humanities": "MMLU 人文", "Sentiment": "情感", "separate unpaired diagnostic": "单独的非配对诊断", "not evaluated": "未评估", "Refusal": "拒答", "Coverage-Driver with at most eight candidates. Seeds passing: held out \\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le 0.4\\); reversal ratio \\(\\ge 2\\); Spearman \\(\\rho \\ge 0.95\\) over ten doses (under F, 3/8 Humanities and 4/8 STEM seeds are strongly negative); feedback counts seed and target endpoints; off-target uses seed mean \\(\\mathrm{KL} \\le 0.001\\), with P directions for MCQA and F for Sentiment and Refusal. Source: Tables 3, G.4, G.6, G.7, G.9.": "Coverage-Driver，最多八个候选。种子通过标准：留出 \\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le 0.4\\)；反转比值 \\(\\ge 2\\)；十个剂量上 Spearman \\(\\rho \\ge 0.95\\)（F 方向下人文 3/8、STEM 4/8 个种子呈强负序）；反馈按种子与目标端点计数；非目标保持采用种子均值 \\(\\mathrm{KL} \\le 0.001\\)，MCQA 用 P 方向，情感与拒答用 F 方向。来源：表 3、G.4、G.6、G.7、G.9。", "P · evaluation pair directions": "P · 评估对方向", "F · training mean directions": "F · 训练均值方向", "Direction information sets the profile": "方向信息决定整体画像", "On MCQA and Sentiment, reachability and reversal pass in 8/8 seeds with P directions and in none with F. Feedback on MCQA drops from 46/48 to 8/48 hits.": "在 MCQA 与情感任务上，可达性与反转在 P 方向下 8/8 个种子通过，在 F 方向下全部失败。MCQA 的反馈命中从 46/48 降到 8/48。", "Ordered is not reversible": "有序不等于可逆", "All 48 Refusal dose curves have \\(\\rho = 1\\), yet Refusal never passes signed reversal or held out reachability. Each axis measures something the others miss.": "拒答任务的全部 48 条剂量曲线 \\(\\rho = 1\\)，却从未通过符号反转或留出可达性。每个轴都度量了其他轴遗漏的东西。", "Preservation is not free": "保持并非免费", "No MCQA or Sentiment seed keeps \\(\\mathrm{KL} \\le 0.001\\) on the off-target panel. Median MCQA KL sits around 0.05.": "在非目标面板上，没有任何 MCQA 或情感任务的种子能保持 \\(\\mathrm{KL} \\le 0.001\\)。MCQA 的 KL 中位数约为 0.05。", "Nominal dose target recovery": "标称剂量下的目标恢复", "Table 2. \\(\\mathrm{Rel}_{\\mathrm{tar}}(1)\\) on the fitting panel, mean ± sample SD, lower is better. At most eight candidates with evaluation pair directions.": "表 2：拟合面板上的 \\(\\mathrm{Rel}_{\\mathrm{tar}}(1)\\)，均值 ± 样本标准差，越低越好。使用评估对方向，最多八个候选。", "Method": "方法", "IOI · 10 seeds": "IOI · 10 个种子", "Humanities · 3 seeds": "人文 · 3 个种子", "STEM · 3 seeds": "STEM · 3 个种子", "Random": "随机", "Nonlinear greedy": "非线性贪心", "Bars share one scale from 0 to 1.25. Nonlinear greedy reaches the lowest residual at the cost of additional model evaluations.": "所有条形共用 0 到 1.25 的刻度。非线性贪心残差最低，但需要额外的模型评估。", "Sites travel, frozen interventions do not": "位点可以迁移，冻结的干预不能", "Held-out reuse stays a continuous number with its information condition attached, never a pass flag. In module level MCQA, Driver-OMP keeps its selected sites and refits strengths on held out targets to recover 0.992 ± 0.009 (Humanities) and 0.987 ± 0.034 (STEM). Freeze the whole intervention and recovery falls to 0.021 ± 0.026 and 0.024 ± 0.066.": "留出复用始终以连续数值报告并附带其信息条件，从不转换为通过标记。在模块级 MCQA 中，Driver-OMP 保留所选位点、在留出目标上重拟合强度，恢复率达到 0.992 ± 0.009（人文）和 0.987 ± 0.034（STEM）。若冻结整个干预，恢复率降至 0.021 ± 0.026 和 0.024 ± 0.066。", "Sentiment shows the opposite pattern at \\(k = 8\\): training mean directions give a mean margin recovery of 0.942 ± 0.535 for Coverage-Driver, yet no F seed passes signed reversal.": "情感任务在 \\(k = 8\\) 时呈现另一种模式：训练均值方向下 Coverage-Driver 的均值差恢复率为 0.942 ± 0.535，但没有任何 F 种子通过符号反转。", "Use the protocol": "使用协议", "Score your own intervention": "评估你自己的干预", "The axes only need an intervention (a support, base strengths and a direction rule), a dose and task readouts. Interventions from activation steering, sparse autoencoder features, concept erasure or circuit discovery can be selected, adjusted and scored the same way. The release includes Driver-OMP, Coverage-Driver, the comparison methods and every metric.": "这些轴只需要一个干预（支撑集、基础强度和方向规则）、一个剂量和任务读出。来自激活引导、稀疏自编码器特征、概念擦除或电路发现的干预，都可以用同样的方式选择、调整和评分。代码发布包含 Driver-OMP、Coverage-Driver、对比方法以及全部指标。", "Recalculate every table on CPU, no model needed": "在 CPU 上重算全部表格，无需加载模型", "Copy": "复制", "One metrics module per axis": "每个轴一个指标模块", "In": "位于", "experimental series": " 个实验系列", "source, target and patched readout triples": " 组源、目标与干预读出三元组", "prompt and seed KL measurements": " 次提示与种子的 KL 测量", "numerical rows checked by": " 行数值由以下命令核对：", "Questions": "问答", "Frequently asked": "常见问题", "Does sparse internal control change the model’s weights?": "稀疏内部控制会改变模型权重吗？", "No. The parameters \\(\\theta\\) stay frozen. An intervention adds scaled directions to a few activations during the forward pass, and setting \\(\\beta = 0\\) recovers the original model exactly.": "不会。参数 \\(\\theta\\) 保持冻结。干预只是在前向传播中把缩放后的方向加到少数激活上，令 \\(\\beta = 0\\) 即可精确恢复原模型。", "What is a driver node?": "什么是驱动节点？", "A candidate control node is a triple of a physical site, an intervention direction and a selection cost. The candidates that receive a nonzero strength form the driver set \\(S_\\beta = \\operatorname{supp}(\\beta)\\). One site can host several candidates with different directions.": "候选控制节点是由物理位点、干预方向和选择代价组成的三元组。获得非零强度的候选构成驱动集 \\(S_\\beta = \\operatorname{supp}(\\beta)\\)。同一个位点可以对应多个方向不同的候选。", "How is this different from activation steering?": "它和激活引导有什么不同？", "Activation steering shows that internal directions can change behavior. Sparse internal control adds the control problem around it: which compact set of sites to use, under a bounded energy, with explicit requirements for target recovery and off-target preservation, followed by an evaluation on six axes.": "激活引导表明内部方向可以改变行为。稀疏内部控制在此之上加入了控制问题：在有界能量下使用哪一组紧凑的位点，对目标恢复与非目标保持提出明确要求，并在六个轴上进行评估。", "Why six axes instead of one score?": "为什么用六个轴，而不是一个分数？", "Because the properties separate in practice. Refusal responds to dose in perfect order and still fails reversal. MCQA sites transfer when strengths are refit, while the fully frozen intervention barely moves held out prompts. One number would hide both facts.": "因为这些性质在实践中会分离。拒答任务对剂量的响应完全有序，却依然无法反转。MCQA 的位点在重拟合强度后可以迁移，而完全冻结的干预几乎推不动留出提示。一个数字会把这两件事都掩盖掉。", "What do P and F mean?": "P 和 F 是什么意思？", "They describe the direction information. P uses evaluation pair directions, computed from the activation contrast of each evaluation pair. F uses training mean directions, averaged over the fitting split and shared across inputs.": "它们描述方向信息。P 使用评估对方向，由每个评估对的激活差计算得到。F 使用训练均值方向，在拟合划分上取平均，并在所有输入间共享。", "Which models and tasks were tested?": "测试了哪些模型和任务？", "Indirect object identification and sentiment on GPT-2 small, MMLU Humanities and STEM on Qwen3-4B, and refusal on Qwen3-1.7B. The appendix adds model comparisons on Qwen3-8B and Mistral-7B.": "GPT-2 small 上的间接宾语识别与情感，Qwen3-4B 上的 MMLU 人文与 STEM，以及 Qwen3-1.7B 上的拒答。附录还在 Qwen3-8B 与 Mistral-7B 上做了模型对比。", "Can I reproduce the tables without a GPU?": "没有 GPU 能复现表格吗？", "Yes. The record replay path recalculates the paper’s tables from the supplied measurements on CPU, and": "可以。记录回放流程在 CPU 上根据提供的测量结果重算论文中的表格，并由 ", "compares 162 numerical rows and 15 supporting values against the manuscript. Running the models themselves uses a separate environment and execution profile.": " 将 162 行数值和 15 个辅助数值与论文原稿逐一核对。运行模型本身需要单独的环境和执行配置。", "Can I evaluate my own steering method with the protocol?": "能用这个协议评估我自己的引导方法吗？", "Yes. Each axis is defined on any intervention with a support, base strengths and a direction rule. Directions from steering vectors, sparse autoencoder features or editing methods can enter as candidates and be scored on the same six axes.": "可以。每个轴都定义在任意具有支撑集、基础强度和方向规则的干预上。来自引导向量、稀疏自编码器特征或编辑方法的方向都可以作为候选进入，并在同样的六个轴上评分。", "Cite the paper": "引用论文", "Paper": "论文", "Software": "软件", "Read the full formulation, proofs and per seed results": "阅读完整的建模、证明与逐种子结果", "53 pages with the local target controllability analysis, pseudocode for both selectors, complete axis definitions and every table behind this page.": "共 53 页，包含局部目标可控性分析、两种选择器的伪代码、六轴的完整定义，以及本页背后的全部表格。", "Sparse Internal Control of Language Models": "语言模型的稀疏内部控制", "© 2026 Xizhe Zhang · Contact": "© 2026 Xizhe Zhang · 联系方式", "· Code under Apache 2.0 · This site sets no cookies and runs no analytics.": " · 代码采用 Apache 2.0 许可 · 本站不使用 Cookie，也不做访问统计。", "Try it": "试一试", "Results": "结果", "A framework for researchers who steer language models from the inside. Pick a few internal sites as actuators, certify the control within an energy budget, and measure it on six axes.": "面向从内部引导语言模型的研究者的一套框架：选少数内部位点作为执行器，在能量预算内认证控制，并在六个轴上度量它。", "task instances": "个任务实例", "frozen models": "个冻结模型", "control axes": "个控制轴", "table rows verified on CPU": "行表格数值在 CPU 上核对", "Move a frozen model through four sites": "通过四个位点推动冻结的模型", "Drag the dose. In this schematic, four driver sites in attention heads, an MLP and the residual stream are patched while every weight stays frozen. The readout at the answer position moves from the source behavior toward the target.": "拖动剂量。在这个示意中，注意力头、MLP 和残差流上的四个驱动位点被干预，所有权重保持冻结。回答位置的读出会从源行为移向目标行为。", "Schematic · the paper's Figure 1 setting": "示意 · 论文图 1 的设定", "Steering is easy to show. Control is hard to prove.": "引导容易展示，控制难以证明。", "Activation steering shows that patching internal states can move a frozen model. It leaves three questions open: which few sites to patch, how hard to push, and what evidence shows that the change behaves like control.": "激活引导表明，修补内部状态可以推动冻结的模型。但它留下了三个问题：修补哪几个位点，推多大力，以及有什么证据表明这种改变真正具有控制的性质。", "Sparse internal control answers them as a control problem. Selected activations become temporary, adjustable inputs, the weights never change, and success is defined by task readouts, an energy budget and a certificate checked in the full model.": "稀疏内部控制把它们作为控制问题来回答：被选中的激活成为临时、可调的输入，权重始终不变，成功由任务读出、能量预算以及在完整模型中检验的证书来定义。", "Few sites, chosen on purpose": "少数位点，有据可选", "Driver-OMP and Coverage-Driver select at most eight sites from a library of attention heads, MLP outputs and residual positions.": "Driver-OMP 与 Coverage-Driver 从注意力头、MLP 输出和残差位置构成的候选库中选出最多八个位点。", "How it works": "工作原理", "A certificate for every intervention": "每个干预都有证书", "Target recovery, off-target change and energy are checked together in the original nonlinear model.": "目标恢复、非目标变化与能量，在原始非线性模型中一并检验。", "See the certificate": "查看证书", "Controllability you can compute": "可以计算的可控性", "Near the unpatched model, reaching a target reduces to a span test and a minimum energy, with a bound on linearization error.": "在未干预模型附近，能否到达目标归结为张成检验与最小能量，并附有线性化误差界。", "Explore the theory": "探索理论", "Six axes instead of one score": "六个轴，而不是一个分数", "Reachability, reversal, dose response, feedback, preservation and reuse are measured separately, so one strong number cannot hide a failure.": "可达性、反转、剂量响应、反馈、保持与复用分别度量，一个漂亮的数字掩盖不了任何一处失败。", "See the six axes": "查看六轴"};
 let LANG = 'en';
 try { const q = new URLSearchParams(location.search).get('lang'); const st = localStorage.getItem('sic-lang'); LANG = q === 'zh' || q === 'en' ? q : (st === 'zh' ? 'zh' : 'en'); } catch (e) {}
 const tr = (en, zh) => LANG === 'zh' ? zh : en;
@@ -1507,6 +1498,96 @@ const Hero = (() => {
   if (!reduce) setTimeout(sweep, 500);
   mathFontsReady.then(() => draw());
   return { setGamma };
+})();
+
+
+/* ---------- hero artwork: a frozen tower moved by a few strings ---------- */
+(() => {
+  const cv = $('#art'); if (!cv) return;
+  const S = sizer(cv);
+  let raf = 0, visible = true, grain = null, clouds = [], stars = [];
+  const W2 = { sky: '#0B1626', haze: '#1A2D49', ink: '#060E19', cream: '#F3E6D3', warm: '#FF8A3D', warm2: '#FFC08F' };
+  const rgb = (h, a) => rgba(h, a);
+  function seed(){
+    let x = 7; const rnd = () => (x = (x * 16807) % 2147483647) / 2147483647;
+    stars = Array.from({ length: 90 }, () => ({ x: rnd(), y: rnd() * .7, r: rnd() * 1.1 + .3, a: rnd() * .45 + .1, p: rnd() * 6.3 }));
+    clouds = [{ x: .58, y: .2, s: 1 }, { x: .93, y: .34, s: .8 }, { x: .76, y: .6, s: .7 }];
+    const g = document.createElement('canvas'); g.width = g.height = 180; const gx = g.getContext('2d'), im = gx.createImageData(180, 180);
+    for (let i = 0; i < im.data.length; i += 4){ const v = rnd() * 255; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = rnd() < .55 ? 22 : 0; }
+    gx.putImageData(im, 0, 0); grain = g;
+  }
+  seed();
+  function geom(w, h){
+    const narrow = w < 760;
+    const cx = narrow ? w * .5 - 18 : w * .72, base = narrow ? h - 14 : h * .86;
+    const sw = narrow ? Math.min(w * .5, 210) : Math.min(w * .22, 330), n = narrow ? 7 : 9;
+    const sh = narrow ? 13 : Math.min(28, h * .036), gap = narrow ? 7 : Math.min(13, h * .016), dep = sw * .3;
+    const top = base - n * (sh + gap);
+    return { narrow, cx, base, sw, n, sh, gap, dep, barY: narrow ? top - 64 : Math.max(h * .17, 96) };
+  }
+  const DRV = [[1, 1], [3, 4], [4, 2], [6, 5]];
+  function cloud(ctx, x, y, s){
+    [[0, 0, 1], [-.9, .18, .7], [.95, .2, .75], [.4, -.35, .62], [-.35, -.3, .55]].forEach(([dx, dy, r]) => {
+      const R = 70 * s * r, gr = ctx.createRadialGradient(x + dx * 70 * s, y + dy * 70 * s, 0, x + dx * 70 * s, y + dy * 70 * s, R);
+      gr.addColorStop(0, rgb(W2.cream, .11)); gr.addColorStop(1, rgb(W2.cream, 0)); ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(x + dx * 70 * s, y + dy * 70 * s, R, 0, Math.PI * 2); ctx.fill();
+    });
+  }
+  function draw(time){
+    raf = 0;
+    const ctx = S.ctx, w = S.w, h = S.h, t = (time || 0) / 1000, G = geom(w, h), still = reduce;
+    ctx.fillStyle = W2.sky; ctx.fillRect(0, 0, w, h);
+    const hz = ctx.createRadialGradient(G.cx, h * .3, 0, G.cx, h * .3, Math.max(w, h) * .7);
+    hz.addColorStop(0, rgb(W2.haze, .9)); hz.addColorStop(1, rgb(W2.haze, 0)); ctx.fillStyle = hz; ctx.fillRect(0, 0, w, h);
+    stars.forEach(st => { const a = st.a * (still ? .8 : .6 + .4 * Math.sin(t * 1.3 + st.p)); dot(ctx, st.x * w, st.y * h, st.r, rgb(W2.cream, a)); });
+    clouds.forEach((c, k) => cloud(ctx, ((c.x + (still ? 0 : t * .004 * (k + 1))) % 1.15) * w, c.y * h, c.s * (G.narrow ? .6 : 1)));
+    // hill
+    ctx.save(); ctx.beginPath(); ctx.moveTo(0, h); ctx.lineTo(0, h * .97);
+    ctx.bezierCurveTo(w * .3, h * .95, G.cx - G.sw * 1.3, G.base - 6, G.cx, G.base + 2);
+    ctx.bezierCurveTo(G.cx + G.sw * 1.4, G.base + 8, w * .95, h * .9, w, h * .93); ctx.lineTo(w, h); ctx.closePath();
+    ctx.fillStyle = W2.ink; ctx.fill(); ctx.clip();
+    ctx.strokeStyle = rgb(W2.cream, .05); ctx.lineWidth = 1; for (let x = -h; x < w; x += 6){ ctx.beginPath(); ctx.moveTo(x, h); ctx.lineTo(x + h * .5, h * .5); ctx.stroke(); }
+    ctx.restore();
+    // control bar
+    const barY = G.barY, barX = G.cx + G.dep * .5, barW = G.sw * .95, sway = still ? 0 : Math.sin(t * .6) * .035;
+    const glow = ctx.createRadialGradient(barX, barY, 0, barX, barY, G.sw * 1.1);
+    glow.addColorStop(0, rgb(W2.warm, .22)); glow.addColorStop(1, rgb(W2.warm, 0)); ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(barX, barY, G.sw * 1.1, 0, Math.PI * 2); ctx.fill();
+    ctx.save(); ctx.translate(barX, barY); ctx.rotate(sway);
+    ctx.fillStyle = W2.warm2; rr(ctx, -barW / 2, -3, barW, 6, 3); ctx.fill(); rr(ctx, -3, -barW * .22, 6, barW * .44, 3); ctx.fill();
+    ctx.restore();
+    const anchors = [-.5, -.17, .17, .5].map((f, k) => { const ax = f * barW, ay = k === 1 ? -barW * .22 : k === 2 ? barW * .22 : 0; const ux = k === 1 || k === 2 ? 0 : ax; return { x: barX + Math.cos(sway) * ux - Math.sin(sway) * ay, y: barY + Math.sin(sway) * ux + Math.cos(sway) * ay }; });
+    // tower slabs (bottom to top)
+    const slab = i => { const y = G.base - (i + 1) * (G.sh + G.gap); return { x: G.cx - G.sw / 2, y }; };
+    const nodes = [];
+    for (let i = 0; i < G.n; i++){
+      const { x, y } = slab(i), d = G.dep, dy = d * .45;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + d, y - dy); ctx.lineTo(x + G.sw + d, y - dy); ctx.lineTo(x + G.sw, y); ctx.closePath(); ctx.fillStyle = rgb(W2.cream, .08); ctx.fill(); ctx.strokeStyle = rgb(W2.cream, .22); ctx.lineWidth = 1; ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x + G.sw, y); ctx.lineTo(x + G.sw + d, y - dy); ctx.lineTo(x + G.sw + d, y - dy + G.sh); ctx.lineTo(x + G.sw, y + G.sh); ctx.closePath(); ctx.fillStyle = rgb('#0E1B2E', .9); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = rgb('#1C3150', .92); ctx.fillRect(x, y, G.sw, G.sh); ctx.strokeRect(x + .5, y + .5, G.sw - 1, G.sh - 1);
+      for (let k = 0; k < 6; k++){ const nx = x + (k + .5) * G.sw / 6, ny = y + G.sh / 2; nodes.push({ i, k, x: nx, y: ny }); dot(ctx, nx, ny, G.narrow ? 1.6 : 2.2, rgb(W2.cream, .38)); }
+    }
+    // snowflake mark: weights frozen
+    if (!G.narrow) T(ctx, G.cx - G.sw / 2, G.base + 26, tr('weights frozen', '权重冻结'), { size: 11, color: rgb(W2.cream, .45), sans: true });
+    // strings to driver sites
+    DRV.forEach(([i, k], j) => {
+      const nd = nodes.find(n => n.i === i && n.k === k), an = anchors[j];
+      const sx = still ? 0 : Math.sin(t * .9 + j * 1.7) * 7, mx = (an.x + nd.x) / 2 + sx, my = (an.y + nd.y) / 2;
+      ctx.save(); ctx.lineCap = 'round';
+      ctx.strokeStyle = rgb(W2.warm, .16); ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(an.x, an.y); ctx.quadraticCurveTo(mx, my, nd.x, nd.y); ctx.stroke();
+      ctx.strokeStyle = rgb(W2.warm2, .9); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(an.x, an.y); ctx.quadraticCurveTo(mx, my, nd.x, nd.y); ctx.stroke();
+      ctx.restore();
+      const pulse = still ? .7 : .6 + .4 * Math.sin(t * 2 + j);
+      const gl = ctx.createRadialGradient(nd.x, nd.y, 0, nd.x, nd.y, 22); gl.addColorStop(0, rgb(W2.warm, .55 * pulse)); gl.addColorStop(1, rgb(W2.warm, 0));
+      ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(nd.x, nd.y, 22, 0, Math.PI * 2); ctx.fill();
+      dot(ctx, nd.x, nd.y, G.narrow ? 3 : 4, W2.warm, W2.warm2, 1.5);
+    });
+    // grain
+    ctx.save(); ctx.globalAlpha = 1; ctx.fillStyle = ctx.createPattern(grain, 'repeat'); ctx.fillRect(0, 0, w, h); ctx.restore();
+    if (visible && !reduce) raf = requestAnimationFrame(draw);
+  }
+  S.onfit = () => { if (!raf) draw(performance.now()); };
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && !reduce && !raf) raf = requestAnimationFrame(draw); }, { threshold: 0 }).observe(cv);
+  langSubs.push(() => { if (!raf) draw(performance.now()); });
+  draw(performance.now());
 })();
 
 /* ---------- framework stepper ---------- */

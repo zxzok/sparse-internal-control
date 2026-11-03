@@ -21,6 +21,7 @@
   --s-25:2px; --s-50:4px; --s-75:8px; --s-100:12px; --s-200:16px; --s-300:24px; --s-400:32px; --s-500:40px; --s-600:48px; --s-700:64px; --s-800:80px; --s-900:96px;
   --r-sm:2px; --r:4px; --r-md:6px; --r-lg:8px; --r-xl:12px; --r-2xl:16px; --r-3xl:24px; --r-full:9999px;
   --ease:cubic-bezier(0.22,1,0.36,1);
+  --art-bg:#0B1626; --art-ink:#F4F1EA; --art-muted:rgba(244,241,234,.74); --art-faint:rgba(244,241,234,.52);
   --ease-timer:cubic-bezier(0.3,0.1,0.7,0.9);
 }
 @media (prefers-color-scheme: dark){
@@ -171,7 +172,7 @@ body.menu-open{overflow:hidden}
 .gauge-tick{position:absolute; top:var(--s-100); width:1px; height:var(--s-100); background:var(--faint)}
 .gauge-tick i{position:absolute; top:var(--s-200); left:0; transform:translateX(-50%); font-style:normal; white-space:nowrap; color:var(--faint)}
 .gauge-mark{position:absolute; left:0; top:var(--s-75); width:var(--s-200); height:var(--s-200); margin-left:calc(var(--s-75) * -1); border-radius:var(--r-full); background:var(--drive); border:3px solid var(--surface); box-shadow:0 0 0 1px var(--drive)}
-.controls{display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center; gap:var(--s-200); padding-top:var(--s-200); border-top:1px solid var(--line)}
+.controls{display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center; gap:var(--s-200); padding:var(--s-200) var(--s-200) var(--s-100); border-radius:var(--r-lg); background:var(--raised)}
 .dose-val{min-width:5.5rem; text-align:right; font-variant-numeric:tabular-nums}
 .slider-box{position:relative; padding-bottom:var(--s-300)}
 input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:var(--s-300); background:transparent; margin:0; cursor:pointer}
@@ -190,13 +191,6 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .note{color:var(--faint)}
 
 /* Idea */
-.idea-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--s-700); align-items:start}
-.obj-list{display:grid; border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
-.obj{display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--s-200); padding:var(--s-200) var(--s-300)}
-.obj + .obj{border-top:1px solid var(--line)}
-.obj-ic{display:grid; place-items:center; width:var(--s-500); height:var(--s-500); border-radius:var(--r-lg); border:1px solid var(--line); background:var(--raised); color:var(--drive)}
-.obj p{color:var(--muted)}
-.obj-cap{padding:var(--s-100) var(--s-300); color:var(--faint); border-top:1px solid var(--line)}
 
 /* Framework */
 .fw{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:var(--s-600); margin-top:var(--s-600); align-items:start}
@@ -248,60 +242,7 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
 .tw.k{color:var(--drive-ink)}
 
 /* Six axes */
-.axes{display:grid; grid-template-columns:minmax(0,25rem) minmax(0,1fr); gap:var(--s-600); margin-top:var(--s-600); align-items:start}
-.hex-col{display:grid; gap:var(--s-300); position:sticky; top:calc(env(safe-area-inset-top,0px) + var(--s-900))}
-.hex{position:relative; width:100%; max-width:25rem; aspect-ratio:400/350; margin-inline:auto}
-.hex-svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible}
-.hex-svg .hg{fill:transparent; transition:fill 500ms var(--ease)}
-.hex-svg .hg.on{fill:var(--drive-soft)}
-.hex-svg .ring1{fill:none; stroke:var(--line-strong); stroke-width:1.25}
-.hex-svg .ring2{fill:none; stroke:var(--line); stroke-width:1; stroke-dasharray:3 4}
-.hex-svg .spk{stroke:var(--line); stroke-width:1}
-.hex-svg .ptr{transform-box:view-box; transform-origin:200px 175px; transition:transform 500ms var(--ease)}
-.hex-svg .ptr line{stroke:var(--drive); stroke-width:2; stroke-linecap:round}
-.hex-svg .core{fill:var(--surface); stroke:var(--line-strong); stroke-width:1.25}
-.hex-svg .core-t{font-family:var(--mono); font-size:12px; font-weight:500; fill:var(--ink)}
-.hex-svg .core-s{font-family:var(--mono); font-size:10px; fill:var(--faint); letter-spacing:.06em}
-.hx{position:absolute; display:flex; align-items:center; gap:var(--s-75); padding:0; border:0; background:none; cursor:pointer; color:var(--muted); font-size:.75rem; line-height:1rem; font-weight:500; text-align:left; border-radius:var(--r-lg)}
-.hx .n{display:grid; place-items:center; width:1.75rem; height:1.75rem; flex:none; border-radius:var(--r-full); border:1px solid var(--line-strong); background:var(--surface); color:var(--ink); font-family:var(--mono); font-size:.75rem; font-weight:600; transition:transform 500ms var(--ease), background-color 300ms var(--ease), border-color 300ms var(--ease), color 300ms var(--ease)}
-.hx:hover .n{transform:scale(1.08); border-color:var(--ink)}
-.hx[aria-selected="true"]{color:var(--ink)}
-.hx[aria-selected="true"] .n{background:var(--drive); border-color:var(--drive); color:var(--on-drive); transform:scale(1.15)}
-.hx-r{transform:translate(-0.875rem,-50%)}
-.hx-l{transform:translate(calc(-100% + 0.875rem),-50%); flex-direction:row-reverse; text-align:right}
-.hx-t{transform:translate(-50%,calc(-100% + 0.875rem)); flex-direction:column-reverse; text-align:center}
-.hx-b{transform:translate(-50%,-0.875rem); flex-direction:column; text-align:center}
-.hex-legend{display:grid; gap:var(--s-75)}
-.hex-legend li{display:flex; align-items:center; gap:var(--s-100); color:var(--muted)}
-.hex-legend .k{font-family:var(--mono); color:var(--ink); min-width:2.5rem}
-.hex-legend li.on{color:var(--ink)}
-.hex-legend li.on .sw{background:var(--drive)}
 .sw{width:var(--s-100); height:var(--s-100); border-radius:var(--r-sm); background:var(--line-strong); transition:background-color 300ms var(--ease)}
-.panel{border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); display:grid; min-width:0; overflow:hidden}
-.panel-head{display:flex; justify-content:space-between; gap:var(--s-200); padding:var(--s-300) var(--s-300) var(--s-200)}
-.panel-head .ttl{display:grid; gap:var(--s-50); min-width:0}
-.panel-head .ttl p{color:var(--muted)}
-.panel-btns{display:flex; gap:var(--s-75); align-items:flex-start}
-.tour-bar{height:2px; background:var(--line); position:relative; overflow:hidden}
-.tour-bar i{position:absolute; inset:0; background:var(--drive); transform:scaleX(0); transform-origin:left}
-.swap{transition:opacity 300ms var(--ease), transform 300ms var(--ease)}
-.swap.out{opacity:0; transform:translateY(var(--s-75))}
-.scope{position:relative; height:22.5rem; border-bottom:1px solid var(--line); background:var(--surface)}
-.scope canvas{position:absolute; inset:0; width:100%; height:100%}
-.scope-read{padding:var(--s-100) var(--s-300); color:var(--faint); border-bottom:1px solid var(--line)}
-.panel-body{display:grid; gap:var(--s-200); padding:var(--s-300)}
-.facts{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--s-300)}
-.facts > div{display:grid; gap:var(--s-75); align-content:start}
-.facts p{color:var(--muted)}
-.facts .find p{color:var(--ink)}
-.t1{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s-200); margin-top:var(--s-600)}
-.t1-card{display:grid; gap:var(--s-75); align-content:start; text-align:left; padding:var(--s-200) var(--s-300) var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); cursor:pointer; transition:border-color 300ms var(--ease), transform 300ms var(--ease)}
-.t1-card:hover{border-color:var(--ink); transform:translateY(-2px)}
-.t1-card:active{transform:scale(.98)}
-.t1-card[aria-current="true"]{border-color:var(--drive)}
-.t1-card .top{display:flex; justify-content:space-between; gap:var(--s-100); color:var(--faint)}
-.t1-card .d{display:block; color:var(--muted)}
-.t1-card .ro{font-family:var(--mono); font-size:.75rem; line-height:1rem; color:var(--ink); padding-top:var(--s-75); border-top:1px solid var(--line); margin-top:var(--s-50)}
 
 /* Evidence */
 .ev-grid{display:grid; grid-template-columns:minmax(0,8fr) minmax(0,4fr); gap:var(--s-500); margin-top:var(--s-600); align-items:start}
@@ -313,7 +254,7 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 .mx{min-width:46rem}
 .mx td:first-child{white-space:nowrap}
 .mx td:first-child small{display:block; color:var(--faint); font-size:.75rem; line-height:1rem}
-.pf{display:grid; grid-template-columns:.875rem 3.5rem auto; align-items:center; gap:var(--s-75); font-family:var(--mono); font-size:.75rem; line-height:1.25rem; white-space:nowrap}
+.pf{display:grid; grid-template-columns:.875rem 3.5rem auto; align-items:center; gap:var(--s-75); padding-block:var(--s-25); font-family:var(--mono); font-size:.75rem; line-height:1rem; white-space:nowrap}
 .pf .k{color:var(--faint)}
 .trk{height:var(--s-75); border-radius:var(--r-full); background:var(--raised); border:1px solid var(--line); overflow:hidden}
 .fill{display:block; height:100%; width:100%; border-radius:var(--r-full); transform:scaleX(var(--f)); transform-origin:left; transition:transform 800ms var(--ease)}
@@ -321,10 +262,9 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 .fill.f{background:var(--model)}
 .reveal.pre .fill{transform:scaleX(0)}
 .na{font-size:.75rem; line-height:1rem; color:var(--faint)}
-.tbl-note{padding:var(--s-100) var(--s-200); color:var(--faint); border-top:1px solid var(--line)}
-.take{display:grid; gap:var(--s-200)}
-.take li{display:grid; gap:var(--s-50); padding-bottom:var(--s-200); border-bottom:1px solid var(--line)}
-.take li:last-child{border-bottom:0}
+.tbl-note{padding:var(--s-100) var(--s-200) var(--s-200); color:var(--faint)}
+.take{display:grid; gap:var(--s-300)}
+.take li{display:grid; gap:var(--s-50)}
 .take p{color:var(--muted)}
 .key{display:inline-flex; gap:var(--s-100); flex-wrap:wrap; color:var(--muted)}
 .key i{display:inline-block; width:var(--s-100); height:var(--s-75); border-radius:var(--r-full); margin-right:var(--s-50)}
@@ -342,23 +282,24 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 /* Use */
 .use-grid{display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:var(--s-500); margin-top:var(--s-600); align-items:start}
 .code{border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); overflow:hidden; min-width:0}
-.code-head{display:flex; justify-content:space-between; align-items:center; gap:var(--s-100); padding:var(--s-75) var(--s-75) var(--s-75) var(--s-200); border-bottom:1px solid var(--line); color:var(--muted)}
-.code pre{margin:0; padding:var(--s-200); overflow-x:auto; font-family:var(--mono); font-size:.8125rem; line-height:1.25rem; color:var(--ink)}
+.code-head{display:flex; justify-content:space-between; align-items:center; gap:var(--s-100); padding:var(--s-75) var(--s-75) var(--s-75) var(--s-200); background:var(--raised); color:var(--muted)}
+.code pre{margin:0; padding:var(--s-200); overflow-x:auto; font-family:var(--mono); font-size:.875rem; line-height:1.25rem; color:var(--ink)}
 .code pre .cm{color:var(--faint)}
 .code pre .pr{color:var(--drive-ink)}
-.mods{border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
-.mods li{display:flex; justify-content:space-between; gap:var(--s-200); padding:var(--s-100) var(--s-200); border-bottom:1px solid var(--line)}
-.mods li:last-child{border-bottom:0}
-.mods code{font-family:var(--mono); font-size:.8125rem; color:var(--ink)}
+.mods{display:grid; gap:var(--s-75); padding:var(--s-75); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
+.mods ul{display:grid; gap:var(--s-50)}
+.mods li{display:flex; justify-content:space-between; gap:var(--s-200); padding:var(--s-100) var(--s-200); border-radius:var(--r-lg); background:var(--raised)}
+.mods code{font-family:var(--mono); font-size:.875rem; line-height:1.25rem; color:var(--ink)}
 .mods span{color:var(--muted); text-align:right}
-.mods-head{padding:var(--s-200); border-bottom:1px solid var(--line); display:grid; gap:var(--s-50)}
+.mods-head{padding:var(--s-100) var(--s-100) var(--s-50); display:grid; gap:var(--s-50)}
 .mods-head p{color:var(--muted)}
 .stats{display:flex; flex-wrap:wrap; gap:var(--s-100) var(--s-300); margin-top:var(--s-300); color:var(--muted)}
 .stats b{font-family:var(--mono); font-weight:500; color:var(--ink)}
 
 /* FAQ */
-.faq{display:grid; margin-top:var(--s-600); max-width:52rem; border-top:1px solid var(--line)}
-.faq details{border-bottom:1px solid var(--line)}
+.faq{display:grid; gap:var(--s-75); margin-top:var(--s-600); max-width:52rem}
+.faq details{padding:0 var(--s-300); border:1px solid var(--line); border-radius:var(--r-xl); background:var(--surface); transition:border-color 300ms var(--ease)}
+.faq details[open]{border-color:var(--line-strong)}
 .faq summary{display:flex; justify-content:space-between; align-items:center; gap:var(--s-200); padding:var(--s-200) 0; cursor:pointer; list-style:none}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary .pm{position:relative; width:var(--s-200); height:var(--s-200); flex:none; transition:transform 500ms var(--ease)}
@@ -378,7 +319,7 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 .final p{color:var(--muted)}
 
 /* Footer */
-.foot{border-top:1px solid var(--line); padding-block:var(--s-500) var(--s-600)}
+.foot{background:var(--raised); padding-block:var(--s-500) var(--s-600)}
 .foot-row{display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--s-300)}
 .foot-links{display:flex; flex-wrap:wrap; gap:var(--s-100) var(--s-300)}
 .foot-links a{text-decoration:none; color:var(--muted)}
@@ -392,10 +333,10 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 
 
 /* Theory */
-.ctl{display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); margin-top:var(--s-600); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); overflow:hidden}
-.ctl-plot{position:relative; min-height:28rem; border-right:1px solid var(--line)}
+.ctl{display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:var(--s-75); padding:var(--s-75); margin-top:var(--s-600); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
+.ctl-plot{position:relative; min-height:28rem; border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface); overflow:hidden}
 .ctl-plot canvas{position:absolute; inset:0; width:100%; height:100%}
-.ctl-side{display:grid; gap:var(--s-300); padding:var(--s-300); align-content:start}
+.ctl-side{display:grid; gap:var(--s-300); padding:var(--s-200); align-content:start}
 .ctl-head{display:grid; gap:var(--s-75)}
 .ctl-group{display:grid; gap:var(--s-100)}
 .ctl-row{display:flex; justify-content:space-between; align-items:center; gap:var(--s-100)}
@@ -434,21 +375,16 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 
 
 /* Math typesetting (KaTeX) */
-.katex{font-size:1.06em; line-height:1.2}
-.fx{font-family:var(--font); font-size:1rem; line-height:1.75rem}
-.fx .katex{font-size:1.12em}
+.katex{font-size:1em; line-height:1.2}
+.fx{font-family:var(--font); font-size:1.125rem; line-height:1.75rem}
 .mi{font-family:KaTeX_Math,"Times New Roman",serif; font-style:italic}
 .mr{font-family:KaTeX_Main,"Times New Roman",serif}
 .dose-val.mr{font-size:1.125rem; line-height:1.75rem}
-.fw-svg .fo{display:grid; gap:2px; font-family:var(--font); font-size:13px; line-height:18px; color:var(--ink)}
+.fw-svg .fo{display:grid; gap:2px; font-family:var(--font); font-size:14px; line-height:20px; color:var(--ink)}
 .fw-svg .fo b{font-weight:600}
-.fw-svg .fo span{font-size:12px; line-height:17px; color:var(--muted)}
+.fw-svg .fo span{font-size:12px; line-height:16px; color:var(--muted)}
 .fw-svg .fo .mt{color:var(--model)}
 .fw-svg .fo .dt{color:var(--drive-ink)}
-.fw-svg .fo .katex{font-size:1.1em}
-.hex-core{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:grid; justify-items:center; gap:2px; max-width:5.75rem; pointer-events:none; text-align:center; font-size:.875rem; line-height:1.25rem; color:var(--ink)}
-.hex-core small{font-family:var(--mono); font-size:.75rem; line-height:1rem; letter-spacing:.06em; color:var(--faint)}
-.t1-card .ro{font-family:var(--font); font-size:.875rem; line-height:1.25rem}
 .cchip{font-family:var(--font)}
 .meta-link{color:var(--muted); text-decoration:none; transition:color 300ms var(--ease)}
 .meta-link:hover{color:var(--ink); text-decoration:underline}
@@ -457,18 +393,20 @@ thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted)
 
 /* Six axis grid */
 .ax-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s-200); margin-top:var(--s-500)}
-.ax-card{position:relative; display:grid; gap:var(--s-100); align-content:start; padding:var(--s-200) var(--s-200) var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); min-width:0}
+.ax-card{position:relative; display:grid; gap:var(--s-100); align-content:start; padding:var(--s-75) var(--s-75) var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); min-width:0}
 .ax-card::after{content:""; position:absolute; inset:-1px; border:2px solid var(--drive); border-radius:var(--r-2xl); opacity:0; pointer-events:none}
 .ax-card.flash::after{animation:flash 1400ms var(--ease)}
 @keyframes flash{0%{opacity:0} 20%{opacity:1} 100%{opacity:0}}
-.ax-top{display:flex; align-items:center; gap:var(--s-100)}
+.ax-top{display:flex; align-items:center; gap:var(--s-100); padding:var(--s-100) var(--s-100) 0}
+.ax-q,.ax-meta{padding-inline:var(--s-100)}
+.ax-fx{margin-inline:var(--s-100)}
 .ax-n{display:grid; place-items:center; width:var(--s-400); height:var(--s-400); flex:none; border-radius:var(--r-full); background:var(--drive); color:var(--on-drive); font-family:var(--mono); font-size:.875rem; font-weight:600}
 .ax-t{display:grid; min-width:0}
 .ax-g{color:var(--faint)}
 .ax-q{color:var(--ink)}
 .ax-scope{position:relative; height:13.75rem; border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface); overflow:hidden}
 .ax-scope canvas{position:absolute; inset:0; width:100%; height:100%}
-.ax-fx{font-size:.875rem; padding:var(--s-75) var(--s-100)}
+.ax-fx{font-size:1rem; line-height:1.5rem; padding:var(--s-100)}
 .ax-meta{display:grid; gap:var(--s-100); margin:var(--s-50) 0 0}
 .ax-meta div{display:grid; gap:var(--s-25)}
 .ax-meta dt{color:var(--drive-ink); letter-spacing:.06em; text-transform:uppercase}
@@ -488,21 +426,63 @@ html[data-lang="zh"] .heading-1, html[data-lang="zh"] .heading-2, html[data-lang
 html[data-lang="zh"] .eyebrow, html[data-lang="zh"] .io-label, html[data-lang="zh"] .ax-meta dt{letter-spacing:.1em}
 html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 
+
+/* Hero artwork: a frozen tower on a few strings (single dark scene in both themes) */
+.hero-art{position:relative; overflow:hidden; background:var(--art-bg); color:var(--art-ink)}
+.art-canvas{position:absolute; inset:0; width:100%; height:100%}
+.hero-inner{position:relative; display:grid; grid-template-rows:1fr auto; gap:var(--s-700); min-height:46rem; padding-block:calc(var(--s-900) + var(--s-400)) var(--s-500)}
+.hero-art .hero-text{display:grid; gap:var(--s-300); max-width:680px; align-self:center}
+.hero-art .h1-grad{background:linear-gradient(90deg,#FFFFFF,#9B9B9B); -webkit-background-clip:text; background-clip:text; color:transparent}
+.hero-art .hero-sub{color:var(--art-muted); max-width:36rem}
+.hero-art .meta-link{color:var(--art-muted)}
+.hero-art .meta-link:hover{color:var(--art-ink)}
+.hero-art .sep{color:var(--art-faint)}
+.on-art{color:var(--art-ink)}
+.chip-dark{background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.22); color:var(--art-ink)}
+.btn-light{background:#FFFFFF; color:#0B1626; padding-inline:var(--s-200)}
+.btn-light:hover{opacity:.9}
+.btn-ghost-light{color:var(--art-ink); border-color:rgba(255,255,255,.26); background:rgba(255,255,255,.04)}
+.btn-ghost-light:hover{border-color:rgba(255,255,255,.6)}
+.hero-art :focus-visible{outline-color:#FFB37A}
+.hero-foot{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:var(--s-300)}
+.proof-stats{display:flex; flex-wrap:wrap; gap:var(--s-300) var(--s-600)}
+.proof-stats li{display:grid; gap:var(--s-25)}
+.proof-stats b{font-family:var(--mono); font-weight:500; color:var(--art-ink)}
+.proof-stats span{color:var(--art-faint)}
+.tested{color:var(--art-faint)}
+.tested span{color:var(--art-muted)}
+/* Problem to solution and benefits */
+.ps{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,6fr); gap:var(--s-600); align-items:end}
+.benefits{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:var(--s-200); margin-top:var(--s-600)}
+.benefit{display:grid; grid-template-rows:auto auto 1fr auto; gap:var(--s-100); padding:var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); transition:border-color 300ms var(--ease), transform 500ms var(--ease)}
+.benefit:hover{border-color:var(--line-strong); transform:translateY(-2px)}
+.benefit p{color:var(--muted)}
+.b-ic{display:grid; place-items:center; width:var(--s-500); height:var(--s-500); margin-bottom:var(--s-75); border-radius:var(--r-lg); background:var(--drive-soft); color:var(--drive)}
+.more{display:inline-flex; align-items:center; gap:var(--s-50); justify-self:start; margin-top:var(--s-75); color:var(--drive-ink); text-decoration:none; border-radius:var(--r)}
+.more svg{transition:transform 300ms var(--ease)}
+.more:hover svg{transform:translateX(var(--s-50))}
+
 /* Responsive */
-@media (max-width:1040px){
+@media (max-width:1100px){
+  .ps{grid-template-columns:minmax(0,1fr)}
+  .benefits{grid-template-columns:repeat(2,minmax(0,1fr))}
   .nav-links{display:none}
   .menu-btn{display:inline-grid}
   .console-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .net-wrap{grid-column:1 / -1; grid-row:1}
   .fw{grid-template-columns:minmax(0,1fr)}
   .fw-fig{position:relative; top:0; grid-row:1}
-  .axes{grid-template-columns:minmax(0,1fr)}
-  .hex-col{position:relative; top:0}
   .ev-grid,.ev-lower,.use-grid,.cite-grid,.idea-grid,.ctl,.pmap{grid-template-columns:minmax(0,1fr)}
-  .ctl-plot{border-right:0; border-bottom:1px solid var(--line); min-height:24rem}
+  .ctl-plot{min-height:24rem}
   .thm,.ax-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:720px){
+  .thm,.ax-grid{grid-template-columns:minmax(0,1fr)}
+  .benefits{grid-template-columns:minmax(0,1fr)}
+  .hero-inner{min-height:0; padding-block:calc(var(--s-900) + var(--s-200)) 20rem; gap:var(--s-500)}
+  .hero-art .hero-meta .sep{display:none}
+  .hero-art .hero-meta{gap:var(--s-75) var(--s-200)}
+  .proof-stats{gap:var(--s-200) var(--s-400)}
   .section,.tagline{padding-block:var(--s-700)}
   .hero{padding-top:calc(var(--s-900) + var(--s-200)); padding-bottom:var(--s-500)}
   .heading-1{font-size:2.25rem; line-height:2.5rem}
@@ -517,15 +497,10 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   .controls .slider-box{grid-column:1 / -1; grid-row:2}
   .controls .btn{grid-column:1 / -1; justify-self:start}
   .hide-sm{display:none}
-  .t1,.thm,.ax-grid{grid-template-columns:minmax(0,1fr)}
   .ctl-plot{min-height:20rem}
-  .facts{grid-template-columns:minmax(0,1fr)}
-  .scope{height:20rem}
-  .panel-head{flex-direction:column}
   .final{padding:var(--s-300)}
 }
 @media (min-width:721px) and (max-width:1040px){
-  .t1{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:400px){
   .heading-1{font-size:1.875rem; line-height:2.25rem}
@@ -566,14 +541,11 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   <nav class="nav" aria-label="Primary">
     <a class="brand title-4" href="#top" aria-label="Sparse internal control, back to top"><svg aria-hidden="true"><use href="#logo"/></svg>Sparse control</a>
     <div class="nav-links body-5">
-      <a href="#idea">Idea</a>
+      <a href="#demo">Try it</a>
       <a href="#framework">Framework</a>
       <a href="#theory">Theory</a>
       <a href="#axes">Six axes</a>
-      <a href="#evidence">Evidence</a>
-      <a href="#use">Use it</a>
-      <a href="#faq">FAQ</a>
-      <a href="#cite">Cite</a>
+      <a href="#evidence">Results</a>
     </div>
     <a class="icon-btn" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener" aria-label="Code on GitHub"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-gh"/></svg></a>
     <button class="lang-btn button-sm" type="button" lang="zh" aria-label="切换到中文">中文</button>
@@ -581,11 +553,11 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   </nav>
   <div class="menu" id="menu" aria-hidden="true">
     <ul class="heading-5">
-      <li><a class="m-link" href="#idea">Idea</a></li>
+      <li><a class="m-link" href="#demo">Try it</a></li>
       <li><a class="m-link" href="#framework">Framework</a></li>
       <li><a class="m-link" href="#theory">Theory</a></li>
       <li><a class="m-link" href="#axes">Six axes</a></li>
-      <li><a class="m-link" href="#evidence">Evidence</a></li>
+      <li><a class="m-link" href="#evidence">Results</a></li>
       <li><a class="m-link" href="#use">Use it</a></li>
       <li><a class="m-link" href="#faq">FAQ</a></li>
       <li><a class="m-link" href="#cite">Cite</a></li>
@@ -600,25 +572,44 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 <main id="main">
 
 <!-- Hero -->
-<section class="hero" id="top" aria-labelledby="h-title">
-  <div class="wrap">
+<section class="hero-art" id="top" aria-labelledby="h-title">
+  <canvas class="art-canvas" id="art" aria-hidden="true"></canvas>
+  <div class="wrap hero-inner">
     <div class="hero-text">
       <div class="hero-meta">
-        <span class="chip caption-3"><span class="dot"></span>NeurIPS 2026</span>
-        <span class="caption-1">Xizhe Zhang</span><span class="sep" aria-hidden="true">·</span><a class="meta-link caption-1" href="mailto:zhangxizhe@gmail.com">zhangxizhe@gmail.com</a><span class="sep" aria-hidden="true">·</span><a class="meta-link caption-1" href="https://orcid.org/0000-0002-8684-4591" target="_blank" rel="noopener">ORCID 0000-0002-8684-4591</a>
+        <span class="chip chip-dark caption-3"><span class="dot"></span>NeurIPS 2026</span>
+        <span class="caption-1 on-art">Xizhe Zhang</span><span class="sep" aria-hidden="true">·</span><a class="meta-link caption-1" href="mailto:zhangxizhe@gmail.com">zhangxizhe@gmail.com</a><span class="sep" aria-hidden="true">·</span><a class="meta-link caption-1" href="https://orcid.org/0000-0002-8684-4591" target="_blank" rel="noopener">ORCID 0000-0002-8684-4591</a>
       </div>
       <h1 class="heading-1 h1-grad no-i18n" id="h-title"><span data-only="en"><span class="ln">Sparse</span><span class="ln">Internal Control</span><span class="ln">of Language Models</span></span><span data-only="zh"><span class="ln">语言模型的</span><span class="ln">稀疏内部控制</span></span></h1>
-      <p class="title-1 hero-sub">A control theoretic account of steering frozen language models. A few internal sites act as actuators, a local controllability analysis says what they can reach and at what energy, and a six axis protocol measures the control you actually get.</p>
+      <p class="title-1 hero-sub">A framework for researchers who steer language models from the inside. Pick a few internal sites as actuators, certify the control within an energy budget, and measure it on six axes.</p>
       <div class="cta-row">
-        <a class="btn btn-primary button-md" href="{{PAPER_URL}}" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Read the paper</a>
-        <a class="btn btn-text button-md" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-gh"/></svg>Code on GitHub</a>
+        <a class="btn btn-light button-md" href="{{PAPER_URL}}" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Read the paper</a>
+        <a class="btn btn-ghost-light button-md" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-gh"/></svg>Code on GitHub</a>
       </div>
-      <p class="caption-2 proof">Tested on <b>GPT-2 small</b>, <b>Qwen3-1.7B</b> and <b>Qwen3-4B</b> across indirect object identification, MMLU question answering, sentiment and refusal steering.</p>
     </div>
+    <div class="hero-foot">
+      <ul class="proof-stats" aria-label="At a glance">
+        <li><b class="heading-4">5</b><span class="caption-2">task instances</span></li>
+        <li><b class="heading-4">3</b><span class="caption-2">frozen models</span></li>
+        <li><b class="heading-4">6</b><span class="caption-2">control axes</span></li>
+        <li><b class="heading-4">162</b><span class="caption-2">table rows verified on CPU</span></li>
+      </ul>
+      <p class="tested caption-2"><span>Tested on</span> GPT-2 small · Qwen3-1.7B · Qwen3-4B</p>
+    </div>
+  </div>
+</section>
 
+<!-- Demo -->
+<section class="section reveal" id="demo" aria-labelledby="h-demo">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Try it</span>
+      <h2 class="heading-2" id="h-demo">Move a frozen model through four sites</h2>
+      <p class="body-3">Drag the dose. In this schematic, four driver sites in attention heads, an MLP and the residual stream are patched while every weight stays frozen. The readout at the answer position moves from the source behavior toward the target.</p>
+    </div>
     <div class="console" aria-label="Interactive illustration of sparse internal control">
       <div class="console-top">
-        <span class="caption-3 io-label">Try it · the paper's Figure 1 setting</span>
+        <span class="caption-3 io-label">Schematic · the paper's Figure 1 setting</span>
         <span class="caption-1 muted hide-sm">weights \(\theta\) frozen · 4 driver nodes · \(h \leftarrow h + \gamma \textstyle\sum_v \beta_v u_v\)</span>
       </div>
       <div class="console-grid">
@@ -673,23 +664,31 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 
 <!-- Idea -->
 <section class="section reveal" id="idea" aria-labelledby="h-idea">
-  <div class="wrap idea-grid">
-    <div class="prose">
-      <span class="eyebrow">The idea</span>
-      <h2 class="heading-2" id="h-idea">Treat a few activations as actuators</h2>
-      <p class="body-3 muted">Activation steering has shown that patching internal states can change what a frozen model does. Sparse internal control asks the engineering question that follows. Which few sites should be patched, with what strength, and what evidence shows that the change behaves like control?</p>
-      <p class="body-3 muted">Selected activations become temporary, adjustable control inputs while the learned parameters stay fixed. Goals are written as task readouts, so control can be studied on single prompts and on objectives shared across prompts. The question is no longer only whether an intervention moves the output, but how accurately it reaches the target, how the response changes as the intervention is adjusted, and what else it disturbs.</p>
+  <div class="wrap">
+    <div class="ps">
+      <div class="sec-head">
+        <span class="eyebrow">The idea</span>
+        <h2 class="heading-2" id="h-idea">Steering is easy to show. Control is hard to prove.</h2>
+      </div>
+      <div class="prose">
+        <p class="title-2 muted">Activation steering shows that patching internal states can move a frozen model. It leaves three questions open: which few sites to patch, how hard to push, and what evidence shows that the change behaves like control.</p>
+        <p class="body-3 muted">Sparse internal control answers them as a control problem. Selected activations become temporary, adjustable inputs, the weights never change, and success is defined by task readouts, an energy budget and a certificate checked in the full model.</p>
+      </div>
     </div>
-    <div>
-      <ul class="obj-list">
-        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-cross"/></svg></span><div><h3 class="title-3">Localized</h3><p class="body-6">Act through a sparse set of internal nodes chosen from a candidate library.</p></div></li>
-        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-undo"/></svg></span><div><h3 class="title-3">Signed reversal</h3><p class="body-6">The opposite patch on target inputs moves behavior back toward the source.</p></div></li>
-        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-funnel"/></svg></span><div><h3 class="title-3">Selective</h3><p class="body-6">Change the targeted behavior, as measured by a task readout.</p></div></li>
-        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg></span><div><h3 class="title-3">Bounded</h3><p class="body-6">Keep intervention strength inside an explicit energy budget \(\kappa\).</p></div></li>
-        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></span><div><h3 class="title-3">Off-target preservation</h3><p class="body-6">Leave unrelated behavior alone, such as refusing malicious requests.</p></div></li>
-        <li class="obj-cap caption-5">The five control objectives from Figure 1 of the paper.</li>
-      </ul>
-    </div>
+    <ul class="benefits">
+      <li class="benefit"><span class="b-ic"><svg class="ic" aria-hidden="true"><use href="#i-cross"/></svg></span><h3 class="heading-6">Few sites, chosen on purpose</h3><p class="body-6">Driver-OMP and Coverage-Driver select at most eight sites from a library of attention heads, MLP outputs and residual positions.</p><a class="more button-sm" href="#framework">How it works<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      <li class="benefit"><span class="b-ic"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></span><h3 class="heading-6">A certificate for every intervention</h3><p class="body-6">Target recovery, off-target change and energy are checked together in the original nonlinear model.</p><a class="more button-sm" href="#framework">See the certificate<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      <li class="benefit"><span class="b-ic"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg></span><h3 class="heading-6">Controllability you can compute</h3><p class="body-6">Near the unpatched model, reaching a target reduces to a span test and a minimum energy, with a bound on linearization error.</p><a class="more button-sm" href="#theory">Explore the theory<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+      <li class="benefit"><span class="b-ic"><svg class="ic" aria-hidden="true"><use href="#logo"/></svg></span><h3 class="heading-6">Six axes instead of one score</h3><p class="body-6">Reachability, reversal, dose response, feedback, preservation and reuse are measured separately, so one strong number cannot hide a failure.</p><a class="more button-sm" href="#axes">See the six axes<svg class="ic ic-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- Tagline -->
+<section class="tagline" aria-label="Summary">
+  <div class="wrap">
+    <p class="heading-3 tagline-p no-i18n" data-only="en">One push is a demo. Control means you can <span class="k">hit</span> a target, <span class="k">undo</span> it, <span class="k">dial</span> it, <span class="k">track</span> it, <span class="k">spare</span> everything else, and <span class="k">reuse</span> it on prompts you have never seen.</p>
+    <p class="heading-3 tagline-p no-i18n" data-only="zh">推动一次只是演示。控制意味着你能<span class="k">命中</span>目标、<span class="k">撤销</span>它、<span class="k">调节</span>它、<span class="k">跟踪</span>它、<span class="k">不扰动</span>其余一切，并在从未见过的提示上<span class="k">复用</span>它。</p>
   </div>
 </section>
 
@@ -916,14 +915,6 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   </div>
 </section>
 
-<!-- Tagline -->
-<section class="tagline" aria-label="Summary">
-  <div class="wrap">
-    <p class="heading-3 tagline-p no-i18n" data-only="en">One push is a demo. Control means you can <span class="k">hit</span> a target, <span class="k">undo</span> it, <span class="k">dial</span> it, <span class="k">track</span> it, <span class="k">spare</span> everything else, and <span class="k">reuse</span> it on prompts you have never seen.</p>
-    <p class="heading-3 tagline-p no-i18n" data-only="zh">推动一次只是演示。控制意味着你能<span class="k">命中</span>目标、<span class="k">撤销</span>它、<span class="k">调节</span>它、<span class="k">跟踪</span>它、<span class="k">不扰动</span>其余一切，并在从未见过的提示上<span class="k">复用</span>它。</p>
-  </div>
-</section>
-
 <!-- Six axes -->
 <section class="section reveal" id="axes" aria-labelledby="h-axes">
   <div class="wrap">
@@ -1039,7 +1030,7 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 <section class="section reveal" id="evidence" aria-labelledby="h-ev">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">Evidence</span>
+      <span class="eyebrow">Results</span>
       <h2 class="heading-2" id="h-ev">What the axes revealed</h2>
       <p class="body-3">Five task instances, four behaviors, three frozen models. The same selector can pass one axis and fail the next, and the direction information it receives changes the whole profile. The experiments are exploratory and every count is per seed.</p>
     </div>
@@ -1481,6 +1472,96 @@ const Hero = (() => {
   if (!reduce) setTimeout(sweep, 500);
   mathFontsReady.then(() => draw());
   return { setGamma };
+})();
+
+
+/* ---------- hero artwork: a frozen tower moved by a few strings ---------- */
+(() => {
+  const cv = $('#art'); if (!cv) return;
+  const S = sizer(cv);
+  let raf = 0, visible = true, grain = null, clouds = [], stars = [];
+  const W2 = { sky: '#0B1626', haze: '#1A2D49', ink: '#060E19', cream: '#F3E6D3', warm: '#FF8A3D', warm2: '#FFC08F' };
+  const rgb = (h, a) => rgba(h, a);
+  function seed(){
+    let x = 7; const rnd = () => (x = (x * 16807) % 2147483647) / 2147483647;
+    stars = Array.from({ length: 90 }, () => ({ x: rnd(), y: rnd() * .7, r: rnd() * 1.1 + .3, a: rnd() * .45 + .1, p: rnd() * 6.3 }));
+    clouds = [{ x: .58, y: .2, s: 1 }, { x: .93, y: .34, s: .8 }, { x: .76, y: .6, s: .7 }];
+    const g = document.createElement('canvas'); g.width = g.height = 180; const gx = g.getContext('2d'), im = gx.createImageData(180, 180);
+    for (let i = 0; i < im.data.length; i += 4){ const v = rnd() * 255; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = rnd() < .55 ? 22 : 0; }
+    gx.putImageData(im, 0, 0); grain = g;
+  }
+  seed();
+  function geom(w, h){
+    const narrow = w < 760;
+    const cx = narrow ? w * .5 - 18 : w * .72, base = narrow ? h - 14 : h * .86;
+    const sw = narrow ? Math.min(w * .5, 210) : Math.min(w * .22, 330), n = narrow ? 7 : 9;
+    const sh = narrow ? 13 : Math.min(28, h * .036), gap = narrow ? 7 : Math.min(13, h * .016), dep = sw * .3;
+    const top = base - n * (sh + gap);
+    return { narrow, cx, base, sw, n, sh, gap, dep, barY: narrow ? top - 64 : Math.max(h * .17, 96) };
+  }
+  const DRV = [[1, 1], [3, 4], [4, 2], [6, 5]];
+  function cloud(ctx, x, y, s){
+    [[0, 0, 1], [-.9, .18, .7], [.95, .2, .75], [.4, -.35, .62], [-.35, -.3, .55]].forEach(([dx, dy, r]) => {
+      const R = 70 * s * r, gr = ctx.createRadialGradient(x + dx * 70 * s, y + dy * 70 * s, 0, x + dx * 70 * s, y + dy * 70 * s, R);
+      gr.addColorStop(0, rgb(W2.cream, .11)); gr.addColorStop(1, rgb(W2.cream, 0)); ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(x + dx * 70 * s, y + dy * 70 * s, R, 0, Math.PI * 2); ctx.fill();
+    });
+  }
+  function draw(time){
+    raf = 0;
+    const ctx = S.ctx, w = S.w, h = S.h, t = (time || 0) / 1000, G = geom(w, h), still = reduce;
+    ctx.fillStyle = W2.sky; ctx.fillRect(0, 0, w, h);
+    const hz = ctx.createRadialGradient(G.cx, h * .3, 0, G.cx, h * .3, Math.max(w, h) * .7);
+    hz.addColorStop(0, rgb(W2.haze, .9)); hz.addColorStop(1, rgb(W2.haze, 0)); ctx.fillStyle = hz; ctx.fillRect(0, 0, w, h);
+    stars.forEach(st => { const a = st.a * (still ? .8 : .6 + .4 * Math.sin(t * 1.3 + st.p)); dot(ctx, st.x * w, st.y * h, st.r, rgb(W2.cream, a)); });
+    clouds.forEach((c, k) => cloud(ctx, ((c.x + (still ? 0 : t * .004 * (k + 1))) % 1.15) * w, c.y * h, c.s * (G.narrow ? .6 : 1)));
+    // hill
+    ctx.save(); ctx.beginPath(); ctx.moveTo(0, h); ctx.lineTo(0, h * .97);
+    ctx.bezierCurveTo(w * .3, h * .95, G.cx - G.sw * 1.3, G.base - 6, G.cx, G.base + 2);
+    ctx.bezierCurveTo(G.cx + G.sw * 1.4, G.base + 8, w * .95, h * .9, w, h * .93); ctx.lineTo(w, h); ctx.closePath();
+    ctx.fillStyle = W2.ink; ctx.fill(); ctx.clip();
+    ctx.strokeStyle = rgb(W2.cream, .05); ctx.lineWidth = 1; for (let x = -h; x < w; x += 6){ ctx.beginPath(); ctx.moveTo(x, h); ctx.lineTo(x + h * .5, h * .5); ctx.stroke(); }
+    ctx.restore();
+    // control bar
+    const barY = G.barY, barX = G.cx + G.dep * .5, barW = G.sw * .95, sway = still ? 0 : Math.sin(t * .6) * .035;
+    const glow = ctx.createRadialGradient(barX, barY, 0, barX, barY, G.sw * 1.1);
+    glow.addColorStop(0, rgb(W2.warm, .22)); glow.addColorStop(1, rgb(W2.warm, 0)); ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(barX, barY, G.sw * 1.1, 0, Math.PI * 2); ctx.fill();
+    ctx.save(); ctx.translate(barX, barY); ctx.rotate(sway);
+    ctx.fillStyle = W2.warm2; rr(ctx, -barW / 2, -3, barW, 6, 3); ctx.fill(); rr(ctx, -3, -barW * .22, 6, barW * .44, 3); ctx.fill();
+    ctx.restore();
+    const anchors = [-.5, -.17, .17, .5].map((f, k) => { const ax = f * barW, ay = k === 1 ? -barW * .22 : k === 2 ? barW * .22 : 0; const ux = k === 1 || k === 2 ? 0 : ax; return { x: barX + Math.cos(sway) * ux - Math.sin(sway) * ay, y: barY + Math.sin(sway) * ux + Math.cos(sway) * ay }; });
+    // tower slabs (bottom to top)
+    const slab = i => { const y = G.base - (i + 1) * (G.sh + G.gap); return { x: G.cx - G.sw / 2, y }; };
+    const nodes = [];
+    for (let i = 0; i < G.n; i++){
+      const { x, y } = slab(i), d = G.dep, dy = d * .45;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + d, y - dy); ctx.lineTo(x + G.sw + d, y - dy); ctx.lineTo(x + G.sw, y); ctx.closePath(); ctx.fillStyle = rgb(W2.cream, .08); ctx.fill(); ctx.strokeStyle = rgb(W2.cream, .22); ctx.lineWidth = 1; ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x + G.sw, y); ctx.lineTo(x + G.sw + d, y - dy); ctx.lineTo(x + G.sw + d, y - dy + G.sh); ctx.lineTo(x + G.sw, y + G.sh); ctx.closePath(); ctx.fillStyle = rgb('#0E1B2E', .9); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = rgb('#1C3150', .92); ctx.fillRect(x, y, G.sw, G.sh); ctx.strokeRect(x + .5, y + .5, G.sw - 1, G.sh - 1);
+      for (let k = 0; k < 6; k++){ const nx = x + (k + .5) * G.sw / 6, ny = y + G.sh / 2; nodes.push({ i, k, x: nx, y: ny }); dot(ctx, nx, ny, G.narrow ? 1.6 : 2.2, rgb(W2.cream, .38)); }
+    }
+    // snowflake mark: weights frozen
+    if (!G.narrow) T(ctx, G.cx - G.sw / 2, G.base + 26, tr('weights frozen', '权重冻结'), { size: 11, color: rgb(W2.cream, .45), sans: true });
+    // strings to driver sites
+    DRV.forEach(([i, k], j) => {
+      const nd = nodes.find(n => n.i === i && n.k === k), an = anchors[j];
+      const sx = still ? 0 : Math.sin(t * .9 + j * 1.7) * 7, mx = (an.x + nd.x) / 2 + sx, my = (an.y + nd.y) / 2;
+      ctx.save(); ctx.lineCap = 'round';
+      ctx.strokeStyle = rgb(W2.warm, .16); ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(an.x, an.y); ctx.quadraticCurveTo(mx, my, nd.x, nd.y); ctx.stroke();
+      ctx.strokeStyle = rgb(W2.warm2, .9); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(an.x, an.y); ctx.quadraticCurveTo(mx, my, nd.x, nd.y); ctx.stroke();
+      ctx.restore();
+      const pulse = still ? .7 : .6 + .4 * Math.sin(t * 2 + j);
+      const gl = ctx.createRadialGradient(nd.x, nd.y, 0, nd.x, nd.y, 22); gl.addColorStop(0, rgb(W2.warm, .55 * pulse)); gl.addColorStop(1, rgb(W2.warm, 0));
+      ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(nd.x, nd.y, 22, 0, Math.PI * 2); ctx.fill();
+      dot(ctx, nd.x, nd.y, G.narrow ? 3 : 4, W2.warm, W2.warm2, 1.5);
+    });
+    // grain
+    ctx.save(); ctx.globalAlpha = 1; ctx.fillStyle = ctx.createPattern(grain, 'repeat'); ctx.fillRect(0, 0, w, h); ctx.restore();
+    if (visible && !reduce) raf = requestAnimationFrame(draw);
+  }
+  S.onfit = () => { if (!raf) draw(performance.now()); };
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && !reduce && !raf) raf = requestAnimationFrame(draw); }, { threshold: 0 }).observe(cv);
+  langSubs.push(() => { if (!raf) draw(performance.now()); });
+  draw(performance.now());
 })();
 
 /* ---------- framework stepper ---------- */
