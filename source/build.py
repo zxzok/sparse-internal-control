@@ -14,6 +14,7 @@ SITE = DIST / "site"
 DOMAIN = "sparsecontrol.xizhe.net"
 URL = f"https://{DOMAIN}/"
 PAPER_PDF = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else None
+ARXIV_ID = sys.argv[2] if len(sys.argv) > 2 else ""
 
 DESC = ("Sparse internal control steers a frozen language model through a few internal sites at "
         "inference time. A six axis protocol measures reachability, signed reversal, dose response, "
@@ -78,6 +79,13 @@ def katex_inline_css():
 
 def main():
     src = SRC.read_text(encoding="utf-8")
+    # arXiv: set ARXIV_ID (e.g. "2611.01234") to add the arXiv button, footer link and BibTeX eprint
+    if ARXIV_ID:
+        src = re.sub(r"<!--/?ARXIV-->", "", src).replace("{{ARXIV_ID}}", ARXIV_ID)
+        src = src.replace("{{ARXIV_BIB}}", f",\n  eprint    = {{{ARXIV_ID}}},\n  archivePrefix = {{arXiv}}")
+        src = src.replace("{{ARXIV_BIB_JS}}", f",\\n  eprint    = {{{ARXIV_ID}}},\\n  archivePrefix = {{arXiv}}")
+    else:
+        src = re.sub(r"\s*<!--ARXIV-->.*?<!--/ARXIV-->", "", src, flags=re.S).replace("{{ARXIV_BIB}}", "").replace("{{ARXIV_BIB_JS}}", "")
     zh_path = ROOT / "src" / "zh.json"
     zh = json.loads(zh_path.read_text(encoding="utf-8")) if zh_path.exists() else {}
     src = src.replace("/*ZH_DICT*/{}", json.dumps(zh, ensure_ascii=False).replace("</", "<\\/"))

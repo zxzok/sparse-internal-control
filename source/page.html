@@ -441,8 +441,37 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 .more svg{transition:transform 300ms var(--ease)}
 .more:hover svg{transform:translateX(var(--s-50))}
 
+
+/* Six axes intro (tagline with verb map) */
+.tg-wrap{display:grid; gap:var(--s-400)}
+.verb-map{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:var(--s-100); counter-reset:none}
+.vm{display:grid; gap:var(--s-50); align-content:start; height:100%; padding:var(--s-200); border:1px solid var(--line); border-radius:var(--r-xl); background:var(--surface); text-decoration:none; transition:border-color 300ms var(--ease), transform 300ms var(--ease)}
+.vm:hover{border-color:var(--drive); transform:translateY(-2px)}
+.vm:active{transform:scale(.98)}
+.vm-n{font-family:var(--mono); font-size:.75rem; line-height:1rem; color:var(--faint)}
+.vm-v{color:var(--drive-ink)}
+.vm-a{color:var(--muted)}
+/* Framework, rebuilt: three steps, one diagram, two details */
+.fw-steps{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s-200); margin-top:var(--s-600)}
+.fw-steps li{display:grid}
+.fw-steps .step{display:grid; gap:var(--s-100); align-content:start; width:100%; text-align:left; padding:var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); color:var(--ink); cursor:pointer; opacity:1; transition:border-color 300ms var(--ease), transform 300ms var(--ease)}
+.fw-steps .step:hover{border-color:var(--line-strong); transform:translateY(-2px)}
+.fw-steps .step:active{transform:scale(.99)}
+.fw-steps .step.on{border-color:var(--drive)}
+.step-top{display:flex; align-items:center; gap:var(--s-100)}
+.fw-steps .sd{color:var(--muted)}
+.fw-steps .sf{font-size:1rem; line-height:1.5rem; margin-top:var(--s-50)}
+.fw-fig{position:static; display:grid; gap:var(--s-100); margin:var(--s-200) 0 0}
+.fw-fig .fig-scroll{padding:var(--s-300)}
+.fw-fig .fw-svg{max-width:58rem; margin-inline:auto}
+.fw-detail{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--s-200); margin-top:var(--s-200)}
+.fd-card{display:grid; gap:var(--s-100); align-content:start; padding:var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
+.fd-card p{color:var(--muted)}
+
 /* Responsive */
 @media (max-width:1100px){
+  .verb-map{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .fw-steps,.fw-detail{grid-template-columns:minmax(0,1fr)}
   .ps{grid-template-columns:minmax(0,1fr)}
   .benefits{grid-template-columns:repeat(2,minmax(0,1fr))}
   .nav-links{display:none}
@@ -456,9 +485,11 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   .thm,.ax-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:720px){
+  .verb-map{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fw-fig .fig-scroll{padding:var(--s-200)}
   .thm,.ax-grid{grid-template-columns:minmax(0,1fr)}
   .benefits{grid-template-columns:minmax(0,1fr)}
-  .hero-inner{min-height:0; padding-block:calc(var(--s-900) + var(--s-200)) 20rem; gap:var(--s-500)}
+  .hero-inner{min-height:0; padding-block:calc(var(--s-900) + var(--s-200)) 23rem; gap:var(--s-500)}
   .hero-art .hero-meta .sep{display:none}
   .hero-art .hero-meta{gap:var(--s-75) var(--s-200)}
   .proof-stats{gap:var(--s-200) var(--s-400)}
@@ -520,11 +551,11 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   <nav class="nav" aria-label="Primary">
     <a class="brand title-4" href="#top" aria-label="Sparse internal control, back to top"><svg aria-hidden="true"><use href="#logo"/></svg>Sparse control</a>
     <div class="nav-links body-5">
-      <a href="#demo">Try it</a>
-      <a href="#framework">Framework</a>
-      <a href="#theory">Theory</a>
       <a href="#axes">Six axes</a>
+      <a href="#framework">Framework</a>
+      <a href="#demo">Try it</a>
       <a href="#evidence">Results</a>
+      <a href="#theory">Theory</a>
     </div>
     <a class="icon-btn" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener" aria-label="Code on GitHub"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-gh"/></svg></a>
     <button class="lang-btn button-sm" type="button" lang="zh" aria-label="切换到中文">中文</button>
@@ -532,11 +563,11 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   </nav>
   <div class="menu" id="menu" aria-hidden="true">
     <ul class="heading-5">
-      <li><a class="m-link" href="#demo">Try it</a></li>
-      <li><a class="m-link" href="#framework">Framework</a></li>
-      <li><a class="m-link" href="#theory">Theory</a></li>
       <li><a class="m-link" href="#axes">Six axes</a></li>
+      <li><a class="m-link" href="#framework">Framework</a></li>
+      <li><a class="m-link" href="#demo">Try it</a></li>
       <li><a class="m-link" href="#evidence">Results</a></li>
+      <li><a class="m-link" href="#theory">Theory</a></li>
       <li><a class="m-link" href="#use">Use it</a></li>
       <li><a class="m-link" href="#faq">FAQ</a></li>
       <li><a class="m-link" href="#cite">Cite</a></li>
@@ -563,6 +594,7 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
       <p class="title-1 hero-sub">A framework for researchers who steer language models from the inside. Pick a few internal sites as actuators, certify the control within an energy budget, and measure it on six axes.</p>
       <div class="cta-row">
         <a class="btn btn-light button-md" href="{{PAPER_URL}}" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Read the paper</a>
+        <!--ARXIV--><a class="btn btn-ghost-light button-md" href="https://arxiv.org/abs/{{ARXIV_ID}}" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-ext"/></svg>arXiv</a><!--/ARXIV-->
         <a class="btn btn-ghost-light button-md" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-gh"/></svg>Code on GitHub</a>
       </div>
     </div>
@@ -574,69 +606,6 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
         <li><b class="heading-4">162</b><span class="caption-2">table rows verified on CPU</span></li>
       </ul>
       <p class="tested caption-2"><span>Tested on</span> GPT-2 small · Qwen3-1.7B · Qwen3-4B</p>
-    </div>
-  </div>
-</section>
-
-<!-- Demo -->
-<section class="section reveal" id="demo" aria-labelledby="h-demo">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">Try it</span>
-      <h2 class="heading-2" id="h-demo">Move a frozen model through four sites</h2>
-      <p class="body-3">Drag the dose. In this schematic, four driver sites in attention heads, an MLP and the residual stream are patched while every weight stays frozen. The readout at the answer position moves from the source behavior toward the target.</p>
-    </div>
-    <div class="console" aria-label="Interactive illustration of sparse internal control">
-      <div class="console-top">
-        <span class="caption-3 io-label">Schematic · the paper's Figure 1 setting</span>
-        <span class="caption-1 muted hide-sm">weights \(\theta\) frozen · 4 driver nodes · \(h \leftarrow h + \gamma \textstyle\sum_v \beta_v u_v\)</span>
-      </div>
-      <div class="console-grid">
-        <div class="io">
-          <span class="caption-3 io-label">Input prompt</span>
-          <p class="bubble body-5">How can I check SSH login logs on a company server?</p>
-          <span class="ctx-chip caption-4">Authorized audit context</span>
-        </div>
-        <div class="net-wrap"><canvas id="hero-canvas" aria-hidden="true"></canvas></div>
-        <div class="io">
-          <span class="caption-3 io-label">Model output</span>
-          <div class="out-stack">
-            <div class="out-text src" id="out-src">
-              <p class="body-6">“I can’t help with server access or hacking related requests.”</p>
-              <span class="tag caption-4">Source behavior · over refusal</span>
-            </div>
-            <div class="out-text tgt" id="out-tgt">
-              <p class="body-6">“For an authorized audit, review SSH login records and document suspicious login attempts.”</p>
-              <span class="tag caption-4">Target behavior · helpful</span>
-            </div>
-          </div>
-          <div class="gauge" aria-hidden="true">
-            <div class="gauge-track"></div>
-            <div class="gauge-tick" style="left:48.9%"><i class="caption-5">\(b(x)\)</i></div>
-            <div class="gauge-tick" style="left:93.3%"><i class="caption-5">\(\tau\)</i></div>
-            <div class="gauge-mark" id="gauge-mark"></div>
-          </div>
-        </div>
-      </div>
-      <div class="controls">
-        <label class="title-4" for="dose">Dose \(\gamma\)</label>
-        <div class="slider-box">
-          <input type="range" id="dose" min="-1" max="2" step="0.01" value="1" aria-describedby="dose-help">
-          <div class="slider-ticks caption-5 mono" aria-hidden="true">
-            <span style="left:0%">−1</span><span style="left:33.333%">0<span class="hide-sm"> · unpatched</span></span><span style="left:66.667%">1<span class="hide-sm"> · nominal</span></span><span style="left:100%">2</span>
-          </div>
-        </div>
-        <output class="dose-val mr" id="dose-out" for="dose"><span class="mi">γ</span> = <span id="dose-num">1.00</span></output>
-        <button class="btn btn-line button-sm" id="sweep" type="button"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-play"/></svg>Replay sweep</button>
-      </div>
-      <div class="legend caption-4">
-        <span><i class="lg-drive lg-sq"></i>driver site, patched</span>
-        <span><i class="lg-site lg-sq"></i>attention head</span>
-        <span><i class="lg-site lg-mlp"></i>MLP</span>
-        <span><i class="lg-res"></i>residual stream</span>
-        <span><i class="lg-model"></i>forward pass</span>
-        <span id="dose-help" class="note">A schematic of Figure 1. The two outputs are the figure’s example texts, not live model output.</span>
-      </div>
     </div>
   </div>
 </section>
@@ -664,233 +633,19 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 </section>
 
 <!-- Tagline -->
-<section class="tagline" aria-label="Summary">
-  <div class="wrap">
+<section class="tagline" id="why" aria-label="Why six axes">
+  <div class="wrap tg-wrap">
+    <span class="eyebrow">Why six axes</span>
     <p class="heading-3 tagline-p no-i18n" data-only="en">One push is a demo. Control means you can <span class="k">hit</span> a target, <span class="k">undo</span> it, <span class="k">dial</span> it, <span class="k">track</span> it, <span class="k">spare</span> everything else, and <span class="k">reuse</span> it on prompts you have never seen.</p>
     <p class="heading-3 tagline-p no-i18n" data-only="zh">推动一次只是演示。控制意味着你能<span class="k">命中</span>目标、<span class="k">撤销</span>它、<span class="k">调节</span>它、<span class="k">跟踪</span>它、<span class="k">不扰动</span>其余一切，并在从未见过的提示上<span class="k">复用</span>它。</p>
-  </div>
-</section>
-
-<!-- Framework -->
-<section class="section reveal" id="framework" aria-labelledby="h-fw">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">Framework</span>
-      <h2 class="heading-2" id="h-fw">Specify, select, certify</h2>
-      <p class="body-3">The framework separates what you ask for from how drivers are chosen. Any selector can be plugged into the same specification and judged by the same certificate.</p>
-    </div>
-    <div class="fw">
-      <div class="steps" id="steps">
-        <article class="step on" data-step="1" tabindex="0" aria-label="Step 1, specify the behavior">
-          <div class="step-head"><span class="step-n">1</span><h3 class="heading-6">Specify the behavior</h3></div>
-          <p class="body-6">Choose a readout \(b_\theta(x)\) for the behavior: a logit margin, a sentiment score, a refusal score, or the four option logits of a multiple choice question. Pair each target prompt with the readout you want, and set aside disjoint prompts whose outputs should not move.</p>
-          <div class="fx terms"><span>\(q_i = \tau_i - b_\theta(x_i)\)</span><span>\(\mathcal{D}_{\mathrm{tar}} = \{(x_i, \tau_i)\}_{i=1}^{n}\)</span><span>\(\mathcal{D}_{\mathrm{off}} = \{\tilde{x}_j\}_{j=1}^{n_{\mathrm{off}}}\)</span></div>
-        </article>
-        <article class="step" data-step="2" tabindex="0" aria-label="Step 2, select sparse drivers">
-          <div class="step-head"><span class="step-n">2</span><h3 class="heading-6">Select sparse drivers</h3></div>
-          <p class="body-6">A candidate control node \(v = (s_v, u_v, c_v)\) pairs a physical site (layer, component, token position, slice) with a direction and a selection cost. The intervention adds scaled directions to the chosen sites during the forward pass. The nonzero entries of \(\beta\) form the driver set \(S_\beta = \operatorname{supp}(\beta)\).</p>
-          <div class="fx terms"><span>\(h_s(x) \leftarrow h_s(x) + \sum_{v:\,s_v = s} \beta_v u_v(x)\)</span><span>\(\|\beta\|_{0,c} = \sum_{v \in S_\beta} c_v\)</span><span>\(E(\beta) = \beta^{\top} W \beta\)</span></div>
-          <p class="body-6"><b class="body-4" style="color:var(--ink)">Driver-OMP</b> fits the requested displacement by sparse residual fitting. <b class="body-4" style="color:var(--ink)">Coverage-Driver</b> adds candidates by saturated coverage across prompts. Both follow the same three stages.</p>
-          <div class="pipe caption-4"><span class="p">Local proposal</span><svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="p">Shared refit</span><svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="p">Nonlinear validation</span></div>
-        </article>
-        <article class="step" data-step="3" tabindex="0" aria-label="Step 3, certify then characterize">
-          <div class="step-head"><span class="step-n">3</span><h3 class="heading-6">Certify, then characterize</h3></div>
-          <p class="body-6">An intervention is an \((\varepsilon, \delta, \kappa)\) control certificate when it reaches the target, preserves off-target outputs and stays inside the energy budget, all checked in the original nonlinear model. Sparse internal control looks for the cheapest such intervention.</p>
-          <div class="fx terms"><span>\(\dfrac{\|q - F(\beta)\|_2}{\|q\|_2 + \xi} \le \varepsilon\)</span><span>\(L_{\mathrm{off}}(\beta) \le \delta\)</span><span>\(E(\beta) \le \kappa\)</span></div>
-          <div class="fx">\(\displaystyle\min_{\beta \in \mathbb{R}^M}\ \|\beta\|_{0,c} + \lambda_E\, E(\beta) \quad \text{s.t. } \beta \text{ is an } (\varepsilon, \delta, \kappa) \text{ certificate}\)</div>
-          <p class="body-6">The six axes below then describe what kind of control the intervention provides beyond this one check.</p>
-        </article>
-      </div>
-      <figure class="fw-fig" style="margin:0">
-        <div class="fig-scroll">
-          <svg class="fw-svg" id="fw-svg" viewBox="0 0 760 420" data-step="1" role="img" aria-labelledby="fw-t fw-d">
-            <title id="fw-t">Sparse internal control drawn as a control loop</title>
-            <desc id="fw-d">Prompts enter a frozen model. A sparse set of strengths patches a few candidate sites. The readout is compared with the target, off-target outputs are compared with the unpatched model, and three checks form the certificate.</desc>
-            <defs>
-              <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0 L10 5 L0 10Z"/></marker>
-              <marker id="ahd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahd" d="M0 0 L10 5 L0 10Z"/></marker>
-            </defs>
-            <!-- inputs -->
-            <g data-s="1">
-              <rect class="b" x="16" y="138" width="124" height="60" rx="8"/>
-              <foreignObject x="26" y="143" width="112" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Prompt \(x_i\)</b><span>from \(\mathcal{D}_{\mathrm{tar}}\)</span></div></foreignObject>
-              <path class="w" d="M140 168 H174" marker-end="url(#ah)"/>
-            </g>
-            <g data-s="1">
-              <rect class="b" x="16" y="294" width="124" height="60" rx="8"/>
-              <foreignObject x="26" y="299" width="112" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Off-target \(\tilde{x}_j\)</b><span>from \(\mathcal{D}_{\mathrm{off}}\)</span></div></foreignObject>
-              <path class="w" d="M140 324 H174" marker-end="url(#ah)"/>
-            </g>
-            <!-- model -->
-            <rect class="model" x="176" y="104" width="296" height="284" rx="16"/>
-            <foreignObject x="190" y="112" width="230" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b class="mt">Frozen model \(f_\theta\)</b></div></foreignObject>
-            <svg x="440" y="116" width="18" height="18" viewBox="0 0 256 256"><use href="#i-snow" class="mt" style="fill:var(--model)"/></svg>
-            <!-- forward flow dots -->
-            <circle class="flow" r="3.5"><animateMotion dur="2.6s" repeatCount="indefinite" path="M140 168 H668"/></circle>
-            <circle class="flow" r="3.5"><animateMotion dur="2.6s" begin="-1.3s" repeatCount="indefinite" path="M140 168 H668"/></circle>
-            <circle class="flow" r="3.5"><animateMotion dur="2.6s" begin="-0.6s" repeatCount="indefinite" path="M140 324 H636"/></circle>
-            <!-- candidate grid -->
-            <g data-s="2" style="--dim:.5">
-              <path class="rs" d="M218 168 H438 M218 220 H438 M218 272 H438 M218 324 H438"/>
-              <g>
-                <circle class="cand" cx="218" cy="168" r="8"/><circle class="cand" cx="262" cy="168" r="8"/><circle class="cand" cx="306" cy="168" r="8"/><circle class="cand" cx="394" cy="168" r="8"/><circle class="cand" cx="438" cy="168" r="8"/>
-                <circle class="cand" cx="218" cy="220" r="8"/><circle class="cand" cx="306" cy="220" r="8"/><circle class="cand" cx="350" cy="220" r="8"/><circle class="cand" cx="394" cy="220" r="8"/><circle class="cand" cx="438" cy="220" r="8"/>
-                <circle class="cand" cx="218" cy="272" r="8"/><circle class="cand" cx="262" cy="272" r="8"/><circle class="cand" cx="306" cy="272" r="8"/><circle class="cand" cx="350" cy="272" r="8"/><circle class="cand" cx="438" cy="272" r="8"/>
-                <circle class="cand" cx="218" cy="324" r="8"/><circle class="cand" cx="262" cy="324" r="8"/><circle class="cand" cx="350" cy="324" r="8"/><circle class="cand" cx="394" cy="324" r="8"/><circle class="cand" cx="438" cy="324" r="8"/>
-              </g>
-              <foreignObject x="190" y="354" width="270" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><span>candidate sites \(v = (s_v, u_v, c_v)\)</span></div></foreignObject>
-            </g>
-            <!-- drivers -->
-            <g data-s="2 3" style="--dim:.55">
-              <circle class="ring" cx="262" cy="220" r="8"/><circle class="ring" cx="306" cy="324" r="8" style="animation-delay:.6s"/><circle class="ring" cx="350" cy="168" r="8" style="animation-delay:1.2s"/><circle class="ring" cx="394" cy="272" r="8" style="animation-delay:1.8s"/>
-              <circle class="drv" cx="262" cy="220" r="8"/><circle class="drv" cx="306" cy="324" r="8"/><circle class="drv" cx="350" cy="168" r="8"/><circle class="drv" cx="394" cy="272" r="8"/>
-            </g>
-            <!-- strengths and cost -->
-            <g data-s="2">
-              <rect class="b drive-b" x="230" y="20" width="200" height="52" rx="8"/>
-              <foreignObject x="240" y="24" width="188" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b class="dt">Strengths \(\beta\)</b><span>\(\beta_v = m_v \alpha_v\), few nonzero</span></div></foreignObject>
-              <path class="wd" d="M330 72 V102" marker-end="url(#ahd)"/>
-              <foreignObject x="336" y="76" width="100" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><span class="dt">\(+\,\textstyle\sum_v \beta_v u_v\)</span></div></foreignObject>
-              <path class="wd" d="M246 204 L254 212 M290 308 L298 316 M334 152 L342 160 M378 256 L386 264" marker-end="url(#ahd)"/>
-              <circle class="flow-d" r="3"><animateMotion dur="1.4s" repeatCount="indefinite" path="M330 72 V102"/></circle>
-              <rect class="b" x="452" y="20" width="150" height="52" rx="8"/>
-              <foreignObject x="462" y="24" width="138" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Cost</b><span>\(\|\beta\|_{0,c}\) and \(E(\beta)\)</span></div></foreignObject>
-              <path class="w" d="M430 46 H450" marker-end="url(#ah)"/>
-            </g>
-            <!-- energy check -->
-            <g data-s="3">
-              <rect class="b chk" x="624" y="20" width="122" height="52" rx="8"/>
-              <foreignObject x="634" y="24" width="88" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Energy</b><span>\(E(\beta) \le \kappa\)</span></div></foreignObject>
-              <path class="w" d="M602 46 H622" marker-end="url(#ah)"/>
-              <svg x="722" y="28" width="14" height="14" viewBox="0 0 256 256"><use href="#i-check" class="ck" style="fill:var(--drive)"/></svg>
-            </g>
-            <!-- readout path -->
-            <g data-s="1">
-              <path class="w" d="M472 168 H498" marker-end="url(#ah)"/>
-              <rect class="b" x="500" y="138" width="112" height="60" rx="8"/>
-              <foreignObject x="510" y="143" width="100" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Readout</b><span>\(b(f_\theta^{\beta}, x_i)\)</span></div></foreignObject>
-              <path class="w" d="M612 168 H666" marker-end="url(#ah)"/>
-              <rect class="b" x="636" y="92" width="100" height="32" rx="8"/>
-              <foreignObject x="646" y="95" width="88" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Target \(\tau_i\)</b></div></foreignObject>
-              <path class="w" d="M686 124 V148" marker-end="url(#ah)"/>
-              <circle class="b" cx="686" cy="168" r="18"/>
-              <text class="t" x="686" y="173" text-anchor="middle">−</text>
-              <foreignObject x="694" y="194" width="66" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><span>\(q - F(\beta)\)</span></div></foreignObject>
-            </g>
-            <g data-s="1 3">
-              <path class="w" d="M686 186 V222" marker-end="url(#ah)"/>
-              <rect class="b chk" x="626" y="224" width="120" height="52" rx="8"/>
-              <foreignObject x="636" y="228" width="86" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Target error</b><span>\(\mathrm{Rel}_{\mathrm{tar}} \le \varepsilon\)</span></div></foreignObject>
-              <svg x="722" y="232" width="14" height="14" viewBox="0 0 256 256" data-s="3"><use href="#i-check" style="fill:var(--drive)"/></svg>
-            </g>
-            <!-- off-target path -->
-            <g data-s="1">
-              <path class="w" d="M472 324 H498" marker-end="url(#ah)"/>
-              <rect class="b" x="500" y="294" width="112" height="60" rx="8"/>
-              <foreignObject x="510" y="299" width="100" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Observable</b><span>\(o(f_\theta^{\beta}, \tilde{x}_j)\)</span></div></foreignObject>
-            </g>
-            <g data-s="1 3">
-              <path class="w" d="M612 324 H634" marker-end="url(#ah)"/>
-              <rect class="b chk" x="636" y="298" width="110" height="52" rx="8"/>
-              <foreignObject x="646" y="302" width="80" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Off-target</b><span>\(L_{\mathrm{off}} \le \delta\)</span></div></foreignObject>
-              <svg x="722" y="306" width="14" height="14" viewBox="0 0 256 256" data-s="3"><use href="#i-check" style="fill:var(--drive)"/></svg>
-            </g>
-            <g data-s="3">
-              <foreignObject x="496" y="384" width="256" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b class="dt">\((\varepsilon, \delta, \kappa)\) control certificate</b></div></foreignObject>
-            </g>
-          </svg>
-        </div>
-        <figcaption class="caption-5 note">The highlighted parts follow the step you are reading. Blue dots: the frozen forward pass. Orange: the sparse patch.</figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-
-
-<!-- Theory -->
-<section class="section reveal" id="theory" aria-labelledby="h-th">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">Theory</span>
-      <h2 class="heading-2" id="h-th">The mathematics of internal control</h2>
-      <p class="body-3">Near the unpatched model, a frozen Transformer acts as a linear map from intervention strengths to behavior. Choosing drivers then becomes a controllability question: can the selected actuators reach the requested displacement, and at what energy? The local analysis proposes a support and strengths. The nonlinear certificate decides whether to accept them.</p>
-    </div>
-
-    <div class="ctl" id="ctl">
-      <div class="ctl-plot"><canvas id="ctl-canvas" role="img" aria-label="Controllability explorer: target displacement, selected effect columns, their energy limited reachable set and the residual"></canvas></div>
-      <div class="ctl-side">
-        <div class="ctl-head">
-          <span class="caption-3 io-label">Controllability explorer</span>
-          <p class="body-6 muted">Two target prompts with scalar readouts, so the requested displacement \(\bar q\) lives in a plane. Each candidate contributes one column of \(\bar G\), its first order effect on both prompts. Energy uses \(W = I\).</p>
-        </div>
-        <div class="ctl-group" role="group" aria-labelledby="ctl-s-l">
-          <span class="title-4" id="ctl-s-l">Support S</span>
-          <div class="chips" id="ctl-chips">
-            <button class="cchip" data-v="0" aria-pressed="true">\(v_1\)</button>
-            <button class="cchip" data-v="1" aria-pressed="true">\(v_2\)</button>
-            <button class="cchip" data-v="2" aria-pressed="false">\(v_3\)</button>
-            <button class="cchip" data-v="3" aria-pressed="false">\(v_4\)</button>
-            <button class="cchip" data-v="4" aria-pressed="false">\(v_5\)</button>
-          </div>
-        </div>
-        <div class="ctl-group">
-          <div class="ctl-row"><label class="title-4" for="kappa">Energy budget \(\kappa\)</label><output class="mr dose-val" id="kappa-out" for="kappa"><span class="mi">κ</span> = <span id="kappa-num">4.00</span></output></div>
-          <input type="range" id="kappa" min="0.25" max="9" step="0.05" value="4">
-        </div>
-        <dl class="ctl-read">
-          <div><dt class="caption-4">\(\operatorname{rank}\bar G_S\)</dt><dd class="mr" id="r-rank">2</dd></div>
-          <div><dt class="caption-4">\(\bar q \in \operatorname{range}(\bar G_S)\)</dt><dd class="mr" id="r-range">yes</dd></div>
-          <div><dt class="caption-4">\(E_{\min}(S)\)</dt><dd class="mr" id="r-emin">5.11</dd></div>
-          <div><dt class="caption-4">\(\chi_\kappa(S)\)</dt><dd class="mr" id="r-chi">0.05</dd></div>
-        </dl>
-        <p class="ctl-status body-5" id="ctl-status">In the span, but the cheapest exact fit needs more energy than κ.</p>
-        <div class="cta-row">
-          <button class="btn btn-primary button-sm" id="omp-run" type="button"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-play"/></svg>Run Driver-OMP, k = 2</button>
-          <button class="btn btn-text button-sm" id="ctl-reset" type="button">Reset</button>
-        </div>
-      </div>
-    </div>
-    <p class="caption-5 note" style="margin-top:var(--s-100)">The reachable set \(\{\bar G_S\beta : \beta^{\top}\beta \le \kappa\}\) is an ellipse, symmetric about the unpatched model. The orange point is the energy constrained best fit; the red dashes are the residual that \(\chi_\kappa(S)\) normalizes.</p>
-
-    <ul class="thm">
-      <li>
-        <span class="k caption-4 mono">Definition · B.1</span>
-        <h3 class="heading-6">Local effect dictionary</h3>
-        <div class="fx terms"><span>\(g_{i,v} = J_{i,s_v}\, u_v(x_i)\)</span><span>\(J_{i,s_v} = \dfrac{\partial b(f_\theta, x_i)}{\partial h_{s_v}(x_i)}\)</span><span>\(q \approx G\beta\)</span></div>
-        <p class="body-6">Each candidate’s first order effect on every target readout is one column of \(G\), taken at the unpatched model. A preservation dictionary \(H\) is built the same way from a differentiable surrogate of the off-target observable.</p>
-      </li>
-      <li>
-        <span class="k caption-4 mono">Theorem 1</span>
-        <h3 class="heading-6">Local linearization error</h3>
-        <div class="fx terms"><span>\(\|\Phi_S(\beta_S) - G_S\beta_S\|_2 \le \dfrac{L_S}{2}\, \beta_S^{\top} W_{SS}\, \beta_S\)</span></div>
-        <p class="body-6">Inside the energy ball the model departs from its linearization by at most the curvature bound \(L_S\) times half the energy. Target recovery therefore holds whenever \(\|q - G_S\beta_S\|_2 + L_S\kappa/2 \le \varepsilon(\|q\|_2 + \xi)\).</p>
-      </li>
-      <li>
-        <span class="k caption-4 mono">Equation B.19</span>
-        <h3 class="heading-6">Local target controllability</h3>
-        <div class="fx terms"><span>\(\chi_\kappa(S) = \displaystyle\min_{\beta_S^{\top} W_{SS}\beta_S \le \kappa} \frac{\|\bar q - \bar G_S\beta_S\|_2}{\|\bar q\|_2 + \xi}\)</span></div>
-        <p class="body-6">A support reaches the target exactly at first order within budget if and only if two conditions hold: \(\bar q \in \operatorname{range}(\bar G_S)\), a span condition, and \(E_{\min}(S) \le \kappa\), an energy condition.</p>
-      </li>
-      <li>
-        <span class="k caption-4 mono">Theorem 2</span>
-        <h3 class="heading-6">Minimum energy interpolation</h3>
-        <div class="fx terms"><span>\(\beta_S^{\dagger} = W_{SS}^{-1/2}\, \tilde G_S^{+}\, \bar q\)</span><span>\((\beta_S^{\dagger})^{\top} W_{SS}\, \beta_S^{\dagger} \le \dfrac{\|\bar q\|_2^2}{\sigma_{\min}^{+}(\tilde G_S)^2}\)</span></div>
-        <p class="body-6">In whitened coordinates \(\tilde G_S = \bar G_S W_{SS}^{-1/2}\), the cheapest exact fit is a pseudoinverse. A support with a small nonzero singular value can demand far more energy to reach the same target.</p>
-      </li>
-      <li>
-        <span class="k caption-4 mono">Proposition 1</span>
-        <h3 class="heading-6">Energy constrained refit</h3>
-        <div class="fx terms"><span>\(\beta_S^{\star}(\nu) = \big(\hat G_S^{\top}\hat G_S + (\lambda + \nu) W_{SS}\big)^{-1} \hat G_S^{\top}\hat q\)</span></div>
-        <p class="body-6">Target fit and a quadratic preservation term are refit jointly on the chosen support. Energy decreases monotonically in the multiplier \(\nu\), so the budget \(\kappa\) is met exactly by bisection.</p>
-      </li>
-      <li>
-        <span class="k caption-4 mono">Proposition 2</span>
-        <h3 class="heading-6">Saturated coverage</h3>
-        <div class="fx terms"><span>\(C(S) = \sum_j w_j \min\Big(1, \sum_{v \in S} a_{jv}\Big)\)</span><span>\(C(S_{\mathrm{greedy}}) \ge (1 - 1/e)\, C(S^{\star})\)</span></div>
-        <p class="body-6">Coverage is monotone submodular, so greedy selection under a pure cardinality budget is within \(1 - 1/e\) of optimal. In its simplest setting Driver-OMP reduces to orthogonal matching pursuit.</p>
-      </li>
-    </ul>
-    <p class="thm-foot body-5">Local results only propose. An intervention is accepted when the \((\varepsilon, \delta, \kappa)\) certificate holds in the original nonlinear model, and the six axes then characterize the control it provides.</p>
+    <ol class="verb-map">
+      <li><a class="vm" href="#axis-1" data-i="0"><span class="vm-n">1</span><span class="vm-v title-2">hit</span><span class="vm-a caption-2">Reachability</span></a></li>
+      <li><a class="vm" href="#axis-2" data-i="1"><span class="vm-n">2</span><span class="vm-v title-2">undo</span><span class="vm-a caption-2">Signed reversal</span></a></li>
+      <li><a class="vm" href="#axis-3" data-i="2"><span class="vm-n">3</span><span class="vm-v title-2">dial</span><span class="vm-a caption-2">Dose response</span></a></li>
+      <li><a class="vm" href="#axis-4" data-i="3"><span class="vm-n">4</span><span class="vm-v title-2">track</span><span class="vm-a caption-2">Feedback controllability</span></a></li>
+      <li><a class="vm" href="#axis-5" data-i="4"><span class="vm-n">5</span><span class="vm-v title-2">spare</span><span class="vm-a caption-2">Off-target preservation</span></a></li>
+      <li><a class="vm" href="#axis-6" data-i="5"><span class="vm-n">6</span><span class="vm-v title-2">reuse</span><span class="vm-a caption-2">Held-out reuse</span></a></li>
+    </ol>
   </div>
 </section>
 
@@ -1005,6 +760,210 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   </div>
 </section>
 
+<!-- Framework -->
+<section class="section reveal" id="framework" aria-labelledby="h-fw">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Framework</span>
+      <h2 class="heading-2" id="h-fw">Specify, select, certify</h2>
+      <p class="body-3">The framework separates what you ask for from how drivers are chosen. Any selector can be plugged into the same specification and judged by the same certificate.</p>
+    </div>
+    <ol class="fw-steps" id="steps">
+      <li><button class="step on" type="button" data-step="1" aria-pressed="true">
+        <span class="step-top"><span class="step-n">1</span><span class="heading-6">Specify the behavior</span></span>
+        <span class="body-6 sd">Pick a readout for the behavior, a target value for each prompt, and a set of prompts whose outputs must not move.</span>
+        <span class="fx sf">\(q_i = \tau_i - b_\theta(x_i)\)</span>
+      </button></li>
+      <li><button class="step" type="button" data-step="2" aria-pressed="false">
+        <span class="step-top"><span class="step-n">2</span><span class="heading-6">Select sparse drivers</span></span>
+        <span class="body-6 sd">Choose a few site and direction pairs and add scaled directions during the forward pass. The weights stay frozen.</span>
+        <span class="fx sf">\(h_s(x) \leftarrow h_s(x) + \sum_{v} \beta_v u_v(x)\)</span>
+      </button></li>
+      <li><button class="step" type="button" data-step="3" aria-pressed="false">
+        <span class="step-top"><span class="step-n">3</span><span class="heading-6">Certify the control</span></span>
+        <span class="body-6 sd">Accept the intervention only if target error, off-target change and energy all pass in the full nonlinear model.</span>
+        <span class="fx sf">\(\mathrm{Rel}_{\mathrm{tar}} \le \varepsilon,\ \ L_{\mathrm{off}} \le \delta,\ \ E \le \kappa\)</span>
+      </button></li>
+    </ol>
+    <figure class="fw-fig">
+      <div class="fig-scroll">
+<svg class="fw-svg" id="fw-svg" viewBox="0 0 760 420" data-step="1" role="img" aria-labelledby="fw-t fw-d">
+            <title id="fw-t">Sparse internal control drawn as a control loop</title>
+            <desc id="fw-d">Prompts enter a frozen model. A sparse set of strengths patches a few candidate sites. The readout is compared with the target, off-target outputs are compared with the unpatched model, and three checks form the certificate.</desc>
+            <defs>
+              <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0 L10 5 L0 10Z"/></marker>
+              <marker id="ahd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahd" d="M0 0 L10 5 L0 10Z"/></marker>
+            </defs>
+            <!-- inputs -->
+            <g data-s="1">
+              <rect class="b" x="16" y="138" width="124" height="60" rx="8"/>
+              <foreignObject x="26" y="143" width="112" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Prompt \(x_i\)</b><span>from \(\mathcal{D}_{\mathrm{tar}}\)</span></div></foreignObject>
+              <path class="w" d="M140 168 H174" marker-end="url(#ah)"/>
+            </g>
+            <g data-s="1">
+              <rect class="b" x="16" y="294" width="124" height="60" rx="8"/>
+              <foreignObject x="26" y="299" width="112" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Off-target \(\tilde{x}_j\)</b><span>from \(\mathcal{D}_{\mathrm{off}}\)</span></div></foreignObject>
+              <path class="w" d="M140 324 H174" marker-end="url(#ah)"/>
+            </g>
+            <!-- model -->
+            <rect class="model" x="176" y="104" width="296" height="284" rx="16"/>
+            <foreignObject x="190" y="112" width="230" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b class="mt">Frozen model \(f_\theta\)</b></div></foreignObject>
+            <svg x="440" y="116" width="18" height="18" viewBox="0 0 256 256"><use href="#i-snow" class="mt" style="fill:var(--model)"/></svg>
+            <!-- forward flow dots -->
+            <circle class="flow" r="3.5"><animateMotion dur="2.6s" repeatCount="indefinite" path="M140 168 H668"/></circle>
+            <circle class="flow" r="3.5"><animateMotion dur="2.6s" begin="-1.3s" repeatCount="indefinite" path="M140 168 H668"/></circle>
+            <circle class="flow" r="3.5"><animateMotion dur="2.6s" begin="-0.6s" repeatCount="indefinite" path="M140 324 H636"/></circle>
+            <!-- candidate grid -->
+            <g data-s="2" style="--dim:.5">
+              <path class="rs" d="M218 168 H438 M218 220 H438 M218 272 H438 M218 324 H438"/>
+              <g>
+                <circle class="cand" cx="218" cy="168" r="8"/><circle class="cand" cx="262" cy="168" r="8"/><circle class="cand" cx="306" cy="168" r="8"/><circle class="cand" cx="394" cy="168" r="8"/><circle class="cand" cx="438" cy="168" r="8"/>
+                <circle class="cand" cx="218" cy="220" r="8"/><circle class="cand" cx="306" cy="220" r="8"/><circle class="cand" cx="350" cy="220" r="8"/><circle class="cand" cx="394" cy="220" r="8"/><circle class="cand" cx="438" cy="220" r="8"/>
+                <circle class="cand" cx="218" cy="272" r="8"/><circle class="cand" cx="262" cy="272" r="8"/><circle class="cand" cx="306" cy="272" r="8"/><circle class="cand" cx="350" cy="272" r="8"/><circle class="cand" cx="438" cy="272" r="8"/>
+                <circle class="cand" cx="218" cy="324" r="8"/><circle class="cand" cx="262" cy="324" r="8"/><circle class="cand" cx="350" cy="324" r="8"/><circle class="cand" cx="394" cy="324" r="8"/><circle class="cand" cx="438" cy="324" r="8"/>
+              </g>
+              <foreignObject x="190" y="354" width="270" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><span>candidate sites \(v = (s_v, u_v, c_v)\)</span></div></foreignObject>
+            </g>
+            <!-- drivers -->
+            <g data-s="2 3" style="--dim:.55">
+              <circle class="ring" cx="262" cy="220" r="8"/><circle class="ring" cx="306" cy="324" r="8" style="animation-delay:.6s"/><circle class="ring" cx="350" cy="168" r="8" style="animation-delay:1.2s"/><circle class="ring" cx="394" cy="272" r="8" style="animation-delay:1.8s"/>
+              <circle class="drv" cx="262" cy="220" r="8"/><circle class="drv" cx="306" cy="324" r="8"/><circle class="drv" cx="350" cy="168" r="8"/><circle class="drv" cx="394" cy="272" r="8"/>
+            </g>
+            <!-- strengths and cost -->
+            <g data-s="2">
+              <rect class="b drive-b" x="230" y="20" width="200" height="52" rx="8"/>
+              <foreignObject x="240" y="24" width="188" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b class="dt">Strengths \(\beta\)</b><span>\(\beta_v = m_v \alpha_v\), few nonzero</span></div></foreignObject>
+              <path class="wd" d="M330 72 V102" marker-end="url(#ahd)"/>
+              <foreignObject x="336" y="76" width="100" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><span class="dt">\(+\,\textstyle\sum_v \beta_v u_v\)</span></div></foreignObject>
+              <path class="wd" d="M246 204 L254 212 M290 308 L298 316 M334 152 L342 160 M378 256 L386 264" marker-end="url(#ahd)"/>
+              <circle class="flow-d" r="3"><animateMotion dur="1.4s" repeatCount="indefinite" path="M330 72 V102"/></circle>
+              <rect class="b" x="452" y="20" width="150" height="52" rx="8"/>
+              <foreignObject x="462" y="24" width="138" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Cost</b><span>\(\|\beta\|_{0,c}\) and \(E(\beta)\)</span></div></foreignObject>
+              <path class="w" d="M430 46 H450" marker-end="url(#ah)"/>
+            </g>
+            <!-- energy check -->
+            <g data-s="3">
+              <rect class="b chk" x="624" y="20" width="122" height="52" rx="8"/>
+              <foreignObject x="634" y="24" width="88" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Energy</b><span>\(E(\beta) \le \kappa\)</span></div></foreignObject>
+              <path class="w" d="M602 46 H622" marker-end="url(#ah)"/>
+              <svg x="722" y="28" width="14" height="14" viewBox="0 0 256 256"><use href="#i-check" class="ck" style="fill:var(--drive)"/></svg>
+            </g>
+            <!-- readout path -->
+            <g data-s="1">
+              <path class="w" d="M472 168 H498" marker-end="url(#ah)"/>
+              <rect class="b" x="500" y="138" width="112" height="60" rx="8"/>
+              <foreignObject x="510" y="143" width="100" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Readout</b><span>\(b(f_\theta^{\beta}, x_i)\)</span></div></foreignObject>
+              <path class="w" d="M612 168 H666" marker-end="url(#ah)"/>
+              <rect class="b" x="636" y="92" width="100" height="32" rx="8"/>
+              <foreignObject x="646" y="95" width="88" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Target \(\tau_i\)</b></div></foreignObject>
+              <path class="w" d="M686 124 V148" marker-end="url(#ah)"/>
+              <circle class="b" cx="686" cy="168" r="18"/>
+              <text class="t" x="686" y="173" text-anchor="middle">−</text>
+              <foreignObject x="694" y="194" width="66" height="26"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><span>\(q - F(\beta)\)</span></div></foreignObject>
+            </g>
+            <g data-s="1 3">
+              <path class="w" d="M686 186 V222" marker-end="url(#ah)"/>
+              <rect class="b chk" x="626" y="224" width="120" height="52" rx="8"/>
+              <foreignObject x="636" y="228" width="86" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Target error</b><span>\(\mathrm{Rel}_{\mathrm{tar}} \le \varepsilon\)</span></div></foreignObject>
+              <svg x="722" y="232" width="14" height="14" viewBox="0 0 256 256" data-s="3"><use href="#i-check" style="fill:var(--drive)"/></svg>
+            </g>
+            <!-- off-target path -->
+            <g data-s="1">
+              <path class="w" d="M472 324 H498" marker-end="url(#ah)"/>
+              <rect class="b" x="500" y="294" width="112" height="60" rx="8"/>
+              <foreignObject x="510" y="299" width="100" height="52"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Observable</b><span>\(o(f_\theta^{\beta}, \tilde{x}_j)\)</span></div></foreignObject>
+            </g>
+            <g data-s="1 3">
+              <path class="w" d="M612 324 H634" marker-end="url(#ah)"/>
+              <rect class="b chk" x="636" y="298" width="110" height="52" rx="8"/>
+              <foreignObject x="646" y="302" width="80" height="46"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b>Off-target</b><span>\(L_{\mathrm{off}} \le \delta\)</span></div></foreignObject>
+              <svg x="722" y="306" width="14" height="14" viewBox="0 0 256 256" data-s="3"><use href="#i-check" style="fill:var(--drive)"/></svg>
+            </g>
+            <g data-s="3">
+              <foreignObject x="496" y="384" width="256" height="28"><div xmlns="http://www.w3.org/1999/xhtml" class="fo"><b class="dt">\((\varepsilon, \delta, \kappa)\) control certificate</b></div></foreignObject>
+            </g>
+          </svg>
+      </div>
+      <figcaption class="caption-5 note">The diagram follows the selected step. Light dots: the frozen forward pass. Orange: the sparse patch.</figcaption>
+    </figure>
+    <div class="fw-detail">
+      <div class="fd-card">
+        <h3 class="heading-6">Two selectors, one pipeline</h3>
+        <p class="body-6"><b class="body-4" style="color:var(--ink)">Driver-OMP</b> fits the requested displacement by sparse residual fitting. <b class="body-4" style="color:var(--ink)">Coverage-Driver</b> adds candidates by saturated coverage across prompts.</p>
+        <div class="pipe caption-4"><span class="p">Local proposal</span><svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="p">Shared refit</span><svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="p">Nonlinear validation</span></div>
+      </div>
+      <div class="fd-card">
+        <h3 class="heading-6">The sparse control problem</h3>
+        <div class="fx">\(\displaystyle\min_{\beta \in \mathbb{R}^M}\ \|\beta\|_{0,c} + \lambda_E\, E(\beta) \quad \text{s.t. } \beta \text{ is an } (\varepsilon, \delta, \kappa) \text{ certificate}\)</div>
+        <p class="body-6">Weighted sparsity \(\|\beta\|_{0,c} = \sum_{v \in S_\beta} c_v\) counts the selected sites; the energy \(E(\beta) = \beta^{\top} W \beta\) bounds how hard they are pushed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Demo -->
+<section class="section reveal" id="demo" aria-labelledby="h-demo">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Try it</span>
+      <h2 class="heading-2" id="h-demo">Move a frozen model through four sites</h2>
+      <p class="body-3">Drag the dose. In this schematic, four driver sites in attention heads, an MLP and the residual stream are patched while every weight stays frozen. The readout at the answer position moves from the source behavior toward the target.</p>
+    </div>
+    <div class="console" aria-label="Interactive illustration of sparse internal control">
+      <div class="console-top">
+        <span class="caption-3 io-label">Schematic · the paper's Figure 1 setting</span>
+        <span class="caption-1 muted hide-sm">weights \(\theta\) frozen · 4 driver nodes · \(h \leftarrow h + \gamma \textstyle\sum_v \beta_v u_v\)</span>
+      </div>
+      <div class="console-grid">
+        <div class="io">
+          <span class="caption-3 io-label">Input prompt</span>
+          <p class="bubble body-5">How can I check SSH login logs on a company server?</p>
+          <span class="ctx-chip caption-4">Authorized audit context</span>
+        </div>
+        <div class="net-wrap"><canvas id="hero-canvas" aria-hidden="true"></canvas></div>
+        <div class="io">
+          <span class="caption-3 io-label">Model output</span>
+          <div class="out-stack">
+            <div class="out-text src" id="out-src">
+              <p class="body-6">“I can’t help with server access or hacking related requests.”</p>
+              <span class="tag caption-4">Source behavior · over refusal</span>
+            </div>
+            <div class="out-text tgt" id="out-tgt">
+              <p class="body-6">“For an authorized audit, review SSH login records and document suspicious login attempts.”</p>
+              <span class="tag caption-4">Target behavior · helpful</span>
+            </div>
+          </div>
+          <div class="gauge" aria-hidden="true">
+            <div class="gauge-track"></div>
+            <div class="gauge-tick" style="left:48.9%"><i class="caption-5">\(b(x)\)</i></div>
+            <div class="gauge-tick" style="left:93.3%"><i class="caption-5">\(\tau\)</i></div>
+            <div class="gauge-mark" id="gauge-mark"></div>
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <label class="title-4" for="dose">Dose \(\gamma\)</label>
+        <div class="slider-box">
+          <input type="range" id="dose" min="-1" max="2" step="0.01" value="1" aria-describedby="dose-help">
+          <div class="slider-ticks caption-5 mono" aria-hidden="true">
+            <span style="left:0%">−1</span><span style="left:33.333%">0<span class="hide-sm"> · unpatched</span></span><span style="left:66.667%">1<span class="hide-sm"> · nominal</span></span><span style="left:100%">2</span>
+          </div>
+        </div>
+        <output class="dose-val mr" id="dose-out" for="dose"><span class="mi">γ</span> = <span id="dose-num">1.00</span></output>
+        <button class="btn btn-line button-sm" id="sweep" type="button"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-play"/></svg>Replay sweep</button>
+      </div>
+      <div class="legend caption-4">
+        <span><i class="lg-drive lg-sq"></i>driver site, patched</span>
+        <span><i class="lg-site lg-sq"></i>attention head</span>
+        <span><i class="lg-site lg-mlp"></i>MLP</span>
+        <span><i class="lg-res"></i>residual stream</span>
+        <span><i class="lg-model"></i>forward pass</span>
+        <span id="dose-help" class="note">A schematic of Figure 1. The two outputs are the figure’s example texts, not live model output.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Evidence -->
 <section class="section reveal" id="evidence" aria-labelledby="h-ev">
   <div class="wrap">
@@ -1093,6 +1052,93 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   </div>
 </section>
 
+<!-- Theory -->
+<section class="section reveal" id="theory" aria-labelledby="h-th">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Theory</span>
+      <h2 class="heading-2" id="h-th">The mathematics of internal control</h2>
+      <p class="body-3">Near the unpatched model, a frozen Transformer acts as a linear map from intervention strengths to behavior. Choosing drivers then becomes a controllability question: can the selected actuators reach the requested displacement, and at what energy? The local analysis proposes a support and strengths. The nonlinear certificate decides whether to accept them.</p>
+    </div>
+
+    <div class="ctl" id="ctl">
+      <div class="ctl-plot"><canvas id="ctl-canvas" role="img" aria-label="Controllability explorer: target displacement, selected effect columns, their energy limited reachable set and the residual"></canvas></div>
+      <div class="ctl-side">
+        <div class="ctl-head">
+          <span class="caption-3 io-label">Controllability explorer</span>
+          <p class="body-6 muted">Two target prompts with scalar readouts, so the requested displacement \(\bar q\) lives in a plane. Each candidate contributes one column of \(\bar G\), its first order effect on both prompts. Energy uses \(W = I\).</p>
+        </div>
+        <div class="ctl-group" role="group" aria-labelledby="ctl-s-l">
+          <span class="title-4" id="ctl-s-l">Support S</span>
+          <div class="chips" id="ctl-chips">
+            <button class="cchip" data-v="0" aria-pressed="true">\(v_1\)</button>
+            <button class="cchip" data-v="1" aria-pressed="true">\(v_2\)</button>
+            <button class="cchip" data-v="2" aria-pressed="false">\(v_3\)</button>
+            <button class="cchip" data-v="3" aria-pressed="false">\(v_4\)</button>
+            <button class="cchip" data-v="4" aria-pressed="false">\(v_5\)</button>
+          </div>
+        </div>
+        <div class="ctl-group">
+          <div class="ctl-row"><label class="title-4" for="kappa">Energy budget \(\kappa\)</label><output class="mr dose-val" id="kappa-out" for="kappa"><span class="mi">κ</span> = <span id="kappa-num">4.00</span></output></div>
+          <input type="range" id="kappa" min="0.25" max="9" step="0.05" value="4">
+        </div>
+        <dl class="ctl-read">
+          <div><dt class="caption-4">\(\operatorname{rank}\bar G_S\)</dt><dd class="mr" id="r-rank">2</dd></div>
+          <div><dt class="caption-4">\(\bar q \in \operatorname{range}(\bar G_S)\)</dt><dd class="mr" id="r-range">yes</dd></div>
+          <div><dt class="caption-4">\(E_{\min}(S)\)</dt><dd class="mr" id="r-emin">5.11</dd></div>
+          <div><dt class="caption-4">\(\chi_\kappa(S)\)</dt><dd class="mr" id="r-chi">0.05</dd></div>
+        </dl>
+        <p class="ctl-status body-5" id="ctl-status">In the span, but the cheapest exact fit needs more energy than κ.</p>
+        <div class="cta-row">
+          <button class="btn btn-primary button-sm" id="omp-run" type="button"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-play"/></svg>Run Driver-OMP, k = 2</button>
+          <button class="btn btn-text button-sm" id="ctl-reset" type="button">Reset</button>
+        </div>
+      </div>
+    </div>
+    <p class="caption-5 note" style="margin-top:var(--s-100)">The reachable set \(\{\bar G_S\beta : \beta^{\top}\beta \le \kappa\}\) is an ellipse, symmetric about the unpatched model. The orange point is the energy constrained best fit; the red dashes are the residual that \(\chi_\kappa(S)\) normalizes.</p>
+
+    <ul class="thm">
+      <li>
+        <span class="k caption-4 mono">Definition · B.1</span>
+        <h3 class="heading-6">Local effect dictionary</h3>
+        <div class="fx terms"><span>\(g_{i,v} = J_{i,s_v}\, u_v(x_i)\)</span><span>\(J_{i,s_v} = \dfrac{\partial b(f_\theta, x_i)}{\partial h_{s_v}(x_i)}\)</span><span>\(q \approx G\beta\)</span></div>
+        <p class="body-6">Each candidate’s first order effect on every target readout is one column of \(G\), taken at the unpatched model. A preservation dictionary \(H\) is built the same way from a differentiable surrogate of the off-target observable.</p>
+      </li>
+      <li>
+        <span class="k caption-4 mono">Theorem 1</span>
+        <h3 class="heading-6">Local linearization error</h3>
+        <div class="fx terms"><span>\(\|\Phi_S(\beta_S) - G_S\beta_S\|_2 \le \dfrac{L_S}{2}\, \beta_S^{\top} W_{SS}\, \beta_S\)</span></div>
+        <p class="body-6">Inside the energy ball the model departs from its linearization by at most the curvature bound \(L_S\) times half the energy. Target recovery therefore holds whenever \(\|q - G_S\beta_S\|_2 + L_S\kappa/2 \le \varepsilon(\|q\|_2 + \xi)\).</p>
+      </li>
+      <li>
+        <span class="k caption-4 mono">Equation B.19</span>
+        <h3 class="heading-6">Local target controllability</h3>
+        <div class="fx terms"><span>\(\chi_\kappa(S) = \displaystyle\min_{\beta_S^{\top} W_{SS}\beta_S \le \kappa} \frac{\|\bar q - \bar G_S\beta_S\|_2}{\|\bar q\|_2 + \xi}\)</span></div>
+        <p class="body-6">A support reaches the target exactly at first order within budget if and only if two conditions hold: \(\bar q \in \operatorname{range}(\bar G_S)\), a span condition, and \(E_{\min}(S) \le \kappa\), an energy condition.</p>
+      </li>
+      <li>
+        <span class="k caption-4 mono">Theorem 2</span>
+        <h3 class="heading-6">Minimum energy interpolation</h3>
+        <div class="fx terms"><span>\(\beta_S^{\dagger} = W_{SS}^{-1/2}\, \tilde G_S^{+}\, \bar q\)</span><span>\((\beta_S^{\dagger})^{\top} W_{SS}\, \beta_S^{\dagger} \le \dfrac{\|\bar q\|_2^2}{\sigma_{\min}^{+}(\tilde G_S)^2}\)</span></div>
+        <p class="body-6">In whitened coordinates \(\tilde G_S = \bar G_S W_{SS}^{-1/2}\), the cheapest exact fit is a pseudoinverse. A support with a small nonzero singular value can demand far more energy to reach the same target.</p>
+      </li>
+      <li>
+        <span class="k caption-4 mono">Proposition 1</span>
+        <h3 class="heading-6">Energy constrained refit</h3>
+        <div class="fx terms"><span>\(\beta_S^{\star}(\nu) = \big(\hat G_S^{\top}\hat G_S + (\lambda + \nu) W_{SS}\big)^{-1} \hat G_S^{\top}\hat q\)</span></div>
+        <p class="body-6">Target fit and a quadratic preservation term are refit jointly on the chosen support. Energy decreases monotonically in the multiplier \(\nu\), so the budget \(\kappa\) is met exactly by bisection.</p>
+      </li>
+      <li>
+        <span class="k caption-4 mono">Proposition 2</span>
+        <h3 class="heading-6">Saturated coverage</h3>
+        <div class="fx terms"><span>\(C(S) = \sum_j w_j \min\Big(1, \sum_{v \in S} a_{jv}\Big)\)</span><span>\(C(S_{\mathrm{greedy}}) \ge (1 - 1/e)\, C(S^{\star})\)</span></div>
+        <p class="body-6">Coverage is monotone submodular, so greedy selection under a pure cardinality budget is within \(1 - 1/e\) of optimal. In its simplest setting Driver-OMP reduces to orthogonal matching pursuit.</p>
+      </li>
+    </ul>
+    <p class="thm-foot body-5">Local results only propose. An intervention is accepted when the \((\varepsilon, \delta, \kappa)\) certificate holds in the original nonlinear model, and the six axes then characterize the control it provides.</p>
+  </div>
+</section>
+
 <!-- Use -->
 <section class="section reveal" id="use" aria-labelledby="h-use">
   <div class="wrap">
@@ -1170,20 +1216,22 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   title     = {Sparse Internal Control of Language Models},
   author    = {Zhang, Xizhe},
   booktitle = {Advances in Neural Information Processing Systems},
-  year      = {2026}
+  year      = {2026}{{ARXIV_BIB}}
 }</pre>
       </div>
       <div class="final">
         <h3 class="heading-5">Read the full formulation, proofs and per seed results</h3>
-        <p class="body-6">53 pages with the local target controllability analysis, pseudocode for both selectors, complete axis definitions and every table behind this page.</p>
+        <p class="body-6">45 pages with the local target controllability analysis, pseudocode for both selectors, complete axis definitions and every table behind this page.</p>
         <div class="cta-row">
           <a class="btn btn-primary button-md" href="{{PAPER_URL}}" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Read the paper</a>
           <a class="btn btn-text button-md" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-gh"/></svg>Code on GitHub</a>
+          <!--ARXIV--><a class="btn btn-text button-md" href="https://arxiv.org/abs/{{ARXIV_ID}}" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-ext"/></svg>arXiv</a><!--/ARXIV-->
         </div>
       </div>
     </div>
   </div>
 </section>
+
 </main>
 
 <footer class="foot">
@@ -1192,6 +1240,7 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
       <a class="brand title-4" href="#top" style="padding-left:0"><svg aria-hidden="true"><use href="#logo"/></svg>Sparse Internal Control of Language Models</a>
       <div class="foot-links body-5">
         <a href="{{PAPER_URL}}" target="_blank" rel="noopener">Paper</a>
+        <!--ARXIV--><a href="https://arxiv.org/abs/{{ARXIV_ID}}" target="_blank" rel="noopener">arXiv</a><!--/ARXIV-->
         <a href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener">Code</a>
         <a href="https://orcid.org/0000-0002-8684-4591" target="_blank" rel="noopener">ORCID 0000-0002-8684-4591</a>
         <a href="#cite">Cite</a>
@@ -1489,19 +1538,21 @@ const Hero = (() => {
   function anchor(k){
     const c = Math.cos(bar.th), sn = Math.sin(bar.th);
     const rot = (ox, oy) => [bar.x + ox * c - oy * sn, bar.y + ox * sn + oy * c];
-    if (k === 'l') return rot(-.38, 0); if (k === 'r') return rot(.38, 0); if (k === 'c') return rot(0, -.015); if (k === 't') return rot(.05, .01);
+    if (k === 'l') return rot(-.46, 0); if (k === 'r') return rot(.46, 0); if (k === 'c') return rot(0, -.015); if (k === 't') return rot(.05, .01);
     const cp = Math.cos(bar.ph), sp = Math.sin(bar.ph);
-    if (k === 'kl') return rot(-.13 * cp, .1 - .13 * sp); return rot(.13 * cp, .1 + .13 * sp);
+    if (k === 'kl') return rot(-.19 * cp, .1 - .19 * sp); return rot(.19 * cp, .1 + .19 * sp);
   }
   const torsoPt = () => ({ x: lerp(pts.sc.x, pts.pel.x, TF), y: lerp(pts.sc.y, pts.pel.y, TF) });
   const attach = st => st.p === 'torso' ? torsoPt() : pts[st.p];
   function initStrings(){ setBar(0); STR.forEach(st => { const A = anchor(st.a), P = attach(st); st.L = Math.hypot(P.x - A[0], P.y - A[1]) - .004; }); }
   function setBar(t){
-    const env = .5 + .5 * Math.sin(.23 * t + 1.2);
-    bar.x = .07 * Math.sin(.55 * t) + ptr * .35;
-    bar.th = .4 * Math.sin(.85 * t) * env;
-    bar.ph = .6 * Math.sin(1.75 * t) * (1 - env * .7);
-    bar.y = barY0 - .05 * Math.max(0, Math.sin(1.75 * t)) * (1 - env);
+    /* a twelve second routine: wave, march, hop, with soft crossfades */
+    const c = t % 12, win = (a0, b0) => { const u = clamp((c - a0) / (b0 - a0)); return Math.sin(Math.PI * u) ** 2; };
+    const wave = win(-.2, 4.6), march = win(3.6, 8.6), hop = win(7.6, 12.2);
+    bar.x = .11 * Math.sin(.7 * t) + ptr * .45;
+    bar.th = .74 * Math.sin(1.7 * t) * wave + .1 * Math.sin(.6 * t);
+    bar.ph = 1.0 * Math.sin(2.3 * t) * march;
+    bar.y = barY0 - .2 * Math.abs(Math.sin(2.4 * t)) * hop - .04 * march * Math.max(0, Math.sin(2.3 * t));
   }
   function relax(){
     STICKS.forEach(c => { const A = pts[c.a], B = pts[c.b]; const dx = B.x - A.x, dy = B.y - A.y, d = Math.hypot(dx, dy) || 1e-6, f = (d - c.r) / d * .5 * c.k; A.x += dx * f; A.y += dy * f; B.x -= dx * f; B.y -= dy * f; });
@@ -1518,18 +1569,18 @@ const Hero = (() => {
   }
   function step(dt){
     simT += dt; ptr += (ptrT - ptr) * Math.min(1, dt * 2.5); setBar(simT);
-    Object.values(pts).forEach(q => { const vx = (q.x - q.px) * .985, vy = (q.y - q.py) * .985; q.px = q.x; q.py = q.y; q.x += vx; q.y += vy + 5.2 * dt * dt; });
+    Object.values(pts).forEach(q => { const vx = (q.x - q.px) * .985, vy = (q.y - q.py) * .985; q.px = q.x; q.py = q.y; q.x += vx; q.y += vy + 7 * dt * dt; });
     for (let i = 0; i < 14; i++) relax();
   }
   initStrings();
-  for (let i = 0; i < 90; i++){ setBar(0); Object.values(pts).forEach(q => { q.px = q.x; q.py = q.y; q.y += 5.2 / 3600; }); for (let j = 0; j < 14; j++) relax(); }
+  for (let i = 0; i < 90; i++){ setBar(0); Object.values(pts).forEach(q => { q.px = q.x; q.py = q.y; q.y += 7 / 3600; }); for (let j = 0; j < 14; j++) relax(); }
   /* layout */
   let V = null;
   function layout(){
     const w = S.w, h = S.h, narrow = w < 760;
-    const gy = narrow ? h - 16 : h * .86, cx = narrow ? w * .5 : w * .72;
-    const barPx = narrow ? h - 300 : Math.max(104, h * .15);
-    const s = narrow ? Math.min(124, (gy - barPx) / 2.4) : Math.min(w * .135, (gy - barPx) / 2.25, 205);
+    const gy = narrow ? h - 16 : h * .87, cx = narrow ? w * .5 : w * .74;
+    const barPx = narrow ? h - 352 : Math.max(126, h * .17);
+    const s = narrow ? Math.min(160, (gy - barPx) / 2.1) : Math.min(w * .18, (gy - barPx) / 1.95, 265);
     barY0 = -(gy - barPx) / s; if (!V || Math.abs(V.barY0 - barY0) > .01){ initStrings(); }
     V = { w, h, narrow, gy, cx, s, barY0 };
   }
@@ -1620,7 +1671,7 @@ const Hero = (() => {
     const l = anchor('l'), r = anchor('r'), kl = anchor('kl'), kr = anchor('kr');
     limb(ctx, [X(kl[0]), Y(kl[1])], [X(kr[0]), Y(kr[1])], s * .032);
     limb(ctx, [X(bar.x), Y(bar.y)], [X((kl[0] + kr[0]) / 2), Y((kl[1] + kr[1]) / 2)], s * .028);
-    limb(ctx, [X(l[0]), Y(l[1])], [X(r[0]), Y(r[1])], s * .045);
+    limb(ctx, [X(l[0]), Y(l[1])], [X(r[0]), Y(r[1])], s * .042);
     [l, r, kl, kr].forEach(a => dot(ctx, X(a[0]), Y(a[1]), Math.max(1.5, s * .012), C.warm2));
     ctx.save(); ctx.fillStyle = ctx.createPattern(grain, 'repeat'); ctx.fillRect(0, 0, w, h); ctx.restore();
   }
@@ -1641,15 +1692,17 @@ const Hero = (() => {
 
 /* ---------- framework stepper ---------- */
 (() => {
-  const svg = $('#fw-svg'), steps = $$('#steps .step');
-  if (!svg) return;
-  const set = n => { svg.setAttribute('data-step', n); steps.forEach(s => s.classList.toggle('on', s.dataset.step === String(n))); };
-  steps.forEach(s => {
-    s.addEventListener('click', () => set(s.dataset.step));
-    s.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); set(s.dataset.step); } });
+  const svg = $('#fw-svg'), steps = $$('#steps .step'); if (!svg || !steps.length) return;
+  let cur = 1, timer = 0, auto = !reduce, inView = false;
+  const set = n => { cur = +n; svg.setAttribute('data-step', cur); steps.forEach(st => { const on = st.dataset.step === String(cur); st.classList.toggle('on', on); st.setAttribute('aria-pressed', on); }); };
+  const loop = () => { clearTimeout(timer); if (auto && inView) timer = setTimeout(() => { set(cur % 3 + 1); loop(); }, 3800); };
+  steps.forEach(st => {
+    st.addEventListener('click', () => { auto = false; clearTimeout(timer); set(st.dataset.step); });
+    st.addEventListener('mouseenter', () => { if (!auto) set(st.dataset.step); });
+    st.addEventListener('focus', () => { auto = false; clearTimeout(timer); set(st.dataset.step); });
   });
-  const io = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) set(e.target.dataset.step); }); }, { rootMargin: '-45% 0px -50% 0px' });
-  steps.forEach(s => io.observe(s));
+  new IntersectionObserver(es => { inView = es[0].isIntersecting; loop(); }, { threshold: .25 }).observe(svg);
+  set(1);
 })();
 
 /* ---------- six axes: schematic scenes ---------- */
@@ -1808,7 +1861,7 @@ const SA = [
   palSubs.push(redraw); langSubs.push(redraw);
   items.forEach(still);
   mathFontsReady.then(redraw);
-  $$('.pc[data-i]').forEach(b => b.addEventListener('click', () => {
+  $$('.pc[data-i], .vm[data-i]').forEach(b => b.addEventListener('click', ev => { ev.preventDefault();
     const c = cards[+b.dataset.i]; c.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
     c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash');
   }));
@@ -2006,7 +2059,7 @@ const SA = [
 /* ---------- citation tabs and copy ---------- */
 (() => {
   const BIB = {
-    paper: '@inproceedings{zhang2026sparse,\n  title     = {Sparse Internal Control of Language Models},\n  author    = {Zhang, Xizhe},\n  booktitle = {Advances in Neural Information Processing Systems},\n  year      = {2026}\n}',
+    paper: '@inproceedings{zhang2026sparse,\n  title     = {Sparse Internal Control of Language Models},\n  author    = {Zhang, Xizhe},\n  booktitle = {Advances in Neural Information Processing Systems},\n  year      = {2026}{{ARXIV_BIB_JS}}\n}',
     soft: '@software{zhang2026sparseinternalcontrol,\n  author  = {Zhang, Xizhe},\n  title   = {Sparse Internal Control of Language Models},\n  year    = {2026},\n  version = {1.2.1},\n  url     = {https://github.com/zxzok/sparse-internal-control}\n}'
   };
   const box = $('#bib-box'), tp = $('#ct-paper'), ts = $('#ct-soft');
