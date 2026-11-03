@@ -168,6 +168,8 @@ def main():
         f"<url><loc>{URL}</loc></url><url><loc>{URL}theory.html</loc></url></urlset>\n", encoding="utf-8")
     if (ROOT / "assets" / "og.png").exists():
         shutil.copyfile(ROOT / "assets" / "og.png", SITE / "og.png")
+    if (ROOT / "assets" / "readme").is_dir():
+        shutil.copytree(ROOT / "assets" / "readme", SITE / "readme")
     if PAPER_PDF and PAPER_PDF.exists():
         shutil.copyfile(PAPER_PDF, SITE / "paper.pdf")
     print("built", sorted(p.name for p in SITE.iterdir()))
