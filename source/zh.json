@@ -261,5 +261,12 @@
 "adds candidates by saturated coverage across prompts.": " 依据跨提示的饱和覆盖逐个加入候选。",
 "The sparse control problem": "稀疏控制问题",
 "Weighted sparsity \\(\\|\\beta\\|_{0,c} = \\sum_{v \\in S_\\beta} c_v\\) counts the selected sites; the energy \\(E(\\beta) = \\beta^{\\top} W \\beta\\) bounds how hard they are pushed.": "加权稀疏度 \\(\\|\\beta\\|_{0,c} = \\sum_{v \\in S_\\beta} c_v\\) 计入所选位点；能量 \\(E(\\beta) = \\beta^{\\top} W \\beta\\) 限制推动的力度。",
-"45 pages with the local target controllability analysis, pseudocode for both selectors, complete axis definitions and every table behind this page.": "共 45 页，包含局部目标可控性分析、两种选择器的伪代码、六轴的完整定义，以及本页背后的全部表格。"
+"45 pages with the local target controllability analysis, pseudocode for both selectors, complete axis definitions and every table behind this page.": "共 45 页，包含局部目标可控性分析、两种选择器的伪代码、六轴的完整定义，以及本页背后的全部表格。",
+"Every axis reads the same patched model \\(f_\\theta^{\\gamma\\beta}\\) with the sites, strengths and directions fixed. Only the dose \\(\\gamma\\) and the inputs change.": "六个轴读取的都是同一个干预后的模型 \\(f_\\theta^{\\gamma\\beta}\\)：位点、强度和方向保持不变，变化的只有剂量 \\(\\gamma\\) 与输入。",
+"\\(\\gamma = 1\\) · target prompts": "\\(\\gamma = 1\\) · 目标提示",
+"\\(-\\beta\\) on the target input \\(x^{c}\\)": "在目标输入 \\(x^{c}\\) 上施加 \\(-\\beta\\)",
+"ten doses \\(\\gamma \\in \\Gamma\\) · target prompts": "十个剂量 \\(\\gamma \\in \\Gamma\\) · 目标提示",
+"\\(\\gamma_t\\) from feedback · target prompts": "由反馈给出 \\(\\gamma_t\\) · 目标提示",
+"\\(\\gamma = 1\\) · off-target prompts": "\\(\\gamma = 1\\) · 非目标提示",
+"\\(\\gamma = 1\\) · unseen prompts": "\\(\\gamma = 1\\) · 未见提示"
 }

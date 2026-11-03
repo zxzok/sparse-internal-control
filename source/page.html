@@ -468,6 +468,13 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 .fd-card{display:grid; gap:var(--s-100); align-content:start; padding:var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
 .fd-card p{color:var(--muted)}
 
+
+/* Six axes header, merged */
+.ax-head{display:grid; gap:var(--s-200); max-width:52rem}
+.ax-head .tagline-p{max-width:none}
+.ax-verb{color:var(--drive-ink); letter-spacing:.08em; text-transform:uppercase}
+.ax-probe{justify-self:start; margin-inline:var(--s-100); padding:var(--s-25) var(--s-100); border:1px solid var(--line-strong); border-radius:var(--r-full); color:var(--muted)}
+
 /* Responsive */
 @media (max-width:1100px){
   .verb-map{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -551,9 +558,9 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   <nav class="nav" aria-label="Primary">
     <a class="brand title-4" href="#top" aria-label="Sparse internal control, back to top"><svg aria-hidden="true"><use href="#logo"/></svg>Sparse control</a>
     <div class="nav-links body-5">
-      <a href="#axes">Six axes</a>
-      <a href="#framework">Framework</a>
       <a href="#demo">Try it</a>
+      <a href="#framework">Framework</a>
+      <a href="#axes">Six axes</a>
       <a href="#evidence">Results</a>
       <a href="#theory">Theory</a>
     </div>
@@ -563,9 +570,9 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   </nav>
   <div class="menu" id="menu" aria-hidden="true">
     <ul class="heading-5">
-      <li><a class="m-link" href="#axes">Six axes</a></li>
-      <li><a class="m-link" href="#framework">Framework</a></li>
       <li><a class="m-link" href="#demo">Try it</a></li>
+      <li><a class="m-link" href="#framework">Framework</a></li>
+      <li><a class="m-link" href="#axes">Six axes</a></li>
       <li><a class="m-link" href="#evidence">Results</a></li>
       <li><a class="m-link" href="#theory">Theory</a></li>
       <li><a class="m-link" href="#use">Use it</a></li>
@@ -632,131 +639,66 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   </div>
 </section>
 
-<!-- Tagline -->
-<section class="tagline" id="why" aria-label="Why six axes">
-  <div class="wrap tg-wrap">
-    <span class="eyebrow">Why six axes</span>
-    <p class="heading-3 tagline-p no-i18n" data-only="en">One push is a demo. Control means you can <span class="k">hit</span> a target, <span class="k">undo</span> it, <span class="k">dial</span> it, <span class="k">track</span> it, <span class="k">spare</span> everything else, and <span class="k">reuse</span> it on prompts you have never seen.</p>
-    <p class="heading-3 tagline-p no-i18n" data-only="zh">推动一次只是演示。控制意味着你能<span class="k">命中</span>目标、<span class="k">撤销</span>它、<span class="k">调节</span>它、<span class="k">跟踪</span>它、<span class="k">不扰动</span>其余一切，并在从未见过的提示上<span class="k">复用</span>它。</p>
-    <ol class="verb-map">
-      <li><a class="vm" href="#axis-1" data-i="0"><span class="vm-n">1</span><span class="vm-v title-2">hit</span><span class="vm-a caption-2">Reachability</span></a></li>
-      <li><a class="vm" href="#axis-2" data-i="1"><span class="vm-n">2</span><span class="vm-v title-2">undo</span><span class="vm-a caption-2">Signed reversal</span></a></li>
-      <li><a class="vm" href="#axis-3" data-i="2"><span class="vm-n">3</span><span class="vm-v title-2">dial</span><span class="vm-a caption-2">Dose response</span></a></li>
-      <li><a class="vm" href="#axis-4" data-i="3"><span class="vm-n">4</span><span class="vm-v title-2">track</span><span class="vm-a caption-2">Feedback controllability</span></a></li>
-      <li><a class="vm" href="#axis-5" data-i="4"><span class="vm-n">5</span><span class="vm-v title-2">spare</span><span class="vm-a caption-2">Off-target preservation</span></a></li>
-      <li><a class="vm" href="#axis-6" data-i="5"><span class="vm-n">6</span><span class="vm-v title-2">reuse</span><span class="vm-a caption-2">Held-out reuse</span></a></li>
-    </ol>
-  </div>
-</section>
-
-<!-- Six axes -->
-<section class="section reveal" id="axes" aria-labelledby="h-axes">
+<!-- Demo -->
+<section class="section reveal" id="demo" aria-labelledby="h-demo">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">Evaluation protocol</span>
-      <h2 class="heading-2" id="h-axes">Six axes of control</h2>
-      <p class="body-3">Target recovery at a single dose describes one property of an intervention. The protocol fixes the support \(S\), the base strengths \(\beta_S\) and the direction rule \(u_v(x)\), then asks six separate questions of the patched model. Each axis has an operational definition and a quantitative readout, so interventions built by different methods can be compared on equal terms.</p>
+      <span class="eyebrow">Try it</span>
+      <h2 class="heading-2" id="h-demo">Move a frozen model through four sites</h2>
+      <p class="body-3">Drag the dose. In this schematic, four driver sites in attention heads, an MLP and the residual stream are patched while every weight stays frozen. The readout at the answer position moves from the source behavior toward the target.</p>
     </div>
-
-    <div class="pmap">
-      <div class="pmap-eq">
-        <span class="caption-3 io-label">One object, six probes</span>
-        <div class="fx">\(f_\theta^{\gamma\beta}:\quad h_s(x) \leftarrow h_s(x) + \gamma \sum_{v:\,s_v = s} \beta_v u_v(x)\)</div>
-        <p class="body-6 muted">The support \(S\), base strengths \(\beta_S\) and direction rule stay fixed. Every axis reads this one dose family; what changes is the dose \(\gamma\) and the inputs it is read on. \(\gamma = 0\) is the unpatched model and \(\gamma = 1\) the nominal dose.</p>
+    <div class="console" aria-label="Interactive illustration of sparse internal control">
+      <div class="console-top">
+        <span class="caption-3 io-label">Schematic · the paper's Figure 1 setting</span>
+        <span class="caption-1 muted hide-sm">weights \(\theta\) frozen · 4 driver nodes · \(h \leftarrow h + \gamma \textstyle\sum_v \beta_v u_v\)</span>
       </div>
-      <div class="pmap-scroll">
-        <div class="pmap-grid" role="table" aria-label="Where each axis probes the dose family">
-          <div role="row" class="pr">
-            <span role="columnheader" class="ph"></span>
-            <span role="columnheader" class="ph caption-1">\(\gamma = 1\)</span>
-            <span role="columnheader" class="ph caption-1">\(-\beta\) on \(x^{c}\)</span>
-            <span role="columnheader" class="ph caption-1">\(\gamma \in \Gamma\), ten doses</span>
-            <span role="columnheader" class="ph caption-1">\(\gamma_t\) from feedback</span>
+      <div class="console-grid">
+        <div class="io">
+          <span class="caption-3 io-label">Input prompt</span>
+          <p class="bubble body-5">How can I check SSH login logs on a company server?</p>
+          <span class="ctx-chip caption-4">Authorized audit context</span>
+        </div>
+        <div class="net-wrap"><canvas id="hero-canvas" aria-hidden="true"></canvas></div>
+        <div class="io">
+          <span class="caption-3 io-label">Model output</span>
+          <div class="out-stack">
+            <div class="out-text src" id="out-src">
+              <p class="body-6">“I can’t help with server access or hacking related requests.”</p>
+              <span class="tag caption-4">Source behavior · over refusal</span>
+            </div>
+            <div class="out-text tgt" id="out-tgt">
+              <p class="body-6">“For an authorized audit, review SSH login records and document suspicious login attempts.”</p>
+              <span class="tag caption-4">Target behavior · helpful</span>
+            </div>
           </div>
-          <div role="row" class="pr">
-            <span role="rowheader" class="rh caption-4">target prompts \(\mathcal{D}_{\mathrm{tar}}\)</span>
-            <button role="cell" class="pc axis-link" data-i="0"><span class="n">1</span>Reachability</button>
-            <button role="cell" class="pc axis-link" data-i="1"><span class="n">2</span>Signed reversal</button>
-            <button role="cell" class="pc axis-link" data-i="2"><span class="n">3</span>Dose response</button>
-            <button role="cell" class="pc axis-link" data-i="3"><span class="n">4</span>Feedback</button>
-          </div>
-          <div role="row" class="pr">
-            <span role="rowheader" class="rh caption-4">off-target prompts \(\mathcal{D}_{\mathrm{off}}\)</span>
-            <button role="cell" class="pc axis-link" data-i="4"><span class="n">5</span>Off-target preservation</button>
-            <span role="cell" class="pe"></span><span role="cell" class="pe"></span><span role="cell" class="pe"></span>
-          </div>
-          <div role="row" class="pr">
-            <span role="rowheader" class="rh caption-4">unseen prompts</span>
-            <button role="cell" class="pc axis-link" data-i="5"><span class="n">6</span>Held-out reuse</button>
-            <span role="cell" class="pe"></span><span role="cell" class="pe"></span><span role="cell" class="pe"></span>
+          <div class="gauge" aria-hidden="true">
+            <div class="gauge-track"></div>
+            <div class="gauge-tick" style="left:48.9%"><i class="caption-5">\(b(x)\)</i></div>
+            <div class="gauge-tick" style="left:93.3%"><i class="caption-5">\(\tau\)</i></div>
+            <div class="gauge-mark" id="gauge-mark"></div>
           </div>
         </div>
       </div>
+      <div class="controls">
+        <label class="title-4" for="dose">Dose \(\gamma\)</label>
+        <div class="slider-box">
+          <input type="range" id="dose" min="-1" max="2" step="0.01" value="1" aria-describedby="dose-help">
+          <div class="slider-ticks caption-5 mono" aria-hidden="true">
+            <span style="left:0%">−1</span><span style="left:33.333%">0<span class="hide-sm"> · unpatched</span></span><span style="left:66.667%">1<span class="hide-sm"> · nominal</span></span><span style="left:100%">2</span>
+          </div>
+        </div>
+        <output class="dose-val mr" id="dose-out" for="dose"><span class="mi">γ</span> = <span id="dose-num">1.00</span></output>
+        <button class="btn btn-line button-sm" id="sweep" type="button"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-play"/></svg>Replay sweep</button>
+      </div>
+      <div class="legend caption-4">
+        <span><i class="lg-drive lg-sq"></i>driver site, patched</span>
+        <span><i class="lg-site lg-sq"></i>attention head</span>
+        <span><i class="lg-site lg-mlp"></i>MLP</span>
+        <span><i class="lg-res"></i>residual stream</span>
+        <span><i class="lg-model"></i>forward pass</span>
+        <span id="dose-help" class="note">A schematic of Figure 1. The two outputs are the figure’s example texts, not live model output.</span>
+      </div>
     </div>
-
-    <div class="ax-grid" id="ax-grid">
-      <article class="ax-card" id="axis-1" aria-labelledby="axn-1">
-        <header class="ax-top"><span class="ax-n">1</span><div class="ax-t"><h3 class="heading-6" id="axn-1">Reachability</h3><span class="caption-4 ax-g">At a fixed dose</span></div></header>
-        <p class="body-5 ax-q">Does the nominal dose land on the requested target?</p>
-        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
-        <div class="fx ax-fx">\(\mathrm{Rel}_{\mathrm{tar}}(1) = \dfrac{\|q - F(\beta)\|_2}{\|q\|_2 + \xi}\)</div>
-        <dl class="ax-meta">
-          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\mathrm{Rel}_{\mathrm{tar}}(1) \le \varepsilon = 0.4\) on held out readouts.</dd></div>
-          <div><dt class="caption-3">In the paper</dt><dd class="body-6">Coverage-Driver passes 8/8 seeds with evaluation pair directions and 0/8 with training mean directions, on both MCQA and Sentiment.</dd></div>
-        </dl>
-      </article>
-      <article class="ax-card" id="axis-2" aria-labelledby="axn-2">
-        <header class="ax-top"><span class="ax-n">2</span><div class="ax-t"><h3 class="heading-6" id="axn-2">Signed reversal</h3><span class="caption-4 ax-g">At a fixed dose</span></div></header>
-        <p class="body-5 ax-q">Does the opposite patch send a target input back toward its source?</p>
-        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
-        <div class="fx ax-fx">\(\mathrm{Reversal}(\beta) = \dfrac{\mathrm{Rel}_{\mathrm{dis}\to\mathrm{clean}}}{\mathrm{Rel}_{\mathrm{dis}\to\mathrm{src}}}\)</div>
-        <dl class="ax-meta">
-          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\mathrm{Reversal}(\beta) \ge 2\): twice as far from the target as from the source.</dd></div>
-          <div><dt class="caption-3">In the paper</dt><dd class="body-6">MCQA passes 21/24 (Humanities) and 23/24 (STEM) cells with P directions and none with F. Refusal never passes.</dd></div>
-        </dl>
-      </article>
-      <article class="ax-card" id="axis-3" aria-labelledby="axn-3">
-        <header class="ax-top"><span class="ax-n">3</span><div class="ax-t"><h3 class="heading-6" id="axn-3">Dose response</h3><span class="caption-4 ax-g">Across doses</span></div></header>
-        <p class="body-5 ax-q">As the dose grows, does progress toward the target grow in order?</p>
-        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
-        <div class="fx ax-fx">\(P(\gamma) = \dfrac{\langle q, F(\gamma\beta)\rangle}{\|q\|_2^2 + \xi},\ \ \rho = \mathrm{Spearman}(\gamma, P)\)</div>
-        <dl class="ax-meta">
-          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\rho \ge 0.95\) over ten doses \(\gamma \in \Gamma = \{-1, \dots, 2\}\).</dd></div>
-          <div><dt class="caption-3">In the paper</dt><dd class="body-6">All 48 Refusal curves have \(\rho = 1\), yet none passes signed reversal. Order and reversibility are different properties.</dd></div>
-        </dl>
-      </article>
-      <article class="ax-card" id="axis-4" aria-labelledby="axn-4">
-        <header class="ax-top"><span class="ax-n">4</span><div class="ax-t"><h3 class="heading-6" id="axn-4">Feedback controllability</h3><span class="caption-4 ax-g">Across doses</span></div></header>
-        <p class="body-5 ax-q">Keeping the sites fixed, can a feedback loop on the dose track new targets?</p>
-        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
-        <div class="fx ax-fx">\(\gamma_{t+1} = \gamma_t + \eta\,\big(m^{\star} - M(\gamma_t)\big)\)</div>
-        <dl class="ax-meta">
-          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(|m^{\star} - M(\gamma_{\mathrm{end}})| \le \tau_{\mathrm{ctrl}}\): 0.3 for IOI and MCQA, 0.1 for Refusal.</dd></div>
-          <div><dt class="caption-3">In the paper</dt><dd class="body-6">Coverage-Driver hits 46/48 Humanities and 47/48 STEM targets with P directions, and 8/48 and 7/48 with F.</dd></div>
-        </dl>
-      </article>
-      <article class="ax-card" id="axis-5" aria-labelledby="axn-5">
-        <header class="ax-top"><span class="ax-n">5</span><div class="ax-t"><h3 class="heading-6" id="axn-5">Off-target preservation</h3><span class="caption-4 ax-g">Beyond the target set</span></div></header>
-        <p class="body-5 ax-q">Does the patch leave unrelated prompts alone?</p>
-        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
-        <div class="fx ax-fx">\(L_{\mathrm{off}}(\beta) = \tfrac{1}{n_{\mathrm{off}}}\sum_j \mathrm{KL}\big(p_\theta(\cdot\,|\,\tilde x_j)\,\|\,p_\theta^{\beta}(\cdot\,|\,\tilde x_j)\big)\)</div>
-        <dl class="ax-meta">
-          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\mathrm{KL} \le \delta = 0.001\), as a seed mean and on every prompt.</dd></div>
-          <div><dt class="caption-3">In the paper</dt><dd class="body-6">No MCQA or Sentiment seed passes. On Refusal, Driver-OMP passes 4/8 seeds by the mean rule.</dd></div>
-        </dl>
-      </article>
-      <article class="ax-card" id="axis-6" aria-labelledby="axn-6">
-        <header class="ax-top"><span class="ax-n">6</span><div class="ax-t"><h3 class="heading-6" id="axn-6">Held-out reuse</h3><span class="caption-4 ax-g">Beyond the target set</span></div></header>
-        <p class="body-5 ax-q">Do the chosen sites, or the whole intervention, carry over to new prompts?</p>
-        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
-        <div class="fx ax-fx">\(\mathrm{recovery} = \dfrac{\bar b_{\mathrm{patched}} - \bar b_{\mathrm{source}}}{\bar b_{\mathrm{target}} - \bar b_{\mathrm{source}}}\)</div>
-        <dl class="ax-meta">
-          <div><dt class="caption-3">Passes when</dt><dd class="body-6">No pass flag. Recovery is reported with its condition: refit \(\beta\) or frozen \(\beta\).</dd></div>
-          <div><dt class="caption-3">In the paper</dt><dd class="body-6">MCQA with refit strengths recovers 0.992 (Humanities); the fully frozen intervention recovers 0.021.</dd></div>
-        </dl>
-      </article>
-    </div>
-    <p class="caption-5 note" style="margin-top:var(--s-200)">Each panel is a schematic of one axis. Chips show whether the case shown would pass the paper’s criterion; the numbers under each panel are the paper’s measured results.</p>
   </div>
 </section>
 
@@ -901,66 +843,84 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
   </div>
 </section>
 
-<!-- Demo -->
-<section class="section reveal" id="demo" aria-labelledby="h-demo">
+<!-- Six axes -->
+<section class="section reveal" id="axes" aria-labelledby="h-axes">
   <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">Try it</span>
-      <h2 class="heading-2" id="h-demo">Move a frozen model through four sites</h2>
-      <p class="body-3">Drag the dose. In this schematic, four driver sites in attention heads, an MLP and the residual stream are patched while every weight stays frozen. The readout at the answer position moves from the source behavior toward the target.</p>
+    <div class="ax-head">
+      <span class="eyebrow">Evaluation protocol</span>
+      <h2 class="heading-3 tagline-p no-i18n" id="h-axes" data-only="en">One push is a demo. Control means you can <span class="k">hit</span> a target, <span class="k">undo</span> it, <span class="k">dial</span> it, <span class="k">track</span> it, <span class="k">spare</span> everything else, and <span class="k">reuse</span> it on prompts you have never seen.</h2>
+      <h2 class="heading-3 tagline-p no-i18n" data-only="zh">推动一次只是演示。控制意味着你能<span class="k">命中</span>目标、<span class="k">撤销</span>它、<span class="k">调节</span>它、<span class="k">跟踪</span>它、<span class="k">不扰动</span>其余一切，并在从未见过的提示上<span class="k">复用</span>它。</h2>
+      <p class="body-3 muted">Every axis reads the same patched model \(f_\theta^{\gamma\beta}\) with the sites, strengths and directions fixed. Only the dose \(\gamma\) and the inputs change.</p>
     </div>
-    <div class="console" aria-label="Interactive illustration of sparse internal control">
-      <div class="console-top">
-        <span class="caption-3 io-label">Schematic · the paper's Figure 1 setting</span>
-        <span class="caption-1 muted hide-sm">weights \(\theta\) frozen · 4 driver nodes · \(h \leftarrow h + \gamma \textstyle\sum_v \beta_v u_v\)</span>
-      </div>
-      <div class="console-grid">
-        <div class="io">
-          <span class="caption-3 io-label">Input prompt</span>
-          <p class="bubble body-5">How can I check SSH login logs on a company server?</p>
-          <span class="ctx-chip caption-4">Authorized audit context</span>
-        </div>
-        <div class="net-wrap"><canvas id="hero-canvas" aria-hidden="true"></canvas></div>
-        <div class="io">
-          <span class="caption-3 io-label">Model output</span>
-          <div class="out-stack">
-            <div class="out-text src" id="out-src">
-              <p class="body-6">“I can’t help with server access or hacking related requests.”</p>
-              <span class="tag caption-4">Source behavior · over refusal</span>
-            </div>
-            <div class="out-text tgt" id="out-tgt">
-              <p class="body-6">“For an authorized audit, review SSH login records and document suspicious login attempts.”</p>
-              <span class="tag caption-4">Target behavior · helpful</span>
-            </div>
-          </div>
-          <div class="gauge" aria-hidden="true">
-            <div class="gauge-track"></div>
-            <div class="gauge-tick" style="left:48.9%"><i class="caption-5">\(b(x)\)</i></div>
-            <div class="gauge-tick" style="left:93.3%"><i class="caption-5">\(\tau\)</i></div>
-            <div class="gauge-mark" id="gauge-mark"></div>
-          </div>
-        </div>
-      </div>
-      <div class="controls">
-        <label class="title-4" for="dose">Dose \(\gamma\)</label>
-        <div class="slider-box">
-          <input type="range" id="dose" min="-1" max="2" step="0.01" value="1" aria-describedby="dose-help">
-          <div class="slider-ticks caption-5 mono" aria-hidden="true">
-            <span style="left:0%">−1</span><span style="left:33.333%">0<span class="hide-sm"> · unpatched</span></span><span style="left:66.667%">1<span class="hide-sm"> · nominal</span></span><span style="left:100%">2</span>
-          </div>
-        </div>
-        <output class="dose-val mr" id="dose-out" for="dose"><span class="mi">γ</span> = <span id="dose-num">1.00</span></output>
-        <button class="btn btn-line button-sm" id="sweep" type="button"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-play"/></svg>Replay sweep</button>
-      </div>
-      <div class="legend caption-4">
-        <span><i class="lg-drive lg-sq"></i>driver site, patched</span>
-        <span><i class="lg-site lg-sq"></i>attention head</span>
-        <span><i class="lg-site lg-mlp"></i>MLP</span>
-        <span><i class="lg-res"></i>residual stream</span>
-        <span><i class="lg-model"></i>forward pass</span>
-        <span id="dose-help" class="note">A schematic of Figure 1. The two outputs are the figure’s example texts, not live model output.</span>
-      </div>
+    <div class="ax-grid" id="ax-grid">
+      <article class="ax-card" id="axis-1" aria-labelledby="axn-1">
+        <header class="ax-top"><span class="ax-n">1</span><div class="ax-t"><span class="ax-verb caption-3">hit</span><h3 class="heading-6" id="axn-1">Reachability</h3></div></header>
+        <p class="ax-probe caption-4">\(\gamma = 1\) · target prompts</p>
+        <p class="body-5 ax-q">Does the nominal dose land on the requested target?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(\mathrm{Rel}_{\mathrm{tar}}(1) = \dfrac{\|q - F(\beta)\|_2}{\|q\|_2 + \xi}\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\mathrm{Rel}_{\mathrm{tar}}(1) \le \varepsilon = 0.4\) on held out readouts.</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">Coverage-Driver passes 8/8 seeds with evaluation pair directions and 0/8 with training mean directions, on both MCQA and Sentiment.</dd></div>
+        </dl>
+      </article>
+      <article class="ax-card" id="axis-2" aria-labelledby="axn-2">
+        <header class="ax-top"><span class="ax-n">2</span><div class="ax-t"><span class="ax-verb caption-3">undo</span><h3 class="heading-6" id="axn-2">Signed reversal</h3></div></header>
+        <p class="ax-probe caption-4">\(-\beta\) on the target input \(x^{c}\)</p>
+        <p class="body-5 ax-q">Does the opposite patch send a target input back toward its source?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(\mathrm{Reversal}(\beta) = \dfrac{\mathrm{Rel}_{\mathrm{dis}\to\mathrm{clean}}}{\mathrm{Rel}_{\mathrm{dis}\to\mathrm{src}}}\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\mathrm{Reversal}(\beta) \ge 2\): twice as far from the target as from the source.</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">MCQA passes 21/24 (Humanities) and 23/24 (STEM) cells with P directions and none with F. Refusal never passes.</dd></div>
+        </dl>
+      </article>
+      <article class="ax-card" id="axis-3" aria-labelledby="axn-3">
+        <header class="ax-top"><span class="ax-n">3</span><div class="ax-t"><span class="ax-verb caption-3">dial</span><h3 class="heading-6" id="axn-3">Dose response</h3></div></header>
+        <p class="ax-probe caption-4">ten doses \(\gamma \in \Gamma\) · target prompts</p>
+        <p class="body-5 ax-q">As the dose grows, does progress toward the target grow in order?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(P(\gamma) = \dfrac{\langle q, F(\gamma\beta)\rangle}{\|q\|_2^2 + \xi},\ \ \rho = \mathrm{Spearman}(\gamma, P)\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\rho \ge 0.95\) over ten doses \(\gamma \in \Gamma = \{-1, \dots, 2\}\).</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">All 48 Refusal curves have \(\rho = 1\), yet none passes signed reversal. Order and reversibility are different properties.</dd></div>
+        </dl>
+      </article>
+      <article class="ax-card" id="axis-4" aria-labelledby="axn-4">
+        <header class="ax-top"><span class="ax-n">4</span><div class="ax-t"><span class="ax-verb caption-3">track</span><h3 class="heading-6" id="axn-4">Feedback controllability</h3></div></header>
+        <p class="ax-probe caption-4">\(\gamma_t\) from feedback · target prompts</p>
+        <p class="body-5 ax-q">Keeping the sites fixed, can a feedback loop on the dose track new targets?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(\gamma_{t+1} = \gamma_t + \eta\,\big(m^{\star} - M(\gamma_t)\big)\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(|m^{\star} - M(\gamma_{\mathrm{end}})| \le \tau_{\mathrm{ctrl}}\): 0.3 for IOI and MCQA, 0.1 for Refusal.</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">Coverage-Driver hits 46/48 Humanities and 47/48 STEM targets with P directions, and 8/48 and 7/48 with F.</dd></div>
+        </dl>
+      </article>
+      <article class="ax-card" id="axis-5" aria-labelledby="axn-5">
+        <header class="ax-top"><span class="ax-n">5</span><div class="ax-t"><span class="ax-verb caption-3">spare</span><h3 class="heading-6" id="axn-5">Off-target preservation</h3></div></header>
+        <p class="ax-probe caption-4">\(\gamma = 1\) · off-target prompts</p>
+        <p class="body-5 ax-q">Does the patch leave unrelated prompts alone?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(L_{\mathrm{off}}(\beta) = \tfrac{1}{n_{\mathrm{off}}}\sum_j \mathrm{KL}\big(p_\theta(\cdot\,|\,\tilde x_j)\,\|\,p_\theta^{\beta}(\cdot\,|\,\tilde x_j)\big)\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">\(\mathrm{KL} \le \delta = 0.001\), as a seed mean and on every prompt.</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">No MCQA or Sentiment seed passes. On Refusal, Driver-OMP passes 4/8 seeds by the mean rule.</dd></div>
+        </dl>
+      </article>
+      <article class="ax-card" id="axis-6" aria-labelledby="axn-6">
+        <header class="ax-top"><span class="ax-n">6</span><div class="ax-t"><span class="ax-verb caption-3">reuse</span><h3 class="heading-6" id="axn-6">Held-out reuse</h3></div></header>
+        <p class="ax-probe caption-4">\(\gamma = 1\) · unseen prompts</p>
+        <p class="body-5 ax-q">Do the chosen sites, or the whole intervention, carry over to new prompts?</p>
+        <div class="ax-scope"><canvas aria-hidden="true"></canvas></div>
+        <div class="fx ax-fx">\(\mathrm{recovery} = \dfrac{\bar b_{\mathrm{patched}} - \bar b_{\mathrm{source}}}{\bar b_{\mathrm{target}} - \bar b_{\mathrm{source}}}\)</div>
+        <dl class="ax-meta">
+          <div><dt class="caption-3">Passes when</dt><dd class="body-6">No pass flag. Recovery is reported with its condition: refit \(\beta\) or frozen \(\beta\).</dd></div>
+          <div><dt class="caption-3">In the paper</dt><dd class="body-6">MCQA with refit strengths recovers 0.992 (Humanities); the fully frozen intervention recovers 0.021.</dd></div>
+        </dl>
+      </article>
     </div>
+    <p class="caption-5 note" style="margin-top:var(--s-200)">Each panel is a schematic of one axis. Chips show whether the case shown would pass the paper’s criterion; the numbers under each panel are the paper’s measured results.</p>
   </div>
 </section>
 
