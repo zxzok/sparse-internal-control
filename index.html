@@ -13,44 +13,23 @@
 /* Layout: one 1152px column told as a long story. Instruments (canvas, SVG) carry the ideas; prose keeps a 680px measure.
    Color follows the paper's Figure 1: orange = intervention, blue = frozen model, red = source behavior, green = target behavior. */
 :root{
-  --bg:#FAFAF8; --surface:#FFFFFF; --raised:#F2F2EF; --line:#E2E2DD; --line-strong:#C8C8C1;
-  --ink:#0E0E0C; --muted:#5B5B55; --faint:#8E8E87;
-  --drive:#C9480C; --drive-ink:#A93C0A; --drive-soft:rgba(201,72,12,.09); --on-drive:#FFFFFF;
-  --model:#2357D9; --model-soft:rgba(35,87,217,.08);
-  --src:#C93A2E; --tgt:#0A7F55;
-  --nav-bg:rgba(255,255,255,.74); --panel-bg:rgba(250,250,248,.94);
-  --h1-a:#000000; --h1-b:#666666;
+  /* One warm stage palette, dark by design: warm black ground, wood orange as the only accent */
+  --bg:#131209; --surface:#181818; --raised:#1F1F1F; --line:#272727; --line-strong:#423F37;
+  --ink:#F4F1EA; --muted:#B3AC9F; --faint:#857F73;
+  --drive:#FF8A3D; --drive-ink:#FFA66B; --drive-soft:rgba(255,138,61,.12); --on-drive:#131209;
+  --model:#D8CEBE; --model-soft:rgba(216,206,190,.07);
+  --src:#EE8A74; --tgt:#8FCFA5;
+  --nav-bg:rgba(24,24,24,.72); --panel-bg:rgba(19,18,9,.95);
+  --h1-a:#FFFFFF; --h1-b:#9B9B9B;
+  color-scheme:dark;
   --font:"Geist","Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,"Noto Sans SC",monospace;
   --s-25:2px; --s-50:4px; --s-75:8px; --s-100:12px; --s-200:16px; --s-300:24px; --s-400:32px; --s-500:40px; --s-600:48px; --s-700:64px; --s-800:80px; --s-900:96px;
   --r-sm:2px; --r:4px; --r-md:6px; --r-lg:8px; --r-xl:12px; --r-2xl:16px; --r-3xl:24px; --r-full:9999px;
   --ease:cubic-bezier(0.22,1,0.36,1);
-  --art-bg:#0B1626; --art-ink:#F4F1EA; --art-muted:rgba(244,241,234,.74); --art-faint:rgba(244,241,234,.52);
+  --art-bg:#131209; --art-ink:#F4F1EA; --art-muted:rgba(244,241,234,.74); --art-faint:rgba(244,241,234,.52);
   --ease-timer:cubic-bezier(0.3,0.1,0.7,0.9);
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#181818; --surface:#1F1F1F; --raised:#272727; --line:#313131; --line-strong:#4A4A45;
-    --ink:#F2F2EE; --muted:#A8A8A1; --faint:#77776F;
-    --drive:#FF8A3D; --drive-ink:#FFA66B; --drive-soft:rgba(255,138,61,.13); --on-drive:#181818;
-    --model:#7FA3FF; --model-soft:rgba(127,163,255,.10);
-    --src:#FF7B6E; --tgt:#3DD39A;
-    --nav-bg:rgba(31,31,31,.72); --panel-bg:rgba(24,24,24,.94);
-    --h1-a:#FFFFFF; --h1-b:#9B9B9B;
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#181818; --surface:#1F1F1F; --raised:#272727; --line:#313131; --line-strong:#4A4A45;
-  --ink:#F2F2EE; --muted:#A8A8A1; --faint:#77776F;
-  --drive:#FF8A3D; --drive-ink:#FFA66B; --drive-soft:rgba(255,138,61,.13); --on-drive:#181818;
-  --model:#7FA3FF; --model-soft:rgba(127,163,255,.10);
-  --src:#FF7B6E; --tgt:#3DD39A;
-  --nav-bg:rgba(31,31,31,.72); --panel-bg:rgba(24,24,24,.94);
-  --h1-a:#FFFFFF; --h1-b:#9B9B9B;
-  color-scheme:dark;
-}
-
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth; scroll-padding-top:var(--s-900)}
 body{background:var(--bg); color:var(--ink); font-family:var(--font); font-size:1rem; line-height:1.5rem; font-weight:400; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility}
@@ -521,8 +500,7 @@ html[data-lang="zh"] .rt tr.ours td:first-child::after{content:"本文"}
 <link rel="canonical" href="https://sparsecontrol.xizhe.net/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta name="author" content="Xizhe Zhang">
-<meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#181818" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#131209">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Sparse Internal Control">
 <meta property="og:title" content="Sparse Internal Control of Language Models">
@@ -1501,93 +1479,189 @@ const Hero = (() => {
 })();
 
 
-/* ---------- hero artwork: a frozen tower moved by a few strings ---------- */
+/* ---------- hero artwork: a wooden marionette on a few strings ---------- */
 (() => {
-  const cv = $('#art'); if (!cv) return;
+  const hero = $('.hero-art'), cv = $('#art'); if (!cv || !hero) return;
   const S = sizer(cv);
-  let raf = 0, visible = true, grain = null, clouds = [], stars = [];
-  const W2 = { sky: '#0B1626', haze: '#1A2D49', ink: '#060E19', cream: '#F3E6D3', warm: '#FF8A3D', warm2: '#FFC08F' };
-  const rgb = (h, a) => rgba(h, a);
-  function seed(){
+  const C = { sky: '#131209', ink: '#0B0A05', cream: '#F3E6D3', beam: '#FFD9AE', warm: '#FF8A3D', warm2: '#FFC08F', wood: '#C9773A', woodL: '#F0B57C', woodD: '#6E3714', face: '#2E1405' };
+  let raf = 0, visible = true, last = 0, acc = 0, simT = 0, ptr = 0, ptrT = 0, grain = null, stars = [], clouds = [];
+  /* backdrop */
+  (() => {
     let x = 7; const rnd = () => (x = (x * 16807) % 2147483647) / 2147483647;
-    stars = Array.from({ length: 90 }, () => ({ x: rnd(), y: rnd() * .7, r: rnd() * 1.1 + .3, a: rnd() * .45 + .1, p: rnd() * 6.3 }));
-    clouds = [{ x: .58, y: .2, s: 1 }, { x: .93, y: .34, s: .8 }, { x: .76, y: .6, s: .7 }];
+    stars = Array.from({ length: 46 }, () => ({ x: rnd() * 2 - 1, y: rnd(), r: rnd() * 1.2 + .4, a: rnd() * .4 + .15, p: rnd() * 6.3, v: rnd() * .5 + .3 }));
     const g = document.createElement('canvas'); g.width = g.height = 180; const gx = g.getContext('2d'), im = gx.createImageData(180, 180);
     for (let i = 0; i < im.data.length; i += 4){ const v = rnd() * 255; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = rnd() < .55 ? 22 : 0; }
     gx.putImageData(im, 0, 0); grain = g;
-  }
-  seed();
-  function geom(w, h){
-    const narrow = w < 760;
-    const cx = narrow ? w * .5 - 18 : w * .72, base = narrow ? h - 14 : h * .86;
-    const sw = narrow ? Math.min(w * .5, 210) : Math.min(w * .22, 330), n = narrow ? 7 : 9;
-    const sh = narrow ? 13 : Math.min(28, h * .036), gap = narrow ? 7 : Math.min(13, h * .016), dep = sw * .3;
-    const top = base - n * (sh + gap);
-    return { narrow, cx, base, sw, n, sh, gap, dep, barY: narrow ? top - 64 : Math.max(h * .17, 96) };
-  }
-  const DRV = [[1, 1], [3, 4], [4, 2], [6, 5]];
+  })();
   function cloud(ctx, x, y, s){
     [[0, 0, 1], [-.9, .18, .7], [.95, .2, .75], [.4, -.35, .62], [-.35, -.3, .55]].forEach(([dx, dy, r]) => {
-      const R = 70 * s * r, gr = ctx.createRadialGradient(x + dx * 70 * s, y + dy * 70 * s, 0, x + dx * 70 * s, y + dy * 70 * s, R);
-      gr.addColorStop(0, rgb(W2.cream, .11)); gr.addColorStop(1, rgb(W2.cream, 0)); ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(x + dx * 70 * s, y + dy * 70 * s, R, 0, Math.PI * 2); ctx.fill();
+      const cx = x + dx * 70 * s, cy = y + dy * 70 * s, R = 70 * s * r, gr = ctx.createRadialGradient(cx, cy, 0, cx, cy, R);
+      gr.addColorStop(0, rgba(C.cream, .1)); gr.addColorStop(1, rgba(C.cream, 0)); ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
     });
   }
-  function draw(time){
-    raf = 0;
-    const ctx = S.ctx, w = S.w, h = S.h, t = (time || 0) / 1000, G = geom(w, h), still = reduce;
-    ctx.fillStyle = W2.sky; ctx.fillRect(0, 0, w, h);
-    const hz = ctx.createRadialGradient(G.cx, h * .3, 0, G.cx, h * .3, Math.max(w, h) * .7);
-    hz.addColorStop(0, rgb(W2.haze, .9)); hz.addColorStop(1, rgb(W2.haze, 0)); ctx.fillStyle = hz; ctx.fillRect(0, 0, w, h);
-    stars.forEach(st => { const a = st.a * (still ? .8 : .6 + .4 * Math.sin(t * 1.3 + st.p)); dot(ctx, st.x * w, st.y * h, st.r, rgb(W2.cream, a)); });
-    clouds.forEach((c, k) => cloud(ctx, ((c.x + (still ? 0 : t * .004 * (k + 1))) % 1.15) * w, c.y * h, c.s * (G.narrow ? .6 : 1)));
-    // hill
-    ctx.save(); ctx.beginPath(); ctx.moveTo(0, h); ctx.lineTo(0, h * .97);
-    ctx.bezierCurveTo(w * .3, h * .95, G.cx - G.sw * 1.3, G.base - 6, G.cx, G.base + 2);
-    ctx.bezierCurveTo(G.cx + G.sw * 1.4, G.base + 8, w * .95, h * .9, w, h * .93); ctx.lineTo(w, h); ctx.closePath();
-    ctx.fillStyle = W2.ink; ctx.fill(); ctx.clip();
-    ctx.strokeStyle = rgb(W2.cream, .05); ctx.lineWidth = 1; for (let x = -h; x < w; x += 6){ ctx.beginPath(); ctx.moveTo(x, h); ctx.lineTo(x + h * .5, h * .5); ctx.stroke(); }
+  /* skeleton in puppet units; y grows downward, the ground is y = 0 */
+  const P0 = { head: [0, -1.43], neck: [0, -1.26], sc: [0, -1.17], ls: [-.2, -1.13], rs: [.2, -1.13], le: [-.25, -.88], re: [.25, -.88], lh: [-.27, -.64], rh: [.27, -.64],
+    pel: [0, -.67], lhip: [-.1, -.61], rhip: [.1, -.61], lk: [-.11, -.32], rk: [.11, -.32], lf: [-.13, 0], rf: [.13, 0] };
+  const pts = {}; Object.keys(P0).forEach(k => { pts[k] = { x: P0[k][0], y: P0[k][1], px: P0[k][0], py: P0[k][1] }; });
+  const dist0 = (a, b) => Math.hypot(P0[a][0] - P0[b][0], P0[a][1] - P0[b][1]);
+  const STICKS = [['head', 'neck'], ['neck', 'sc'], ['sc', 'ls'], ['sc', 'rs'], ['ls', 'rs'], ['ls', 'pel'], ['rs', 'pel'], ['sc', 'pel'], ['pel', 'lhip'], ['pel', 'rhip'], ['lhip', 'rhip'],
+    ['ls', 'lhip'], ['rs', 'rhip'], ['ls', 'rhip'], ['rs', 'lhip'], ['ls', 'le'], ['le', 'lh'], ['rs', 're'], ['re', 'rh'], ['lhip', 'lk'], ['lk', 'lf'], ['rhip', 'rk'], ['rk', 'rf'],
+    ['head', 'ls', .3], ['head', 'rs', .3], ['neck', 'ls', .6], ['neck', 'rs', .6]].map(([a, b, k]) => ({ a, b, r: dist0(a, b), k: k || 1 }));
+  const MINS = [['ls', 'lh', .34], ['rs', 'rh', .34], ['lhip', 'lf', .5], ['rhip', 'rf', .5], ['lh', 'rh', .22], ['lf', 'rf', .24], ['lk', 'rk', .2], ['lh', 'pel', .16], ['rh', 'pel', .16]];
+  const TF = .45; /* the torso driver sits 45% of the way down the spine */
+  const STR = [{ p: 'head', a: 'c' }, { p: 'lh', a: 'l' }, { p: 'rh', a: 'r' }, { p: 'lk', a: 'kl' }, { p: 'rk', a: 'kr' }, { p: 'torso', a: 't' }];
+  let bar = { x: 0, y: -2.3, th: 0, ph: 0 }, barY0 = -2.3;
+  function anchor(k){
+    const c = Math.cos(bar.th), sn = Math.sin(bar.th);
+    const rot = (ox, oy) => [bar.x + ox * c - oy * sn, bar.y + ox * sn + oy * c];
+    if (k === 'l') return rot(-.38, 0); if (k === 'r') return rot(.38, 0); if (k === 'c') return rot(0, -.015); if (k === 't') return rot(.05, .01);
+    const cp = Math.cos(bar.ph), sp = Math.sin(bar.ph);
+    if (k === 'kl') return rot(-.13 * cp, .1 - .13 * sp); return rot(.13 * cp, .1 + .13 * sp);
+  }
+  const torsoPt = () => ({ x: lerp(pts.sc.x, pts.pel.x, TF), y: lerp(pts.sc.y, pts.pel.y, TF) });
+  const attach = st => st.p === 'torso' ? torsoPt() : pts[st.p];
+  function initStrings(){ setBar(0); STR.forEach(st => { const A = anchor(st.a), P = attach(st); st.L = Math.hypot(P.x - A[0], P.y - A[1]) - .004; }); }
+  function setBar(t){
+    const env = .5 + .5 * Math.sin(.23 * t + 1.2);
+    bar.x = .07 * Math.sin(.55 * t) + ptr * .35;
+    bar.th = .4 * Math.sin(.85 * t) * env;
+    bar.ph = .6 * Math.sin(1.75 * t) * (1 - env * .7);
+    bar.y = barY0 - .05 * Math.max(0, Math.sin(1.75 * t)) * (1 - env);
+  }
+  function relax(){
+    STICKS.forEach(c => { const A = pts[c.a], B = pts[c.b]; const dx = B.x - A.x, dy = B.y - A.y, d = Math.hypot(dx, dy) || 1e-6, f = (d - c.r) / d * .5 * c.k; A.x += dx * f; A.y += dy * f; B.x -= dx * f; B.y -= dy * f; });
+    MINS.forEach(([a, b, m]) => { const A = pts[a], B = pts[b]; const dx = B.x - A.x, dy = B.y - A.y, d = Math.hypot(dx, dy) || 1e-6; if (d < m){ const f = (d - m) / d * .5; A.x += dx * f; A.y += dy * f; B.x -= dx * f; B.y -= dy * f; } });
+    STR.forEach(st => {
+      const A = anchor(st.a), P = attach(st), dx = P.x - A[0], dy = P.y - A[1], d = Math.hypot(dx, dy) || 1e-6;
+      st.tension = Math.max(0, d - st.L);
+      if (d <= st.L) return;
+      const cx = dx / d * (d - st.L), cy = dy / d * (d - st.L);
+      if (st.p === 'torso'){ pts.sc.x -= cx * (1 - TF) * 1.2; pts.sc.y -= cy * (1 - TF) * 1.2; pts.pel.x -= cx * TF * 1.2; pts.pel.y -= cy * TF * 1.2; }
+      else { P.x -= cx; P.y -= cy; }
+    });
+    Object.values(pts).forEach(q => { if (q.y > 0){ q.y = 0; q.px = q.x - (q.x - q.px) * .35; } });
+  }
+  function step(dt){
+    simT += dt; ptr += (ptrT - ptr) * Math.min(1, dt * 2.5); setBar(simT);
+    Object.values(pts).forEach(q => { const vx = (q.x - q.px) * .985, vy = (q.y - q.py) * .985; q.px = q.x; q.py = q.y; q.x += vx; q.y += vy + 5.2 * dt * dt; });
+    for (let i = 0; i < 14; i++) relax();
+  }
+  initStrings();
+  for (let i = 0; i < 90; i++){ setBar(0); Object.values(pts).forEach(q => { q.px = q.x; q.py = q.y; q.y += 5.2 / 3600; }); for (let j = 0; j < 14; j++) relax(); }
+  /* layout */
+  let V = null;
+  function layout(){
+    const w = S.w, h = S.h, narrow = w < 760;
+    const gy = narrow ? h - 16 : h * .86, cx = narrow ? w * .5 : w * .72;
+    const barPx = narrow ? h - 300 : Math.max(104, h * .15);
+    const s = narrow ? Math.min(124, (gy - barPx) / 2.4) : Math.min(w * .135, (gy - barPx) / 2.25, 205);
+    barY0 = -(gy - barPx) / s; if (!V || Math.abs(V.barY0 - barY0) > .01){ initStrings(); }
+    V = { w, h, narrow, gy, cx, s, barY0 };
+  }
+  const X = x => V.cx + x * V.s, Y = y => V.gy + y * V.s, P = q => [X(q.x), Y(q.y)];
+  /* drawing helpers */
+  function limb(ctx, a, b, wd){
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
+    const g = ctx.createLinearGradient(a[0] + nx * wd / 2, a[1] + ny * wd / 2, a[0] - nx * wd / 2, a[1] - ny * wd / 2);
+    g.addColorStop(0, C.woodD); g.addColorStop(.3, C.woodL); g.addColorStop(.62, C.wood); g.addColorStop(1, C.woodD);
+    ctx.strokeStyle = g; ctx.lineWidth = wd; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+  }
+  function ball(ctx, p, r){ const g = ctx.createRadialGradient(p[0] - r * .35, p[1] - r * .4, r * .1, p[0], p[1], r); g.addColorStop(0, C.woodL); g.addColorStop(1, C.woodD); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p[0], p[1], r, 0, Math.PI * 2); ctx.fill(); }
+  function block(ctx, cx, cy, ang, w, h, r, glowNode){
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(ang);
+    const g = ctx.createLinearGradient(-w / 2, 0, w / 2, 0); g.addColorStop(0, C.woodD); g.addColorStop(.32, C.woodL); g.addColorStop(.6, C.wood); g.addColorStop(1, C.woodD);
+    rr(ctx, -w / 2, -h / 2, w, h, r); ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = rgba(C.woodD, .9); ctx.lineWidth = 1; ctx.stroke();
+    for (let k = 0; k < 4; k++) dot(ctx, -w / 2 + (k + .5) * w / 4, 0, Math.max(1.2, h * .09), rgba(C.cream, .55));
     ctx.restore();
-    // control bar
-    const barY = G.barY, barX = G.cx + G.dep * .5, barW = G.sw * .95, sway = still ? 0 : Math.sin(t * .6) * .035;
-    const glow = ctx.createRadialGradient(barX, barY, 0, barX, barY, G.sw * 1.1);
-    glow.addColorStop(0, rgb(W2.warm, .22)); glow.addColorStop(1, rgb(W2.warm, 0)); ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(barX, barY, G.sw * 1.1, 0, Math.PI * 2); ctx.fill();
-    ctx.save(); ctx.translate(barX, barY); ctx.rotate(sway);
-    ctx.fillStyle = W2.warm2; rr(ctx, -barW / 2, -3, barW, 6, 3); ctx.fill(); rr(ctx, -3, -barW * .22, 6, barW * .44, 3); ctx.fill();
+  }
+  function stringLine(ctx, A, Pp, st){
+    const slack = Math.max(0, st.L - Math.hypot((Pp[0] - A[0]) / V.s, (Pp[1] - A[1]) / V.s));
+    const mx = (A[0] + Pp[0]) / 2 + slack * V.s * .25, my = (A[1] + Pp[1]) / 2 + slack * V.s * .7, taut = slack < .01;
+    ctx.save(); ctx.lineCap = 'round';
+    ctx.strokeStyle = rgba(C.warm, taut ? .2 : .1); ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.quadraticCurveTo(mx, my, Pp[0], Pp[1]); ctx.stroke();
+    ctx.strokeStyle = rgba(C.warm2, taut ? .95 : .6); ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.quadraticCurveTo(mx, my, Pp[0], Pp[1]); ctx.stroke();
     ctx.restore();
-    const anchors = [-.5, -.17, .17, .5].map((f, k) => { const ax = f * barW, ay = k === 1 ? -barW * .22 : k === 2 ? barW * .22 : 0; const ux = k === 1 || k === 2 ? 0 : ax; return { x: barX + Math.cos(sway) * ux - Math.sin(sway) * ay, y: barY + Math.sin(sway) * ux + Math.cos(sway) * ay }; });
-    // tower slabs (bottom to top)
-    const slab = i => { const y = G.base - (i + 1) * (G.sh + G.gap); return { x: G.cx - G.sw / 2, y }; };
-    const nodes = [];
-    for (let i = 0; i < G.n; i++){
-      const { x, y } = slab(i), d = G.dep, dy = d * .45;
-      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + d, y - dy); ctx.lineTo(x + G.sw + d, y - dy); ctx.lineTo(x + G.sw, y); ctx.closePath(); ctx.fillStyle = rgb(W2.cream, .08); ctx.fill(); ctx.strokeStyle = rgb(W2.cream, .22); ctx.lineWidth = 1; ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(x + G.sw, y); ctx.lineTo(x + G.sw + d, y - dy); ctx.lineTo(x + G.sw + d, y - dy + G.sh); ctx.lineTo(x + G.sw, y + G.sh); ctx.closePath(); ctx.fillStyle = rgb('#0E1B2E', .9); ctx.fill(); ctx.stroke();
-      ctx.fillStyle = rgb('#1C3150', .92); ctx.fillRect(x, y, G.sw, G.sh); ctx.strokeRect(x + .5, y + .5, G.sw - 1, G.sh - 1);
-      for (let k = 0; k < 6; k++){ const nx = x + (k + .5) * G.sw / 6, ny = y + G.sh / 2; nodes.push({ i, k, x: nx, y: ny }); dot(ctx, nx, ny, G.narrow ? 1.6 : 2.2, rgb(W2.cream, .38)); }
+  }
+  function draw(){
+    const ctx = S.ctx, { w, h, gy, cx, s, narrow } = V, t = simT, still = reduce;
+    ctx.fillStyle = C.sky; ctx.fillRect(0, 0, w, h);
+    /* stage floor with planks */
+    ctx.fillStyle = 'rgba(255,240,220,.025)'; ctx.fillRect(0, gy, w, h - gy);
+    ctx.strokeStyle = 'rgba(255,240,220,.05)'; ctx.lineWidth = 1;
+    for (let k = 1; k < 7; k++){ const yy = gy + (h - gy) * (k / 7) ** 1.4; ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(w, yy); ctx.stroke(); }
+    seg(ctx, 0, gy, w, gy, 'rgba(255,240,220,.08)', 1);
+    /* spotlight beam and pool */
+    const top = -20, tw = s * .22, bw = s * 1.25;
+    const beam = ctx.createLinearGradient(0, top, 0, gy); beam.addColorStop(0, rgba(C.beam, .16)); beam.addColorStop(1, rgba(C.beam, .04));
+    ctx.fillStyle = beam; ctx.beginPath(); ctx.moveTo(cx - tw, top); ctx.lineTo(cx + tw, top); ctx.lineTo(cx + bw, gy); ctx.lineTo(cx - bw, gy); ctx.closePath(); ctx.fill();
+    const pool = ctx.createRadialGradient(cx, gy + 4, 0, cx, gy + 4, bw * 1.15); pool.addColorStop(0, rgba(C.beam, .24)); pool.addColorStop(1, rgba(C.beam, 0));
+    ctx.fillStyle = pool; ctx.beginPath(); ctx.ellipse(cx, gy + 4, bw * 1.15, bw * .2, 0, 0, Math.PI * 2); ctx.fill();
+    /* dust drifting in the light */
+    stars.forEach(st => { const yy = gy - ((st.y + (still ? 0 : t * .02 * st.v)) % 1) * (gy - top); const half = tw + (bw - tw) * (yy - top) / (gy - top); dot(ctx, cx + st.x * half * .9, yy, st.r, rgba(C.beam, st.a * (still ? .7 : .55 + .45 * Math.sin(t * 1.5 + st.p)))); });
+    const shadow = ctx.createRadialGradient(cx, gy + 2, 0, cx, gy + 2, s * .5); shadow.addColorStop(0, 'rgba(0,0,0,.45)'); shadow.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = shadow; ctx.beginPath(); ctx.ellipse(cx, gy + 2, s * .5, s * .08, 0, 0, Math.PI * 2); ctx.fill();
+    const bp = [X(bar.x), Y(bar.y)];
+    const glow = ctx.createRadialGradient(bp[0], bp[1], 0, bp[0], bp[1], s * 1.1); glow.addColorStop(0, rgba(C.warm, .2)); glow.addColorStop(1, rgba(C.warm, 0)); ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(bp[0], bp[1], s * 1.1, 0, Math.PI * 2); ctx.fill();
+    const q = k => P(pts[k]);
+    /* legs and feet */
+    [['lhip', 'lk', 'lf', -1], ['rhip', 'rk', 'rf', 1]].forEach(([hp, kn, ft, sd]) => {
+      limb(ctx, q(hp), q(kn), s * .095); limb(ctx, q(kn), q(ft), s * .085); ball(ctx, q(kn), s * .05);
+      const f = q(ft); ctx.save(); ctx.translate(f[0], f[1]); ctx.rotate(sd * .12); const gf = ctx.createLinearGradient(0, -s * .05, 0, s * .02); gf.addColorStop(0, C.woodL); gf.addColorStop(1, C.woodD); rr(ctx, -s * .06 + sd * s * .02, -s * .055, s * .12, s * .06, s * .025); ctx.fillStyle = gf; ctx.fill(); ctx.restore();
+    });
+    /* pelvis block */
+    const lhp = q('lhip'), rhp = q('rhip');
+    block(ctx, (lhp[0] + rhp[0]) / 2, (lhp[1] + rhp[1]) / 2 - s * .02, Math.atan2(rhp[1] - lhp[1], rhp[0] - lhp[0]), s * .3, s * .09, s * .03);
+    /* torso: a stack of layer blocks along the spine */
+    const sc = q('sc'), pl = q('pel'), ang = Math.atan2(pl[1] - sc[1], pl[0] - sc[0]) - Math.PI / 2, n = 5;
+    for (let i = 0; i < n; i++){
+      const f = (i + .5) / n, bx = lerp(sc[0], pl[0], f), by = lerp(sc[1], pl[1], f), seg = Math.hypot(pl[0] - sc[0], pl[1] - sc[1]) / n;
+      block(ctx, bx, by, ang, s * lerp(.42, .3, i / (n - 1)), seg * .8, s * .025);
     }
-    // snowflake mark: weights frozen
-    if (!G.narrow) T(ctx, G.cx - G.sw / 2, G.base + 26, tr('weights frozen', '权重冻结'), { size: 11, color: rgb(W2.cream, .45), sans: true });
-    // strings to driver sites
-    DRV.forEach(([i, k], j) => {
-      const nd = nodes.find(n => n.i === i && n.k === k), an = anchors[j];
-      const sx = still ? 0 : Math.sin(t * .9 + j * 1.7) * 7, mx = (an.x + nd.x) / 2 + sx, my = (an.y + nd.y) / 2;
-      ctx.save(); ctx.lineCap = 'round';
-      ctx.strokeStyle = rgb(W2.warm, .16); ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(an.x, an.y); ctx.quadraticCurveTo(mx, my, nd.x, nd.y); ctx.stroke();
-      ctx.strokeStyle = rgb(W2.warm2, .9); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(an.x, an.y); ctx.quadraticCurveTo(mx, my, nd.x, nd.y); ctx.stroke();
-      ctx.restore();
-      const pulse = still ? .7 : .6 + .4 * Math.sin(t * 2 + j);
-      const gl = ctx.createRadialGradient(nd.x, nd.y, 0, nd.x, nd.y, 22); gl.addColorStop(0, rgb(W2.warm, .55 * pulse)); gl.addColorStop(1, rgb(W2.warm, 0));
-      ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(nd.x, nd.y, 22, 0, Math.PI * 2); ctx.fill();
-      dot(ctx, nd.x, nd.y, G.narrow ? 3 : 4, W2.warm, W2.warm2, 1.5);
+    const tp = P(torsoPt()), tst = STR[5], tg = .6 + .4 * Math.min(1, (tst.tension || 0) * 60 + (still ? .5 : .5 + .5 * Math.sin(t * 2.4)));
+    const gl = ctx.createRadialGradient(tp[0], tp[1], 0, tp[0], tp[1], s * .16); gl.addColorStop(0, rgba(C.warm, .75 * tg)); gl.addColorStop(1, rgba(C.warm, 0)); ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(tp[0], tp[1], s * .16, 0, Math.PI * 2); ctx.fill();
+    dot(ctx, tp[0], tp[1], Math.max(2.5, s * .025), C.warm2, C.warm, 1.5);
+    /* arms */
+    [['ls', 'le', 'lh'], ['rs', 're', 'rh']].forEach(([sh, el, hd]) => {
+      ball(ctx, q(sh), s * .055); limb(ctx, q(sh), q(el), s * .075); limb(ctx, q(el), q(hd), s * .066); ball(ctx, q(el), s * .042); ball(ctx, q(hd), s * .05);
     });
-    // grain
-    ctx.save(); ctx.globalAlpha = 1; ctx.fillStyle = ctx.createPattern(grain, 'repeat'); ctx.fillRect(0, 0, w, h); ctx.restore();
-    if (visible && !reduce) raf = requestAnimationFrame(draw);
+    /* neck and head */
+    const hd = q('head'), nk = q('neck'); limb(ctx, nk, q('sc'), s * .055);
+    const ha = Math.atan2(hd[1] - nk[1], hd[0] - nk[0]) + Math.PI / 2;
+    ctx.save(); ctx.translate(hd[0], hd[1]); ctx.rotate(ha);
+    const hg = ctx.createRadialGradient(-s * .04, -s * .05, s * .01, 0, 0, s * .15); hg.addColorStop(0, C.woodL); hg.addColorStop(.7, C.wood); hg.addColorStop(1, C.woodD);
+    ctx.fillStyle = hg; ctx.beginPath(); ctx.ellipse(0, 0, s * .115, s * .135, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = rgba(C.woodD, .9); ctx.lineWidth = 1; ctx.stroke();
+    [-1, 1].forEach(sd => { ctx.fillStyle = C.face; ctx.beginPath(); ctx.ellipse(sd * s * .042, -s * .008, s * .017, s * .023, 0, 0, Math.PI * 2); ctx.fill(); dot(ctx, sd * s * .042 - s * .005, -s * .016, Math.max(.8, s * .005), rgba(C.cream, .9)); dot(ctx, sd * s * .07, s * .045, s * .022, rgba(C.warm, .35)); });
+    ball(ctx, [0, s * .03], s * .019);
+    ctx.strokeStyle = C.face; ctx.lineWidth = Math.max(1, s * .008); ctx.beginPath(); ctx.arc(0, s * .055, s * .025, .2 * Math.PI, .8 * Math.PI); ctx.stroke();
+    ctx.strokeStyle = rgba(C.cream, .7); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(0, -s * .148, s * .014, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+    /* strings */
+    STR.forEach(st => {
+      const A = anchor(st.a), Ap = [X(A[0]), Y(A[1])];
+      let Pp = st.p === 'torso' ? tp : st.p === 'head' ? [hd[0] + Math.sin(ha) * s * .148, hd[1] - Math.cos(ha) * s * .148] : q(st.p);
+      stringLine(ctx, Ap, Pp, st);
+    });
+    /* control bar with walking rocker */
+    const l = anchor('l'), r = anchor('r'), kl = anchor('kl'), kr = anchor('kr');
+    limb(ctx, [X(kl[0]), Y(kl[1])], [X(kr[0]), Y(kr[1])], s * .032);
+    limb(ctx, [X(bar.x), Y(bar.y)], [X((kl[0] + kr[0]) / 2), Y((kl[1] + kr[1]) / 2)], s * .028);
+    limb(ctx, [X(l[0]), Y(l[1])], [X(r[0]), Y(r[1])], s * .045);
+    [l, r, kl, kr].forEach(a => dot(ctx, X(a[0]), Y(a[1]), Math.max(1.5, s * .012), C.warm2));
+    ctx.save(); ctx.fillStyle = ctx.createPattern(grain, 'repeat'); ctx.fillRect(0, 0, w, h); ctx.restore();
   }
-  S.onfit = () => { if (!raf) draw(performance.now()); };
-  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && !reduce && !raf) raf = requestAnimationFrame(draw); }, { threshold: 0 }).observe(cv);
-  langSubs.push(() => { if (!raf) draw(performance.now()); });
-  draw(performance.now());
+  function frame(now){
+    raf = 0;
+    const dt = Math.min(.05, (now - (last || now)) / 1000); last = now; acc += dt;
+    while (acc >= 1 / 60){ step(1 / 60); acc -= 1 / 60; }
+    draw();
+    if (visible && !reduce) raf = requestAnimationFrame(frame);
+  }
+  S.onfit = () => { layout(); if (!raf) draw(); };
+  layout();
+  hero.addEventListener('pointermove', e => { const r = hero.getBoundingClientRect(); ptrT = clamp((e.clientX - r.left - V.cx) / (r.width * .5), -1, 1); });
+  hero.addEventListener('pointerleave', () => { ptrT = 0; });
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && !reduce && !raf){ last = 0; raf = requestAnimationFrame(frame); } }, { threshold: 0 }).observe(cv);
+  draw();
 })();
 
 /* ---------- framework stepper ---------- */

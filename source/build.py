@@ -32,7 +32,7 @@ FAQ = [
      "Yes. Each axis is defined on any intervention with a support, base strengths and a direction rule, and the released code has one metrics module per axis."),
 ]
 
-FAVICON = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><style>.s{stroke:#0E0E0C}.f{fill:#0E0E0C}@media (prefers-color-scheme:dark){.s{stroke:#F2F2EE}.f{fill:#F2F2EE}}</style><path class="s" d="M12 2.6 20.1 7.3v9.4L12 21.4 3.9 16.7V7.3Z" fill="none" stroke-width="1.6" stroke-linejoin="round"/><path class="s" d="M12 12 12 2.6" stroke-width="1.6" opacity=".45"/><circle class="f" cx="12" cy="12" r="1.9"/><circle cx="12" cy="2.9" r="2.6" fill="#E8590C"/></svg>
+FAVICON = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><style>.s{stroke:#131209}.f{fill:#131209}@media (prefers-color-scheme:dark){.s{stroke:#F4F1EA}.f{fill:#F4F1EA}}</style><path class="s" d="M12 2.6 20.1 7.3v9.4L12 21.4 3.9 16.7V7.3Z" fill="none" stroke-width="1.6" stroke-linejoin="round"/><path class="s" d="M12 12 12 2.6" stroke-width="1.6" opacity=".45"/><circle class="f" cx="12" cy="12" r="1.9"/><circle cx="12" cy="2.9" r="2.6" fill="#E8590C"/></svg>
 """
 
 NOT_FOUND = """<!doctype html>
@@ -40,8 +40,7 @@ NOT_FOUND = """<!doctype html>
 <title>Page not found · Sparse Internal Control</title><meta name="robots" content="noindex"><link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
 <style>
-:root{--bg:#FAFAF8;--ink:#0E0E0C;--muted:#5B5B55;--line:#C8C8C1;--drive:#C9480C}
-@media (prefers-color-scheme:dark){:root{--bg:#181818;--ink:#F2F2EE;--muted:#A8A8A1;--line:#4A4A45;--drive:#FF8A3D;color-scheme:dark}}
+:root{--bg:#131209;--ink:#F4F1EA;--muted:#B3AC9F;--line:#423F37;--drive:#FF8A3D;color-scheme:dark}
 body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font-family:"Geist",system-ui,sans-serif;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 main{display:grid;gap:24px;max-width:680px}
 .k{font-family:"Geist Mono",ui-monospace,monospace;font-size:12px;line-height:16px;letter-spacing:.08em;color:var(--drive)}
@@ -111,8 +110,7 @@ def main():
     meta = f"""<link rel="canonical" href="{URL}">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta name="author" content="Xizhe Zhang">
-<meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#181818" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#131209">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Sparse Internal Control">
 <meta property="og:title" content="Sparse Internal Control of Language Models">
