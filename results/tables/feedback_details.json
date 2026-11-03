@@ -11,6 +11,15 @@
   ],
   "cells": [
     [
+      "IOI",
+      "Driver-OMP",
+      "P",
+      "24/24",
+      "0.1351",
+      "3.958",
+      "2/24"
+    ],
+    [
       "Humanities",
       "Driver-OMP",
       "P",
@@ -174,6 +183,16 @@
     ]
   ],
   "numeric_rows": [
+    {
+      "task": "ioi",
+      "method": "driver_omp",
+      "direction": "P",
+      "hits": 24,
+      "total": 24,
+      "initial_hits": 2,
+      "mean_absolute_error": 0.13513108963767687,
+      "mean_evaluations": 3.9583333333333335
+    },
     {
       "task": "mcqa_humanities",
       "method": "driver_omp",

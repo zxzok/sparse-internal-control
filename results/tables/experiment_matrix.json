@@ -58,7 +58,7 @@
     ],
     [
       "IOI reuse",
-      "Pointwise clean-normalized recovery; fitting/test split",
+      "Pointwise clean-normalized recovery; 64 fitting/64 test pairs; $k\\leq8$",
       "3 seeds; refit or fixed coefficients, both with evaluation-pair directions"
     ],
     [

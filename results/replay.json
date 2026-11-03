@@ -17,7 +17,8 @@
     "feedback_tolerance",
     "model_comparison",
     "reachability_tolerance",
-    "supporting_numbers"
+    "supporting_numbers",
+    "sentiment_displacement_sensitivity"
   ],
   "scope": "tabular_saved_records",
   "model_execution": false

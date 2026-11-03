@@ -1,40 +1,40 @@
 {
   "columns": [
     "Axis",
-    "Property evaluated",
+    "Evaluation objective",
     "Quantitative readout"
   ],
   "cells": [
     [
       "Reachability",
-      "Target proximity",
-      "\\(\\mathrm{Rel}_{\\mathrm{tar}}(\\gamma)\\)"
+      "Proximity to the target",
+      "$\\mathrm{Rel}_{\\mathrm{tar}}(1)$"
     ],
     [
       "Signed reversal",
-      "Reverse source--target movement",
-      "Reversal ratio"
+      "Return toward source under the opposite patch",
+      "$\\operatorname{Reversal}(\\beta)$"
     ],
     [
       "Dose response",
-      "Ordered response to dose",
-      "Progress and signed Spearman \\(\\rho\\)"
+      "Target progress across intervention doses",
+      "Progress and signed $\\rho$"
     ],
     [
       "Feedback controllability",
-      "Tracking multiple targets",
-      "Hit rate, error, evaluations"
+      "Tracking targets through feedback-adjusted doses",
+      "Error, hit rate, evaluations"
     ],
     [
       "Off-target preservation",
-      "Collateral output change",
-      "\\(L_{\\mathrm{off}}(\\gamma\\beta)\\)"
+      "Output changes on non-target prompts",
+      "$L_{\\mathrm{off}}(\\gamma\\beta)$"
     ],
     [
       "Held-out reuse",
-      "Transfer to unseen prompts",
+      "Reuse of sites or interventions on unseen prompts",
       "Held-out residual or recovery"
     ]
   ],
-  "latex_table": "\\begin{tabular}{@{}p{0.28\\linewidth}p{0.37\\linewidth}p{0.29\\linewidth}@{}}\n\\toprule\nAxis & Property evaluated & Quantitative readout \\\\\n\\midrule\nReachability & Target proximity & \\(\\mathrm{Rel}_{\\mathrm{tar}}(\\gamma)\\) \\\\\nSigned reversal & Reverse source--target movement & Reversal ratio \\\\\nDose response & Ordered response to dose & Progress and signed Spearman \\(\\rho\\) \\\\\nFeedback controllability & Tracking multiple targets & Hit rate, error, evaluations \\\\\nOff-target preservation & Collateral output change & \\(L_{\\mathrm{off}}(\\gamma\\beta)\\) \\\\\nHeld-out reuse & Transfer to unseen prompts & Held-out residual or recovery \\\\\n\\bottomrule\n\\end{tabular}\n"
+  "latex_table": "\\begin{tabular}{@{}\n>{\\raggedright\\arraybackslash}p{0.25\\linewidth}\n>{\\raggedright\\arraybackslash}p{0.42\\linewidth}\n>{\\raggedright\\arraybackslash}p{0.26\\linewidth}@{}}\n\\toprule\nAxis & Evaluation objective & Quantitative readout \\\\\n\\midrule\nReachability\n& Proximity to the target\n& $\\mathrm{Rel}_{\\mathrm{tar}}(1)$ \\\\\n\nSigned reversal\n& Return toward source under the opposite patch\n& $\\operatorname{Reversal}(\\beta)$ \\\\\n\nDose response\n& Target progress across intervention doses\n& Progress and signed $\\rho$ \\\\\n\nFeedback controllability\n& Tracking targets through feedback-adjusted doses\n& Error, hit rate, evaluations \\\\\n\nOff-target preservation\n& Output changes on non-target prompts\n& $L_{\\mathrm{off}}(\\gamma\\beta)$ \\\\\n\nHeld-out reuse\n& Reuse of sites or interventions on unseen prompts\n& Held-out residual or recovery \\\\\n\\bottomrule\n\\end{tabular}\n"
 }

@@ -213,15 +213,15 @@ def coverage_driver(G: Tensor, q: Tensor, max_drivers: int=20, coverage_target: 
     return (selected, coverage_history, marginal_gains)
 
 def orthogonal_matching_pursuit(G: Tensor, q: Tensor, costs: Optional[Tensor]=None, max_drivers: int=20, ridge: float=1.0, tol: float=0.05, min_marginal_gain: float=0.001, preselected: Optional[Sequence[int]]=None, H: Optional[Tensor]=None, mu: float=0.0, W_diag: Optional[Tensor]=None, eta_0: float=0.0001) -> Tuple[List[int], Tensor, List[float]]:
-    """Driver-OMP (Algorithm C.3) — sparse residual fitting selection.
+    """Executed module-reuse OMP with coefficient-ridge refitting.
 
-    Implements the cost-normalised gain rule of Eq. C.27:
+    Uses the cost-normalised gain rule:
 
         score(v | S_t) = |⟨ ĝ_v, r_t ⟩|² /
                          ((‖ĝ_v‖² + λ W_vv) (c_v + η_0)),
 
-    where the augmented column ``ĝ_v = [Ḡ_v ; √μ Ω^{1/2} H̄_v]`` includes
-    the preservation block when ``H`` and ``mu > 0`` are supplied. With the
+    where the augmented column ``ĝ_v = [G_v ; √μ H_v]`` includes
+    a caller-supplied preservation block when ``H`` and ``mu > 0`` are supplied. With the
     defaults ``H=None, mu=0, W_diag=None``, the rule degenerates to plain
     cost-normalised OMP with ``score = |G^T r|² / (‖G_v‖² (c_v + η_0))``.
 
@@ -230,8 +230,9 @@ def orthogonal_matching_pursuit(G: Tensor, q: Tensor, costs: Optional[Tensor]=No
       * ``‖q − Ĝ_S β‖ / (‖q‖ + ξ) ≤ tol``,
       * marginal residual drop < ``min_marginal_gain`` after at least one pick.
 
-    Defaults: ``ridge=1.0`` and ``tol=0.05`` follow Appendix F.1
-    (``λ = 1`` and ``ε_lin = 0.05`` for the linear early-stop).
+    Defaults are ``ridge=1.0`` and ``tol=0.05``; each experiment's
+    configuration specifies its actual arguments. This implementation
+    does not enforce the formal intervention-energy constraint.
     """
     assert G.ndim == 2 and q.ndim == 1, 'G must be [n, k] and q must be [n]'
     n_obs, n_cand = G.shape
@@ -450,6 +451,8 @@ class DriverCircuitDiscovery:
         if self.do_backward_prune and drivers:
             drivers, strengths, prune_log = self.backward_prune(corrupt_batch, clean_target, drivers, deltas, strengths)
             val_log.extend(prune_log)
+        index_by_node = {node: i for i, node in enumerate(self.candidate_nodes)}
+        selected = [index_by_node[node] for node in drivers]
         ok, final_scores = self.validate_driver_set(corrupt_batch, clean_target, drivers, deltas, strengths)
         val_log.append({'action': 'final_validate', 'ok': ok, **final_scores})
         return DriverResult(drivers=drivers, strengths=strengths.detach(), linear_residual_norms=residual_norms, nonlinear_scores=final_scores, validation_log=val_log, selected_indices=selected, method='driver_omp')
@@ -497,6 +500,8 @@ def consensus_core(results: Sequence[DriverResult], gamma: float=0.7) -> Tuple[L
     return (core, backup, freq)
 
 def build_local_tables(discovery: 'DriverCircuitDiscovery', clean_batch: Mapping[str, Any], corrupt_batch: Mapping[str, Any], off_target_batch: Optional[Mapping[str, Any]]=None, preservation_target: Optional['TargetMetric']=None) -> Dict[str, Any]:
+    if off_target_batch is not None:
+        raise NotImplementedError('Off-target effects require directions defined on the preservation inputs.')
     G, q, deltas = discovery.estimate_local_effects(clean_batch, corrupt_batch)
     n_target = max(1, q.shape[0])
     q_bar = q / math.sqrt(n_target)
@@ -510,19 +515,9 @@ def build_local_tables(discovery: 'DriverCircuitDiscovery', clean_batch: Mapping
         diag[j] = (flat * flat).sum(dim=-1).mean()
     W = torch.diag(diag)
     H_bar: Optional[Tensor] = None
-    if off_target_batch is not None:
-        prev_metric = discovery.target_metric
-        try:
-            if preservation_target is not None:
-                discovery.target_metric = preservation_target
-            H_raw, _q_off, _d_off = discovery.estimate_local_effects(off_target_batch, off_target_batch)
-        finally:
-            discovery.target_metric = prev_metric
-        n_off = max(1, H_raw.shape[0])
-        H_bar = H_raw / math.sqrt(n_off)
     return {'q': q_bar, 'G': G_bar, 'H': H_bar, 'W': W, 'deltas': deltas, 'candidate_nodes': list(nodes)}
 driver_omp = orthogonal_matching_pursuit
-'Paper alias for Algorithm C.3 (Driver-OMP).'
+'Alias for the executed module-reuse selector.'
 
 
 def fit_reuse_coefficients(G, q, selected, ridge=1.0):

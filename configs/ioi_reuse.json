@@ -1,7 +1,7 @@
 {
   "experiment_id": "ioi_reuse",
   "model": "GPT-2 small",
-  "panel": "split and exact IDs from recorded IOI reuse inputs",
+  "panel": "64 fitting pairs and 64 independently constructed evaluation pairs; test constructor seed = fitting seed + 10000; original token IDs not separately retained",
   "settings": "pointwise clean-normalized recovery; refit-beta vs fixed-beta; actual denominator floor and failure threshold from producer",
   "direction_conditions": "P in both conditions",
   "seed_ids": [

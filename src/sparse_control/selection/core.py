@@ -437,6 +437,8 @@ class DriverCircuitDiscovery:
         if self.do_backward_prune and drivers:
             drivers, strengths, prune_log = self.backward_prune(corrupt_batch, clean_target, drivers, deltas, strengths)
             val_log.extend(prune_log)
+        index_by_node = {node: i for i, node in enumerate(self.candidate_nodes)}
+        selected = [index_by_node[node] for node in drivers]
         ok, final_scores = self.validate_driver_set(corrupt_batch, clean_target, drivers, deltas, strengths)
         val_log.append({'action': 'final_validate', 'ok': ok, **final_scores})
         return DriverResult(drivers=drivers, strengths=strengths.detach(), linear_residual_norms=residual_norms, nonlinear_scores=final_scores, validation_log=val_log, selected_indices=selected, method='driver_omp')

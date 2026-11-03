@@ -1,12 +1,32 @@
-\begin{tabular}{@{}p{0.28\linewidth}p{0.37\linewidth}p{0.29\linewidth}@{}}
+\begin{tabular}{@{}
+>{\raggedright\arraybackslash}p{0.25\linewidth}
+>{\raggedright\arraybackslash}p{0.42\linewidth}
+>{\raggedright\arraybackslash}p{0.26\linewidth}@{}}
 \toprule
-Axis & Property evaluated & Quantitative readout \\
+Axis & Evaluation objective & Quantitative readout \\
 \midrule
-Reachability & Target proximity & \(\mathrm{Rel}_{\mathrm{tar}}(\gamma)\) \\
-Signed reversal & Reverse source--target movement & Reversal ratio \\
-Dose response & Ordered response to dose & Progress and signed Spearman \(\rho\) \\
-Feedback controllability & Tracking multiple targets & Hit rate, error, evaluations \\
-Off-target preservation & Collateral output change & \(L_{\mathrm{off}}(\gamma\beta)\) \\
-Held-out reuse & Transfer to unseen prompts & Held-out residual or recovery \\
+Reachability
+& Proximity to the target
+& $\mathrm{Rel}_{\mathrm{tar}}(1)$ \\
+
+Signed reversal
+& Return toward source under the opposite patch
+& $\operatorname{Reversal}(\beta)$ \\
+
+Dose response
+& Target progress across intervention doses
+& Progress and signed $\rho$ \\
+
+Feedback controllability
+& Tracking targets through feedback-adjusted doses
+& Error, hit rate, evaluations \\
+
+Off-target preservation
+& Output changes on non-target prompts
+& $L_{\mathrm{off}}(\gamma\beta)$ \\
+
+Held-out reuse
+& Reuse of sites or interventions on unseen prompts
+& Held-out residual or recovery \\
 \bottomrule
 \end{tabular}

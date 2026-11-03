@@ -30,7 +30,7 @@ def test_independent_standard_library(root, replay):
     assert (report['seed_vectors'], report['condition_groups'], report['threshold_rows']) == (272,39,195)
     r = verify_outputs(root, replay)
     assert r['scope'] == 'tabular_saved_records'
-    assert r['paper_values']['numeric_rows'] == 161
+    assert r['paper_values']['numeric_rows'] == 162
 
 
 @pytest.mark.parametrize('damage', ['missing_table', 'bad_threshold', 'missing_seed', 'bad_summary', 'bad_statistics', 'bad_tex'])

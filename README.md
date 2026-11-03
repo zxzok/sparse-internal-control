@@ -16,13 +16,13 @@ The main task instances are IOI and Sentiment on GPT-2 small, MMLU Humanities an
 | Configurations | 21 experimental series, model profiles and available input/control identities |
 | Formal reachability | 272 complete source/target/patched task-readout triples, 39 groups and 195 threshold classifications |
 | Preservation | 3,072 prompt–seed KL measurements |
-| Result calculations | 13 numerical tables, three definition/configuration tables, threshold sensitivity and supporting statistics |
+| Result calculations | 13 numerical tables, three definition/configuration tables, threshold and Sentiment displacement sensitivity, and supporting statistics |
 
 The measurements underlying the paper's figures are indexed in [experiments/figure_records.json](experiments/figure_records.json). Plotting code, rendered figures, model weights and full-vocabulary logit arrays are not included.
 
 ## Quick start: recalculate tables and statistics
 
-Use Python 3.12. These calculations run on CPU without loading a model or requiring a GPU. Keep environments and generated outputs outside the checkout.
+For a downloaded ZIP, extract it and enter its `sparse-internal-control` directory; skip the clone command below. Use Python 3.12. These calculations run on CPU without loading a model or requiring a GPU. Keep environments and generated outputs outside the checkout.
 
 ```bash
 git clone https://github.com/zxzok/sparse-internal-control.git
@@ -43,7 +43,7 @@ On Windows, activate the environment with `..\sic-replay-env\Scripts\Activate.ps
 
 Calculations use the Python standard library; the lock file installs test dependencies. Model-dependent tests skip when their dependencies or explicit model fixture are absent. GitHub Actions runs this CPU-only record-replay path.
 
-Generated outputs mirror [results/](results/). The `verify` command checks all requested CSV, JSON and TeX files, compares 161 numerical rows and 15 supporting values with independently transcribed paper values, and checks formal residuals and threshold classifications with a separate arithmetic implementation. Its reported scope is `tabular_saved_records`.
+Generated outputs mirror [results/](results/). The `verify` command checks all requested CSV, JSON and TeX files, compares 162 numerical rows and 15 supporting values with independently transcribed paper values, and checks formal residuals and threshold classifications with a separate arithmetic implementation. It also checks static Tables 1 and G.2 and all artifact labels against the manuscript transcription in `experiments/paper_reference.json`. Its reported scope is `tabular_saved_records`.
 
 For a subset, pass the same artifact IDs to both commands:
 
@@ -103,7 +103,7 @@ The author of the accompanying paper is Xizhe Zhang. To cite this software relea
   author  = {Zhang, Xizhe},
   title   = {Sparse Internal Control of Language Models},
   year    = {2026},
-  version = {1.2.0},
+  version = {1.2.1},
   url     = {https://github.com/zxzok/sparse-internal-control}
 }
 ```

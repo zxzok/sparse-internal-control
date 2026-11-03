@@ -1,4 +1,5 @@
 task,method,direction,hits,total,initial_hits,mean_absolute_error,mean_evaluations
+ioi,driver_omp,P,24,24,2,0.13513108963767687,3.9583333333333335
 mcqa_humanities,driver_omp,P,38,48,6,1.0025864314908783,6.125
 mcqa_humanities,driver_omp,F,8,48,6,2.2640988156708772,11.479166666666666
 mcqa_humanities,coverage_driver,P,46,48,6,0.23778301718023917,4.416666666666667

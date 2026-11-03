@@ -8,7 +8,7 @@
 
 `verify` reports `scope: tabular_saved_records`. It checks every requested CSV, JSON and TeX output, independently transcribed paper values, and formal-reachability arithmetic. A subset requires an explicit matching `--artifacts` argument.
 
-Preservation verification aggregates 3,072 saved KL scalars; it does not recalculate logits-to-KL. Plotting code and rendered figures are absent. Saved-record verification does not establish full model replication. Full fitting campaigns have not been rerun as part of package preparation.
+Preservation verification aggregates 3,072 saved KL scalars; it does not recalculate logits-to-KL. Plotting code and rendered figures are absent. Saved-record verification does not establish full model replication.
 
 ## Inputs and models
 

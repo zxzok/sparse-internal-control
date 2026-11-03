@@ -9,7 +9,7 @@ Independent dose,"Humanities, STEM, Refusal; control evaluation splits; P/F","8 
 Preservation,"Fixed 32-prompt MMLU panel; MCQA P, Sentiment/Refusal F; nominal dose",8 seeds; 256 prompt--seed observations/selector on 32 unique prompts
 MCQA module reuse,"Signed margin recovery; 32 questions/category, 16/16",4 seeds/category; evaluation-side coefficient refit or fully frozen
 Sentiment reuse,"Signed margin recovery; 16 pairs, 8/8; P/F; $k=3,5,8$",8 seeds; fixed-dose recovery
-IOI reuse,Pointwise clean-normalized recovery; fitting/test split,"3 seeds; refit or fixed coefficients, both with evaluation-pair directions"
+IOI reuse,Pointwise clean-normalized recovery; 64 fitting/64 test pairs; $k\leq8$,"3 seeds; refit or fixed coefficients, both with evaluation-pair directions"
 IOI dose,"64 pairs, same panel; mean-margin progress and non-answer-position \(\Delta\)KL","Driver-OMP: 2 seeds, $k=4$; Random: 3 seeds, $k=8$"
 Sentiment unpaired dose,Word-set margin; unpaired prompt pools; seven doses,3 seeds/method; progress and same-prompt KL
 IOI feedback,Batch-mean IO--S margin; same 64-prompt panel,"3 seeds, 8 targets; 24 endpoints"

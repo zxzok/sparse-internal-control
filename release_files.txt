@@ -137,6 +137,7 @@ experiments/execution_profiles.json
 experiments/figure_records.json
 experiments/metric_registry.json
 experiments/model_assets.json
+experiments/paper_reference.json
 experiments/paper_source.json
 experiments/registry.json
 pyproject.toml
@@ -151,6 +152,9 @@ results/formal_reachability/summary.csv
 results/formal_reachability/threshold_sensitivity.csv
 results/paper_values.json
 results/replay.json
+results/sentiment_displacement_sensitivity/per_seed.csv
+results/sentiment_displacement_sensitivity/summary.csv
+results/sentiment_displacement_sensitivity/summary.json
 results/supporting_numbers.json
 results/tables/control_axes.csv
 results/tables/control_axes.json
@@ -293,6 +297,7 @@ src/sparse_control/tasks/sentiment_unpaired.py
 tests/conftest.py
 tests/test_dose.py
 tests/test_feedback.py
+tests/test_final_alignment.py
 tests/test_imports.py
 tests/test_input_binding.py
 tests/test_model_profiles.py
@@ -314,3 +319,4 @@ tests/test_reversal.py
 tests/test_runtime_reports.py
 tests/test_seed_statistics.py
 tests/test_selection.py
+tests/test_selector_interfaces.py

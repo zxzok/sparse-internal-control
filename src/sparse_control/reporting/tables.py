@@ -48,6 +48,30 @@ def feedback(root):
             endpoints=[endpoint_metrics(r['M_star'],r['iter_final_M'],r['history'][0]['M'],tol,r['n_evals']) for r in gg]
             rows.append(dict(task=task,method=algo,direction=MODES[mode],**summarize_feedback(endpoints)))
     return rows
+
+def ioi_feedback(root):
+    rs=records(root,'ioi_feedback','feedback_trajectories')
+    endpoints=[endpoint_metrics(r['M_star'],r['iter_M_final'],r['iter_history'][0]['M'],.3,r['iter_n_evals']) for r in rs]
+    return dict(task='ioi',method='driver_omp',direction='P',**summarize_feedback(endpoints))
+
+def sentiment_displacement_sensitivity(root):
+    """Exclude zero requested displacements from saved paired evaluation vectors."""
+    per=[]
+    for r in records(root,'formal_reachability','readouts'):
+        if r['task']!='sentiment':continue
+        s,t,y=r['source_behavior'],r['target_behavior'],r['forward_behavior']
+        if not (len(s)==len(t)==len(y)==8):raise ValueError('Sentiment evaluation panel must contain eight pairs')
+        keep=[i for i,(a,b) in enumerate(zip(s,t)) if a!=b]
+        if not keep:raise ValueError('Sentiment sensitivity has no nonzero displacement')
+        full=rel_tar(s,t,y);filtered=rel_tar([s[i] for i in keep],[t[i] for i in keep],[y[i] for i in keep])
+        per.append(dict(method=r['method'],direction=r['direction'],seed=r['seed'],pairs=len(s),retained_pairs=len(keep),excluded_pairs=len(s)-len(keep),Rel_tar_all=full,Rel_tar_nonzero=filtered,passes_all=full<=.4,passes_nonzero=filtered<=.4))
+    summary=[]
+    for (method,direction),rs in sorted(groups(per,'method','direction').items()):
+        a=seed_summary([r['Rel_tar_all'] for r in rs],[r['seed'] for r in rs],range(8))
+        b=seed_summary([r['Rel_tar_nonzero'] for r in rs])
+        summary.append(dict(method=method,direction=direction,seeds=a['n'],Rel_tar_all_mean=a['mean'],Rel_tar_all_sample_sd=a['sample_sd'],Rel_tar_nonzero_mean=b['mean'],Rel_tar_nonzero_sample_sd=b['sample_sd'],passes_all=sum(r['passes_all'] for r in rs),passes_nonzero=sum(r['passes_nonzero'] for r in rs),epsilon=.4))
+    if (len(per),len(summary))!=(48,6):raise ValueError('Incomplete Sentiment sensitivity coverage')
+    return per,summary
 def preservation(root):
     rows=[]
     for task in ['mcqa_humanities','mcqa_stem','sentiment','refusal']:
@@ -110,6 +134,7 @@ def build_table(artifact_id,root,output):
                 for mode in ['P','F']:cells.append([TASKS[task],mode]+[count(index[task,m,mode]['hits'],index[task,m,mode]['total']) for m in METHODS[:3]])
             numeric=fs
         elif artifact_id=='feedback_details':
+            fs=[ioi_feedback(root)]+fs
             columns=['Task','Method','Mode','Hits','MAE','Evals','Initial'];numeric=fs
             for r in fs:cells.append([TASKS[r['task']],LABELS[r['method']],r['direction'],count(r['hits'],r['total']),f"{r['mean_absolute_error']:.4f}",f"{r['mean_evaluations']:.3f}",count(r['initial_hits'],r['total'])])
         else:
@@ -175,6 +200,11 @@ def build_table(artifact_id,root,output):
             cells.append(row)
     elif artifact_id in ['control_axes','formal_reference_settings','experiment_matrix']:
         spec=load_json(root/'configs'/('display_'+artifact_id+'.json'));columns=spec['columns'];cells=spec['cells']
+    elif artifact_id=='sentiment_displacement_sensitivity':
+        per,summary=sentiment_displacement_sensitivity(root)
+        sd=output/artifact_id;sd.mkdir(exist_ok=True)
+        write_csv(sd/'per_seed.csv',per);write_csv(sd/'summary.csv',summary);write_json(sd/'summary.json',summary)
+        return dict(artifact_id=artifact_id,per_seed_records=len(per),condition_groups=len(summary))
     elif artifact_id=='supporting_numbers':
         value=supporting_numbers(root);write_json(output/'supporting_numbers.json',value);return {'artifact_id':artifact_id,'scalars':value}
     else:raise ValueError(f'Unknown table {artifact_id}')

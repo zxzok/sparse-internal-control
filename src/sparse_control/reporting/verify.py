@@ -5,7 +5,7 @@ from pathlib import Path
 from ..io import load_json
 from ..registry import load_artifacts, resolve_dependencies
 from ..release.check import check_records
-from .paper_checks import compare_with_expected
+from .paper_checks import compare_with_expected, check_paper_references
 
 
 def verify_outputs(root, output, artifacts='all'):
@@ -17,6 +17,7 @@ def verify_outputs(root, output, artifacts='all'):
     if manifest != dict(artifacts=selected, scope='tabular_saved_records', model_execution=False):
         raise ValueError('Output scope differs from requested artifacts; specify --artifacts for a subset')
     record_check = check_records(root)
+    references = check_paper_references(root, output, selected)
     independent = compare_with_expected(output, root/'results/paper_values.json', selected)
     formal = {'status': 'not_in_requested_scope'}
     if any(x.startswith('formal_reachability_') or x == 'reachability_tolerance' for x in selected):
@@ -45,5 +46,5 @@ def verify_outputs(root, output, artifacts='all'):
             raise ValueError(f'Unexpected files outside declared output scope: {sorted(map(str, extras))}')
     return dict(status='PASS', scope='tabular_saved_records', artifacts=selected,
                 output_files=len(paths), paper_values=independent, formal_reachability=formal,
-                records=record_check, preservation='saved_KL_scalar_aggregation_only',
+                records=record_check, paper_references=references, preservation='saved_KL_scalar_aggregation_only',
                 model_execution=False)

@@ -2,38 +2,38 @@
   "artifact_id": "control_axes",
   "columns": [
     "Axis",
-    "Property evaluated",
+    "Evaluation objective",
     "Quantitative readout"
   ],
   "cells": [
     [
       "Reachability",
-      "Target proximity",
-      "\\(\\mathrm{Rel}_{\\mathrm{tar}}(\\gamma)\\)"
+      "Proximity to the target",
+      "$\\mathrm{Rel}_{\\mathrm{tar}}(1)$"
     ],
     [
       "Signed reversal",
-      "Reverse source--target movement",
-      "Reversal ratio"
+      "Return toward source under the opposite patch",
+      "$\\operatorname{Reversal}(\\beta)$"
     ],
     [
       "Dose response",
-      "Ordered response to dose",
-      "Progress and signed Spearman \\(\\rho\\)"
+      "Target progress across intervention doses",
+      "Progress and signed $\\rho$"
     ],
     [
       "Feedback controllability",
-      "Tracking multiple targets",
-      "Hit rate, error, evaluations"
+      "Tracking targets through feedback-adjusted doses",
+      "Error, hit rate, evaluations"
     ],
     [
       "Off-target preservation",
-      "Collateral output change",
-      "\\(L_{\\mathrm{off}}(\\gamma\\beta)\\)"
+      "Output changes on non-target prompts",
+      "$L_{\\mathrm{off}}(\\gamma\\beta)$"
     ],
     [
       "Held-out reuse",
-      "Transfer to unseen prompts",
+      "Reuse of sites or interventions on unseen prompts",
       "Held-out residual or recovery"
     ]
   ],

@@ -7,9 +7,14 @@ def execute(root,experiment,stage,seeds,profile_id,output,interventions=None,smo
     if profile_id not in profiles:raise ValueError(f'Unknown execution profile: {profile_id}')
     profile=profiles[profile_id]
     if profile_id not in config['execution_profiles']:raise ValueError('Profile incompatible with experiment loader/readout')
+    if smoke:
+        if stage!='nominal' or experiment not in ['ioi_nominal','mcqa_humanities_nominal','mcqa_stem_nominal']:
+            raise ValueError('Smoke requires --stage nominal and a nominal head/module experiment')
+        if seeds is None:seeds=str(config['seed_ids'][0])
     seeds=config['seed_ids'] if seeds is None else list(map(int,seeds.split(',')))
     if not seeds or len(set(seeds))!=len(seeds) or not set(seeds)<=set(config['seed_ids']):raise ValueError('Select a nonempty registered seed subset')
-    if not smoke and stage not in config['available_stages']:raise ValueError(f'{experiment}: stage {stage} is not registered; available={config["available_stages"]}')
+    if smoke and len(seeds)!=1:raise ValueError('Smoke requires exactly one seed')
+    if stage not in config['available_stages']:raise ValueError(f'{experiment}: stage {stage} is not registered; available={config["available_stages"]}')
     if interventions and (smoke or stage in ['full','fit','preservation','generation'] or experiment=='refusal_single_site'):
         raise ValueError('--interventions is supported only by fixed-control nominal/dose/reversal/feedback stages')
     if task is not None and stage!='preservation':
@@ -21,7 +26,6 @@ def execute(root,experiment,stage,seeds,profile_id,output,interventions=None,smo
         actual=importlib.metadata.version(lib)
         if actual.split('+')[0]!=version.split('+')[0]:raise RuntimeError(f'Profile {profile_id} requires {lib}=={version}; installed {actual}')
     actual={x:importlib.metadata.version(x) for x in profile['versions']};start=time.time()
-    if smoke and experiment not in ['ioi_nominal','mcqa_humanities_nominal','mcqa_stem_nominal']:raise ValueError('Smoke is limited to nominal head/module interfaces')
     if smoke:
         from .nominal import run_nominal
         report=run_nominal(config,profile,seeds,root,output,smoke=True)

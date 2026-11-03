@@ -13,3 +13,7 @@ The directories separate inputs, interventions, measurements and generated summa
 Preservation records retain measured scalar KL values and any recorded array identifiers as provenance. Full-vocabulary arrays are not included. Replay verifies scalar summaries only.
 
 The 16-token Refusal continuations retain token IDs, text and lexical readouts. They do not provide semantic refusal annotations or completed final answers. The unpaired Sentiment curves remain distinct from paired experiments and do not have bound fitted controls in this distribution.
+
+`results/sentiment_displacement_sensitivity/` reports the Appendix E.3 check on the paired Sentiment evaluation vectors. It excludes pairs with exactly equal saved source and target readouts, retains the same interventions, and recomputes the complete-vector residual with stabilizer 1e-6. The 48 per-seed rows and six condition summaries report both residuals and pass counts at epsilon 0.4. Five of the sixteen source/target template pairs have identical strings; the seeded evaluation halves contain two or three such pairs. This analysis does not create new experimental trials.
+
+Feedback fields `iter_n_evals` (IOI) and `n_evals` (MCQA/Refusal) count recorded readout evaluations, including the initial zero-dose and final endpoint readouts. A zero-dose call may return the cached baseline; these counts are distinct from controller updates and fresh model forward passes. Table G.8 includes all 24 IOI endpoints and the MCQA/Refusal summaries.

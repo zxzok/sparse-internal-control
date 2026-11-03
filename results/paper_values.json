@@ -2,8 +2,8 @@
   "source": "final manuscript tables and quantitative text",
   "tables": {
     "nominal_reconstruction": {
-      "paper_label": "tab:nominal-restored",
-      "paper_display_name": "Table 2",
+      "paper_label": "tab:nominal-clean",
+      "paper_display_name": "Table G.5",
       "cells": [
         [
           "Driver-OMP",
@@ -126,6 +126,26 @@
           "$0.073\\pm0.093$ (3/3)",
           "$0.020\\pm0.012$ (3/3)"
         ]
+      ],
+      "paper_appearances": [
+        {
+          "paper_label": "tab:nominal-restored",
+          "paper_display_name": "Table 2",
+          "reported_fields": [
+            "Rel_tar_mean",
+            "Rel_tar_sample_sd"
+          ]
+        },
+        {
+          "paper_label": "tab:formal_reachability_samepanel",
+          "paper_display_name": "Table G.3",
+          "reported_fields": [
+            "Rel_tar_mean",
+            "Rel_tar_sample_sd",
+            "passes_0p4",
+            "seeds"
+          ]
+        }
       ]
     },
     "formal_reachability_heldout": {
@@ -208,7 +228,7 @@
     },
     "signed_reversal": {
       "paper_label": "tab:formal-reversal",
-      "paper_display_name": "Table G.5",
+      "paper_display_name": "Table G.6",
       "cells": [
         [
           "IOI",
@@ -403,7 +423,7 @@
     },
     "dose_ordering": {
       "paper_label": "tab:independent-dose-stats",
-      "paper_display_name": "Table G.6",
+      "paper_display_name": "Table G.7",
       "cells": [
         [
           "Humanities",
@@ -571,8 +591,17 @@
     },
     "feedback_details": {
       "paper_label": "tab:feedback-details",
-      "paper_display_name": "Table G.7",
+      "paper_display_name": "Table G.8",
       "cells": [
+        [
+          "IOI",
+          "Driver-OMP",
+          "P",
+          "24/24",
+          "0.1351",
+          "3.958",
+          "2/24"
+        ],
         [
           "Humanities",
           "\\DriverOMP{}",
@@ -739,7 +768,7 @@
     },
     "off_target_preservation": {
       "paper_label": "tab:fixed-panel-preservation",
-      "paper_display_name": "Table G.8",
+      "paper_display_name": "Table G.9",
       "cells": [
         [
           "Sentiment",
@@ -865,7 +894,7 @@
     },
     "mcqa_reuse": {
       "paper_label": "tab:baselines-transfer",
-      "paper_display_name": "Table G.9",
+      "paper_display_name": "Table G.10",
       "cells": [
         [
           "Humanities",
@@ -927,7 +956,7 @@
     },
     "ioi_reuse": {
       "paper_label": "tab:ioi-reuse",
-      "paper_display_name": "Table G.10",
+      "paper_display_name": "Table G.11",
       "cells": [
         [
           "Driver-OMP",
@@ -961,7 +990,7 @@
     },
     "sentiment_fixed_dose": {
       "paper_label": "tab:sentiment-reuse",
-      "paper_display_name": "Table G.11",
+      "paper_display_name": "Table G.12",
       "cells": [
         [
           "\\DriverOMP{}",
@@ -1159,7 +1188,7 @@
     },
     "feedback_tolerance": {
       "paper_label": "tab:feedback-tolerances",
-      "paper_display_name": "Table G.12",
+      "paper_display_name": "Table G.13",
       "cells": [
         [
           "Humanities",
@@ -1345,7 +1374,7 @@
     },
     "model_comparison": {
       "paper_label": "tab:source-bound-scale",
-      "paper_display_name": "Table G.13",
+      "paper_display_name": "Table G.14",
       "cells": [
         [
           "Qwen3-4B",

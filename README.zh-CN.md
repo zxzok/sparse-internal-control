@@ -11,7 +11,7 @@
 - 21 组实验配置及执行入口。
 - 272 组完整 source/target/patched 任务读出，对应 39 个条件组和 195 项阈值分类。
 - 3,072 条逐提示、逐种子的 KL 测量。
-- 重建 13 张数值表、3 张定义/配置表及其他统计的代码。
+- 重建 13 张数值表、3 张定义/配置表、阈值及 Sentiment 零位移敏感性统计的代码。
 - 输入、保存的干预、模型配置、数据说明、测试与引用信息。
 
 论文图的底层测量记录和对应关系见 [experiments/figure_records.json](experiments/figure_records.json)。仓库不含绘图代码、图片、模型权重或完整词表 logits 数组。
@@ -37,7 +37,7 @@ python -m pytest -q
 
 Windows PowerShell 使用 `..\sic-replay-env\Scripts\Activate.ps1` 激活环境。
 
-`reproduce` 从测量记录生成表格与统计；`verify` 检查完整性、论文数值、逐种子结果、均值、标准差及阈值分类，不需要另一个独立验证脚本。部分结果复算应在两个命令中使用相同的 `--artifacts` 参数。每次运行使用新的输出目录。
+`reproduce` 从测量记录生成表格与统计；`verify` 检查完整性、论文数值、表号与静态表定义、逐种子结果、均值、标准差及阈值分类，不需要另一个独立验证脚本。部分结果复算应在两个命令中使用相同的 `--artifacts` 参数。每次运行使用新的输出目录。
 
 未安装模型依赖或缺少显式模型 fixture 的测试会标记为跳过。GitHub Actions 仅运行 CPU 记录复算，不启动语言模型实验。
 

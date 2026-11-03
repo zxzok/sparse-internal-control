@@ -8,6 +8,8 @@ Executed OMP ranks squared residual correlations divided by column squared norm 
 
 The nominal producer's execution-context kernels preserve the order of method calls required by the registered pipeline. The public paper comparisons are Driver-OMP, Coverage-Driver, Top-k, Random and Nonlinear greedy. Nonlinear greedy shortlists up to 32 candidates and selects by measured nonlinear reconstruction after ridge refitting; it is not a global bound.
 
+`DriverResult.selected_indices` indexes the returned, possibly pruned `drivers` in the candidate library, in the same order as `strengths`. The module-reuse `build_local_tables` interface raises `NotImplementedError` for a supplied off-target batch; the registered experiments do not use that branch.
+
 ## Direction and information conditions
 
 P means evaluation-pair activation contrasts; F means fitting-split mean contrasts. Direction mode is independent of coefficient fitting and dose updates. Feedback holds support, base coefficients and direction rule fixed, and adjusts dose using observed target error. Fully frozen open-loop reuse fixes dose as well. Sentiment feedback is not evaluated.
@@ -20,7 +22,7 @@ MCQA retains the original reference answer index after exchanging correct and se
 - `r_clean`: norm(target - patched) / max(norm(target), 1e-12); it has a different denominator and is not rel_tar.
 - Reversal ratio: distance from reversed output to target divided by distance to source. Positive infinity and 0/0 are represented explicitly.
 - Dose response: signed Spearman over the declared fixed grid. Ties use average ranks; a constant curve is undefined. Negative correlation is not counted as positive dose ordering.
-- Feedback: terminal endpoint error, with initial hits and model evaluations reported separately. MCQA/Refusal use fixed gains without clipping or gain halving. IOI retains its own controller.
+- Feedback: terminal endpoint error, with initial hits and recorded readout-evaluation counts reported separately. Counts include the initial zero-dose readout and final endpoint readout; zero-dose calls may reuse a cached unpatched baseline, so these are not necessarily fresh model forward passes. MCQA/Refusal use fixed gains without clipping or gain halving. IOI retains its own controller.
 - Preservation: full-vocabulary KL(unpatched || patched), in nats. P95 is nearest rank; at 256 observations it is the 244th sorted value. Seed-mean and all-prompt pass counts are separate. The paired-position IOI delta-KL and unpaired Sentiment dose KL retain their own panel and reference definitions.
 - Reuse: MCQA signed mean-margin recovery excludes absolute mean gaps below 1e-9; Sentiment uses max(mean target gap, 1e-6); IOI uses one minus mean pointwise clean-normalized absolute error with floor 1e-6. They are not interchangeable with one minus rel_tar.
 

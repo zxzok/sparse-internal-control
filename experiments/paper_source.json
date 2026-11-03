@@ -1,12 +1,16 @@
 {
   "title": "Sparse Internal Control of Language Models",
   "source_sha256": {
-    "main": "3310f90fd6a8dddf112834ca31eaeb71faa75bc3094bd3278b2d25e7821be8c9",
-    "appendix": "bfe06f6de4aa3f916408f2f73e0179c12538b72ab04386f0262687ae0da583a5"
+    "main": "038758de46325c06680fde81f34eac70720d00bf43803a736a851e3bec855dd6",
+    "appendix": "b884c17c81c13a3d3fe4f8fb888d01d47fccacd8a5d2af13b6de3629521e46dc",
+    "checklist": "330e1b1ccad5ded45f15fca8b98a008ee9ccb40d78b0351750aea4e3b401f3f1"
   },
   "mapping_rule": "Stable LaTeX labels and compiled display numbers. Table 2 selects the continuous fields of formal_reachability_samepanel; nominal_reconstruction is the supplemental R_clean table. Source hashes bind artifact labels; measurement-reference hashes bind the transcribed comparison values.",
   "measurement_reference_source_sha256": {
-    "main": "bd22ddcd0f1bed9c5103270cfe7ebf183d723fb78c21e17547e95ea3cc04aaa2",
-    "appendix": "e8f36569da918b2f59b58f64427cddd06a1e4f769fca106b7129c052b69a94ed"
-  }
+    "main": "038758de46325c06680fde81f34eac70720d00bf43803a736a851e3bec855dd6",
+    "appendix": "b884c17c81c13a3d3fe4f8fb888d01d47fccacd8a5d2af13b6de3629521e46dc"
+  },
+  "compiled_pdf_sha256": "533f615f67f99045d42ec99cf63978e4aed1baad827da94877e5c4381b14cbf6",
+  "paper_reference_sha256": "296d0876a90ed0f8ba2ceeb888259057347b751733036a4ccbbf954eae09bc93",
+  "measurement_reference_note": "The numerical transcription is checked against the final manuscript; the IOI feedback-details row is included in Table G.8."
 }

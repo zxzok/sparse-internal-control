@@ -294,11 +294,13 @@
     "paper_label": "tab:feedback-details",
     "paper_display_name": "Table G.8",
     "experiment_ids": [
+      "ioi_feedback",
       "mcqa_humanities_head",
       "mcqa_stem_head",
       "refusal_head"
     ],
     "record_paths": [
+      "data/measurements/ioi_feedback/feedback_trajectories.jsonl",
       "data/measurements/mcqa_humanities_head/dose_scan.jsonl",
       "data/measurements/mcqa_humanities_head/feedback_trajectories.jsonl",
       "data/measurements/mcqa_humanities_head/readouts.jsonl",
@@ -315,7 +317,7 @@
       "data/measurements/refusal_head/run_metadata.json"
     ],
     "metric_id": "feedback_endpoint",
-    "aggregation": "hits, MAE, evaluations, initial hits",
+    "aggregation": "terminal errors, recorded readout-evaluation counts and initial hits; zero-dose readouts may reuse cached baselines",
     "generator": "sparse_control.reporting.tables.build_table",
     "dependencies": [],
     "filters": {
@@ -418,7 +420,7 @@
       "data/measurements/sentiment_paired/reversal.jsonl"
     ],
     "metric_id": "sentiment_recovery",
-    "aggregation": "4 methods \u00d7 3 budgets \u00d7 2 modes; mean and SD",
+    "aggregation": "4 methods × 3 budgets × 2 modes; mean and SD",
     "generator": "sparse_control.reporting.tables.build_table",
     "dependencies": [],
     "filters": {
@@ -511,7 +513,7 @@
       "data/measurements/formal_reachability/readouts.jsonl"
     ],
     "metric_id": "rel_tar",
-    "aggregation": "39 groups \u00d7 5 thresholds = 195 rows",
+    "aggregation": "39 groups × 5 thresholds = 195 rows",
     "generator": "sparse_control.reporting.tables.build_table",
     "dependencies": [],
     "filters": {
@@ -556,6 +558,32 @@
     "filters": {},
     "output_files": [
       "supporting_numbers.json"
+    ]
+  },
+  {
+    "artifact_id": "sentiment_displacement_sensitivity",
+    "paper_label": "app:task-sentiment",
+    "paper_display_name": "Appendix E.3",
+    "experiment_ids": [
+      "formal_reachability",
+      "sentiment_paired"
+    ],
+    "record_paths": [
+      "data/measurements/formal_reachability/readouts.jsonl"
+    ],
+    "metric_id": "rel_tar",
+    "aggregation": "per-seed displacement-normalized residuals before and after excluding zero-displacement evaluation pairs; mean, sample SD and passes at epsilon=0.4",
+    "generator": "sparse_control.reporting.tables.build_table",
+    "dependencies": [],
+    "filters": {
+      "task": "sentiment",
+      "dose": 1,
+      "exclude": "source_behavior equals target_behavior"
+    },
+    "output_files": [
+      "sentiment_displacement_sensitivity/per_seed.csv",
+      "sentiment_displacement_sensitivity/summary.csv",
+      "sentiment_displacement_sensitivity/summary.json"
     ]
   }
 ]
