@@ -1,12 +1,37 @@
+<a href="https://sparsecontrol.xizhe.net"><img src="https://raw.githubusercontent.com/zxzok/sparse-internal-control/gh-pages/readme/banner.png" alt="Sparse Control: sparse interventions in a frozen model, and a six-axis protocol for evaluating control" width="100%"></a>
+
 # Sparse Internal Control of Language Models
 
-[English](README.md) · [中文](README.zh-CN.md) · [Reproduction scope](REPRODUCIBILITY.md) · [Experiment guide](docs/experiments.md)
+[![Website](https://img.shields.io/badge/website-sparsecontrol.xizhe.net-D7EE5B?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net)
+[![Paper](https://img.shields.io/badge/paper-PDF-D7EE5B?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net/paper.pdf)
+[![Theory](https://img.shields.io/badge/theory-mathematical%20model-D7EE5B?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net/theory.html)
+[![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-F4F3EE?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net)
+[![Record replay](https://img.shields.io/github/actions/workflow/status/zxzok/sparse-internal-control/replay.yml?branch=main&style=flat-square&label=record%20replay&labelColor=111111)](https://github.com/zxzok/sparse-internal-control/actions/workflows/replay.yml)
+[![License](https://img.shields.io/badge/license-Apache--2.0-F4F3EE?style=flat-square&labelColor=111111)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.12-F4F3EE?style=flat-square&labelColor=111111)](pyproject.toml)
+
+**[Project website](https://sparsecontrol.xizhe.net)** · [Theory](https://sparsecontrol.xizhe.net/theory.html) · [Paper (PDF)](https://sparsecontrol.xizhe.net/paper.pdf) · [中文](README.zh-CN.md) · [Reproduction scope](REPRODUCIBILITY.md) · [Experiment guide](docs/experiments.md)
 
 Code and measurement records for **Sparse Internal Control of Language Models** by **Xizhe Zhang** (2026).
 
-The project studies sparse activation interventions in frozen language models. It includes Driver-OMP, Coverage-Driver and the comparison methods used in the paper, with task-specific evaluations of reachability, signed reversal, dose response, feedback controllability, off-target preservation and held-out reuse.
+> **Project website: [sparsecontrol.xizhe.net](https://sparsecontrol.xizhe.net)**. The framework, the six-axis protocol with interactive animations, and the [mathematical model](https://sparsecontrol.xizhe.net/theory.html) behind it.
 
-The main task instances are IOI and Sentiment on GPT-2 small, MMLU Humanities and STEM on Qwen3-4B, and Refusal on Qwen3-1.7B. Additional model comparisons are indexed in the [experiment guide](docs/experiments.md).
+## Overview
+
+Sparse internal control steers a frozen language model through a few internal sites at inference time. An intervention adds scaled directions to a handful of activations during the forward pass; the weights stay fixed, and setting the strengths to zero recovers the original model. Choosing the sites is posed as a control problem (which drivers, how hard, under what guarantees), and the resulting control is evaluated on six axes instead of one score.
+
+<a href="https://sparsecontrol.xizhe.net/#protocol"><img src="https://raw.githubusercontent.com/zxzok/sparse-internal-control/gh-pages/readme/six-axes.png" alt="The six-axis protocol: reachability, signed reversal, dose response, feedback controllability, off-target preservation and held-out reuse" width="100%"></a>
+
+| Axis | Question | Passes when |
+|---|---|---|
+| Reachability | How close does the intervention get to the target? | $\mathrm{Rel}_{\mathrm{tar}}(1) \le 0.4$ on held-out readouts |
+| Signed reversal | Does the opposite patch move target-side behavior toward the source? | $\mathrm{Reversal}(\beta) \ge 2$ after applying $-\beta$ to the target-side input |
+| Dose response | How does target progress vary with intervention strength? | Signed Spearman $\rho \ge 0.95$ over ten doses |
+| Feedback controllability | Can feedback-adjusted doses track requested targets? | Final error within $\tau_{\mathrm{ctrl}}$: 0.3 for IOI and MCQA, 0.1 for Refusal |
+| Off-target preservation | How much do non-target outputs change? | $\mathrm{KL} \le 0.001$, as a seed mean and on every prompt |
+| Held-out reuse | Do selected sites or complete interventions transfer to unseen prompts? | Reported as continuous recovery, with refit or frozen strengths |
+
+The repository includes Driver-OMP, Coverage-Driver and the comparison methods used in the paper, with task-specific evaluations on all six axes. The main task instances are IOI and Sentiment on GPT-2 small, MMLU Humanities and STEM on Qwen3-4B, and Refusal on Qwen3-1.7B. Additional model comparisons are indexed in the [experiment guide](docs/experiments.md).
 
 ## Included material
 
@@ -108,7 +133,7 @@ The author of the accompanying paper is Xizhe Zhang. To cite this software relea
 }
 ```
 
-Machine-readable metadata is in [CITATION.cff](CITATION.cff).
+Machine-readable metadata is in [CITATION.cff](CITATION.cff). The project website is [sparsecontrol.xizhe.net](https://sparsecontrol.xizhe.net).
 
 ## License and questions
 

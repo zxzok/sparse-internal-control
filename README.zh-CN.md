@@ -1,8 +1,35 @@
+<a href="https://sparsecontrol.xizhe.net"><img src="https://raw.githubusercontent.com/zxzok/sparse-internal-control/gh-pages/readme/banner.png" alt="Sparse Control：冻结模型中的稀疏干预，以及评价控制的六轴协议" width="100%"></a>
+
 # Sparse Internal Control of Language Models
 
-[English](README.md) · [中文](README.zh-CN.md)
+[![Website](https://img.shields.io/badge/website-sparsecontrol.xizhe.net-D7EE5B?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net)
+[![Paper](https://img.shields.io/badge/paper-PDF-D7EE5B?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net/paper.pdf)
+[![Theory](https://img.shields.io/badge/theory-mathematical%20model-D7EE5B?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net/theory.html)
+[![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-F4F3EE?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net)
+[![Record replay](https://img.shields.io/github/actions/workflow/status/zxzok/sparse-internal-control/replay.yml?branch=main&style=flat-square&label=record%20replay&labelColor=111111)](https://github.com/zxzok/sparse-internal-control/actions/workflows/replay.yml)
+[![License](https://img.shields.io/badge/license-Apache--2.0-F4F3EE?style=flat-square&labelColor=111111)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.12-F4F3EE?style=flat-square&labelColor=111111)](pyproject.toml)
+
+**[项目网站](https://sparsecontrol.xizhe.net)** · [理论与数学模型](https://sparsecontrol.xizhe.net/theory.html) · [论文 PDF](https://sparsecontrol.xizhe.net/paper.pdf) · [English](README.md) · [复现范围](REPRODUCIBILITY.md) · [实验说明](docs/experiments.md)
 
 论文 **Sparse Internal Control of Language Models** 的代码与测量记录，作者为 **Xizhe Zhang**。
+
+> **项目网站：[sparsecontrol.xizhe.net](https://sparsecontrol.xizhe.net)**。包含控制框架、带交互动画的六轴评价协议，以及背后的[数学模型](https://sparsecontrol.xizhe.net/theory.html)。
+
+## 概览
+
+稀疏内部控制在推理时通过少数内部位点操控一个冻结的语言模型：干预在前向传播中给少量激活加上缩放后的方向，权重保持不变，强度取零即恢复原模型。位点的选择被表述为一个控制问题（选哪些驱动点、推多大、有何保证），所得控制在六个轴上分别评价，而不是用一个分数概括。
+
+<a href="https://sparsecontrol.xizhe.net/#protocol"><img src="https://raw.githubusercontent.com/zxzok/sparse-internal-control/gh-pages/readme/six-axes.png" alt="六轴协议：可达性、符号反转、剂量响应、反馈可控性、非目标保持、留出复用" width="100%"></a>
+
+| 轴 | 问题 | 通过条件 |
+|---|---|---|
+| 可达性 Reachability | 干预能把读出推到离目标多近？ | 留出读出上 $\mathrm{Rel}_{\mathrm{tar}}(1) \le 0.4$ |
+| 符号反转 Signed reversal | 反向补丁能否把目标侧行为拉回 source？ | 对目标侧输入施加 $-\beta$ 后 $\mathrm{Reversal}(\beta) \ge 2$ |
+| 剂量响应 Dose response | 目标进展如何随干预强度变化？ | 十个剂量上带符号 Spearman $\rho \ge 0.95$ |
+| 反馈可控性 Feedback controllability | 反馈调整的剂量能否跟踪指定目标？ | 终点误差不超过 $\tau_{\mathrm{ctrl}}$：IOI 与 MCQA 为 0.3，Refusal 为 0.1 |
+| 非目标保持 Off-target preservation | 非目标输出改变了多少？ | $\mathrm{KL} \le 0.001$，种子均值与每条提示均满足 |
+| 留出复用 Held-out reuse | 选出的位点或完整干预能否迁移到未见提示？ | 以连续恢复率报告，区分重拟合强度与冻结强度 |
 
 仓库包含论文实际使用的 Driver-OMP、Coverage-Driver、比较方法、任务构造和六轴评价代码。主要任务为 IOI、Sentiment、MMLU Humanities、MMLU STEM 和 Refusal。
 
