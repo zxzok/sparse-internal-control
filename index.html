@@ -1,0 +1,1648 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sparse Internal Control of Language Models</title>
+<meta name="description" content="Sparse internal control steers a frozen language model through a few internal sites at inference time, and a six axis protocol measures the control it provides.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: one 1152px column told as a long story. Instruments (canvas, SVG) carry the ideas; prose keeps a 680px measure.
+   Color follows the paper's Figure 1: orange = intervention, blue = frozen model, red = source behavior, green = target behavior. */
+:root{
+  --bg:#FAFAF8; --surface:#FFFFFF; --raised:#F2F2EF; --line:#E2E2DD; --line-strong:#C8C8C1;
+  --ink:#0E0E0C; --muted:#5B5B55; --faint:#8E8E87;
+  --drive:#C9480C; --drive-ink:#A93C0A; --drive-soft:rgba(201,72,12,.09); --on-drive:#FFFFFF;
+  --model:#2357D9; --model-soft:rgba(35,87,217,.08);
+  --src:#C93A2E; --tgt:#0A7F55;
+  --nav-bg:rgba(255,255,255,.74); --panel-bg:rgba(250,250,248,.94);
+  --h1-a:#000000; --h1-b:#666666;
+  --font:"Geist","Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --s-25:2px; --s-50:4px; --s-75:8px; --s-100:12px; --s-200:16px; --s-300:24px; --s-400:32px; --s-500:40px; --s-600:48px; --s-700:64px; --s-800:80px; --s-900:96px;
+  --r-sm:2px; --r:4px; --r-md:6px; --r-lg:8px; --r-xl:12px; --r-2xl:16px; --r-3xl:24px; --r-full:9999px;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --ease-timer:cubic-bezier(0.3,0.1,0.7,0.9);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#181818; --surface:#1F1F1F; --raised:#272727; --line:#313131; --line-strong:#4A4A45;
+    --ink:#F2F2EE; --muted:#A8A8A1; --faint:#77776F;
+    --drive:#FF8A3D; --drive-ink:#FFA66B; --drive-soft:rgba(255,138,61,.13); --on-drive:#181818;
+    --model:#7FA3FF; --model-soft:rgba(127,163,255,.10);
+    --src:#FF7B6E; --tgt:#3DD39A;
+    --nav-bg:rgba(31,31,31,.72); --panel-bg:rgba(24,24,24,.94);
+    --h1-a:#FFFFFF; --h1-b:#9B9B9B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#181818; --surface:#1F1F1F; --raised:#272727; --line:#313131; --line-strong:#4A4A45;
+  --ink:#F2F2EE; --muted:#A8A8A1; --faint:#77776F;
+  --drive:#FF8A3D; --drive-ink:#FFA66B; --drive-soft:rgba(255,138,61,.13); --on-drive:#181818;
+  --model:#7FA3FF; --model-soft:rgba(127,163,255,.10);
+  --src:#FF7B6E; --tgt:#3DD39A;
+  --nav-bg:rgba(31,31,31,.72); --panel-bg:rgba(24,24,24,.94);
+  --h1-a:#FFFFFF; --h1-b:#9B9B9B;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:var(--s-900)}
+body{background:var(--bg); color:var(--ink); font-family:var(--font); font-size:1rem; line-height:1.5rem; font-weight:400; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:10; background:var(--bg)}
+a{color:inherit}
+p{margin:0; text-wrap:pretty}
+h1,h2,h3,h4{margin:0; text-wrap:balance}
+ul,ol{margin:0; padding:0; list-style:none}
+button{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--drive); outline-offset:3px; border-radius:var(--r)}
+::selection{background:var(--drive-soft)}
+sub,sup{font-size:.72em; line-height:0}
+
+/* Named text styles (Tailwind scale) */
+.heading-1{font-size:3.75rem; line-height:3.75rem; font-weight:600; letter-spacing:-0.025em}
+.heading-2{font-size:3rem; line-height:3rem; font-weight:600; letter-spacing:-0.02em}
+.heading-3{font-size:2.25rem; line-height:2.5rem; font-weight:600; letter-spacing:-0.015em}
+.heading-4{font-size:1.875rem; line-height:2.25rem; font-weight:600; letter-spacing:-0.01em}
+.heading-5{font-size:1.5rem; line-height:2rem; font-weight:600}
+.heading-6{font-size:1.25rem; line-height:1.75rem; font-weight:600}
+.title-1{font-size:1.25rem; line-height:1.75rem; font-weight:500}
+.title-2{font-size:1.125rem; line-height:1.75rem; font-weight:500}
+.title-3{font-size:1rem; line-height:1.5rem; font-weight:500}
+.title-4{font-size:.875rem; line-height:1.25rem; font-weight:500}
+.title-5{font-size:.75rem; line-height:1rem; font-weight:500}
+.body-1{font-size:1rem; line-height:1.5rem; font-weight:600}
+.body-3{font-size:1rem; line-height:1.5rem; font-weight:400}
+.body-5{font-size:.875rem; line-height:1.25rem; font-weight:500}
+.body-6{font-size:.875rem; line-height:1.25rem; font-weight:400}
+.button-md{font-size:1rem; line-height:1.5rem; font-weight:600}
+.button-sm{font-size:.875rem; line-height:1.25rem; font-weight:600}
+.caption-1{font-size:.875rem; line-height:1.25rem; font-weight:500}
+.caption-2{font-size:.875rem; line-height:1.25rem; font-weight:400}
+.caption-3{font-size:.75rem; line-height:1rem; font-weight:600}
+.caption-4{font-size:.75rem; line-height:1rem; font-weight:500}
+.caption-5{font-size:.75rem; line-height:1rem; font-weight:400}
+.mono{font-family:var(--mono)}
+.muted{color:var(--muted)}
+.eyebrow{font-size:.75rem; line-height:1rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--drive-ink)}
+
+.wrap{max-width:1184px; margin-inline:auto; padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))}
+.section{padding-block:var(--s-900)}
+.sec-head{display:grid; gap:var(--s-200); max-width:680px}
+.sec-head p{color:var(--muted)}
+.prose{display:grid; gap:var(--s-200); max-width:680px}
+.skip{position:fixed; left:var(--s-200); top:calc(env(safe-area-inset-top,0px) + var(--s-200)); z-index:100; padding:var(--s-75) var(--s-100); background:var(--ink); color:var(--bg); border-radius:var(--r-lg); transform:translateY(-200%); transition:transform 300ms var(--ease)}
+.skip:focus{transform:none}
+
+/* Icons */
+.ic{width:1.25rem; height:1.25rem; flex:none; fill:currentColor}
+.ic-sm{width:1rem; height:1rem}
+
+/* Buttons */
+.btn{display:inline-flex; align-items:center; white-space:nowrap; gap:var(--s-75); padding:var(--s-75) var(--s-100); border-radius:var(--r-full); border:1px solid transparent; text-decoration:none; cursor:pointer; background:none; transition:transform 300ms var(--ease), opacity 300ms var(--ease), background-color 300ms var(--ease), border-color 300ms var(--ease)}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--ink); color:var(--bg); padding-inline:var(--s-200)}
+.btn-primary:hover{opacity:.88}
+.btn-line{border-color:var(--line-strong); background:var(--surface); color:var(--ink)}
+.btn-line:hover{border-color:var(--ink)}
+.btn-text{color:var(--muted); padding-inline:var(--s-75)}
+.btn-text:hover{color:var(--ink)}
+.icon-btn{display:inline-grid; place-items:center; width:2.25rem; height:2.25rem; border-radius:var(--r-full); border:1px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer; transition:transform 300ms var(--ease), border-color 300ms var(--ease)}
+.icon-btn:hover{border-color:var(--ink)}
+.icon-btn:active{transform:scale(.96)}
+
+/* Navigation */
+.nav{position:fixed; z-index:60; top:calc(env(safe-area-inset-top,0px) + var(--s-200)); left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:var(--s-75); padding:var(--s-50); max-width:calc(100% - var(--s-400)); border:1px solid var(--line); border-radius:var(--r-full); background:var(--nav-bg); -webkit-backdrop-filter:saturate(1.4) blur(16px); backdrop-filter:saturate(1.4) blur(16px)}
+.brand{display:inline-flex; align-items:center; gap:var(--s-75); padding:var(--s-50) var(--s-100) var(--s-50) var(--s-75); text-decoration:none; border-radius:var(--r-full); white-space:nowrap}
+.brand svg{width:1.25rem; height:1.25rem}
+.nav-links{display:flex; gap:var(--s-25)}
+.nav-links a{padding:var(--s-50) var(--s-100); border-radius:var(--r-full); text-decoration:none; color:var(--muted); white-space:nowrap; transition:color 300ms var(--ease), background-color 300ms var(--ease)}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a[aria-current="true"]{background:var(--raised); color:var(--ink)}
+.nav .icon-btn{width:2rem; height:2rem; border-color:transparent; background:transparent}
+.nav .icon-btn:hover{border-color:var(--line-strong)}
+.menu-btn{display:none; position:relative}
+.menu-btn span{position:absolute; left:50%; top:50%; width:1rem; height:1.5px; background:currentColor; border-radius:var(--r-sm); transition:transform 500ms var(--ease)}
+.menu-btn span:first-child{transform:translate(-50%,-4px)}
+.menu-btn span:last-child{transform:translate(-50%,3px)}
+.menu-open .menu-btn span:first-child{transform:translate(-50%,0) rotate(45deg)}
+.menu-open .menu-btn span:last-child{transform:translate(-50%,0) rotate(-45deg)}
+.menu{position:fixed; inset:0; z-index:55; visibility:hidden; background:var(--panel-bg); -webkit-backdrop-filter:blur(24px); backdrop-filter:blur(24px); padding:calc(env(safe-area-inset-top,0px) + var(--s-900)) max(24px, env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + var(--s-400)) max(24px, env(safe-area-inset-left,0px)); display:flex; flex-direction:column; gap:var(--s-400); opacity:0; pointer-events:none; transition:opacity 300ms var(--ease), visibility 0s linear 300ms}
+.menu-open .menu{opacity:1; pointer-events:auto; visibility:visible; transition:opacity 300ms var(--ease)}
+body.menu-open{overflow:hidden}
+.menu ul{display:grid; gap:var(--s-75)}
+.menu a.m-link{display:block; padding:var(--s-75) 0; text-decoration:none; opacity:0; transform:translateY(var(--s-300)); transition:opacity 500ms var(--ease), transform 500ms var(--ease)}
+.menu-open .menu a.m-link{opacity:1; transform:none}
+.menu .m-actions{display:flex; gap:var(--s-100); flex-wrap:wrap}
+
+/* Hero */
+.hero{padding-top:calc(var(--s-900) + var(--s-400)); padding-bottom:var(--s-700)}
+.hero-text{display:grid; gap:var(--s-300); max-width:680px}
+.hero-meta{display:flex; flex-wrap:wrap; align-items:center; gap:var(--s-100)}
+.chip{display:inline-flex; align-items:center; gap:var(--s-50); padding:var(--s-50) var(--s-100); border:1px solid var(--line-strong); border-radius:var(--r-full); background:var(--surface)}
+.chip .dot{width:6px; height:6px; border-radius:var(--r-full); background:var(--drive)}
+.h1-grad{background:linear-gradient(90deg,var(--h1-a),var(--h1-b)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.h1-grad span{display:block}
+.hero-sub{color:var(--muted)}
+.cta-row{display:flex; flex-wrap:wrap; align-items:center; gap:var(--s-100)}
+.proof{color:var(--muted)}
+.proof b{font-weight:500; color:var(--ink)}
+
+.console{margin-top:var(--s-600); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); padding:var(--s-300); display:grid; gap:var(--s-300)}
+.console-top{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:var(--s-100)}
+.console-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2.3fr) minmax(0,1.25fr); gap:var(--s-300); align-items:center}
+.io{display:grid; gap:var(--s-75); min-width:0}
+.io-label{color:var(--faint); letter-spacing:.06em; text-transform:uppercase}
+.bubble{padding:var(--s-100) var(--s-200); border:1px solid var(--line); border-radius:var(--r-xl); background:var(--raised)}
+.ctx-chip{justify-self:start; display:inline-flex; gap:var(--s-50); align-items:center; padding:var(--s-25) var(--s-75); border-radius:var(--r-full); border:1px solid var(--drive); color:var(--drive-ink)}
+.net-wrap{position:relative; height:17.5rem; min-width:0}
+.net-wrap canvas{position:absolute; inset:0; width:100%; height:100%}
+.out-stack{display:grid}
+.out-stack > *{grid-area:1/1; transition:opacity 300ms var(--ease)}
+.out-text{padding:var(--s-100) var(--s-200); border-radius:var(--r-xl); border:1px solid var(--line); background:var(--raised)}
+.out-text.src{border-color:var(--src)}
+.out-text.tgt{border-color:var(--tgt)}
+.tag{display:inline-flex; margin-top:var(--s-75); padding:var(--s-25) var(--s-75); border-radius:var(--r-full); border:1px solid currentColor}
+.out-text.src .tag{color:var(--src)}
+.out-text.tgt .tag{color:var(--tgt)}
+.gauge{position:relative; height:var(--s-500); margin-top:var(--s-50)}
+.gauge-track{position:absolute; left:0; right:0; top:var(--s-200); height:var(--s-50); border-radius:var(--r-full); background:var(--line)}
+.gauge-tick{position:absolute; top:var(--s-100); width:1px; height:var(--s-100); background:var(--faint)}
+.gauge-tick i{position:absolute; top:var(--s-200); left:0; transform:translateX(-50%); font-style:normal; white-space:nowrap; color:var(--faint)}
+.gauge-mark{position:absolute; left:0; top:var(--s-75); width:var(--s-200); height:var(--s-200); margin-left:calc(var(--s-75) * -1); border-radius:var(--r-full); background:var(--drive); border:3px solid var(--surface); box-shadow:0 0 0 1px var(--drive)}
+.controls{display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center; gap:var(--s-200); padding-top:var(--s-200); border-top:1px solid var(--line)}
+.dose-val{min-width:5.5rem; text-align:right; font-variant-numeric:tabular-nums}
+.slider-box{position:relative; padding-bottom:var(--s-300)}
+input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:var(--s-300); background:transparent; margin:0; cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:var(--s-50); border-radius:var(--r-full); background:var(--line)}
+input[type=range]::-moz-range-track{height:var(--s-50); border-radius:var(--r-full); background:var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; width:var(--s-300); height:var(--s-300); margin-top:-10px; border-radius:var(--r-full); background:var(--drive); border:4px solid var(--surface); box-shadow:0 0 0 1px var(--drive); transition:transform 300ms var(--ease)}
+input[type=range]::-moz-range-thumb{width:var(--s-200); height:var(--s-200); border-radius:var(--r-full); background:var(--drive); border:4px solid var(--surface); box-shadow:0 0 0 1px var(--drive)}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
+.slider-ticks{position:absolute; left:var(--s-100); right:var(--s-100); bottom:0; height:var(--s-200)}
+.slider-ticks span{position:absolute; transform:translateX(-50%); white-space:nowrap; color:var(--faint)}
+.legend{display:flex; flex-wrap:wrap; gap:var(--s-100) var(--s-300); color:var(--muted)}
+.legend i{display:inline-block; width:10px; height:10px; border-radius:var(--r-full); margin-right:var(--s-75); vertical-align:-1px}
+.lg-drive{background:var(--drive)}
+.lg-site{border:1.5px solid var(--line-strong); background:var(--surface)}
+.lg-model{background:var(--model)}
+.note{color:var(--faint)}
+
+/* Idea */
+.idea-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--s-700); align-items:start}
+.obj-list{display:grid; border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
+.obj{display:grid; grid-template-columns:auto minmax(0,1fr); gap:var(--s-200); padding:var(--s-200) var(--s-300)}
+.obj + .obj{border-top:1px solid var(--line)}
+.obj-ic{display:grid; place-items:center; width:var(--s-500); height:var(--s-500); border-radius:var(--r-lg); border:1px solid var(--line); background:var(--raised); color:var(--drive)}
+.obj p{color:var(--muted)}
+.obj-cap{padding:var(--s-100) var(--s-300); color:var(--faint); border-top:1px solid var(--line)}
+
+/* Framework */
+.fw{display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:var(--s-600); margin-top:var(--s-600); align-items:start}
+.steps{display:grid; gap:var(--s-300)}
+.step{display:grid; gap:var(--s-200); padding:var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); cursor:pointer; transition:border-color 500ms var(--ease), opacity 500ms var(--ease)}
+.step:not(.on){opacity:.62}
+.step.on{border-color:var(--drive)}
+.step-head{display:flex; align-items:center; gap:var(--s-100)}
+.step-n{display:grid; place-items:center; width:var(--s-400); height:var(--s-400); border-radius:var(--r-full); border:1px solid var(--line-strong); font-family:var(--mono); font-size:.875rem; transition:background-color 500ms var(--ease), color 500ms var(--ease)}
+.step.on .step-n{background:var(--drive); border-color:var(--drive); color:var(--on-drive)}
+.step p{color:var(--muted)}
+.fx{font-family:var(--mono); font-size:.875rem; line-height:1.25rem; padding:var(--s-100) var(--s-200); border-radius:var(--r-lg); background:var(--raised); border:1px solid var(--line); overflow-x:auto; white-space:nowrap; color:var(--ink)}
+.fx.terms{display:flex; flex-wrap:wrap; gap:var(--s-50) var(--s-300); white-space:normal; overflow-x:visible}
+.fx.terms > span{white-space:nowrap}
+.pipe{display:flex; flex-wrap:wrap; align-items:center; gap:var(--s-75)}
+.pipe span.p{padding:var(--s-25) var(--s-75); border:1px solid var(--line-strong); border-radius:var(--r-full); white-space:nowrap}
+.pipe svg{width:.875rem; height:.875rem; fill:var(--faint)}
+.fw-fig{position:sticky; top:calc(env(safe-area-inset-top,0px) + var(--s-900)); display:grid; gap:var(--s-100)}
+.fig-scroll{overflow-x:auto; border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); padding:var(--s-200)}
+.fw-svg{display:block; width:100%; min-width:600px; height:auto; font-family:var(--font)}
+.fw-svg .b{fill:var(--surface); stroke:var(--line-strong); stroke-width:1.25}
+.fw-svg .chk{stroke:var(--drive); stroke-dasharray:4 3}
+.fw-svg .drive-b{stroke:var(--drive)}
+.fw-svg .model{fill:var(--model-soft); stroke:var(--model); stroke-width:1.5}
+.fw-svg .t{font-size:13px; font-weight:600; fill:var(--ink)}
+.fw-svg .c{font-size:12px; fill:var(--muted); font-family:var(--mono)}
+.fw-svg .mt{fill:var(--model)}
+.fw-svg .dt{fill:var(--drive-ink)}
+.fw-svg .w{fill:none; stroke:var(--muted); stroke-width:1.25}
+.fw-svg .wd{fill:none; stroke:var(--drive); stroke-width:1.5}
+.fw-svg .rs{fill:none; stroke:var(--line-strong); stroke-width:1}
+.fw-svg .cand{fill:var(--surface); stroke:var(--line-strong); stroke-width:1.25}
+.fw-svg .drv{fill:var(--drive)}
+.fw-svg .ring{fill:none; stroke:var(--drive); stroke-width:1.5; transform-box:fill-box; transform-origin:center; animation:ring 2.4s var(--ease) infinite}
+.fw-svg .ah{fill:var(--muted)}
+.fw-svg .ahd{fill:var(--drive)}
+.fw-svg .flow{fill:var(--model)}
+.fw-svg .flow-d{fill:var(--drive)}
+.fw-svg .ck{fill:var(--drive)}
+.fw-svg [data-s]{opacity:var(--dim,.18); transition:opacity 500ms var(--ease)}
+.fw-svg[data-step="1"] [data-s~="1"], .fw-svg[data-step="2"] [data-s~="2"], .fw-svg[data-step="3"] [data-s~="3"]{opacity:1}
+@keyframes ring{0%{transform:scale(1); opacity:.9} 100%{transform:scale(2.4); opacity:0}}
+
+/* Tagline */
+.tagline{padding-block:var(--s-900)}
+.tagline p{max-width:680px}
+.tw{opacity:.28; transition:opacity 500ms var(--ease)}
+.tw.on{opacity:1}
+.tw.k{color:var(--drive-ink)}
+
+/* Six axes */
+.axes{display:grid; grid-template-columns:minmax(0,25rem) minmax(0,1fr); gap:var(--s-600); margin-top:var(--s-600); align-items:start}
+.hex-col{display:grid; gap:var(--s-300); position:sticky; top:calc(env(safe-area-inset-top,0px) + var(--s-900))}
+.hex{position:relative; width:100%; max-width:25rem; aspect-ratio:400/350; margin-inline:auto}
+.hex-svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible}
+.hex-svg .hg{fill:transparent; transition:fill 500ms var(--ease)}
+.hex-svg .hg.on{fill:var(--drive-soft)}
+.hex-svg .ring1{fill:none; stroke:var(--line-strong); stroke-width:1.25}
+.hex-svg .ring2{fill:none; stroke:var(--line); stroke-width:1; stroke-dasharray:3 4}
+.hex-svg .spk{stroke:var(--line); stroke-width:1}
+.hex-svg .ptr{transform-box:view-box; transform-origin:200px 175px; transition:transform 500ms var(--ease)}
+.hex-svg .ptr line{stroke:var(--drive); stroke-width:2; stroke-linecap:round}
+.hex-svg .core{fill:var(--surface); stroke:var(--line-strong); stroke-width:1.25}
+.hex-svg .core-t{font-family:var(--mono); font-size:12px; font-weight:500; fill:var(--ink)}
+.hex-svg .core-s{font-family:var(--mono); font-size:10px; fill:var(--faint); letter-spacing:.06em}
+.hx{position:absolute; display:flex; align-items:center; gap:var(--s-75); padding:0; border:0; background:none; cursor:pointer; color:var(--muted); font-size:.75rem; line-height:1rem; font-weight:500; text-align:left; border-radius:var(--r-lg)}
+.hx .n{display:grid; place-items:center; width:1.75rem; height:1.75rem; flex:none; border-radius:var(--r-full); border:1px solid var(--line-strong); background:var(--surface); color:var(--ink); font-family:var(--mono); font-size:.75rem; font-weight:600; transition:transform 500ms var(--ease), background-color 300ms var(--ease), border-color 300ms var(--ease), color 300ms var(--ease)}
+.hx:hover .n{transform:scale(1.08); border-color:var(--ink)}
+.hx[aria-selected="true"]{color:var(--ink)}
+.hx[aria-selected="true"] .n{background:var(--drive); border-color:var(--drive); color:var(--on-drive); transform:scale(1.15)}
+.hx-r{transform:translate(-0.875rem,-50%)}
+.hx-l{transform:translate(calc(-100% + 0.875rem),-50%); flex-direction:row-reverse; text-align:right}
+.hx-t{transform:translate(-50%,calc(-100% + 0.875rem)); flex-direction:column-reverse; text-align:center}
+.hx-b{transform:translate(-50%,-0.875rem); flex-direction:column; text-align:center}
+.hex-legend{display:grid; gap:var(--s-75)}
+.hex-legend li{display:flex; align-items:center; gap:var(--s-100); color:var(--muted)}
+.hex-legend .k{font-family:var(--mono); color:var(--ink); min-width:2.5rem}
+.hex-legend li.on{color:var(--ink)}
+.hex-legend li.on .sw{background:var(--drive)}
+.sw{width:var(--s-100); height:var(--s-100); border-radius:var(--r-sm); background:var(--line-strong); transition:background-color 300ms var(--ease)}
+.panel{border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); display:grid; min-width:0; overflow:hidden}
+.panel-head{display:flex; justify-content:space-between; gap:var(--s-200); padding:var(--s-300) var(--s-300) var(--s-200)}
+.panel-head .ttl{display:grid; gap:var(--s-50); min-width:0}
+.panel-head .ttl p{color:var(--muted)}
+.panel-btns{display:flex; gap:var(--s-75); align-items:flex-start}
+.tour-bar{height:2px; background:var(--line); position:relative; overflow:hidden}
+.tour-bar i{position:absolute; inset:0; background:var(--drive); transform:scaleX(0); transform-origin:left}
+.swap{transition:opacity 300ms var(--ease), transform 300ms var(--ease)}
+.swap.out{opacity:0; transform:translateY(var(--s-75))}
+.scope{position:relative; height:22.5rem; border-bottom:1px solid var(--line); background:var(--surface)}
+.scope canvas{position:absolute; inset:0; width:100%; height:100%}
+.scope-read{padding:var(--s-100) var(--s-300); color:var(--faint); border-bottom:1px solid var(--line)}
+.panel-body{display:grid; gap:var(--s-200); padding:var(--s-300)}
+.facts{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:var(--s-300)}
+.facts > div{display:grid; gap:var(--s-75); align-content:start}
+.facts p{color:var(--muted)}
+.facts .find p{color:var(--ink)}
+.t1{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--s-200); margin-top:var(--s-600)}
+.t1-card{display:grid; gap:var(--s-75); align-content:start; text-align:left; padding:var(--s-200) var(--s-300) var(--s-300); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); cursor:pointer; transition:border-color 300ms var(--ease), transform 300ms var(--ease)}
+.t1-card:hover{border-color:var(--ink); transform:translateY(-2px)}
+.t1-card:active{transform:scale(.98)}
+.t1-card[aria-current="true"]{border-color:var(--drive)}
+.t1-card .top{display:flex; justify-content:space-between; gap:var(--s-100); color:var(--faint)}
+.t1-card .d{display:block; color:var(--muted)}
+.t1-card .ro{font-family:var(--mono); font-size:.75rem; line-height:1rem; color:var(--ink); padding-top:var(--s-75); border-top:1px solid var(--line); margin-top:var(--s-50)}
+
+/* Evidence */
+.ev-grid{display:grid; grid-template-columns:minmax(0,8fr) minmax(0,4fr); gap:var(--s-500); margin-top:var(--s-600); align-items:start}
+.tbl-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
+table{border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums}
+th,td{text-align:left; vertical-align:top; padding:var(--s-100) var(--s-200); border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+thead th{font-size:.75rem; line-height:1rem; font-weight:600; color:var(--muted); background:var(--raised)}
+.mx{min-width:46rem}
+.mx td:first-child{white-space:nowrap}
+.mx td:first-child small{display:block; color:var(--faint); font-size:.75rem; line-height:1rem}
+.pf{display:grid; grid-template-columns:.875rem 3.5rem auto; align-items:center; gap:var(--s-75); font-family:var(--mono); font-size:.75rem; line-height:1.25rem; white-space:nowrap}
+.pf .k{color:var(--faint)}
+.trk{height:var(--s-75); border-radius:var(--r-full); background:var(--raised); border:1px solid var(--line); overflow:hidden}
+.fill{display:block; height:100%; width:100%; border-radius:var(--r-full); transform:scaleX(var(--f)); transform-origin:left; transition:transform 800ms var(--ease)}
+.fill.p{background:var(--drive)}
+.fill.f{background:var(--model)}
+.reveal.pre .fill{transform:scaleX(0)}
+.na{font-size:.75rem; line-height:1rem; color:var(--faint)}
+.tbl-note{padding:var(--s-100) var(--s-200); color:var(--faint); border-top:1px solid var(--line)}
+.take{display:grid; gap:var(--s-200)}
+.take li{display:grid; gap:var(--s-50); padding-bottom:var(--s-200); border-bottom:1px solid var(--line)}
+.take li:last-child{border-bottom:0}
+.take p{color:var(--muted)}
+.key{display:inline-flex; gap:var(--s-100); flex-wrap:wrap; color:var(--muted)}
+.key i{display:inline-block; width:var(--s-100); height:var(--s-75); border-radius:var(--r-full); margin-right:var(--s-50)}
+.rt{min-width:34rem}
+.rt td{font-family:var(--mono); font-size:.75rem; line-height:1rem}
+.rt td:first-child{font-family:var(--font); font-size:.875rem; line-height:1.25rem}
+.rt .cell{display:grid; gap:var(--s-50)}
+.rt .bar{height:var(--s-50); border-radius:var(--r-full); background:var(--line); overflow:hidden}
+.rt .bar i{display:block; height:100%; width:100%; background:var(--ink); transform:scaleX(var(--f)); transform-origin:left; transition:transform 800ms var(--ease)}
+.reveal.pre .rt .bar i{transform:scaleX(0)}
+.rt tr.ours td:first-child::after{content:"this paper"; margin-left:var(--s-75); font-size:.75rem; color:var(--drive-ink)}
+.rt .best{font-weight:600}
+.ev-lower{display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:var(--s-500); margin-top:var(--s-500); align-items:start}
+
+/* Use */
+.use-grid{display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:var(--s-500); margin-top:var(--s-600); align-items:start}
+.code{border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface); overflow:hidden; min-width:0}
+.code-head{display:flex; justify-content:space-between; align-items:center; gap:var(--s-100); padding:var(--s-75) var(--s-75) var(--s-75) var(--s-200); border-bottom:1px solid var(--line); color:var(--muted)}
+.code pre{margin:0; padding:var(--s-200); overflow-x:auto; font-family:var(--mono); font-size:.8125rem; line-height:1.25rem; color:var(--ink)}
+.code pre .cm{color:var(--faint)}
+.code pre .pr{color:var(--drive-ink)}
+.mods{border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
+.mods li{display:flex; justify-content:space-between; gap:var(--s-200); padding:var(--s-100) var(--s-200); border-bottom:1px solid var(--line)}
+.mods li:last-child{border-bottom:0}
+.mods code{font-family:var(--mono); font-size:.8125rem; color:var(--ink)}
+.mods span{color:var(--muted); text-align:right}
+.mods-head{padding:var(--s-200); border-bottom:1px solid var(--line); display:grid; gap:var(--s-50)}
+.mods-head p{color:var(--muted)}
+.stats{display:flex; flex-wrap:wrap; gap:var(--s-100) var(--s-300); margin-top:var(--s-300); color:var(--muted)}
+.stats b{font-family:var(--mono); font-weight:500; color:var(--ink)}
+
+/* FAQ */
+.faq{display:grid; margin-top:var(--s-600); max-width:52rem; border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{display:flex; justify-content:space-between; align-items:center; gap:var(--s-200); padding:var(--s-200) 0; cursor:pointer; list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .pm{position:relative; width:var(--s-200); height:var(--s-200); flex:none; transition:transform 500ms var(--ease)}
+.faq summary .pm::before,.faq summary .pm::after{content:""; position:absolute; left:50%; top:50%; width:12px; height:1.5px; background:currentColor; transform:translate(-50%,-50%)}
+.faq summary .pm::after{transform:translate(-50%,-50%) rotate(90deg)}
+.faq details[open] summary .pm{transform:rotate(45deg)}
+.faq .a{padding-bottom:var(--s-300); color:var(--muted); max-width:680px}
+.faq details[open] .a{animation:faqIn 500ms var(--ease)}
+@keyframes faqIn{from{opacity:0; transform:translateY(calc(var(--s-75) * -1))} to{opacity:1; transform:none}}
+
+/* Cite + final CTA */
+.cite-grid{display:grid; grid-template-columns:minmax(0,7fr) minmax(0,5fr); gap:var(--s-500); margin-top:var(--s-600); align-items:start}
+.tabs{display:flex; gap:var(--s-50)}
+.tab{padding:var(--s-50) var(--s-100); border-radius:var(--r-full); border:1px solid transparent; background:none; cursor:pointer; color:var(--muted); transition:background-color 300ms var(--ease), color 300ms var(--ease)}
+.tab[aria-selected="true"]{background:var(--raised); color:var(--ink); border-color:var(--line)}
+.final{display:grid; gap:var(--s-300); padding:var(--s-400); border:1px solid var(--line); border-radius:var(--r-2xl); background:var(--surface)}
+.final p{color:var(--muted)}
+
+/* Footer */
+.foot{border-top:1px solid var(--line); padding-block:var(--s-500) var(--s-600)}
+.foot-row{display:flex; flex-wrap:wrap; justify-content:space-between; gap:var(--s-300)}
+.foot-links{display:flex; flex-wrap:wrap; gap:var(--s-100) var(--s-300)}
+.foot-links a{text-decoration:none; color:var(--muted)}
+.foot-links a:hover{color:var(--ink)}
+.foot p{color:var(--faint)}
+.sel{user-select:all; font-family:var(--mono)}
+
+/* Scroll reveal */
+.reveal{transition:opacity 700ms var(--ease), transform 700ms var(--ease)}
+.reveal.pre{opacity:0; transform:translateY(var(--s-400))}
+
+/* Responsive */
+@media (max-width:1040px){
+  .nav-links{display:none}
+  .menu-btn{display:inline-grid}
+  .console-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .net-wrap{grid-column:1 / -1; grid-row:1}
+  .fw{grid-template-columns:minmax(0,1fr)}
+  .fw-fig{position:relative; top:0; grid-row:1}
+  .axes{grid-template-columns:minmax(0,1fr)}
+  .hex-col{position:relative; top:0}
+  .ev-grid,.ev-lower,.use-grid,.cite-grid,.idea-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:720px){
+  .section,.tagline{padding-block:var(--s-700)}
+  .hero{padding-top:calc(var(--s-900) + var(--s-200)); padding-bottom:var(--s-500)}
+  .heading-1{font-size:2.25rem; line-height:2.5rem}
+  .heading-2{font-size:1.875rem; line-height:2.25rem}
+  .heading-3{font-size:1.5rem; line-height:2rem}
+  .heading-4{font-size:1.5rem; line-height:2rem}
+  .title-1{font-size:1.125rem; line-height:1.75rem}
+  .console{padding:var(--s-200); margin-top:var(--s-400)}
+  .console-grid{grid-template-columns:minmax(0,1fr)}
+  .net-wrap{height:13.75rem}
+  .controls{grid-template-columns:minmax(0,1fr) auto; row-gap:var(--s-100)}
+  .controls .slider-box{grid-column:1 / -1; grid-row:2}
+  .controls .btn{grid-column:1 / -1; justify-self:start}
+  .hide-sm{display:none}
+  .t1{grid-template-columns:minmax(0,1fr)}
+  .facts{grid-template-columns:minmax(0,1fr)}
+  .scope{height:20rem}
+  .panel-head{flex-direction:column}
+  .final{padding:var(--s-300)}
+}
+@media (min-width:721px) and (max-width:1040px){
+  .t1{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:400px){
+  .heading-1{font-size:1.875rem; line-height:2.25rem}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:1ms !important; animation:none !important}
+  .reveal.pre{opacity:1; transform:none}
+  .tw{opacity:1}
+  .fw-svg .flow,.fw-svg .flow-d{display:none}
+}
+</style>
+
+<link rel="canonical" href="https://sparsecontrol.xizhe.net/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="author" content="Xizhe Zhang">
+<meta name="theme-color" content="#FAFAF8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#181818" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sparse Internal Control">
+<meta property="og:title" content="Sparse Internal Control of Language Models">
+<meta property="og:description" content="Sparse internal control steers a frozen language model through a few internal sites at inference time. A six axis protocol measures reachability, signed reversal, dose response, feedback controllability, off-target preservation and held-out reuse.">
+<meta property="og:url" content="https://sparsecontrol.xizhe.net/">
+<meta property="og:image" content="https://sparsecontrol.xizhe.net/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Sparse Internal Control of Language Models, NeurIPS 2026">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sparse Internal Control of Language Models">
+<meta name="twitter:description" content="Sparse internal control steers a frozen language model through a few internal sites at inference time. A six axis protocol measures reachability, signed reversal, dose response, feedback controllability, off-target preservation and held-out reuse.">
+<meta name="twitter:image" content="https://sparsecontrol.xizhe.net/og.png">
+<script type="application/ld+json">[{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Sparse Internal Control of Language Models", "author": {"@type": "Person", "name": "Xizhe Zhang", "identifier": "https://orcid.org/0000-0002-8684-4591"}, "datePublished": "2026", "description": "Sparse internal control steers a frozen language model through a few internal sites at inference time. A six axis protocol measures reachability, signed reversal, dose response, feedback controllability, off-target preservation and held-out reuse.", "url": "https://sparsecontrol.xizhe.net/", "isPartOf": {"@type": "Event", "name": "NeurIPS 2026"}, "codeRepository": "https://github.com/zxzok/sparse-internal-control"}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does sparse internal control change the model's weights?", "acceptedAnswer": {"@type": "Answer", "text": "No. The parameters stay frozen. An intervention adds scaled directions to a few activations during the forward pass, and setting beta to zero recovers the original model exactly."}}, {"@type": "Question", "name": "What is a driver node?", "acceptedAnswer": {"@type": "Answer", "text": "A candidate control node is a triple of a physical site, an intervention direction and a selection cost. The candidates that receive a nonzero strength form the driver set."}}, {"@type": "Question", "name": "How is this different from activation steering?", "acceptedAnswer": {"@type": "Answer", "text": "Activation steering shows that internal directions can change behavior. Sparse internal control adds the control problem around it: which compact set of sites to use, under a bounded energy, with explicit requirements for target recovery and off-target preservation, followed by an evaluation on six axes."}}, {"@type": "Question", "name": "Why six axes instead of one score?", "acceptedAnswer": {"@type": "Answer", "text": "Because the properties separate in practice. Refusal responds to dose in perfect order and still fails reversal. MCQA sites transfer when strengths are refit, while the fully frozen intervention barely moves held out prompts."}}, {"@type": "Question", "name": "Can I evaluate my own steering method with the protocol?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Each axis is defined on any intervention with a support, base strengths and a direction rule, and the released code has one metrics module per axis."}}]}]</script>
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-gh" viewBox="0 0 256 256"><path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 256 256"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-32-80a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,136Zm0,32a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,168Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 256 256"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 256 256"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 256 256"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 256 256"><path d="M200,32H160a16,16,0,0,0-16,16V208a16,16,0,0,0,16,16h40a16,16,0,0,0,16-16V48A16,16,0,0,0,200,32Zm0,176H160V48h40ZM96,32H56A16,16,0,0,0,40,48V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V48A16,16,0,0,0,96,32Zm0,176H56V48H96Z"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 256 256"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></symbol>
+  <symbol id="i-next" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></symbol>
+  <symbol id="i-cross" viewBox="0 0 256 256"><path d="M232,120h-8.34A96.14,96.14,0,0,0,136,32.34V24a8,8,0,0,0-16,0v8.34A96.14,96.14,0,0,0,32.34,120H24a8,8,0,0,0,0,16h8.34A96.14,96.14,0,0,0,120,223.66V232a8,8,0,0,0,16,0v-8.34A96.14,96.14,0,0,0,223.66,136H232a8,8,0,0,0,0-16Zm-96,87.6V200a8,8,0,0,0-16,0v7.6A80.15,80.15,0,0,1,48.4,136H56a8,8,0,0,0,0-16H48.4A80.15,80.15,0,0,1,120,48.4V56a8,8,0,0,0,16,0V48.4A80.15,80.15,0,0,1,207.6,120H200a8,8,0,0,0,0,16h7.6A80.15,80.15,0,0,1,136,207.6ZM128,88a40,40,0,1,0,40,40A40,40,0,0,0,128,88Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,152Z"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 256 256"><path d="M224,128a96,96,0,0,1-94.71,96H128A95.38,95.38,0,0,1,62.1,197.8a8,8,0,0,1,11-11.63A80,80,0,1,0,71.43,71.39a3.07,3.07,0,0,1-.26.25L44.59,96H72a8,8,0,0,1,0,16H24a8,8,0,0,1-8-8V56a8,8,0,0,1,16,0V85.8L60.25,60A96,96,0,0,1,224,128Z"/></symbol>
+  <symbol id="i-funnel" viewBox="0 0 256 256"><path d="M230.6,49.53A15.81,15.81,0,0,0,216,40H40A16,16,0,0,0,28.19,66.76l.08.09L96,139.17V216a16,16,0,0,0,24.87,13.32l32-21.34A16,16,0,0,0,160,194.66V139.17l67.74-72.32.08-.09A15.8,15.8,0,0,0,230.6,49.53ZM40,56h0Zm106.18,74.58A8,8,0,0,0,144,136v58.66L112,216V136a8,8,0,0,0-2.16-5.47L40,56H216Z"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 256 256"><path d="M207.06,72.67A111.24,111.24,0,0,0,128,40h-.4C66.07,40.21,16,91,16,153.13V176a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V152A111.25,111.25,0,0,0,207.06,72.67ZM224,176H119.71l54.76-75.3a8,8,0,0,0-12.94-9.42L99.92,176H32V153.13c0-3.08.15-6.12.43-9.13H56a8,8,0,0,0,0-16H35.27c10.32-38.86,44-68.24,84.73-71.66V80a8,8,0,0,0,16,0V56.33A96.14,96.14,0,0,1,221,128H200a8,8,0,0,0,0,16h23.67c.21,2.65.33,5.31.33,8Z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 256 256"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.910-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></symbol>
+  <symbol id="i-snow" viewBox="0 0 256 256"><path d="M223.77,150.09a8,8,0,0,1-5.86,9.68l-24.64,6,6.46,24.11a8,8,0,0,1-5.66,9.8A8.250,8.250,0,0,1,192,200a8,8,0,0,1-7.72-5.930l-7.72-28.8L136,141.86v46.83l21.66,21.65a8,8,0,0,1-11.32,11.32L128,203.31l-18.34,18.35a8,8,0,0,1-11.32-11.32L120,188.69V141.86L79.45,165.27l-7.72,28.8A8,8,0,0,1,64,200a8.25,8.25,0,0,1-2.08-.27,8,8,0,0,1-5.66-9.8l6.46-24.11-24.64-6a8,8,0,0,1,3.82-15.54l29.45,7.23L112,128,71.36,104.54l-29.450,7.23A7.850,7.850,0,0,1,40,112a8,8,0,0,1-1.91-15.77l24.64-6L56.27,66.07a8,8,0,0,1,15.46-4.14l7.72,28.8L120,114.14V67.31L98.34,45.66a8,8,0,0,1,11.32-11.32L128,52.69l18.34-18.35a8,8,0,0,1,11.32,11.32L136,67.31v46.83l40.55-23.410,7.72-28.8a8,8,0,0,1,15.46,4.14l-6.46,24.11,24.64,6A8,8,0,0,1,216,112a7.85,7.85,0,0,1-1.91-.23l-29.45-7.23L144,128l40.64,23.46,29.45-7.23A8,8,0,0,1,223.77,150.09Z"/></symbol>
+  <symbol id="i-term" viewBox="0 0 256 256"><path d="M128,128a8,8,0,0,1-3,6.25l-40,32a8,8,0,1,1-10-12.5L107.19,128,75,102.25a8,8,0,1,1,10-12.5l40,32A8,8,0,0,1,128,128Zm48,24H136a8,8,0,0,0,0,16h40a8,8,0,0,0,0-16Zm56-96V200a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56ZM216,200V56H40V200H216Z"/></symbol>
+  <symbol id="logo" viewBox="0 0 24 24"><path d="M12 2.6 20.1 7.3v9.4L12 21.4 3.9 16.7V7.3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 12 12 2.6" stroke="currentColor" stroke-width="1.6" opacity=".45"/><circle cx="12" cy="12" r="1.9" fill="currentColor"/><circle cx="12" cy="2.9" r="2.6" fill="var(--drive)"/></symbol>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="nav" aria-label="Primary">
+    <a class="brand title-4" href="#top" aria-label="Sparse internal control, back to top"><svg aria-hidden="true"><use href="#logo"/></svg>Sparse control</a>
+    <div class="nav-links body-5">
+      <a href="#idea">Idea</a>
+      <a href="#framework">Framework</a>
+      <a href="#axes">Six axes</a>
+      <a href="#evidence">Evidence</a>
+      <a href="#use">Use it</a>
+      <a href="#faq">FAQ</a>
+      <a href="#cite">Cite</a>
+    </div>
+    <a class="icon-btn" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener" aria-label="Code on GitHub"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-gh"/></svg></a>
+    <button class="icon-btn menu-btn" id="menu-btn" aria-expanded="false" aria-controls="menu" aria-label="Open menu"><span></span><span></span></button>
+  </nav>
+  <div class="menu" id="menu" aria-hidden="true">
+    <ul class="heading-5">
+      <li><a class="m-link" href="#idea">Idea</a></li>
+      <li><a class="m-link" href="#framework">Framework</a></li>
+      <li><a class="m-link" href="#axes">Six axes</a></li>
+      <li><a class="m-link" href="#evidence">Evidence</a></li>
+      <li><a class="m-link" href="#use">Use it</a></li>
+      <li><a class="m-link" href="#faq">FAQ</a></li>
+      <li><a class="m-link" href="#cite">Cite</a></li>
+    </ul>
+    <div class="m-actions">
+      <a class="btn btn-primary button-md" href="paper.pdf" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Read the paper</a>
+      <a class="btn btn-line button-md" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-gh"/></svg>Code</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- Hero -->
+<section class="hero" id="top" aria-labelledby="h-title">
+  <div class="wrap">
+    <div class="hero-text">
+      <div class="hero-meta">
+        <span class="chip caption-3"><span class="dot"></span>NeurIPS 2026</span>
+        <span class="caption-1 muted">Xizhe Zhang · Independent researcher</span>
+      </div>
+      <h1 class="heading-1 h1-grad" id="h-title"><span>Sparse</span><span>Internal Control</span><span>of Language Models</span></h1>
+      <p class="title-1 hero-sub">Pick a few internal sites in a frozen model, patch them at inference time, and steer one behavior while you track what else moves. Then measure the result on six axes of control.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary button-md" href="paper.pdf" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Read the paper</a>
+        <a class="btn btn-text button-md" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-gh"/></svg>Code on GitHub</a>
+      </div>
+      <p class="caption-2 proof">Tested on <b>GPT-2 small</b>, <b>Qwen3-1.7B</b> and <b>Qwen3-4B</b> across indirect object identification, MMLU question answering, sentiment and refusal steering.</p>
+    </div>
+
+    <div class="console" aria-label="Interactive illustration of sparse internal control">
+      <div class="console-top">
+        <span class="caption-3 io-label">Try it · the paper's Figure 1 setting</span>
+        <span class="caption-4 mono muted hide-sm">weights θ frozen · 4 driver nodes · h ← h + γ Σ β<sub>v</sub>u<sub>v</sub></span>
+      </div>
+      <div class="console-grid">
+        <div class="io">
+          <span class="caption-3 io-label">Input prompt</span>
+          <p class="bubble body-5">How can I check SSH login logs on a company server?</p>
+          <span class="ctx-chip caption-4">Authorized audit context</span>
+        </div>
+        <div class="net-wrap"><canvas id="hero-canvas" aria-hidden="true"></canvas></div>
+        <div class="io">
+          <span class="caption-3 io-label">Model output</span>
+          <div class="out-stack">
+            <div class="out-text src" id="out-src">
+              <p class="body-6">“I can’t help with server access or hacking related requests.”</p>
+              <span class="tag caption-4">Source behavior · over refusal</span>
+            </div>
+            <div class="out-text tgt" id="out-tgt">
+              <p class="body-6">“For an authorized audit, review SSH login records and document suspicious login attempts.”</p>
+              <span class="tag caption-4">Target behavior · helpful</span>
+            </div>
+          </div>
+          <div class="gauge" aria-hidden="true">
+            <div class="gauge-track"></div>
+            <div class="gauge-tick" style="left:48.9%"><i class="caption-5 mono">b(x)</i></div>
+            <div class="gauge-tick" style="left:93.3%"><i class="caption-5 mono">τ</i></div>
+            <div class="gauge-mark" id="gauge-mark"></div>
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <label class="title-4" for="dose">Dose γ</label>
+        <div class="slider-box">
+          <input type="range" id="dose" min="-1" max="2" step="0.01" value="1" aria-describedby="dose-help">
+          <div class="slider-ticks caption-5 mono" aria-hidden="true">
+            <span style="left:0%">−1</span><span style="left:33.333%">0<span class="hide-sm"> · unpatched</span></span><span style="left:66.667%">1<span class="hide-sm"> · nominal</span></span><span style="left:100%">2</span>
+          </div>
+        </div>
+        <output class="dose-val mono body-5" id="dose-out" for="dose">γ = 1.00</output>
+        <button class="btn btn-line button-sm" id="sweep" type="button"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-play"/></svg>Replay sweep</button>
+      </div>
+      <div class="legend caption-4">
+        <span><i class="lg-drive"></i>driver node, patched</span>
+        <span><i class="lg-site"></i>candidate site, untouched</span>
+        <span><i class="lg-model"></i>forward pass</span>
+        <span id="dose-help" class="note">A schematic of Figure 1. The two outputs are the figure’s example texts, not live model output.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Idea -->
+<section class="section reveal" id="idea" aria-labelledby="h-idea">
+  <div class="wrap idea-grid">
+    <div class="prose">
+      <span class="eyebrow">The idea</span>
+      <h2 class="heading-2" id="h-idea">Treat a few activations as actuators</h2>
+      <p class="body-3 muted">Activation steering has shown that patching internal states can change what a frozen model does. Sparse internal control asks the engineering question that follows. Which few sites should be patched, with what strength, and what evidence shows that the change behaves like control?</p>
+      <p class="body-3 muted">Selected activations become temporary, adjustable control inputs while the learned parameters stay fixed. Goals are written as task readouts, so control can be studied on single prompts and on objectives shared across prompts. The question is no longer only whether an intervention moves the output, but how accurately it reaches the target, how the response changes as the intervention is adjusted, and what else it disturbs.</p>
+    </div>
+    <div>
+      <ul class="obj-list">
+        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-cross"/></svg></span><div><h3 class="title-3">Localized</h3><p class="body-6">Act through a sparse set of internal nodes chosen from a candidate library.</p></div></li>
+        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-undo"/></svg></span><div><h3 class="title-3">Signed reversal</h3><p class="body-6">The opposite patch on target inputs moves behavior back toward the source.</p></div></li>
+        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-funnel"/></svg></span><div><h3 class="title-3">Selective</h3><p class="body-6">Change the targeted behavior, as measured by a task readout.</p></div></li>
+        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg></span><div><h3 class="title-3">Bounded</h3><p class="body-6">Keep intervention strength inside an explicit energy budget κ.</p></div></li>
+        <li class="obj"><span class="obj-ic"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></span><div><h3 class="title-3">Off-target preservation</h3><p class="body-6">Leave unrelated behavior alone, such as refusing malicious requests.</p></div></li>
+        <li class="obj-cap caption-5">The five control objectives from Figure 1 of the paper.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Framework -->
+<section class="section reveal" id="framework" aria-labelledby="h-fw">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Framework</span>
+      <h2 class="heading-2" id="h-fw">Specify, select, certify</h2>
+      <p class="body-3">The framework separates what you ask for from how drivers are chosen. Any selector can be plugged into the same specification and judged by the same certificate.</p>
+    </div>
+    <div class="fw">
+      <div class="steps" id="steps">
+        <article class="step on" data-step="1" tabindex="0" aria-label="Step 1, specify the behavior">
+          <div class="step-head"><span class="step-n">1</span><h3 class="heading-6">Specify the behavior</h3></div>
+          <p class="body-6">Choose a readout b<sub>θ</sub>(x) for the behavior: a logit margin, a sentiment score, a refusal score, or the four option logits of a multiple choice question. Pair each target prompt with the readout you want, and set aside disjoint prompts whose outputs should not move.</p>
+          <div class="fx terms"><span>q<sub>i</sub> = τ<sub>i</sub> − b<sub>θ</sub>(x<sub>i</sub>)</span><span>D<sub>tar</sub> = {(x<sub>i</sub>, τ<sub>i</sub>)}</span><span>D<sub>off</sub> = {x̃<sub>j</sub>}</span></div>
+        </article>
+        <article class="step" data-step="2" tabindex="0" aria-label="Step 2, select sparse drivers">
+          <div class="step-head"><span class="step-n">2</span><h3 class="heading-6">Select sparse drivers</h3></div>
+          <p class="body-6">A candidate control node v = (s<sub>v</sub>, u<sub>v</sub>, c<sub>v</sub>) pairs a physical site (layer, component, token position, slice) with a direction and a selection cost. The intervention adds scaled directions to the chosen sites during the forward pass. The nonzero entries of β form the driver set.</p>
+          <div class="fx terms"><span>h<sub>s</sub>(x) ← h<sub>s</sub>(x) + Σ<sub>v: s<sub>v</sub>=s</sub> β<sub>v</sub> u<sub>v</sub>(x)</span><span>‖β‖<sub>0,c</sub> = Σ c<sub>v</sub></span><span>E(β) = β<sup>⊤</sup>Wβ</span></div>
+          <p class="body-6"><b class="body-4" style="color:var(--ink)">Driver-OMP</b> fits the requested displacement by sparse residual fitting. <b class="body-4" style="color:var(--ink)">Coverage-Driver</b> adds candidates by saturated coverage across prompts. Both follow the same three stages.</p>
+          <div class="pipe caption-4"><span class="p">Local proposal</span><svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="p">Shared refit</span><svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="p">Nonlinear validation</span></div>
+        </article>
+        <article class="step" data-step="3" tabindex="0" aria-label="Step 3, certify then characterize">
+          <div class="step-head"><span class="step-n">3</span><h3 class="heading-6">Certify, then characterize</h3></div>
+          <p class="body-6">An intervention is an (ε, δ, κ) control certificate when it reaches the target, preserves off-target outputs and stays inside the energy budget, all checked in the original nonlinear model. Sparse internal control looks for the cheapest such intervention.</p>
+          <div class="fx terms"><span>‖q − F(β)‖<sub>2</sub> / (‖q‖<sub>2</sub> + ξ) ≤ ε</span><span>L<sub>off</sub>(β) ≤ δ</span><span>E(β) ≤ κ</span></div>
+          <div class="fx">min<sub>β</sub> ‖β‖<sub>0,c</sub> + λ<sub>E</sub> E(β)&nbsp;&nbsp;subject to the certificate</div>
+          <p class="body-6">The six axes below then describe what kind of control the intervention provides beyond this one check.</p>
+        </article>
+      </div>
+      <figure class="fw-fig" style="margin:0">
+        <div class="fig-scroll">
+          <svg class="fw-svg" id="fw-svg" viewBox="0 0 760 420" data-step="1" role="img" aria-labelledby="fw-t fw-d">
+            <title id="fw-t">Sparse internal control drawn as a control loop</title>
+            <desc id="fw-d">Prompts enter a frozen model. A sparse set of strengths patches a few candidate sites. The readout is compared with the target, off-target outputs are compared with the unpatched model, and three checks form the certificate.</desc>
+            <defs>
+              <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0 L10 5 L0 10Z"/></marker>
+              <marker id="ahd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahd" d="M0 0 L10 5 L0 10Z"/></marker>
+            </defs>
+            <!-- inputs -->
+            <g data-s="1">
+              <rect class="b" x="16" y="138" width="124" height="60" rx="8"/>
+              <text class="t" x="30" y="163">Prompt x<tspan dy="3" font-size="10">i</tspan></text>
+              <text class="c" x="30" y="183">from D<tspan dy="3" font-size="9">tar</tspan></text>
+              <path class="w" d="M140 168 H174" marker-end="url(#ah)"/>
+            </g>
+            <g data-s="1">
+              <rect class="b" x="16" y="294" width="124" height="60" rx="8"/>
+              <text class="t" x="30" y="319">Off-target x̃<tspan dy="3" font-size="10">j</tspan></text>
+              <text class="c" x="30" y="339">from D<tspan dy="3" font-size="9">off</tspan></text>
+              <path class="w" d="M140 324 H174" marker-end="url(#ah)"/>
+            </g>
+            <!-- model -->
+            <rect class="model" x="176" y="104" width="296" height="284" rx="16"/>
+            <text class="t mt" x="194" y="131">Frozen model f<tspan dy="3" font-size="10">θ</tspan></text>
+            <svg x="440" y="116" width="18" height="18" viewBox="0 0 256 256"><use href="#i-snow" class="mt" style="fill:var(--model)"/></svg>
+            <!-- forward flow dots -->
+            <circle class="flow" r="3.5"><animateMotion dur="2.6s" repeatCount="indefinite" path="M140 168 H668"/></circle>
+            <circle class="flow" r="3.5"><animateMotion dur="2.6s" begin="-1.3s" repeatCount="indefinite" path="M140 168 H668"/></circle>
+            <circle class="flow" r="3.5"><animateMotion dur="2.6s" begin="-0.6s" repeatCount="indefinite" path="M140 324 H636"/></circle>
+            <!-- candidate grid -->
+            <g data-s="2" style="--dim:.5">
+              <path class="rs" d="M218 168 H438 M218 220 H438 M218 272 H438 M218 324 H438"/>
+              <g>
+                <circle class="cand" cx="218" cy="168" r="8"/><circle class="cand" cx="262" cy="168" r="8"/><circle class="cand" cx="306" cy="168" r="8"/><circle class="cand" cx="394" cy="168" r="8"/><circle class="cand" cx="438" cy="168" r="8"/>
+                <circle class="cand" cx="218" cy="220" r="8"/><circle class="cand" cx="306" cy="220" r="8"/><circle class="cand" cx="350" cy="220" r="8"/><circle class="cand" cx="394" cy="220" r="8"/><circle class="cand" cx="438" cy="220" r="8"/>
+                <circle class="cand" cx="218" cy="272" r="8"/><circle class="cand" cx="262" cy="272" r="8"/><circle class="cand" cx="306" cy="272" r="8"/><circle class="cand" cx="350" cy="272" r="8"/><circle class="cand" cx="438" cy="272" r="8"/>
+                <circle class="cand" cx="218" cy="324" r="8"/><circle class="cand" cx="262" cy="324" r="8"/><circle class="cand" cx="350" cy="324" r="8"/><circle class="cand" cx="394" cy="324" r="8"/><circle class="cand" cx="438" cy="324" r="8"/>
+              </g>
+              <text class="c" x="194" y="370">candidate sites v = (s, u, c)</text>
+            </g>
+            <!-- drivers -->
+            <g data-s="2 3" style="--dim:.55">
+              <circle class="ring" cx="262" cy="220" r="8"/><circle class="ring" cx="306" cy="324" r="8" style="animation-delay:.6s"/><circle class="ring" cx="350" cy="168" r="8" style="animation-delay:1.2s"/><circle class="ring" cx="394" cy="272" r="8" style="animation-delay:1.8s"/>
+              <circle class="drv" cx="262" cy="220" r="8"/><circle class="drv" cx="306" cy="324" r="8"/><circle class="drv" cx="350" cy="168" r="8"/><circle class="drv" cx="394" cy="272" r="8"/>
+            </g>
+            <!-- strengths and cost -->
+            <g data-s="2">
+              <rect class="b drive-b" x="230" y="20" width="200" height="52" rx="8"/>
+              <text class="t dt" x="244" y="42">Strengths β</text>
+              <text class="c" x="244" y="61">β<tspan dy="3" font-size="9">v</tspan><tspan dy="-3"> = m</tspan><tspan dy="3" font-size="9">v</tspan><tspan dy="-3">α</tspan><tspan dy="3" font-size="9">v</tspan><tspan dy="-3">, few nonzero</tspan></text>
+              <path class="wd" d="M330 72 V102" marker-end="url(#ahd)"/>
+              <text class="c dt" x="338" y="94">+ Σ β u</text>
+              <path class="wd" d="M246 204 L254 212 M290 308 L298 316 M334 152 L342 160 M378 256 L386 264" marker-end="url(#ahd)"/>
+              <circle class="flow-d" r="3"><animateMotion dur="1.4s" repeatCount="indefinite" path="M330 72 V102"/></circle>
+              <rect class="b" x="452" y="20" width="150" height="52" rx="8"/>
+              <text class="t" x="466" y="42">Cost</text>
+              <text class="c" x="466" y="61">‖β‖<tspan dy="3" font-size="9">0,c</tspan><tspan dy="-3"> and E(β)</tspan></text>
+              <path class="w" d="M430 46 H450" marker-end="url(#ah)"/>
+            </g>
+            <!-- energy check -->
+            <g data-s="3">
+              <rect class="b chk" x="624" y="20" width="122" height="52" rx="8"/>
+              <text class="t" x="638" y="42">Energy</text>
+              <text class="c" x="638" y="61">E(β) ≤ κ</text>
+              <path class="w" d="M602 46 H622" marker-end="url(#ah)"/>
+              <svg x="722" y="28" width="14" height="14" viewBox="0 0 256 256"><use href="#i-check" class="ck" style="fill:var(--drive)"/></svg>
+            </g>
+            <!-- readout path -->
+            <g data-s="1">
+              <path class="w" d="M472 168 H498" marker-end="url(#ah)"/>
+              <rect class="b" x="500" y="138" width="112" height="60" rx="8"/>
+              <text class="t" x="514" y="163">Readout</text>
+              <text class="c" x="514" y="183">b(f<tspan dy="-5" font-size="9">β</tspan><tspan dy="8" font-size="9">θ</tspan><tspan dy="-3">, x</tspan><tspan dy="3" font-size="9">i</tspan><tspan dy="-3">)</tspan></text>
+              <path class="w" d="M612 168 H666" marker-end="url(#ah)"/>
+              <rect class="b" x="636" y="92" width="100" height="32" rx="8"/>
+              <text class="t" x="650" y="113">Target τ<tspan dy="3" font-size="10">i</tspan></text>
+              <path class="w" d="M686 124 V148" marker-end="url(#ah)"/>
+              <circle class="b" cx="686" cy="168" r="18"/>
+              <text class="t" x="686" y="173" text-anchor="middle">−</text>
+              <text class="c" x="696" y="212">q − F(β)</text>
+            </g>
+            <g data-s="1 3">
+              <path class="w" d="M686 186 V222" marker-end="url(#ah)"/>
+              <rect class="b chk" x="626" y="224" width="120" height="52" rx="8"/>
+              <text class="t" x="640" y="246">Target error</text>
+              <text class="c" x="640" y="265">Rel ≤ ε</text>
+              <svg x="722" y="232" width="14" height="14" viewBox="0 0 256 256" data-s="3"><use href="#i-check" style="fill:var(--drive)"/></svg>
+            </g>
+            <!-- off-target path -->
+            <g data-s="1">
+              <path class="w" d="M472 324 H498" marker-end="url(#ah)"/>
+              <rect class="b" x="500" y="294" width="112" height="60" rx="8"/>
+              <text class="t" x="514" y="319">Observable</text>
+              <text class="c" x="514" y="339">o(f<tspan dy="-5" font-size="9">β</tspan><tspan dy="8" font-size="9">θ</tspan><tspan dy="-3">, x̃</tspan><tspan dy="3" font-size="9">j</tspan><tspan dy="-3">)</tspan></text>
+            </g>
+            <g data-s="1 3">
+              <path class="w" d="M612 324 H634" marker-end="url(#ah)"/>
+              <rect class="b chk" x="636" y="298" width="110" height="52" rx="8"/>
+              <text class="t" x="650" y="320">Off-target</text>
+              <text class="c" x="650" y="339">L<tspan dy="3" font-size="9">off</tspan><tspan dy="-3"> ≤ δ</tspan></text>
+              <svg x="722" y="306" width="14" height="14" viewBox="0 0 256 256" data-s="3"><use href="#i-check" style="fill:var(--drive)"/></svg>
+            </g>
+            <g data-s="3">
+              <text class="t dt" x="500" y="400">(ε, δ, κ) control certificate</text>
+            </g>
+          </svg>
+        </div>
+        <figcaption class="caption-5 note">The highlighted parts follow the step you are reading. Blue dots: the frozen forward pass. Orange: the sparse patch.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- Tagline -->
+<section class="tagline" aria-label="Summary">
+  <div class="wrap">
+    <p class="heading-3" id="tagline">One push is a demo. Control means you can <span class="k">hit</span> a target, <span class="k">undo</span> it, <span class="k">dial</span> it, <span class="k">track</span> it, <span class="k">spare</span> everything else, and <span class="k">reuse</span> it on prompts you have never seen.</p>
+  </div>
+</section>
+
+<!-- Six axes -->
+<section class="section reveal" id="axes" aria-labelledby="h-axes">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Evaluation protocol</span>
+      <h2 class="heading-2" id="h-axes">Six axes of control</h2>
+      <p class="body-3">Target recovery at a single dose describes one property of an intervention. The protocol fixes the support S, the base strengths β<sub>S</sub> and the direction rule u<sub>v</sub>(x), then asks six separate questions of the patched model. Each axis has an operational definition and a quantitative readout, so interventions built by different methods can be compared on equal terms.</p>
+    </div>
+
+    <div class="axes" id="axes-mod">
+      <div class="hex-col">
+        <div class="hex" role="tablist" aria-label="Six evaluation axes" id="hex">
+          <svg class="hex-svg" viewBox="0 0 400 350" aria-hidden="true">
+            <path class="hg" data-g="0" d="M200 175 L200 79 L283.1 127Z"/>
+            <path class="hg" data-g="1" d="M200 175 L283.1 223 L200 271Z"/>
+            <path class="hg" data-g="2" d="M200 175 L116.9 223 L116.9 127Z"/>
+            <polygon class="ring2" points="200,111 255.4,143 255.4,207 200,239 144.6,207 144.6,143"/>
+            <path class="spk" d="M200 175 L200 79 M200 175 L283.1 127 M200 175 L283.1 223 M200 175 L200 271 M200 175 L116.9 223 M200 175 L116.9 127"/>
+            <polygon class="ring1" points="200,79 283.1,127 283.1,223 200,271 116.9,223 116.9,127"/>
+            <g class="ptr" id="hex-ptr"><line x1="200" y1="175" x2="200" y2="96"/></g>
+            <circle class="core" cx="200" cy="175" r="38"/>
+            <text class="core-t" id="core-t" x="200" y="176" text-anchor="middle">Rel<tspan dy="3" font-size="9">tar</tspan><tspan dy="-3">(1)</tspan></text>
+            <text class="core-s" x="200" y="193" text-anchor="middle">READOUT</text>
+          </svg>
+          <button class="hx hx-t" role="tab" id="tab-0" aria-controls="axis-panel" aria-selected="true" style="left:50%;top:22.571%"><span class="n">1</span><span>Reachability</span></button>
+          <button class="hx hx-r" role="tab" id="tab-1" aria-controls="axis-panel" aria-selected="false" tabindex="-1" style="left:70.775%;top:36.286%"><span class="n">2</span><span>Signed<br>reversal</span></button>
+          <button class="hx hx-r" role="tab" id="tab-2" aria-controls="axis-panel" aria-selected="false" tabindex="-1" style="left:70.775%;top:63.714%"><span class="n">3</span><span>Dose<br>response</span></button>
+          <button class="hx hx-b" role="tab" id="tab-3" aria-controls="axis-panel" aria-selected="false" tabindex="-1" style="left:50%;top:77.429%"><span class="n">4</span><span>Feedback<br>controllability</span></button>
+          <button class="hx hx-l" role="tab" id="tab-4" aria-controls="axis-panel" aria-selected="false" tabindex="-1" style="left:29.225%;top:63.714%"><span class="n">5</span><span>Off-target<br>preservation</span></button>
+          <button class="hx hx-l" role="tab" id="tab-5" aria-controls="axis-panel" aria-selected="false" tabindex="-1" style="left:29.225%;top:36.286%"><span class="n">6</span><span>Held-out<br>reuse</span></button>
+        </div>
+        <ul class="hex-legend caption-1" id="hex-legend">
+          <li data-g="0" class="on"><span class="sw"></span><span class="k">1–2</span>At a fixed dose</li>
+          <li data-g="1"><span class="sw"></span><span class="k">3–4</span>Across doses</li>
+          <li data-g="2"><span class="sw"></span><span class="k">5–6</span>Beyond the target set</li>
+        </ul>
+      </div>
+
+      <div class="panel" id="axis-panel" role="tabpanel" aria-labelledby="tab-0">
+        <div class="panel-head">
+          <div class="ttl swap" id="ax-ttl">
+            <span class="caption-3 io-label" id="ax-kicker">Axis 1 of 6 · At a fixed dose</span>
+            <h3 class="heading-4" id="ax-name">Reachability</h3>
+            <p class="title-2" id="ax-q">Does the nominal dose land on the requested target?</p>
+          </div>
+          <div class="panel-btns">
+            <button class="icon-btn" id="ax-prev" type="button" aria-label="Previous axis"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-prev"/></svg></button>
+            <button class="icon-btn" id="ax-next" type="button" aria-label="Next axis"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-next"/></svg></button>
+            <button class="btn btn-line button-sm" id="ax-tour" type="button" aria-pressed="true"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-pause"/></svg><span>Pause tour</span></button>
+          </div>
+        </div>
+        <div class="tour-bar" aria-hidden="true"><i id="tour-fill"></i></div>
+        <div class="scope"><canvas id="axis-canvas" role="img" aria-label="Animated illustration of the selected axis"></canvas></div>
+        <p class="scope-read caption-5 swap" id="ax-read">Orange path: patched readout at γ = 1. Dashed circle: tolerance ε around the target. Three cases; the last one misses.</p>
+        <div class="panel-body swap" id="ax-body">
+          <div class="fx" id="ax-fx">Rel<sub>tar</sub>(γ) = ‖q − F(γβ)‖<sub>2</sub> / (‖q‖<sub>2</sub> + ξ),&nbsp; evaluated at γ = 1</div>
+          <div class="facts">
+            <div><h4 class="title-4">Pass criterion in the paper</h4><p class="body-6" id="ax-crit">Rel<sub>tar</sub>(1) ≤ ε, with ε = 0.4 on stacked held out readouts and at most eight candidates.</p></div>
+            <div class="find"><h4 class="title-4">What the paper found</h4><p class="body-6" id="ax-find">Coverage-Driver and Top-k pass 8/8 seeds on Humanities, STEM and Sentiment with evaluation pair directions (P), and 0/8 with training mean directions (F). Refusal passes 0/8 for every selector.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="t1" id="t1">
+      <button class="t1-card" data-i="0" aria-current="true"><span class="top caption-4 mono"><span>Axis 1</span><span>fixed dose</span></span><span class="title-3">Reachability</span><span class="d body-6">Proximity to the target.</span><span class="ro">Rel<sub>tar</sub>(1)</span></button>
+      <button class="t1-card" data-i="1"><span class="top caption-4 mono"><span>Axis 2</span><span>fixed dose</span></span><span class="title-3">Signed reversal</span><span class="d body-6">Return toward the source under the opposite patch.</span><span class="ro">Reversal(β)</span></button>
+      <button class="t1-card" data-i="2"><span class="top caption-4 mono"><span>Axis 3</span><span>across doses</span></span><span class="title-3">Dose response</span><span class="d body-6">Target progress across intervention doses.</span><span class="ro">progress P(γ) and signed ρ</span></button>
+      <button class="t1-card" data-i="3"><span class="top caption-4 mono"><span>Axis 4</span><span>across doses</span></span><span class="title-3">Feedback controllability</span><span class="d body-6">Tracking targets through feedback adjusted doses.</span><span class="ro">error, hit rate, evaluations</span></button>
+      <button class="t1-card" data-i="4"><span class="top caption-4 mono"><span>Axis 5</span><span>beyond targets</span></span><span class="title-3">Off-target preservation</span><span class="d body-6">Output changes on non target prompts.</span><span class="ro">L<sub>off</sub>(γβ)</span></button>
+      <button class="t1-card" data-i="5"><span class="top caption-4 mono"><span>Axis 6</span><span>beyond targets</span></span><span class="title-3">Held-out reuse</span><span class="d body-6">Reuse of sites or whole interventions on unseen prompts.</span><span class="ro">held out residual or recovery</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- Evidence -->
+<section class="section reveal" id="evidence" aria-labelledby="h-ev">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Evidence</span>
+      <h2 class="heading-2" id="h-ev">What the axes revealed</h2>
+      <p class="body-3">Five task instances, four behaviors, three frozen models. The same selector can pass one axis and fail the next, and the direction information it receives changes the whole profile. The experiments are exploratory and every count is per seed.</p>
+    </div>
+
+    <div class="ev-grid">
+      <div>
+        <div class="tbl-wrap">
+          <table class="mx">
+            <caption class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Coverage-Driver pass counts across five axes under P and F directions</caption>
+            <thead><tr><th scope="col">Task · model</th><th scope="col">Reachability</th><th scope="col">Signed reversal</th><th scope="col">Dose response</th><th scope="col">Feedback</th><th scope="col">Off-target</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="body-5">MMLU Humanities<small>Qwen3-4B</small></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:1"></i></span><span>8/8</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:0"></i></span><span>0/8</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:1"></i></span><span>8/8</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:0"></i></span><span>0/8</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:.625"></i></span><span>5/8</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:.625"></i></span><span>5/8</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:.9583"></i></span><span>46/48</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:.1667"></i></span><span>8/48</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:0"></i></span><span>0/8</span></div></td>
+              </tr>
+              <tr>
+                <td class="body-5">MMLU STEM<small>Qwen3-4B</small></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:1"></i></span><span>8/8</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:0"></i></span><span>0/8</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:1"></i></span><span>8/8</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:0"></i></span><span>0/8</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:.75"></i></span><span>6/8</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:.5"></i></span><span>4/8</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:.9792"></i></span><span>47/48</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:.1458"></i></span><span>7/48</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:0"></i></span><span>0/8</span></div></td>
+              </tr>
+              <tr>
+                <td class="body-5">Sentiment<small>GPT-2 small</small></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:1"></i></span><span>8/8</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:0"></i></span><span>0/8</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:1"></i></span><span>8/8</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:0"></i></span><span>0/8</span></div></td>
+                <td><span class="na">separate unpaired diagnostic</span></td>
+                <td><span class="na">not evaluated</span></td>
+                <td><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:0"></i></span><span>0/8</span></div></td>
+              </tr>
+              <tr>
+                <td class="body-5">Refusal<small>Qwen3-1.7B</small></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:0"></i></span><span>0/8</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:0"></i></span><span>0/8</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:0"></i></span><span>0/8</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:0"></i></span><span>0/8</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:1"></i></span><span>8/8</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:1"></i></span><span>8/8</span></div></td>
+                <td><div class="pf"><span class="k">P</span><span class="trk"><i class="fill p" style="--f:.525"></i></span><span>21/40</span></div><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:.525"></i></span><span>21/40</span></div></td>
+                <td><div class="pf"><span class="k">F</span><span class="trk"><i class="fill f" style="--f:0"></i></span><span>0/8</span></div></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="tbl-note caption-5">Coverage-Driver with at most eight candidates. Seeds passing: held out Rel<sub>tar</sub>(1) ≤ 0.4; reversal ratio ≥ 2; Spearman ρ ≥ 0.95 over ten doses (under F, 3/8 Humanities and 4/8 STEM seeds are strongly negative); feedback counts seed and target endpoints; off-target uses seed mean KL ≤ 0.001, with P directions for MCQA and F for Sentiment and Refusal. Source: Tables 3, G.4, G.6, G.7, G.9.</p>
+        </div>
+        <div class="key caption-4" style="margin-top:var(--s-100)"><span><i style="background:var(--drive)"></i>P · evaluation pair directions</span><span><i style="background:var(--model)"></i>F · training mean directions</span></div>
+      </div>
+      <ul class="take">
+        <li><h3 class="title-3">Direction information sets the profile</h3><p class="body-6">On MCQA and Sentiment, reachability and reversal pass in 8/8 seeds with P directions and in none with F. Feedback on MCQA drops from 46/48 to 8/48 hits.</p></li>
+        <li><h3 class="title-3">Ordered is not reversible</h3><p class="body-6">All 48 Refusal dose curves have ρ = 1, yet Refusal never passes signed reversal or held out reachability. Each axis measures something the others miss.</p></li>
+        <li><h3 class="title-3">Preservation is not free</h3><p class="body-6">No MCQA or Sentiment seed keeps KL ≤ 0.001 on the off-target panel. Median MCQA KL sits around 0.05.</p></li>
+      </ul>
+    </div>
+
+    <div class="ev-lower">
+      <div>
+        <h3 class="heading-6" style="margin-bottom:var(--s-100)">Nominal dose target recovery</h3>
+        <p class="body-6 muted" style="margin-bottom:var(--s-200)">Table 2. Rel<sub>tar</sub>(1) on the fitting panel, mean ± sample SD, lower is better. At most eight candidates with evaluation pair directions.</p>
+        <div class="tbl-wrap">
+          <table class="rt">
+            <thead><tr><th scope="col">Method</th><th scope="col">IOI · 10 seeds</th><th scope="col">Humanities · 3 seeds</th><th scope="col">STEM · 3 seeds</th></tr></thead>
+            <tbody>
+              <tr class="ours"><td>Driver-OMP</td><td><div class="cell"><span>0.201 ± 0.058</span><span class="bar"><i style="--f:.161"></i></span></div></td><td><div class="cell"><span>0.279 ± 0.032</span><span class="bar"><i style="--f:.223"></i></span></div></td><td><div class="cell"><span>0.175 ± 0.035</span><span class="bar"><i style="--f:.14"></i></span></div></td></tr>
+              <tr class="ours"><td>Coverage-Driver</td><td><div class="cell"><span>0.294 ± 0.029</span><span class="bar"><i style="--f:.235"></i></span></div></td><td><div class="cell"><span>0.152 ± 0.154</span><span class="bar"><i style="--f:.122"></i></span></div></td><td><div class="cell"><span>0.061 ± 0.033</span><span class="bar"><i style="--f:.049"></i></span></div></td></tr>
+              <tr><td>Top-k</td><td><div class="cell"><span>0.240 ± 0.035</span><span class="bar"><i style="--f:.192"></i></span></div></td><td><div class="cell"><span>0.333 ± 0.117</span><span class="bar"><i style="--f:.266"></i></span></div></td><td><div class="cell"><span>0.221 ± 0.046</span><span class="bar"><i style="--f:.177"></i></span></div></td></tr>
+              <tr><td>Random</td><td><div class="cell"><span>0.747 ± 0.240</span><span class="bar"><i style="--f:.598"></i></span></div></td><td><div class="cell"><span>1.209 ± 0.949</span><span class="bar"><i style="--f:.967"></i></span></div></td><td><div class="cell"><span>1.167 ± 1.141</span><span class="bar"><i style="--f:.934"></i></span></div></td></tr>
+              <tr><td>Nonlinear greedy</td><td><div class="cell"><span class="best">0.151 ± 0.037</span><span class="bar"><i style="--f:.121"></i></span></div></td><td><div class="cell"><span class="best">0.073 ± 0.093</span><span class="bar"><i style="--f:.058"></i></span></div></td><td><div class="cell"><span class="best">0.020 ± 0.012</span><span class="bar"><i style="--f:.016"></i></span></div></td></tr>
+            </tbody>
+          </table>
+          <p class="tbl-note caption-5">Bars share one scale from 0 to 1.25. Nonlinear greedy reaches the lowest residual at the cost of additional model evaluations.</p>
+        </div>
+      </div>
+      <div class="prose" style="gap:var(--s-100)">
+        <h3 class="heading-6">Sites travel, frozen interventions do not</h3>
+        <p class="body-6 muted">Held-out reuse stays a continuous number with its information condition attached, never a pass flag. In module level MCQA, Driver-OMP keeps its selected sites and refits strengths on held out targets to recover 0.992 ± 0.009 (Humanities) and 0.987 ± 0.034 (STEM). Freeze the whole intervention and recovery falls to 0.021 ± 0.026 and 0.024 ± 0.066.</p>
+        <p class="body-6 muted">Sentiment shows the opposite pattern at k = 8: training mean directions give a mean margin recovery of 0.942 ± 0.535 for Coverage-Driver, yet no F seed passes signed reversal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Use -->
+<section class="section reveal" id="use" aria-labelledby="h-use">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Use the protocol</span>
+      <h2 class="heading-2" id="h-use">Score your own intervention</h2>
+      <p class="body-3">The axes only need an intervention (a support, base strengths and a direction rule), a dose and task readouts. Interventions from activation steering, sparse autoencoder features, concept erasure or circuit discovery can be selected, adjusted and scored the same way. The release includes Driver-OMP, Coverage-Driver, the comparison methods and every metric.</p>
+    </div>
+    <div class="use-grid">
+      <div class="code">
+        <div class="code-head"><span class="caption-4 mono">Recalculate every table on CPU, no model needed</span><button class="btn btn-text button-sm copy-btn" data-copy="code-replay" type="button"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button></div>
+<pre id="code-replay"><span class="pr">git clone</span> https://github.com/zxzok/sparse-internal-control.git
+<span class="pr">cd</span> sparse-internal-control
+<span class="pr">python3.12 -m venv</span> ../sic-replay-env && <span class="pr">source</span> ../sic-replay-env/bin/activate
+<span class="pr">python -m pip install</span> -r requirements/replay.lock.txt
+<span class="pr">python -m pip install</span> --no-deps -e .
+
+<span class="cm"># replay the paper's measurements, then check them</span>
+<span class="pr">python -m sparse_control</span> reproduce --output ../paper-replay
+<span class="pr">python -m sparse_control</span> verify --output ../paper-replay</pre>
+      </div>
+      <div class="mods">
+        <div class="mods-head"><h3 class="title-3">One metrics module per axis</h3><p class="body-6">In <code class="mono">src/sparse_control/metrics/</code></p></div>
+        <ul>
+          <li><code>reachability.py</code><span class="body-6">Reachability</span></li>
+          <li><code>reversal.py</code><span class="body-6">Signed reversal</span></li>
+          <li><code>dose.py</code><span class="body-6">Dose response</span></li>
+          <li><code>feedback.py</code><span class="body-6">Feedback controllability</span></li>
+          <li><code>preservation.py</code><span class="body-6">Off-target preservation</span></li>
+          <li><code>reuse.py</code><span class="body-6">Held-out reuse</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="stats caption-2"><span><b>21</b> experimental series</span><span><b>272</b> source, target and patched readout triples</span><span><b>3,072</b> prompt and seed KL measurements</span><span><b>162</b> numerical rows checked by <span class="mono">verify</span></span></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section reveal" id="faq" aria-labelledby="h-faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Questions</span>
+      <h2 class="heading-2" id="h-faq">Frequently asked</h2>
+    </div>
+    <div class="faq">
+      <details><summary class="title-2">Does sparse internal control change the model’s weights?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">No. The parameters θ stay frozen. An intervention adds scaled directions to a few activations during the forward pass, and setting β = 0 recovers the original model exactly.</div></details>
+      <details><summary class="title-2">What is a driver node?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">A candidate control node is a triple of a physical site, an intervention direction and a selection cost. The candidates that receive a nonzero strength form the driver set S<sub>β</sub> = supp(β). One site can host several candidates with different directions.</div></details>
+      <details><summary class="title-2">How is this different from activation steering?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">Activation steering shows that internal directions can change behavior. Sparse internal control adds the control problem around it: which compact set of sites to use, under a bounded energy, with explicit requirements for target recovery and off-target preservation, followed by an evaluation on six axes.</div></details>
+      <details><summary class="title-2">Why six axes instead of one score?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">Because the properties separate in practice. Refusal responds to dose in perfect order and still fails reversal. MCQA sites transfer when strengths are refit, while the fully frozen intervention barely moves held out prompts. One number would hide both facts.</div></details>
+      <details><summary class="title-2">What do P and F mean?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">They describe the direction information. P uses evaluation pair directions, computed from the activation contrast of each evaluation pair. F uses training mean directions, averaged over the fitting split and shared across inputs.</div></details>
+      <details><summary class="title-2">Which models and tasks were tested?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">Indirect object identification and sentiment on GPT-2 small, MMLU Humanities and STEM on Qwen3-4B, and refusal on Qwen3-1.7B. The appendix adds model comparisons on Qwen3-8B and Mistral-7B.</div></details>
+      <details><summary class="title-2">Can I reproduce the tables without a GPU?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">Yes. The record replay path recalculates the paper’s tables from the supplied measurements on CPU, and <span class="mono">verify</span> compares 162 numerical rows and 15 supporting values against the manuscript. Running the models themselves uses a separate environment and execution profile.</div></details>
+      <details><summary class="title-2">Can I evaluate my own steering method with the protocol?<span class="pm" aria-hidden="true"></span></summary><div class="a body-3">Yes. Each axis is defined on any intervention with a support, base strengths and a direction rule. Directions from steering vectors, sparse autoencoder features or editing methods can enter as candidates and be scored on the same six axes.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- Cite -->
+<section class="section reveal" id="cite" aria-labelledby="h-cite">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Cite</span>
+      <h2 class="heading-2" id="h-cite">Cite the paper</h2>
+    </div>
+    <div class="cite-grid">
+      <div class="code">
+        <div class="code-head">
+          <div class="tabs" role="tablist" aria-label="Citation format">
+            <button class="tab caption-1" role="tab" id="ct-paper" aria-selected="true" aria-controls="bib-box">Paper</button>
+            <button class="tab caption-1" role="tab" id="ct-soft" aria-selected="false" aria-controls="bib-box" tabindex="-1">Software</button>
+          </div>
+          <button class="btn btn-text button-sm copy-btn" data-copy="bib-box" type="button"><svg class="ic ic-sm" aria-hidden="true"><use href="#i-copy"/></svg><span>Copy</span></button>
+        </div>
+<pre id="bib-box" role="tabpanel" aria-labelledby="ct-paper">@inproceedings{zhang2026sparse,
+  title     = {Sparse Internal Control of Language Models},
+  author    = {Zhang, Xizhe},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year      = {2026}
+}</pre>
+      </div>
+      <div class="final">
+        <h3 class="heading-5">Read the full formulation, proofs and per seed results</h3>
+        <p class="body-6">53 pages with the local target controllability analysis, pseudocode for both selectors, complete axis definitions and every table behind this page.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary button-md" href="paper.pdf" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-doc"/></svg>Read the paper</a>
+          <a class="btn btn-text button-md" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-gh"/></svg>Code on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap" style="display:grid; gap:var(--s-300)">
+    <div class="foot-row">
+      <a class="brand title-4" href="#top" style="padding-left:0"><svg aria-hidden="true"><use href="#logo"/></svg>Sparse Internal Control of Language Models</a>
+      <div class="foot-links body-5">
+        <a href="paper.pdf" target="_blank" rel="noopener">Paper</a>
+        <a href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener">Code</a>
+        <a href="https://orcid.org/0000-0002-8684-4591" target="_blank" rel="noopener">ORCID</a>
+        <a href="#cite">Cite</a>
+      </div>
+    </div>
+    <p class="caption-5">© 2026 Xizhe Zhang · Contact <span class="sel">zhangxizhe@gmail.com</span> · Code under Apache 2.0 · This site sets no cookies and runs no analytics.</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const mqReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+let reduce = mqReduce.matches;
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const easeOut = t => 1 - Math.pow(1 - t, 4);
+const easeInOut = t => t < .5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
+const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+
+/* ---------- palette from CSS tokens ---------- */
+const PAL = {};
+const KEYS = ['bg','surface','raised','line','line-strong','ink','muted','faint','drive','drive-ink','model','src','tgt'];
+function readPal(){ const cs = getComputedStyle(document.documentElement); KEYS.forEach(k => PAL[k] = cs.getPropertyValue('--' + k).trim() || '#888888'); }
+readPal();
+const palSubs = [];
+function refreshPal(){ readPal(); palSubs.forEach(f => f()); }
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', refreshPal);
+new MutationObserver(refreshPal).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+function hexRgb(h){ h = h.replace('#', ''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); const n = parseInt(h, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+function rgba(h, a){ const [r, g, b] = hexRgb(h); return `rgba(${r},${g},${b},${a})`; }
+function mix(h1, h2, t){ const a = hexRgb(h1), b = hexRgb(h2); return `rgb(${a.map((v, i) => Math.round(lerp(v, b[i], t))).join(',')})`; }
+
+/* ---------- canvas helpers ---------- */
+const MONO = '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace';
+const SANS = '"Geist", "Manrope", system-ui, sans-serif';
+function sizer(cv){
+  const st = { w: 1, h: 1, ctx: cv.getContext('2d') };
+  const fit = () => {
+    const r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    st.w = Math.max(1, r.width); st.h = Math.max(1, r.height);
+    cv.width = Math.round(st.w * dpr); cv.height = Math.round(st.h * dpr);
+    st.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (st.onfit) st.onfit();
+  };
+  fit();
+  new ResizeObserver(fit).observe(cv);
+  return st;
+}
+function T(ctx, x, y, segs, o = {}){
+  const size = o.size || 12, fam = o.sans ? SANS : MONO, wt = o.weight || 400;
+  if (typeof segs === 'string') segs = [[segs]];
+  let total = 0;
+  const parts = segs.map(([s, m]) => { const sz = m ? Math.round(size * .74) : size; ctx.font = `${wt} ${sz}px ${fam}`; const w = ctx.measureText(s).width; total += w; return { s, m, sz, w }; });
+  let cx = o.align === 'center' ? x - total / 2 : o.align === 'right' ? x - total : x;
+  ctx.fillStyle = o.color || PAL.ink; ctx.textBaseline = 'alphabetic';
+  for (const p of parts){ ctx.font = `${wt} ${p.sz}px ${fam}`; const dy = p.m === 'sub' ? size * .3 : p.m === 'sup' ? -size * .42 : 0; ctx.fillText(p.s, cx, y + dy); cx += p.w; }
+  return total;
+}
+function rr(ctx, x, y, w, h, r){ ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+function pill(ctx, x, y, text, color, o = {}){
+  ctx.font = `600 11px ${MONO}`; const w = ctx.measureText(text).width + 16, h = 20;
+  const X = o.align === 'right' ? x - w : x;
+  rr(ctx, X, y, w, h, 10); ctx.fillStyle = rgba(color, .12); ctx.fill(); ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.stroke();
+  ctx.fillStyle = color; ctx.textBaseline = 'middle'; ctx.fillText(text, X + 8, y + h / 2 + .5); ctx.textBaseline = 'alphabetic';
+  return w;
+}
+function arrow(ctx, x1, y1, x2, y2, color, o = {}){
+  ctx.save(); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = o.lw || 1.5;
+  const a = Math.atan2(y2 - y1, x2 - x1), hs = o.head || 7;
+  if (o.dash) ctx.setLineDash(o.dash);
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2 - Math.cos(a) * hs * .8, y2 - Math.sin(a) * hs * .8); ctx.stroke();
+  ctx.setLineDash([]); ctx.beginPath(); ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - Math.cos(a - .45) * hs, y2 - Math.sin(a - .45) * hs); ctx.lineTo(x2 - Math.cos(a + .45) * hs, y2 - Math.sin(a + .45) * hs);
+  ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function seg(ctx, x1, y1, x2, y2, color, lw = 1, dash){ ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = lw; if (dash) ctx.setLineDash(dash); ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore(); }
+function dot(ctx, x, y, r, fill, stroke, lw = 1.5){ ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); if (fill){ ctx.fillStyle = fill; ctx.fill(); } if (stroke){ ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); } }
+function cross(ctx, x, y, r, color){ dot(ctx, x, y, r, null, color, 1.75); seg(ctx, x - r - 4, y, x + r + 4, y, color, 1.5); seg(ctx, x, y - r - 4, x, y + r + 4, color, 1.5); }
+function dotGrid(ctx, w, h){ ctx.fillStyle = rgba(PAL.faint, .3); for (let x = 12; x < w; x += 24) for (let y = 12; y < h; y += 24) ctx.fillRect(x - .75, y - .75, 1.5, 1.5); }
+
+/* ---------- hero: actuator console ---------- */
+const Hero = (() => {
+  const cv = $('#hero-canvas'); if (!cv) return null;
+  const S = sizer(cv);
+  const slider = $('#dose'), out = $('#dose-out'), srcEl = $('#out-src'), tgtEl = $('#out-tgt'), mark = $('#gauge-mark'), sweepBtn = $('#sweep');
+  const L = 7, N = 5, DRV = [[1, 3], [2, 0], [3, 2], [5, 1]];
+  let nodes = [], outs = [], edges = [], drivers = [], inN, outN, gamma = 1, tween = null, parts = [], last = 0, accA = 0, accC = 0, visible = true, raf = 0, clock = 0;
+  const prog = g => Math.tanh(1.6 * g) / Math.tanh(1.6);
+  function layout(){
+    const W = S.w, H = S.h; nodes = []; edges = []; outs = [];
+    const padX = Math.max(22, W * .055), padY = 26;
+    inN = { x: padX, y: H / 2, id: 0, kind: 'in' }; nodes.push(inN);
+    const gapY = Math.min(48, (H - 2 * padY) / (N - 1));
+    for (let l = 0; l < L; l++) for (let i = 0; i < N; i++){
+      const jit = (((l * 7 + i * 13) % 5) - 2) * 3;
+      nodes.push({ x: padX + (l + 1) * (W - 2 * padX) / (L + 1), y: H / 2 + (i - (N - 1) / 2) * gapY + jit, l, i, id: nodes.length, kind: 'site' });
+    }
+    outN = { x: W - padX, y: H / 2, id: nodes.length, kind: 'out' }; nodes.push(outN);
+    const at = (l, i) => nodes[1 + l * N + i];
+    nodes.forEach(n => outs[n.id] = []);
+    const add = (a, b) => { edges.push([a, b]); outs[a.id].push(b); };
+    for (let i = 0; i < N; i++) add(inN, at(0, i));
+    for (let l = 0; l < L - 1; l++) for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) if (Math.abs(i - j) <= 1 || (i * 3 + j * 5 + l) % 7 === 0) add(at(l, i), at(l + 1, j));
+    for (let i = 0; i < N; i++) add(at(L - 1, i), outN);
+    drivers = DRV.map(([l, i]) => at(l, i)); drivers.forEach(d => d.drv = true);
+    parts = [];
+  }
+  S.onfit = () => { layout(); if (!raf) draw(); };
+  layout();
+  function spawn(n, kind){ const nx = outs[n.id]; if (!nx || !nx.length) return; parts.push({ a: n, b: nx[(Math.random() * nx.length) | 0], p: 0, kind, v: kind === 'c' ? 2.4 : 1.7 }); }
+  function step(dt){
+    accA += dt * 2.6; while (accA >= 1){ accA -= 1; spawn(inN, 'a'); }
+    accC += dt * Math.abs(gamma) * 7; while (accC >= 1){ accC -= 1; spawn(drivers[(Math.random() * drivers.length) | 0], 'c'); }
+    for (const q of parts){ q.p += dt * q.v; if (q.p >= 1){ q.a = q.b; q.p = 0; const nx = outs[q.a.id]; if (q.a === outN || !nx.length) q.dead = true; else q.b = nx[(Math.random() * nx.length) | 0]; } }
+    parts = parts.filter(q => !q.dead);
+    if (parts.length > 260) parts.splice(0, parts.length - 260);
+  }
+  function draw(){
+    const ctx = S.ctx, W = S.w, H = S.h, ag = Math.abs(gamma), p = prog(gamma);
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineWidth = 1;
+    for (const [a, b] of edges){
+      const hot = a.drv && ag > .01;
+      ctx.strokeStyle = hot ? rgba(PAL.drive, .18 + .5 * Math.min(1, ag)) : rgba(PAL['line-strong'], .55);
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    }
+    for (const q of parts){
+      const x = lerp(q.a.x, q.b.x, q.p), y = lerp(q.a.y, q.b.y, q.p);
+      const tx = lerp(q.a.x, q.b.x, Math.max(0, q.p - .22)), ty = lerp(q.a.y, q.b.y, Math.max(0, q.p - .22));
+      const col = q.kind === 'c' ? PAL.drive : PAL.model;
+      ctx.strokeStyle = rgba(col, q.kind === 'c' ? .55 : .35); ctx.lineWidth = q.kind === 'c' ? 2 : 1.5;
+      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(x, y); ctx.stroke();
+      dot(ctx, x, y, q.kind === 'c' ? 2.4 : 1.9, col);
+    }
+    const r = W < 420 ? 4.5 : 5.5;
+    for (const n of nodes){
+      if (n.kind !== 'site') continue;
+      if (n.drv){
+        const pulse = reduce ? .5 : .5 + .5 * Math.sin(clock * 4 + n.l);
+        if (ag > .01) dot(ctx, n.x, n.y, r + 3 + ag * 5 * pulse, null, rgba(PAL.drive, .45), 1.5);
+        dot(ctx, n.x, n.y, r + 1.5, PAL.drive, PAL.surface, 2);
+      } else dot(ctx, n.x, n.y, r, PAL.surface, PAL['line-strong'], 1.25);
+    }
+    dot(ctx, inN.x, inN.y, r + 2, PAL.model, PAL.surface, 2);
+    const oc = p >= 0 ? mix(PAL.src, PAL.tgt, clamp(p)) : PAL.src;
+    dot(ctx, outN.x, outN.y, r + 4 + (ag > .01 ? 1 : 0), oc, PAL.surface, 2.5);
+    T(ctx, inN.x, inN.y - 16, 'x', { align: 'center', color: PAL.muted, size: 12 });
+    T(ctx, outN.x, outN.y - 18, 'b(x)', { align: 'center', color: PAL.muted, size: 12 });
+    const d0 = drivers[1];
+    T(ctx, d0.x, Math.max(14, d0.y - 16), 'driver', { align: 'center', color: PAL['drive-ink'], size: 11 });
+    T(ctx, 4, H - 6, [['θ frozen']], { color: PAL.faint, size: 11 });
+  }
+  function setGamma(g, fromSlider){
+    gamma = g; if (!fromSlider) slider.value = g.toFixed(2);
+    out.textContent = 'γ = ' + (g < 0 ? '−' : '') + Math.abs(g).toFixed(2);
+    const p = prog(g), t = smooth(.38, .62, p);
+    tgtEl.style.opacity = t; srcEl.style.opacity = 1 - t;
+    srcEl.setAttribute('aria-hidden', t > .5); tgtEl.setAttribute('aria-hidden', t <= .5);
+    const track = mark.parentElement.clientWidth;
+    const x = clamp((p + 1.1) / 2.25) * track;
+    mark.style.transform = `translateX(${x}px)`;
+    if (!inTick) draw();
+  }
+  let inTick = false;
+  function tick(now){
+    raf = 0; inTick = true;
+    const dt = Math.min(.05, (now - (last || now)) / 1000); last = now; clock += dt;
+    if (tween){ const k = clamp((now - tween.t0) / tween.d); setGamma(lerp(tween.a, tween.b, tween.ease(k))); if (k >= 1) tween = null; }
+    step(dt); draw(); inTick = false;
+    if (visible && !reduce) raf = requestAnimationFrame(tick);
+  }
+  function start(){ if (!raf && !reduce){ last = 0; raf = requestAnimationFrame(tick); } }
+  function sweep(){
+    if (reduce){ setGamma(1); return; }
+    tween = { a: 0, b: 1, t0: performance.now() + 250, d: 2600, ease: easeInOut };
+    setGamma(0); start();
+  }
+  slider.addEventListener('input', () => { tween = null; setGamma(parseFloat(slider.value), true); });
+  sweepBtn.addEventListener('click', sweep);
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) start(); }, { threshold: .05 }).observe(cv);
+  window.addEventListener('resize', () => setGamma(gamma));
+  palSubs.push(() => draw());
+  setGamma(reduce ? 1 : 0);
+  if (!reduce) setTimeout(sweep, 500);
+  document.fonts && document.fonts.ready.then(() => draw());
+  return { setGamma };
+})();
+
+/* ---------- framework stepper ---------- */
+(() => {
+  const svg = $('#fw-svg'), steps = $$('#steps .step');
+  if (!svg) return;
+  const set = n => { svg.setAttribute('data-step', n); steps.forEach(s => s.classList.toggle('on', s.dataset.step === String(n))); };
+  steps.forEach(s => {
+    s.addEventListener('click', () => set(s.dataset.step));
+    s.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); set(s.dataset.step); } });
+  });
+  const io = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) set(e.target.dataset.step); }); }, { rootMargin: '-45% 0px -50% 0px' });
+  steps.forEach(s => io.observe(s));
+})();
+
+/* ---------- six axes: scenes ---------- */
+const GRID = [-1, -.5, 0, .25, .5, .75, 1, 1.25, 1.5, 2];
+function ranks(a){ const idx = a.map((v, i) => [v, i]).sort((x, y) => x[0] - y[0]); const r = new Array(a.length); let i = 0; while (i < idx.length){ let j = i; while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++; const avg = (i + j) / 2 + 1; for (let k = i; k <= j; k++) r[idx[k][1]] = avg; i = j + 1; } return r; }
+function spearman(x, y){ const rx = ranks(x), ry = ranks(y), n = x.length, mx = (n + 1) / 2; let num = 0, dx = 0, dy = 0; for (let i = 0; i < n; i++){ num += (rx[i] - mx) * (ry[i] - mx); dx += (rx[i] - mx) ** 2; dy += (ry[i] - mx) ** 2; } return num / Math.sqrt(dx * dy); }
+function softmax(z){ const m = Math.max(...z), e = z.map(v => Math.exp(v - m)), s = e.reduce((a, b) => a + b, 0); return e.map(v => v / s); }
+function KL(p, q){ return p.reduce((a, pi, i) => a + pi * Math.log(pi / q[i]), 0); }
+function solveScale(z, d, target){ const p = softmax(z); let lo = 0, hi = 30; for (let k = 0; k < 60; k++){ const mid = (lo + hi) / 2; const q = softmax(z.map((v, i) => v + mid * d[i])); if (KL(p, q) < target) lo = mid; else hi = mid; } return (lo + hi) / 2; }
+const fmtKL = v => v < .01 ? v.toFixed(5) : v.toFixed(3);
+const sgn = v => (v < 0 ? '−' : '') + Math.abs(v).toFixed(2);
+
+const SC_REACH = {
+  dur: 5600, variants: [{ rel: .18, phi: .75 }, { rel: .31, phi: -.95 }, { rel: .57, phi: .35 }],
+  draw(ctx, w, h, t, vi){
+    const v = this.variants[vi];
+    const Sp = { x: w * .2, y: h * .72 }, Tp = { x: w * .66, y: h * .42 };
+    const qx = Tp.x - Sp.x, qy = Tp.y - Sp.y, qn = Math.hypot(qx, qy), ux = qx / qn, uy = qy / qn, px = -uy, py = ux;
+    const d = v.rel * qn, Lp = { x: Tp.x - ux * d * Math.cos(v.phi) + px * d * Math.sin(v.phi), y: Tp.y - uy * d * Math.cos(v.phi) + py * d * Math.sin(v.phi) };
+    const R = .4 * qn;
+    ctx.save(); ctx.beginPath(); ctx.arc(Tp.x, Tp.y, R, 0, Math.PI * 2); ctx.fillStyle = rgba(PAL.tgt, .06); ctx.fill(); ctx.setLineDash([4, 4]); ctx.strokeStyle = rgba(PAL.tgt, .7); ctx.lineWidth = 1.25; ctx.stroke(); ctx.restore();
+    T(ctx, Tp.x + R * .72 + 6, Tp.y + R * .72 + 8, 'ε = 0.4', { color: PAL.tgt, size: 11 });
+    arrow(ctx, Sp.x, Sp.y, Tp.x - ux * 10, Tp.y - uy * 10, rgba(PAL.muted, .75), { dash: [5, 5], lw: 1.25 });
+    T(ctx, (Sp.x + Tp.x) / 2 - px * 16, (Sp.y + Tp.y) / 2 - py * 16, 'requested q', { color: PAL.muted, size: 11, align: 'center' });
+    dot(ctx, Sp.x, Sp.y, 6, PAL.src);
+    T(ctx, Sp.x, Sp.y + 24, [['source b(x'], ['i', 'sub'], [')']], { color: PAL.src, size: 11, align: 'center' });
+    cross(ctx, Tp.x, Tp.y, 6, PAL.tgt);
+    T(ctx, Tp.x + 14, Tp.y - 12, [['target τ'], ['i', 'sub']], { color: PAL.tgt, size: 11 });
+    const k = clamp((t - 500) / 2100), e = easeOut(k);
+    const C = { x: (Sp.x + Lp.x) / 2 + px * qn * .16, y: (Sp.y + Lp.y) / 2 + py * qn * .16 };
+    const B = s => ({ x: (1 - s) * (1 - s) * Sp.x + 2 * (1 - s) * s * C.x + s * s * Lp.x, y: (1 - s) * (1 - s) * Sp.y + 2 * (1 - s) * s * C.y + s * s * Lp.y });
+    ctx.save(); ctx.strokeStyle = PAL.drive; ctx.lineWidth = 2.25; ctx.beginPath();
+    for (let i = 0; i <= 40; i++){ const pt = B(e * i / 40); i ? ctx.lineTo(pt.x, pt.y) : ctx.moveTo(pt.x, pt.y); } ctx.stroke(); ctx.restore();
+    const cur = B(e);
+    if (k >= 1){
+      const a = smooth(2700, 3100, t);
+      ctx.save(); ctx.globalAlpha *= a;
+      seg(ctx, Lp.x, Lp.y, Tp.x, Tp.y, PAL.src, 1.5, [3, 3]);
+      const dx = Tp.x - Lp.x, dy = Tp.y - Lp.y, dn = Math.hypot(dx, dy) || 1, nx = dy / dn, ny = -dx / dn, sd = (nx * (Sp.x - Lp.x) + ny * (Sp.y - Lp.y)) > 0 ? -1 : 1;
+      const mx = (Lp.x + Tp.x) / 2 + nx * 14 * sd, my = (Lp.y + Tp.y) / 2 + ny * 14 * sd;
+      T(ctx, mx, my + 4, 'q − F(β)', { color: PAL.src, size: 11, align: nx * sd < -.3 ? 'right' : nx * sd > .3 ? 'left' : 'center' });
+      ctx.restore();
+    }
+    dot(ctx, cur.x, cur.y, 6.5, PAL.drive, PAL.surface, 2.5);
+    if (k > .02 && k < 1) T(ctx, cur.x + 12, cur.y + 4, 'patched F(β)', { color: PAL['drive-ink'], size: 11 });
+    const rel = Math.hypot(cur.x - Tp.x, cur.y - Tp.y) / qn;
+    T(ctx, 16, 26, [['Rel'], ['tar', 'sub'], ['(1) = ' + rel.toFixed(2)]], { size: 13, weight: 500 });
+    if (t > 3000) pill(ctx, 16, 38, rel <= .4 ? 'within ε · pass' : 'outside ε · fail', rel <= .4 ? PAL.tgt : PAL.src);
+  }
+};
+const SC_REV = {
+  dur: 5600, variants: [{ f: .85, perp: .18 }, { f: .12, perp: .05 }],
+  draw(ctx, w, h, t, vi){
+    const v = this.variants[vi];
+    const Sp = { x: w * .2, y: h * .7 }, Cp = { x: w * .72, y: h * .4 };
+    const dx = Sp.x - Cp.x, dy = Sp.y - Cp.y, Ln = Math.hypot(dx, dy), ux = dx / Ln, uy = dy / Ln, px = -uy, py = ux;
+    const D = { x: Cp.x + ux * Ln * v.f + px * Ln * v.perp, y: Cp.y + uy * Ln * v.f + py * Ln * v.perp };
+    seg(ctx, Sp.x, Sp.y, Cp.x, Cp.y, rgba(PAL.muted, .35), 1, [2, 5]);
+    dot(ctx, Sp.x, Sp.y, 6, PAL.src);
+    T(ctx, Sp.x, Sp.y + 24, [['source x'], ['r', 'sup']], { color: PAL.src, size: 11, align: 'center' });
+    cross(ctx, Cp.x, Cp.y, 6, PAL.tgt);
+    T(ctx, Cp.x, Cp.y - 18, [['target side x'], ['c', 'sup']], { color: PAL.tgt, size: 11, align: 'center' });
+    const k = clamp((t - 700) / 2000), e = easeOut(k);
+    const P = { x: lerp(Cp.x, D.x, e), y: lerp(Cp.y, D.y, e) };
+    if (t < 1100) pill(ctx, Cp.x + 14, Cp.y + 10, 'apply −β', PAL.drive);
+    seg(ctx, Cp.x, Cp.y, P.x, P.y, PAL.drive, 2.25);
+    const dS = Math.hypot(P.x - Sp.x, P.y - Sp.y) / Ln, dC = Math.hypot(P.x - Cp.x, P.y - Cp.y) / Ln, ratio = dC / Math.max(dS, 1e-6);
+    if (t > 2600){
+      const a = smooth(2600, 3000, t); ctx.save(); ctx.globalAlpha *= a;
+      seg(ctx, P.x, P.y, Sp.x, Sp.y, PAL.src, 1.5, [3, 3]); seg(ctx, P.x, P.y, Cp.x, Cp.y, PAL.tgt, 1.5, [3, 3]);
+      ctx.restore();
+    }
+    dot(ctx, P.x, P.y, 6.5, PAL.drive, PAL.surface, 2.5);
+    T(ctx, 16, 24, [['Rel'], ['dis→clean', 'sub'], [' = ' + dC.toFixed(2)]], { size: 12, color: PAL.tgt });
+    T(ctx, 16, 44, [['Rel'], ['dis→src', 'sub'], ['   = ' + dS.toFixed(2)]], { size: 12, color: PAL.src });
+    T(ctx, 16, 68, 'Reversal = ' + (k > .02 ? ratio.toFixed(2) : '0.00'), { size: 13, weight: 600 });
+    if (t > 3000) pill(ctx, 16, 78, ratio >= 2 ? 'ratio ≥ 2 · pass' : 'ratio < 2 · fail', ratio >= 2 ? PAL.tgt : PAL.src);
+  }
+};
+const SC_DOSE = {
+  dur: 6600, variants: [
+    { f: g => 1.3 * Math.tanh(1.02 * g), name: 'ordered response' },
+    { f: g => Math.sin(1.3 * g) / Math.sin(1.3), name: 'overshoot' },
+    { f: g => -.55 * g - .05 * g * g, name: 'reversed ordering' }],
+  draw(ctx, w, h, t, vi){
+    const v = this.variants[vi];
+    const box = { x: 46, y: 64, w: w - 46 - 20, h: h - 64 - 40 };
+    const xr = [-1.15, 2.15], yr = [-1.45, 1.55];
+    const X = g => box.x + (g - xr[0]) / (xr[1] - xr[0]) * box.w, Y = p => box.y + box.h - (p - yr[0]) / (yr[1] - yr[0]) * box.h;
+    seg(ctx, box.x, Y(0), box.x + box.w, Y(0), PAL['line-strong'], 1);
+    seg(ctx, X(0), box.y, X(0), box.y + box.h, PAL.line, 1);
+    seg(ctx, box.x, Y(1), box.x + box.w, Y(1), rgba(PAL.tgt, .7), 1.25, [4, 4]);
+    T(ctx, box.x + box.w, Y(1) - 6, 'target', { color: PAL.tgt, size: 11, align: 'right' });
+    seg(ctx, X(1), box.y, X(1), box.y + box.h, rgba(PAL.muted, .5), 1, [2, 4]);
+    T(ctx, X(1) + 4, box.y + 10, 'nominal', { color: PAL.faint, size: 10 });
+    GRID.forEach(g => seg(ctx, X(g), box.y + box.h, X(g), box.y + box.h + 4, PAL.faint, 1));
+    [-1, 0, 1, 2].forEach(g => T(ctx, X(g), box.y + box.h + 18, g < 0 ? '−1' : String(g), { color: PAL.faint, size: 11, align: 'center' }));
+    T(ctx, box.x + box.w, box.y + box.h + 34, 'dose γ', { color: PAL.muted, size: 11, align: 'right' });
+    [-1, 0, 1].forEach(p => T(ctx, box.x - 8, Y(p) + 4, p < 0 ? '−1' : String(p), { color: PAL.faint, size: 11, align: 'right' }));
+    T(ctx, 16, box.y - 6, 'P(γ)', { color: PAL.muted, size: 11 });
+    const k = clamp((t - 400) / 3800), g = lerp(-1, 2, easeInOut(k));
+    ctx.save(); ctx.strokeStyle = rgba(PAL.drive, .85); ctx.lineWidth = 2; ctx.beginPath();
+    for (let x = -1, i = 0; x <= g + 1e-9; x += .02, i++){ const yy = Y(v.f(x)); i ? ctx.lineTo(X(x), yy) : ctx.moveTo(X(x), yy); } ctx.stroke(); ctx.restore();
+    seg(ctx, X(g), box.y, X(g), box.y + box.h, rgba(PAL.drive, .35), 1);
+    GRID.forEach(gg => { if (gg <= g + 1e-9) dot(ctx, X(gg), Y(v.f(gg)), 4, PAL.surface, PAL.drive, 2); });
+    dot(ctx, X(g), Y(v.f(g)), 5.5, PAL.drive, PAL.surface, 2);
+    T(ctx, 16, 24, 'γ = ' + sgn(g) + '   P(γ) = ' + sgn(v.f(g)), { size: 13, weight: 500 });
+    if (k >= 1){
+      const rho = spearman(GRID, GRID.map(v.f));
+      const tw = T(ctx, 16, 46, 'Spearman ρ = ' + sgn(rho), { size: 12, color: PAL.muted });
+      const ok = rho >= .95, neg = rho <= -.95;
+      pill(ctx, 16 + tw + 10, 32, ok ? 'ρ ≥ 0.95 · pass' : neg ? 'strong negative' : 'ρ < 0.95 · fail', ok ? PAL.tgt : PAL.src);
+    }
+  }
+};
+function simFeedback(Mf, targets, eta = .35, iters = 12){
+  return targets.map(m => { let g = 0; const pts = [Mf(g)]; for (let i = 0; i < iters; i++){ g += eta * (m - Mf(g)); pts.push(Mf(g)); } return { m, pts, hit: Math.abs(m - pts[pts.length - 1]) <= .3 }; });
+}
+const SC_FB = {
+  dur: 6400, targets: [-1.2, -.2, .8, 1.8, 3.2],
+  variants: [{ Mf: g => -2.2 + 4.8 * Math.tanh(.6 * g), name: 'strong control direction' }, { Mf: g => -2.2 + .9 * Math.tanh(.5 * g), name: 'weak control direction' }],
+  init(){ this.sims = this.variants.map(v => simFeedback(v.Mf, this.targets)); },
+  draw(ctx, w, h, t, vi){
+    if (!this.sims) this.init();
+    const sims = this.sims[vi];
+    const box = { x: 40, y: 60, w: w - 40 - 70, h: h - 60 - 40 };
+    const X = i => box.x + i / 12 * box.w, Y = m => box.y + box.h - (m + 3) / 6.8 * box.h;
+    sims.forEach(s => {
+      ctx.fillStyle = rgba(PAL.ink, .05); ctx.fillRect(box.x, Y(s.m + .3), box.w, Y(s.m - .3) - Y(s.m + .3));
+      seg(ctx, box.x, Y(s.m), box.x + box.w, Y(s.m), rgba(PAL.ink, .35), 1, [2, 3]);
+      T(ctx, box.x + box.w + 8, Y(s.m) + 4, 'm* ' + sgn(s.m).replace('.00', '.0').replace(/(\.\d)0$/, '$1'), { color: PAL.muted, size: 10 });
+    });
+    [0, 4, 8, 12].forEach(i => T(ctx, X(i), box.y + box.h + 18, String(i), { color: PAL.faint, size: 11, align: 'center' }));
+    T(ctx, box.x + box.w, box.y + box.h + 34, 'feedback iteration t', { color: PAL.muted, size: 11, align: 'right' });
+    seg(ctx, box.x, box.y + box.h, box.x + box.w, box.y + box.h, PAL['line-strong'], 1);
+    const it = clamp((t - 300) / 3600) * 12;
+    sims.forEach((s, j) => {
+      const col = rgba(PAL.drive, .4 + .6 * j / (sims.length - 1));
+      ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath();
+      const n = Math.floor(it);
+      for (let i = 0; i <= n; i++){ const x = X(i), y = Y(s.pts[i]); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }
+      if (n < 12){ const fr = it - n; ctx.lineTo(lerp(X(n), X(n + 1), fr), lerp(Y(s.pts[n]), Y(s.pts[n + 1]), fr)); }
+      ctx.stroke(); ctx.restore();
+      for (let i = 0; i <= n; i++) dot(ctx, X(i), Y(s.pts[i]), 2.2, col);
+      if (it >= 12){ const y = Y(s.pts[12]); if (s.hit) dot(ctx, X(12), y, 5.5, PAL.tgt, PAL.surface, 2); else dot(ctx, X(12), y, 5, PAL.surface, PAL.src, 2); }
+    });
+    T(ctx, 16, 24, 'Only γ changes. S, β and directions stay fixed.', { size: 12, sans: true, color: PAL.muted, weight: 500 });
+    if (it >= 12){ const hits = sims.filter(s => s.hit).length; pill(ctx, 16, 34, `hits ${hits}/${sims.length} · |e| ≤ 0.3`, hits >= 4 ? PAL.tgt : PAL.src); }
+  }
+};
+const SC_OFF = {
+  dur: 6000, variants: [{ kl: [.0004, .0019, .0006] }, { kl: [.11, .05, .42] }],
+  prompts: [{ tag: 'biology', z: [2.9, .3, -.2, .8], d: [-1, .6, .2, .4] }, { tag: 'history', z: [.1, 2.4, .6, -.3], d: [.7, -1, .5, .1] }, { tag: 'algebra', z: [-.2, .4, .9, 2.7], d: [.3, .5, .4, -1] }],
+  init(){ this.sc = this.variants.map(v => this.prompts.map((p, j) => solveScale(p.z, p.d, v.kl[j]))); },
+  draw(ctx, w, h, t, vi){
+    if (!this.sc) this.init();
+    const g = easeOut(clamp((t - 500) / 2200));
+    const pad = 16, gap = 16, top = 96, bottom = h - 56, pw = (w - 2 * pad - 2 * gap) / 3;
+    const kls = [];
+    this.prompts.forEach((p, j) => {
+      const x0 = pad + j * (pw + gap);
+      const p0 = softmax(p.z), p1 = softmax(p.z.map((v, i) => v + g * this.sc[vi][j] * p.d[i])), kl = KL(p0, p1);
+      kls.push(kl);
+      T(ctx, x0, top - 12, [['x̃'], [String(j + 1), 'sub'], ['  ' + p.tag]], { size: 11, color: PAL.muted });
+      seg(ctx, x0, bottom, x0 + pw, bottom, PAL['line-strong'], 1);
+      const bh = bottom - top;
+      ['A', 'B', 'C', 'D'].forEach((L, i) => {
+        const cx = x0 + (i + .5) * pw / 4, bw = Math.min(26, pw / 4 * .62);
+        ctx.strokeStyle = rgba(PAL.ink, .5); ctx.lineWidth = 1.25; ctx.strokeRect(cx - bw / 2, bottom - bh * p0[i], bw, bh * p0[i]);
+        ctx.fillStyle = rgba(PAL.drive, .8); const iw = bw * .56; ctx.fillRect(cx - iw / 2, bottom - bh * p1[i], iw, bh * p1[i]);
+        T(ctx, cx, bottom + 14, L, { size: 10, color: PAL.faint, align: 'center' });
+      });
+      const ok = kl <= .001;
+      T(ctx, x0, bottom + 34, 'KL = ' + fmtKL(kl), { size: 11, color: g >= 1 ? (ok ? PAL.tgt : PAL.src) : PAL.ink, weight: 500 });
+    });
+    const mean = kls.reduce((a, b) => a + b, 0) / kls.length;
+    T(ctx, 16, 24, 'δ = 0.001   mean KL = ' + fmtKL(mean), { size: 13, weight: 500 });
+    if (g >= 1){
+      const mOk = mean <= .001, aOk = kls.every(k => k <= .001);
+      const w1 = pill(ctx, 16, 36, 'mean rule · ' + (mOk ? 'pass' : 'fail'), mOk ? PAL.tgt : PAL.src);
+      pill(ctx, 16 + w1 + 8, 36, 'every prompt · ' + (aOk ? 'pass' : 'fail'), aOk ? PAL.tgt : PAL.src);
+    }
+  }
+};
+const SC_REUSE = {
+  dur: 6000, variants: [
+    { name: 'Refit-β', note: 'sites fixed, strengths refit on held out targets', fit: [1, .97, 1.02], held: [.99, 1.01, .968, 1] },
+    { name: 'Frozen-β', note: 'sites, strengths, directions and dose all fixed', fit: [1, .97, 1.02], held: [.05, -.01, .044, 0] }],
+  draw(ctx, w, h, t, vi){
+    const v = this.variants[vi];
+    T(ctx, 16, 24, v.name, { size: 13, weight: 600, sans: true });
+    T(ctx, 16, 42, v.note, { size: 11, color: PAL.muted, sans: true });
+    T(ctx, w - 16, 24, 'same support S', { size: 11, color: PAL['drive-ink'], align: 'right' });
+    for (let i = 0; i < 4; i++) dot(ctx, w - 16 - 5 - i * 14, 36, 4.5, PAL.drive);
+    const x0 = 104, x1 = w - 84, top = 76, bot = h - 20, rows = 7, gapB = 18;
+    const rh = (bot - top - gapB) / rows;
+    const rowY = (blk, i) => top + (blk ? (3 * rh + gapB) : 0) + (i + .5) * rh;
+    T(ctx, 16, rowY(0, 1) + 4, 'fitting', { size: 11, color: PAL.muted });
+    T(ctx, 16, rowY(1, 1) + 4, 'held out', { size: 11, color: PAL.ink, weight: 600 });
+    T(ctx, 16, rowY(1, 2) + 4, 'unseen', { size: 11, color: PAL.faint });
+    const k1 = easeOut(clamp((t - 300) / 1200)), k2 = easeOut(clamp((t - 1700) / 1600));
+    const drawRow = (y, f, k) => {
+      seg(ctx, x0, y, x1, y, PAL.line, 1.5);
+      dot(ctx, x0, y, 3.5, PAL.src);
+      seg(ctx, x1, y - 6, x1, y + 6, PAL.tgt, 2);
+      dot(ctx, x0 + f * k * (x1 - x0), y, 5, PAL.drive, PAL.surface, 2);
+    };
+    v.fit.forEach((f, i) => drawRow(rowY(0, i), f, k1));
+    v.held.forEach((f, i) => drawRow(rowY(1, i), f, k2));
+    const mf = v.fit.reduce((a, b) => a + b, 0) / v.fit.length, mh = v.held.reduce((a, b) => a + b, 0) / v.held.length;
+    if (k1 > .02) T(ctx, x1 + 12, rowY(0, 1) + 4, 'rec ' + (mf * k1).toFixed(2), { size: 11, color: PAL.muted });
+    if (k2 > .02) T(ctx, x1 + 12, rowY(1, 1) + 4, 'rec ' + (mh * k2).toFixed(3), { size: 12, weight: 600, color: k2 >= 1 ? (mh > .5 ? PAL.tgt : PAL.src) : PAL.ink });
+    T(ctx, x0, top - 6, 'source', { size: 10, color: PAL.src, align: 'center' });
+    T(ctx, x1, top - 6, 'target', { size: 10, color: PAL.tgt, align: 'center' });
+  }
+};
+
+const AXES = [
+  { name: 'Reachability', g: 0, scene: SC_REACH, center: '<tspan>Rel</tspan><tspan dy="3" font-size="9">tar</tspan><tspan dy="-3">(1)</tspan>',
+    q: 'Does the nominal dose land on the requested target?',
+    read: 'Orange path: the patched readout at γ = 1. Dashed circle: tolerance ε around the target. Three cases; the last one misses.',
+    fx: 'Rel<sub>tar</sub>(γ) = ‖q − F(γβ)‖<sub>2</sub> / (‖q‖<sub>2</sub> + ξ),&nbsp; evaluated at γ = 1',
+    crit: 'Rel<sub>tar</sub>(1) ≤ ε, with ε = 0.4 on stacked held out readouts and at most eight candidates.',
+    find: 'Coverage-Driver and Top-k pass 8/8 seeds on Humanities, STEM and Sentiment with evaluation pair directions (P), and 0/8 with training mean directions (F). Refusal passes 0/8 for every selector.' },
+  { name: 'Signed reversal', g: 0, scene: SC_REV, center: '<tspan>Reversal(β)</tspan>',
+    q: 'Does the opposite patch send a target side input back toward its source?',
+    read: 'The patch −β is applied to the target side input. Dashed lines are its distances to the target (green) and to the source (red).',
+    fx: 'Reversal(β) = Rel<sub>dis→clean</sub> / Rel<sub>dis→src</sub>',
+    crit: 'A seed passes when Reversal(β) ≥ 2: the reverse patched readout sits at least twice as far from the target as from the source.',
+    find: 'IOI passes 10/10 P seeds for all three selectors. MCQA passes 21/24 (Humanities) and 23/24 (STEM) P method–seed cells and no F cell. Refusal passes 0/24 in both modes.' },
+  { name: 'Dose response', g: 1, scene: SC_DOSE, center: '<tspan>ρ over Γ</tspan>',
+    q: 'As the dose γ grows, does target progress follow in order?',
+    read: 'Dots mark the ten doses of the paper’s grid Γ. Spearman ρ summarizes the ordering without assuming a straight line.',
+    fx: 'P(γ) = ⟨q, F(γβ)⟩ / (‖q‖<sub>2</sub><sup>2</sup> + ξ),&nbsp; ρ = Spearman(γ, P(γ)) over Γ',
+    crit: 'ρ ≥ 0.95 over Γ = {−1, −0.5, 0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2}. Strong negative ordering, ρ ≤ −0.95, is counted separately.',
+    find: 'All 48 Refusal curves have ρ = 1, yet no Refusal seed passes signed reversal. Under F directions every STEM selector shows four strongly positive and four strongly negative seeds.' },
+  { name: 'Feedback controllability', g: 1, scene: SC_FB, center: '<tspan>hit rate</tspan>',
+    q: 'With the support fixed, can adjusting only the dose track several requested targets?',
+    read: 'Dotted lines are requested margins m* with tolerance bands. Each trajectory updates only γ from the observed error.',
+    fx: 'e<sub>t</sub> = m<sup>⋆</sup> − M(γ<sub>t</sub>),&nbsp;&nbsp; γ<sub>t+1</sub> = γ<sub>t</sub> + η e<sub>t</sub>',
+    crit: 'A target is hit when |m<sup>⋆</sup> − M(γ<sub>end</sub>)| ≤ τ<sub>ctrl</sub>: 0.3 for IOI and MCQA, 0.1 for Refusal, within twelve updates.',
+    find: 'With P directions, Coverage-Driver hits 46/48 Humanities and 47/48 STEM targets. With F directions it hits 8/48 and 7/48. IOI with Driver-OMP hits 24/24.' },
+  { name: 'Off-target preservation', g: 2, scene: SC_OFF, center: '<tspan>L</tspan><tspan dy="3" font-size="9">off</tspan><tspan dy="-3">(γβ)</tspan>',
+    q: 'How much does the patch change outputs on prompts it was never meant to touch?',
+    read: 'Outlines show the unpatched next token distribution, orange the patched one. KL catches changes too small to see in the bars.',
+    fx: 'L<sub>off</sub>(β) = (1/n<sub>off</sub>) Σ<sub>j</sub> KL( p<sub>θ</sub>(·|x̃<sub>j</sub>) ‖ p<sub>θ</sub><sup>β</sup>(·|x̃<sub>j</sub>) )',
+    crit: 'KL ≤ δ = 0.001 on a shared panel of 32 MMLU prompts, checked two ways: the seed mean, and every prompt on its own.',
+    find: 'No MCQA or Sentiment seed passes either rule; Coverage-Driver’s mean KL is 0.110 on Humanities. On Refusal, Driver-OMP passes 4/8 seeds by the mean rule and 2/8 when every prompt must pass.' },
+  { name: 'Held-out reuse', g: 2, scene: SC_REUSE, center: '<tspan>recovery</tspan>',
+    q: 'Do the selected sites, or the whole intervention, carry over to prompts never used for selection?',
+    read: 'Each track runs from a source readout to its target. The support S is the same in both cases; only what else stays frozen changes.',
+    fx: 'recovery = (b̄<sub>patched</sub> − b̄<sub>source</sub>) / (b̄<sub>target</sub> − b̄<sub>source</sub>)',
+    crit: 'No pass flag. Recovery stays continuous and is reported with its information condition, refit-β or fully frozen-β.',
+    find: 'Module level MCQA with Driver-OMP: refit-β recovers 0.992 ± 0.009 (Humanities) and 0.987 ± 0.034 (STEM). The fully frozen intervention recovers 0.021 ± 0.026 and 0.024 ± 0.066.' }
+];
+const GROUPS = ['At a fixed dose', 'Across doses', 'Beyond the target set'];
+
+/* ---------- six axes: controller ---------- */
+(() => {
+  const cv = $('#axis-canvas'); if (!cv) return;
+  const S = sizer(cv);
+  const tabs = $$('#hex .hx'), cards = $$('#t1 .t1-card'), groupsSvg = $$('.hex-svg .hg'), groupsLi = $$('#hex-legend li');
+  const ptr = $('#hex-ptr'), core = $('#core-t'), fill = $('#tour-fill'), tourBtn = $('#ax-tour');
+  const el = { kicker: $('#ax-kicker'), name: $('#ax-name'), q: $('#ax-q'), read: $('#ax-read'), fx: $('#ax-fx'), crit: $('#ax-crit'), find: $('#ax-find') };
+  const swaps = [$('#ax-ttl'), $('#ax-read'), $('#ax-body')];
+  let idx = 0, t0 = performance.now(), raf = 0, visible = false, touring = !reduce, tourTimer = 0, angle = 0;
+
+  function frame(now){
+    raf = 0;
+    const sc = AXES[idx].scene, el2 = Math.max(0, now - t0), cyc = Math.floor(el2 / sc.dur), vi = cyc % sc.variants.length, t = el2 % sc.dur;
+    render(t, vi);
+    if (visible && !reduce) raf = requestAnimationFrame(frame);
+  }
+  function render(t, vi){
+    const ctx = S.ctx, w = S.w, h = S.h, sc = AXES[idx].scene;
+    ctx.clearRect(0, 0, w, h); dotGrid(ctx, w, h);
+    ctx.save(); ctx.globalAlpha = smooth(0, 280, t) * (1 - smooth(sc.dur - 300, sc.dur, t));
+    sc.draw(ctx, w, h, t, vi);
+    ctx.restore();
+    if (sc.variants.length > 1){
+      const nm = sc.variants[vi].name, label = 'case ' + (vi + 1) + '/' + sc.variants.length + (nm && idx !== 5 ? ' · ' + nm : '');
+      T(ctx, w - 16, h - 12, label, { size: 10, color: PAL.faint, align: 'right' });
+    }
+  }
+  function staticFrame(){ const sc = AXES[idx].scene; render(sc.dur * .8, 0); }
+  function start(){ if (!raf && visible && !reduce) raf = requestAnimationFrame(frame); }
+  S.onfit = () => { if (reduce || !raf) staticFrame(); };
+
+  function schedule(){
+    clearTimeout(tourTimer);
+    fill.style.transition = 'none'; fill.style.transform = 'scaleX(0)';
+    if (!touring || !visible) return;
+    const sc = AXES[idx].scene, ms = sc.dur * sc.variants.length;
+    void fill.offsetWidth;
+    fill.style.transition = `transform ${ms}ms var(--ease-timer)`; fill.style.transform = 'scaleX(1)';
+    tourTimer = setTimeout(() => select((idx + 1) % AXES.length, false), ms);
+  }
+  function setTour(on){
+    touring = on; tourBtn.setAttribute('aria-pressed', on);
+    tourBtn.querySelector('use').setAttribute('href', on ? '#i-pause' : '#i-play');
+    tourBtn.querySelector('span').textContent = on ? 'Pause tour' : 'Play tour';
+    schedule();
+  }
+  function select(i, user){
+    if (user && touring) setTour(false);
+    const prev = idx; idx = i;
+    const a = AXES[i];
+    tabs.forEach((b, j) => { b.setAttribute('aria-selected', j === i); b.tabIndex = j === i ? 0 : -1; });
+    cards.forEach((c, j) => c.setAttribute('aria-current', j === i));
+    groupsSvg.forEach(p => p.classList.toggle('on', +p.dataset.g === a.g));
+    groupsLi.forEach(li => li.classList.toggle('on', +li.dataset.g === a.g));
+    $('#axis-panel').setAttribute('aria-labelledby', 'tab-' + i);
+    let d = (i - prev) * 60; d = ((d % 360) + 540) % 360 - 180; angle += d;
+    ptr.style.transform = `rotate(${angle}deg)`;
+    core.innerHTML = a.center;
+    const apply = () => {
+      el.kicker.textContent = `Axis ${i + 1} of 6 · ${GROUPS[a.g]}`;
+      el.name.textContent = a.name; el.q.textContent = a.q; el.read.textContent = a.read;
+      el.fx.innerHTML = a.fx; el.crit.innerHTML = a.crit; el.find.innerHTML = a.find;
+    };
+    if (reduce || prev === i){ apply(); }
+    else { swaps.forEach(s => s.classList.add('out')); setTimeout(() => { apply(); swaps.forEach(s => s.classList.remove('out')); }, 220); }
+    t0 = performance.now();
+    if (reduce || !raf) staticFrame();
+    start(); schedule();
+  }
+  tabs.forEach((b, j) => {
+    b.addEventListener('click', () => select(j, true));
+    b.addEventListener('keydown', e => {
+      const k = e.key; let n = null;
+      if (k === 'ArrowRight' || k === 'ArrowDown') n = (j + 1) % 6; else if (k === 'ArrowLeft' || k === 'ArrowUp') n = (j + 5) % 6; else if (k === 'Home') n = 0; else if (k === 'End') n = 5;
+      if (n !== null){ e.preventDefault(); select(n, true); tabs[n].focus(); }
+    });
+  });
+  cards.forEach(c => c.addEventListener('click', () => { select(+c.dataset.i, true); $('#axes-mod').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }));
+  $('#ax-prev').addEventListener('click', () => select((idx + 5) % 6, true));
+  $('#ax-next').addEventListener('click', () => select((idx + 1) % 6, true));
+  tourBtn.addEventListener('click', () => setTour(!touring));
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible){ t0 = performance.now(); start(); } schedule(); }, { threshold: .2 }).observe(cv);
+  palSubs.push(() => { if (reduce || !raf) staticFrame(); });
+  if (reduce) setTour(false);
+  staticFrame();
+  document.fonts && document.fonts.ready.then(() => staticFrame());
+})();
+
+/* ---------- tagline: word by word ---------- */
+(() => {
+  const p = $('#tagline'); if (!p) return;
+  const wrapWords = node => {
+    Array.from(node.childNodes).forEach(n => {
+      if (n.nodeType === 3){
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(part => { if (!part) return; if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part)); else { const s = document.createElement('span'); s.className = 'tw'; s.textContent = part; frag.appendChild(s); } });
+        n.replaceWith(frag);
+      } else if (n.nodeType === 1 && n.classList.contains('k')){ n.classList.add('tw'); }
+    });
+  };
+  wrapWords(p);
+  const words = $$('.tw', p);
+  if (reduce){ words.forEach(w => w.classList.add('on')); return; }
+  let ticking = false;
+  const update = () => { ticking = false; const line = window.innerHeight * .72; words.forEach(w => w.classList.toggle('on', w.getBoundingClientRect().top < line)); };
+  window.addEventListener('scroll', () => { if (!ticking){ ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+
+/* ---------- scroll reveals ---------- */
+(() => {
+  const els = $$('.reveal');
+  if (reduce || !('IntersectionObserver' in window)) return;
+  const vh = window.innerHeight;
+  els.forEach(e => { if (e.getBoundingClientRect().top > vh * .92) e.classList.add('pre'); });
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.remove('pre'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  els.forEach(e => { if (e.classList.contains('pre')) io.observe(e); });
+})();
+
+/* ---------- nav: current section and mobile menu ---------- */
+(() => {
+  const links = $$('.nav-links a'), map = {};
+  links.forEach(a => map[a.getAttribute('href').slice(1)] = a);
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ links.forEach(a => a.removeAttribute('aria-current')); const a = map[e.target.id]; if (a) a.setAttribute('aria-current', 'true'); } }), { rootMargin: '-40% 0px -55% 0px' });
+  Object.keys(map).forEach(id => { const s = document.getElementById(id); if (s) io.observe(s); });
+  const btn = $('#menu-btn'), menu = $('#menu'), mlinks = $$('.m-link');
+  const setOpen = open => {
+    document.body.classList.toggle('menu-open', open);
+    btn.setAttribute('aria-expanded', open); btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menu.setAttribute('aria-hidden', !open);
+    mlinks.forEach((a, i) => a.style.transitionDelay = open ? Math.min(i * 60, 400) + 'ms' : '0ms');
+  };
+  btn.addEventListener('click', () => setOpen(!document.body.classList.contains('menu-open')));
+  mlinks.forEach(a => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+})();
+
+/* ---------- citation tabs and copy ---------- */
+(() => {
+  const BIB = {
+    paper: '@inproceedings{zhang2026sparse,\n  title     = {Sparse Internal Control of Language Models},\n  author    = {Zhang, Xizhe},\n  booktitle = {Advances in Neural Information Processing Systems},\n  year      = {2026}\n}',
+    soft: '@software{zhang2026sparseinternalcontrol,\n  author  = {Zhang, Xizhe},\n  title   = {Sparse Internal Control of Language Models},\n  year    = {2026},\n  version = {1.2.1},\n  url     = {https://github.com/zxzok/sparse-internal-control}\n}'
+  };
+  const box = $('#bib-box'), tp = $('#ct-paper'), ts = $('#ct-soft');
+  const pick = which => { box.textContent = BIB[which]; tp.setAttribute('aria-selected', which === 'paper'); ts.setAttribute('aria-selected', which === 'soft'); tp.tabIndex = which === 'paper' ? 0 : -1; ts.tabIndex = which === 'soft' ? 0 : -1; box.setAttribute('aria-labelledby', which === 'paper' ? 'ct-paper' : 'ct-soft'); };
+  tp.addEventListener('click', () => pick('paper')); ts.addEventListener('click', () => pick('soft'));
+  [tp, ts].forEach(b => b.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft'){ e.preventDefault(); const n = b === tp ? ts : tp; n.click(); n.focus(); } }));
+  $$('.copy-btn').forEach(b => b.addEventListener('click', () => {
+    const src = document.getElementById(b.dataset.copy), text = src.innerText, label = b.querySelector('span'), use = b.querySelector('use');
+    const done = msg => { label.textContent = msg; use.setAttribute('href', '#i-check'); setTimeout(() => { label.textContent = 'Copy'; use.setAttribute('href', '#i-copy'); }, 2000); };
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents(src); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); done('Selected, press copy'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done('Copied'), fallback); else fallback();
+  }));
+})();
+
+mqReduce.addEventListener('change', e => { reduce = e.matches; });
+})();
+</script>
+
+</body>
+</html>
