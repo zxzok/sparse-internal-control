@@ -215,7 +215,7 @@ button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor
   .sec{padding-top:48px; padding-bottom:48px}
   .hero{display:flex; flex-direction:column; min-height:0; padding-top:24px}
   .hero-art{order:2} .hero-foot{order:3}
-  .hero-title{margin-top:4px}
+  .hero-title{margin-top:6px; white-space:normal; width:auto; font-size:clamp(56px, 19vw, 132px); line-height:.94}
   .hero-sub{font-size:22px; margin-top:6px}
   .hero-art{position:relative; inset:auto; height:300px; margin:24px calc(-1 * var(--pr)) 0 calc(-1 * var(--pl))}
   .hero-foot{position:relative; left:auto; bottom:auto; max-width:none; padding:28px 0 36px}
@@ -337,8 +337,8 @@ button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor
   <div class="hero-art" id="hero-art"><canvas id="mat" aria-hidden="true"></canvas></div>
   <div class="hero-head">
     <p class="label">Xizhe Zhang / NeurIPS 2026</p>
-    <h1 class="hero-title" id="h-title">Sparse Control</h1>
-    <p class="hero-sub">Sparse Internal Control of Language Models</p>
+    <h1 class="hero-title" id="h-title">Sparse Internal Control</h1>
+    <p class="hero-sub">of Language Models</p>
   </div>
   <div class="hero-foot" id="hero-foot">
     <h2>Sparse interventions<br>in a frozen model.</h2>
@@ -569,6 +569,7 @@ if (window.renderMathInElement) { try { renderMathInElement($('#axes'), { delimi
 /* ---- hero title fills the content width ---- */
 const title = $('.hero-title');
 function fitTitle(){
+  if (window.innerWidth <= 860){ title.style.fontSize = ''; return; } // phones: stacked, sized in CSS
   const w = title.parentElement.clientWidth + 14 * U();
   title.style.fontSize = '100px';
   const tw = title.getBoundingClientRect().width || 1;
@@ -585,11 +586,12 @@ function buildHero(){
   const r = cv.getBoundingClientRect(); W = Math.max(1, r.width); H = Math.max(1, r.height); dpr = Math.min(window.devicePixelRatio || 1, 2);
   cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
   const u = U(), narrow = window.innerWidth <= 860;
+  const dy = narrow ? 0 : $('.hero-head').getBoundingClientRect().bottom - r.top - 322 * u; // follow the title block
   const cw = 15 * u, ch = Math.max(3, 6 * u), px = 17.5 * u, py = Math.max(5, 9.5 * u);
   geo = { cw, ch, u };
   cells = [];
   for (let x = 0; x <= W; x += px){
-    const X = x / u, t = narrow ? 8 : (TOPS.find(([a, b]) => X >= a && X < b) || [0, 0, 0])[2] * u;
+    const X = x / u, t = narrow ? 8 : (TOPS.find(([a, b]) => X >= a && X < b) || [0, 0, 0])[2] * u + dy;
     const bottom = narrow ? H : X < 473 ? H - 304 * u : X < 630 ? H - 246 * u : H;
     const band = BANDS.find(([a, b]) => X >= a && X < b);
     for (let y = t; y + ch <= bottom; y += py) cells.push({ x, y, f: band ? band[2] : C.cream });
@@ -599,11 +601,11 @@ function buildHero(){
   cells.forEach(c => { o.fillStyle = c.f; o.fillRect(c.x, c.y, cw, ch); });
   if (!narrow){
     o.strokeStyle = C.cream; o.fillStyle = C.cream; o.lineWidth = 1.6; o.font = `500 ${Math.round(15 * u)}px "IBM Plex Mono", ui-monospace, monospace`; o.textBaseline = 'alphabetic';
-    const lab = (txt, x0, y0, x1, ty, tx2, ty2) => { o.fillText(txt, x0 * u, y0 * u); o.beginPath(); o.moveTo(x0 * u, ty * u); o.lineTo(x1 * u, ty * u); o.lineTo(tx2 * u, ty2 * u); o.stroke(); };
+    const lab = (txt, x0, y0, x1, ty, tx2, ty2) => { o.fillText(txt, x0 * u, y0 * u + dy); o.beginPath(); o.moveTo(x0 * u, ty * u + dy); o.lineTo(x1 * u, ty * u + dy); o.lineTo(tx2 * u, ty2 * u + dy); o.stroke(); };
     lab('Activation patches', 163, 384, 368, 392, 415, 434);
     lab('Weights fixed', 1108, 320, 1246, 328, 1296, 376);
   }
-  const pick = narrow ? [[.2, .3], [.45, .62], [.7, .2], [.86, .5], [.33, .85], [.62, .9]].map(([a, b]) => [a * W / u, b * H / u]) : PATCH;
+  const pick = narrow ? [[.2, .3], [.45, .62], [.7, .2], [.86, .5], [.33, .85], [.62, .9]].map(([a, b]) => [a * W / u, b * H / u]) : PATCH.map(([a, b]) => [a, b + dy / u]);
   lime = pick.map(([x, y]) => nearest(x * u, y * u)).filter(Boolean).map(c => ({ c, a: 1 }));
 }
 function nearest(x, y){ let best = null, bd = 1e12; for (const c of cells){ const d = (c.x - x) ** 2 + (c.y - y) ** 2; if (d < bd){ bd = d; best = c; } } return best; }
