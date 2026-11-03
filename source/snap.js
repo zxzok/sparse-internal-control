@@ -6,7 +6,7 @@
 (() => {
   const NAV = 64, FLICK = 34, IDLE = 170;
   const fine = window.matchMedia('(pointer: fine)'), calm = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const on = () => fine.matches && !calm.matches && window.innerWidth > 860 && window.innerHeight >= 560;
+  const on = () => fine.matches && !calm.matches && window.innerWidth > 860 && window.innerHeight >= 560 && !document.documentElement.classList.contains('modal-open');
   const sel = document.currentScript && document.currentScript.dataset.snap || 'main > section, main > .snap';
   let anim = 0, g = null, endT = 0;
   const vhc = () => window.innerHeight - NAV;
@@ -43,7 +43,7 @@
     if (best !== null && bd > 2 && bd < vhc() * .1) spring(best, 0);
   }
   window.addEventListener('wheel', e => {
-    if (!on() || e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if (!on() || e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY) || (e.target.closest && e.target.closest('[data-nosnap]'))) return;
     const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1), now = performance.now();
     if (!dy) return;
     if (!g || now - g.t > IDLE || (g.mode === 'free' && Math.sign(dy) !== g.dir)) g = { dir: Math.sign(dy), mode: 'free', t0: now, n: 0, sum: 0 };

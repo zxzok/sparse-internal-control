@@ -279,6 +279,86 @@ button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor
   .proto-h{font-size:54px}
   .ax-name{font-size:28px}
 }
+/* experiment results panel */
+.ex-mrow{display:flex; justify-content:space-between; align-items:center; gap:16px; margin-top:calc(var(--u) * 4)}
+.ex-mrow .ex-model{margin-top:0}
+.ex-go{display:inline-flex; align-items:center; gap:8px; flex:none; font-family:var(--mono); font-weight:600; font-size:calc(var(--u) * 15); letter-spacing:.06em; text-transform:uppercase; padding:calc(var(--u) * 6) calc(var(--u) * 10); background:var(--black); color:var(--lime); transition:transform 300ms var(--ease), background-color 300ms var(--ease), color 300ms var(--ease)}
+.ex-go .ic{font-size:1.1em; transition:transform 300ms var(--ease)}
+.ex:hover .ex-go{background:var(--lime); color:var(--black)}
+.ex:hover .ex-go .ic{transform:translateX(4px)}
+.ex{cursor:pointer}
+html.modal-open{overflow:hidden}
+.xr{position:fixed; inset:0; z-index:80; background:var(--black); color:var(--cream); overflow-y:auto; overscroll-behavior:contain; transform:translateY(102%); transition:transform 720ms cubic-bezier(.2,1.12,.32,1)}
+.xr.on{transform:none}
+.xr[hidden]{display:none}
+.xr-bar{position:sticky; top:0; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:20px; height:64px; padding:0 var(--pr) 0 var(--pl); background:var(--black); border-bottom:2px solid #2E2E2C}
+.xr-tabs{display:flex; gap:calc(var(--u) * 8); overflow-x:auto; scrollbar-width:none}
+.xr-tab{flex:none; padding:8px 14px; border:2px solid #3A3A37; font-family:var(--mono); font-weight:600; font-size:max(12px, calc(var(--u) * 15)); letter-spacing:.06em; text-transform:uppercase; color:var(--g3); transition:border-color 300ms var(--ease), color 300ms var(--ease), background-color 300ms var(--ease)}
+.xr-tab:hover{border-color:var(--cream); color:var(--cream)}
+.xr-tab[aria-selected="true"]{background:var(--lime); border-color:var(--lime); color:var(--black)}
+.xr-x{flex:none; width:44px; height:44px; display:grid; place-items:center; border:2px solid var(--cream); font-size:24px; line-height:1; transition:background-color 300ms var(--ease), color 300ms var(--ease), transform 300ms var(--ease)}
+.xr-x:hover{background:var(--lime); border-color:var(--lime); color:var(--black); transform:rotate(90deg)}
+.xr-body{padding:calc(var(--u) * 30) var(--pr) calc(var(--u) * 56) var(--pl)}
+.xr-head{display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:end; gap:16px 40px}
+.xr-title{font-family:var(--anton); font-weight:400; text-transform:uppercase; font-size:calc(var(--u) * 150); line-height:.92; letter-spacing:.01em; margin-top:calc(var(--u) * 10)}
+.xr-meta{font-family:var(--mono); font-weight:500; font-size:max(12px, calc(var(--u) * 17)); letter-spacing:.04em; color:var(--g1); margin-top:calc(var(--u) * 12)}
+.xr-sub{display:flex; gap:0; border:2px solid var(--cream); align-self:end}
+.xr-sub button{padding:10px 18px; font-weight:600; font-size:max(14px, calc(var(--u) * 18))}
+.xr-sub button[aria-pressed="true"]{background:var(--cream); color:var(--black)}
+.xr-sub[hidden]{display:none}
+.xr-take{grid-column:1 / -1; font-size:calc(var(--u) * 27); line-height:1.3; max-width:calc(var(--u) * 1100); margin-top:calc(var(--u) * 6)}
+.xr-take b{color:var(--lime); font-weight:600}
+.xr-score{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); margin-top:calc(var(--u) * 30); border-top:2px solid #2E2E2C; border-bottom:2px solid #2E2E2C}
+.xr-score a{display:grid; gap:8px; padding:calc(var(--u) * 14) calc(var(--u) * 14) calc(var(--u) * 16); text-decoration:none; color:var(--cream); border-left:2px solid #2E2E2C; transition:background-color 300ms var(--ease)}
+.xr-score a:first-child{border-left:0; padding-left:0}
+.xr-score a:hover{background:#1B1B1A}
+.xr-score .n{font-family:var(--mono); font-weight:600; font-size:max(11px, calc(var(--u) * 13)); letter-spacing:.08em; color:var(--g1); text-transform:uppercase}
+.xr-score .t{font-family:var(--display); font-weight:900; font-stretch:68%; font-size:calc(var(--u) * 30); line-height:1; text-transform:uppercase}
+.chip{justify-self:start; display:inline-flex; align-items:center; gap:6px; padding:4px 9px; font-family:var(--mono); font-weight:600; font-size:max(11px, calc(var(--u) * 13)); letter-spacing:.06em; text-transform:uppercase; white-space:nowrap; border:2px solid currentColor}
+.chip.ok{background:var(--lime); border-color:var(--lime); color:var(--black)}
+.chip.mid{color:var(--cream)}
+.chip.no{color:#9C9C99}
+.chip.na{color:#6E6E6B; border-style:dashed}
+.chip.info{color:var(--lime)}
+.xr-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:calc(var(--u) * 26); border-top:2px solid #2E2E2C}
+.xc{display:grid; grid-template-rows:auto auto 1fr auto; gap:calc(var(--u) * 12); padding:calc(var(--u) * 22) calc(var(--u) * 26) calc(var(--u) * 26); border-bottom:2px solid #2E2E2C; min-width:0; scroll-margin-top:80px}
+.xc:not(:nth-child(3n+1)){border-left:2px solid #2E2E2C}
+.xc:nth-child(3n+1){padding-left:0}
+.xc:nth-child(3n){padding-right:0}
+.xc-h{display:flex; justify-content:space-between; align-items:center; gap:12px}
+.xc-h .label{color:var(--lime); font-size:max(12px, calc(var(--u) * 15))}
+.xc svg{display:block; width:100%; height:auto; overflow:visible}
+.xc svg text{font-family:var(--mono); font-size:13px; fill:#BDBDB8}
+.xc svg .v{fill:var(--cream); font-weight:600}
+.xc svg .big{font-family:var(--anton); font-size:44px; fill:#6E6E6B; letter-spacing:.02em}
+.xc p.x{font-size:max(14px, calc(var(--u) * 18)); line-height:1.45}
+.xc p.f{font-family:var(--mono); font-size:max(11px, calc(var(--u) * 13)); line-height:1.5; letter-spacing:.02em; color:var(--g1)}
+.xr-foot{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px 32px; margin-top:calc(var(--u) * 28); font-size:max(14px, calc(var(--u) * 17)); color:var(--g3)}
+.xr-foot .ulink{color:var(--cream)}
+@media (max-width:1100px){
+  .xr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .xc:not(:nth-child(3n+1)){border-left:0}
+  .xc:nth-child(3n+1),.xc:nth-child(3n){padding-left:calc(var(--u) * 26); padding-right:calc(var(--u) * 26)}
+  .xc:nth-child(2n){border-left:2px solid #2E2E2C}
+  .xc:nth-child(2n+1){padding-left:0} .xc:nth-child(2n){padding-right:0}
+  .xr-score{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .xr-score a:nth-child(4){border-left:0; padding-left:0}
+  .xr-score a:nth-child(n+4){border-top:2px solid #2E2E2C}
+}
+@media (max-width:860px){
+  .ex-go{font-size:11px; padding:5px 8px}
+  .xr-bar{height:58px}
+  .xr-title{font-size:64px}
+  .xr-head{grid-template-columns:minmax(0,1fr)}
+  .xr-take{font-size:17px}
+  .xr-score{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .xr-score a,.xr-score a:first-child,.xr-score a:nth-child(4){padding:12px 12px 14px; border-left:0}
+  .xr-score a:nth-child(2n){border-left:2px solid #2E2E2C}
+  .xr-score a:nth-child(n+3){border-top:2px solid #2E2E2C}
+  .xr-score .t{font-size:22px}
+  .xr-grid{grid-template-columns:minmax(0,1fr)}
+  .xc,.xc:nth-child(n){padding:20px 0 24px; border-left:0}
+}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition-duration:1ms !important; animation:none !important}
@@ -422,24 +502,24 @@ button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor
   <h2 class="ex-h1" id="h-exp">Testing internal control.</h2>
   <p class="ex-lead">Exploratory studies across four behavior families.</p>
   <div class="exp">
-    <a class="ex" href="https://github.com/zxzok/sparse-internal-control/blob/main/docs/experiments.md" target="_blank" rel="noopener">
-      <div class="ex-top"><p class="label">01 / Indirect object identification</p><svg class="ic" aria-hidden="true"><use href="#ne"/></svg></div>
-      <p class="ex-model">GPT-2 small</p>
+    <a class="ex" href="#results" data-task="ioi" aria-haspopup="dialog">
+      <div class="ex-top"><p class="label">01 / Indirect object identification</p></div>
+      <div class="ex-mrow"><p class="ex-model">GPT-2 small</p><span class="ex-go">Six-axis results <svg class="ic" aria-hidden="true"><use href="#e"/></svg></span></div>
       <div class="ex-vis"><svg id="ioi" viewBox="-2 -2 424 180" role="img" aria-label="The letters I O I drawn in tiles"></svg></div>
     </a>
-    <a class="ex" href="https://github.com/zxzok/sparse-internal-control/blob/main/docs/experiments.md" target="_blank" rel="noopener">
-      <div class="ex-top"><p class="label">02 / Multiple-choice answering</p><svg class="ic" aria-hidden="true"><use href="#ne"/></svg></div>
-      <p class="ex-model">MMLU Humanities &amp; STEM · Qwen3-4B</p>
+    <a class="ex" href="#results" data-task="mcqa" aria-haspopup="dialog">
+      <div class="ex-top"><p class="label">02 / Multiple-choice answering</p></div>
+      <div class="ex-mrow"><p class="ex-model">MMLU Humanities &amp; STEM · Qwen3-4B</p><span class="ex-go">Six-axis results <svg class="ic" aria-hidden="true"><use href="#e"/></svg></span></div>
       <div class="ex-vis"><div style="width:100%"><div class="letters" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span></div><svg class="bar" data-n="28" data-on="5,14,24" viewBox="0 0 700 22" aria-hidden="true"></svg></div></div>
     </a>
-    <a class="ex" href="https://github.com/zxzok/sparse-internal-control/blob/main/docs/experiments.md" target="_blank" rel="noopener">
-      <div class="ex-top"><p class="label">03 / Sentiment steering</p><svg class="ic" aria-hidden="true"><use href="#ne"/></svg></div>
-      <p class="ex-model">GPT-2 small</p>
+    <a class="ex" href="#results" data-task="sent" aria-haspopup="dialog">
+      <div class="ex-top"><p class="label">03 / Sentiment steering</p></div>
+      <div class="ex-mrow"><p class="ex-model">GPT-2 small</p><span class="ex-go">Six-axis results <svg class="ic" aria-hidden="true"><use href="#e"/></svg></span></div>
       <div class="ex-vis"><div style="width:100%"><p class="pair dispm"><span>positive</span><span class="slash">/</span><span class="off">negative</span></p><svg class="bar" data-n="28" data-on="3,21" viewBox="0 0 700 22" aria-hidden="true"></svg></div></div>
     </a>
-    <a class="ex" href="https://github.com/zxzok/sparse-internal-control/blob/main/docs/experiments.md" target="_blank" rel="noopener">
-      <div class="ex-top"><p class="label">04 / Refusal steering</p><svg class="ic" aria-hidden="true"><use href="#ne"/></svg></div>
-      <p class="ex-model">Qwen3-1.7B</p>
+    <a class="ex" href="#results" data-task="ref" aria-haspopup="dialog">
+      <div class="ex-top"><p class="label">04 / Refusal steering</p></div>
+      <div class="ex-mrow"><p class="ex-model">Qwen3-1.7B</p><span class="ex-go">Six-axis results <svg class="ic" aria-hidden="true"><use href="#e"/></svg></span></div>
       <div class="ex-vis"><div style="width:100%"><p class="pair long dispm"><span>refusal</span><span class="slash">/</span><span class="off">compliance</span></p><svg class="bar" data-n="28" data-on="4,13,24" viewBox="0 0 700 22" aria-hidden="true"></svg></div></div>
     </a>
   </div>
@@ -481,6 +561,28 @@ button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor
 </section>
 </main>
 
+<div class="xr" id="xr" role="dialog" aria-modal="true" aria-labelledby="xr-title" data-nosnap hidden>
+  <div class="xr-bar">
+    <div class="xr-tabs" role="tablist" aria-label="Experiments">
+      <button class="xr-tab" role="tab" data-task="ioi" aria-selected="false">01 IOI</button>
+      <button class="xr-tab" role="tab" data-task="mcqa" aria-selected="false">02 MCQA</button>
+      <button class="xr-tab" role="tab" data-task="sent" aria-selected="false">03 Sentiment</button>
+      <button class="xr-tab" role="tab" data-task="ref" aria-selected="false">04 Refusal</button>
+    </div>
+    <button class="xr-x" id="xr-x" type="button" aria-label="Close results">×</button>
+  </div>
+  <div class="xr-body">
+    <div class="xr-head">
+      <div><p class="label" id="xr-k"></p><h2 class="xr-title" id="xr-title"></h2><p class="xr-meta" id="xr-meta"></p></div>
+      <div class="xr-sub" id="xr-sub" role="group" aria-label="MMLU subject" hidden><button type="button" data-sub="hum" aria-pressed="true">Humanities</button><button type="button" data-sub="stem" aria-pressed="false">STEM</button></div>
+      <p class="xr-take" id="xr-take"></p>
+    </div>
+    <nav class="xr-score" id="xr-score" aria-label="Six-axis scorecard"></nav>
+    <div class="xr-grid" id="xr-grid"></div>
+    <div class="xr-foot"><p>Numbers come from the paper’s tables; curves are redrawn from the saved measurements in the repository. P: evaluation-pair directions. F: training-mean directions.</p><a class="ulink" href="https://github.com/zxzok/sparse-internal-control/blob/main/docs/experiments.md" target="_blank" rel="noopener">Experiment guide <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a></div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script data-snap="main > section">/* ---- screen snapping with a spring ----
@@ -491,7 +593,7 @@ button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor
 (() => {
   const NAV = 64, FLICK = 34, IDLE = 170;
   const fine = window.matchMedia('(pointer: fine)'), calm = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const on = () => fine.matches && !calm.matches && window.innerWidth > 860 && window.innerHeight >= 560;
+  const on = () => fine.matches && !calm.matches && window.innerWidth > 860 && window.innerHeight >= 560 && !document.documentElement.classList.contains('modal-open');
   const sel = document.currentScript && document.currentScript.dataset.snap || 'main > section, main > .snap';
   let anim = 0, g = null, endT = 0;
   const vhc = () => window.innerHeight - NAV;
@@ -528,7 +630,7 @@ button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor
     if (best !== null && bd > 2 && bd < vhc() * .1) spring(best, 0);
   }
   window.addEventListener('wheel', e => {
-    if (!on() || e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if (!on() || e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY) || (e.target.closest && e.target.closest('[data-nosnap]'))) return;
     const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1), now = performance.now();
     if (!dy) return;
     if (!g || now - g.t > IDLE || (g.mode === 'free' && Math.sign(dy) !== g.dir)) g = { dir: Math.sign(dy), mode: 'free', t0: now, n: 0, sum: 0 };
@@ -864,6 +966,272 @@ $$('.ax').forEach(b => b.addEventListener('click', () => {
   b.setAttribute('aria-expanded', String(!open)); panel.hidden = open;
   if (!open && stages[id] && !reduce) setTimeout(() => stages[id].play(), 380);
 }));
+
+/* ---- experiments: six-axis results panel ---- */
+(() => {
+  const D = {"hum":{"reach":[{"m":"Driver-OMP","P":0.495,"Pc":"6/8","F":1.009,"Fc":"0/8"},{"m":"Coverage-Driver","P":0.188,"Pc":"8/8","F":1.012,"Fc":"0/8"},{"m":"Top-k","P":0.192,"Pc":"8/8","F":1.01,"Fc":"0/8"}],"rev":[{"m":"Driver-OMP","P":3.0596,"Pc":"5/8","F":0.1304,"Fc":"0/8"},{"m":"Coverage-Driver","P":3.7768,"Pc":"8/8","F":0.1428,"Fc":"0/8"},{"m":"Top-k","P":4.2961,"Pc":"8/8","F":0.1424,"Fc":"0/8"}],"rho":[{"m":"Driver-OMP","mode":"P","pass_":"3/8","neg":"0/8","mean":0.597},{"m":"Driver-OMP","mode":"F","pass_":"4/8","neg":"3/8","mean":0.2303},{"m":"Coverage-Driver","mode":"P","pass_":"5/8","neg":"0/8","mean":0.9394},{"m":"Coverage-Driver","mode":"F","pass_":"5/8","neg":"3/8","mean":0.25},{"m":"Top-k","mode":"P","pass_":"2/8","neg":"0/8","mean":0.8939},{"m":"Top-k","mode":"F","pass_":"5/8","neg":"3/8","mean":0.25}],"dose":{"Driver-OMP|P":[[-1.0,-0.7935],[-0.5,-0.4934],[0.0,0.0],[0.25,0.2505],[0.5,0.4187],[0.75,0.5223],[1.0,0.5569],[1.25,0.5635],[1.5,0.5578],[2.0,0.4312]],"Driver-OMP|F":[[-1.0,-0.0212],[-0.5,-0.0109],[0.0,0.0],[0.25,0.005],[0.5,0.0094],[0.75,0.0127],[1.0,0.0144],[1.25,0.0143],[1.5,0.0123],[2.0,0.0039]],"Coverage-Driver|P":[[-1.0,-0.989],[-0.5,-0.5508],[0.0,0.0],[0.25,0.2817],[0.5,0.5357],[0.75,0.7382],[1.0,0.8716],[1.25,0.9397],[1.5,0.9593],[2.0,0.9172]],"Coverage-Driver|F":[[-1.0,-0.0107],[-0.5,-0.0056],[0.0,0.0],[0.25,0.0032],[0.5,0.0069],[0.75,0.011],[1.0,0.0155],[1.25,0.0203],[1.5,0.0253],[2.0,0.0355]],"Top-k|P":[[-1.0,-0.9595],[-0.5,-0.5336],[0.0,0.0],[0.25,0.2744],[0.5,0.5112],[0.75,0.6989],[1.0,0.8294],[1.25,0.894],[1.5,0.8963],[2.0,0.7638]],"Top-k|F":[[-1.0,-0.0128],[-0.5,-0.0063],[0.0,0.0],[0.25,0.0034],[0.5,0.0072],[0.75,0.0113],[1.0,0.0157],[1.25,0.0202],[1.5,0.0247],[2.0,0.0332]]},"hits":[{"mode":"P","Driver-OMP":"38/48","Coverage-Driver":"46/48","Top-k":"45/48"},{"mode":"F","Driver-OMP":"8/48","Coverage-Driver":"8/48","Top-k":"8/48"}],"fb":{"P":[{"target":-2.0,"M":[-0.9453,-1.5555,-1.8071],"err":0.1929},{"target":-1.0,"M":[-0.9453],"err":0.0547},{"target":0.0,"M":[-0.9453,-0.403,-0.1788],"err":-0.1788},{"target":1.0,"M":[-0.9453,0.142,0.5759,0.7778],"err":-0.2222},{"target":2.0,"M":[-0.9453,0.6445,1.2506,1.5478,1.7138],"err":-0.2862},{"target":3.0,"M":[-0.9453,1.1002,1.8326,2.1895,2.3896,2.5118,2.5912,2.6449,2.6822,2.7083],"err":-0.2917}],"F":[{"target":-2.0,"M":[-0.9453,-1.0112,-1.0717,-1.1274,-1.1788,-1.2263,-1.2702,-1.311,-1.3488,-1.384,-1.4167,-1.4473],"err":0.5242},{"target":-1.0,"M":[-0.9453],"err":0.0547},{"target":0.0,"M":[-0.9453,-0.8851,-0.8279,-0.7735,-0.722,-0.6734,-0.6275,-0.5844,-0.5439,-0.5059,-0.4704,-0.4371],"err":-0.406},{"target":1.0,"M":[-0.9453,-0.8204,-0.6996,-0.5837,-0.4732,-0.3685,-0.2697,-0.177,-0.0904,-0.0095,0.0657,0.1354],"err":-0.7999},{"target":2.0,"M":[-0.9453,-0.7545,-0.5674,-0.3867,-0.2141,-0.0511,0.1016,0.2435,0.3748,0.4958,0.607,0.7091],"err":-1.197},{"target":3.0,"M":[-0.9453,-0.6875,-0.4319,-0.184,0.0516,0.2719,0.4754,0.6618,0.8319,0.9868,1.128,1.2569],"err":-1.6253}]},"pres":[{"m":"Driver-OMP","mean":0.49653,"median":0.050394,"p95":2.34992,"max":15.5523,"seeds":"0/8","all":"0/8"},{"m":"Coverage-Driver","mean":0.109692,"median":0.050405,"p95":0.392607,"max":1.0154,"seeds":"0/8","all":"0/8"},{"m":"Top-k","mean":0.115396,"median":0.056724,"p95":0.478003,"max":0.6963,"seeds":"0/8","all":"0/8"}],"reuse":[{"m":"Driver-OMP","refit":0.992,"frozen":0.021},{"m":"Coverage-Driver","refit":0.995,"frozen":0.033},{"m":"Top-k","refit":1.078,"frozen":0.028},{"m":"Random","refit":0.758,"frozen":0.022}]},"stem":{"reach":[{"m":"Driver-OMP","P":0.497,"Pc":"6/8","F":1.016,"Fc":"0/8"},{"m":"Coverage-Driver","P":0.169,"Pc":"8/8","F":1.031,"Fc":"0/8"},{"m":"Top-k","P":0.17,"Pc":"8/8","F":1.03,"Fc":"0/8"}],"rev":[{"m":"Driver-OMP","P":3.645,"Pc":"7/8","F":0.1312,"Fc":"0/8"},{"m":"Coverage-Driver","P":4.8023,"Pc":"8/8","F":0.152,"Fc":"0/8"},{"m":"Top-k","P":5.0921,"Pc":"8/8","F":0.1441,"Fc":"0/8"}],"rho":[{"m":"Driver-OMP","mode":"P","pass_":"4/8","neg":"0/8","mean":0.5076},{"m":"Driver-OMP","mode":"F","pass_":"4/8","neg":"4/8","mean":-0.0015},{"m":"Coverage-Driver","mode":"P","pass_":"6/8","neg":"0/8","mean":0.9742},{"m":"Coverage-Driver","mode":"F","pass_":"4/8","neg":"4/8","mean":0.0},{"m":"Top-k","mode":"P","pass_":"5/8","neg":"0/8","mean":0.9621},{"m":"Top-k","mode":"F","pass_":"4/8","neg":"4/8","mean":0.0}],"dose":{"Driver-OMP|P":[[-1.0,-0.7058],[-0.5,-0.4294],[0.0,0.0],[0.25,0.2302],[0.5,0.3853],[0.75,0.463],[1.0,0.4842],[1.25,0.4633],[1.5,0.4121],[2.0,0.2417]],"Driver-OMP|F":[[-1.0,-0.0131],[-0.5,-0.0058],[0.0,0.0],[0.25,0.0024],[0.5,0.0042],[0.75,0.0056],[1.0,0.0071],[1.25,0.0084],[1.5,0.0095],[2.0,0.0109]],"Coverage-Driver|P":[[-1.0,-0.8925],[-0.5,-0.5],[0.0,0.0],[0.25,0.2628],[0.5,0.5157],[0.75,0.7302],[1.0,0.8814],[1.25,0.9714],[1.5,1.013],[2.0,0.9886]],"Coverage-Driver|F":[[-1.0,-0.0045],[-0.5,-0.0015],[0.0,0.0],[0.25,0.0001],[0.5,-0.0004],[0.75,-0.0016],[1.0,-0.0034],[1.25,-0.0057],[1.5,-0.0084],[2.0,-0.0141]],"Top-k|P":[[-1.0,-0.8975],[-0.5,-0.5067],[0.0,0.0],[0.25,0.2607],[0.5,0.4965],[0.75,0.6973],[1.0,0.8497],[1.25,0.9471],[1.5,0.9917],[2.0,0.957]],"Top-k|F":[[-1.0,-0.0034],[-0.5,-0.0009],[0.0,0.0],[0.25,-0.0002],[0.5,-0.0009],[0.75,-0.0021],[1.0,-0.0038],[1.25,-0.0059],[1.5,-0.0085],[2.0,-0.0144]]},"hits":[{"mode":"P","Driver-OMP":"39/48","Coverage-Driver":"47/48","Top-k":"47/48"},{"mode":"F","Driver-OMP":"8/48","Coverage-Driver":"7/48","Top-k":"7/48"}],"fb":{"P":[{"target":-2.0,"M":[-1.5539,-2.1059],"err":-0.1059},{"target":-1.0,"M":[-1.5539,-0.8695],"err":0.1305},{"target":0.0,"M":[-1.5539,0.3218,-0.0529],"err":-0.0529},{"target":1.0,"M":[-1.5539,1.4255,0.9673],"err":-0.0327},{"target":2.0,"M":[-1.5539,2.4315,2.0101],"err":0.0101},{"target":3.0,"M":[-1.5539,3.3265,3.0475],"err":0.0475}],"F":[{"target":-2.0,"M":[-1.5539,-1.5624,-1.5706,-1.5786,-1.5863,-1.5939,-1.6014,-1.6087,-1.6159,-1.623,-1.6299,-1.6367],"err":0.3566},{"target":-1.0,"M":[-1.5539,-1.5431,-1.5321,-1.5212,-1.5103,-1.4994,-1.4887,-1.4782,-1.4678,-1.4578,-1.448,-1.4385],"err":-0.4293},{"target":0.0,"M":[-1.5539,-1.5228,-1.4905,-1.4584,-1.4274,-1.3981,-1.3703,-1.3435,-1.3169,-1.2895,-1.2606,-1.2302],"err":-1.1986},{"target":1.0,"M":[-1.5539,-1.5017,-1.4479,-1.3971,-1.3498,-1.3028,-1.2517,-1.1949,-1.1357,-1.0786,-1.026,-0.9784],"err":-1.9363},{"target":2.0,"M":[-1.5539,-1.4802,-1.4066,-1.3392,-1.2696,-1.1884,-1.1023,-1.0229,-0.9539,-0.8973,-0.8548,-0.833],"err":-2.8366},{"target":3.0,"M":[-1.5539,-1.4586,-1.3671,-1.2786,-1.1721,-1.0606,-0.964,-0.8883,-0.84,-0.8351,-0.8701,-0.9327],"err":-4.005}]},"pres":[{"m":"Driver-OMP","mean":0.581701,"median":0.051584,"p95":3.08841,"max":17.7225,"seeds":"0/8","all":"0/8"},{"m":"Coverage-Driver","mean":0.128467,"median":0.060374,"p95":0.465265,"max":1.0098,"seeds":"0/8","all":"0/8"},{"m":"Top-k","mean":0.11891,"median":0.055203,"p95":0.511026,"max":0.7559,"seeds":"0/8","all":"0/8"}],"reuse":[{"m":"Driver-OMP","refit":0.987,"frozen":0.024},{"m":"Coverage-Driver","refit":0.944,"frozen":0.038},{"m":"Top-k","refit":1.075,"frozen":0.031},{"m":"Random","refit":0.744,"frozen":0.041}]},"ref":{"reach":[{"m":"Driver-OMP","P":0.932,"Pc":"0/8","F":0.928,"Fc":"0/8"},{"m":"Coverage-Driver","P":0.799,"Pc":"0/8","F":0.801,"Fc":"0/8"},{"m":"Top-k","P":0.774,"Pc":"0/8","F":0.779,"Fc":"0/8"}],"rev":[{"m":"Driver-OMP","P":0.077,"Pc":"0/8","F":0.0713,"Fc":"0/8"},{"m":"Coverage-Driver","P":0.1123,"Pc":"0/8","F":0.1252,"Fc":"0/8"},{"m":"Top-k","P":0.1356,"Pc":"0/8","F":0.1452,"Fc":"0/8"}],"rho":[{"m":"Driver-OMP","mode":"P","pass_":"8/8","neg":"0/8","mean":1.0},{"m":"Driver-OMP","mode":"F","pass_":"8/8","neg":"0/8","mean":1.0},{"m":"Coverage-Driver","mode":"P","pass_":"8/8","neg":"0/8","mean":1.0},{"m":"Coverage-Driver","mode":"F","pass_":"8/8","neg":"0/8","mean":1.0},{"m":"Top-k","mode":"P","pass_":"8/8","neg":"0/8","mean":1.0},{"m":"Top-k","mode":"F","pass_":"8/8","neg":"0/8","mean":1.0}],"dose":{"Driver-OMP|P":[[-1.0,-0.0791],[-0.5,-0.0409],[0.0,0.0],[0.25,0.0215],[0.5,0.0435],[0.75,0.0662],[1.0,0.0895],[1.25,0.1134],[1.5,0.1377],[2.0,0.1879]],"Driver-OMP|F":[[-1.0,-0.0874],[-0.5,-0.0448],[0.0,0.0],[0.25,0.0232],[0.5,0.0469],[0.75,0.0711],[1.0,0.0958],[1.25,0.1209],[1.5,0.1465],[2.0,0.1988]],"Coverage-Driver|P":[[-1.0,-0.214],[-0.5,-0.1119],[0.0,0.0],[0.25,0.0592],[0.5,0.1205],[0.75,0.1837],[1.0,0.2486],[1.25,0.3151],[1.5,0.3829],[2.0,0.5216]],"Coverage-Driver|F":[[-1.0,-0.2333],[-0.5,-0.12],[0.0,0.0],[0.25,0.0622],[0.5,0.1258],[0.75,0.1906],[1.0,0.2566],[1.25,0.3236],[1.5,0.3914],[2.0,0.5294]],"Top-k|P":[[-1.0,-0.2452],[-0.5,-0.1278],[0.0,0.0],[0.25,0.0674],[0.5,0.1371],[0.75,0.2088],[1.0,0.2825],[1.25,0.3579],[1.5,0.4349],[2.0,0.5925]],"Top-k|F":[[-1.0,-0.2581],[-0.5,-0.1328],[0.0,0.0],[0.25,0.069],[0.5,0.1397],[0.75,0.2118],[1.0,0.2853],[1.25,0.3601],[1.5,0.4361],[2.0,0.5909]]},"hits":[{"mode":"P","Driver-OMP":"12/40","Coverage-Driver":"21/40","Top-k":"21/40"},{"mode":"F","Driver-OMP":"12/40","Coverage-Driver":"21/40","Top-k":"22/40"}],"fb":{"P":[{"target":-1.55,"M":[-1.6374],"err":-0.0874},{"target":-1.45,"M":[-1.6374,-1.626,-1.6152,-1.605,-1.5954,-1.5863,-1.5778,-1.5697,-1.5622,-1.555,-1.5483],"err":-0.0983},{"target":-1.35,"M":[-1.6374,-1.6199,-1.6032,-1.5875,-1.5726,-1.5585,-1.5452,-1.5327,-1.5209,-1.5098,-1.4994,-1.4896],"err":-0.1304},{"target":-1.25,"M":[-1.6374,-1.6137,-1.5912,-1.5698,-1.5495,-1.5303,-1.5121,-1.495,-1.4789,-1.4637,-1.4495,-1.4362],"err":-0.1736},{"target":-1.15,"M":[-1.6374,-1.6076,-1.5791,-1.5519,-1.5261,-1.5017,-1.4786,-1.4568,-1.4363,-1.417,-1.3989,-1.382],"err":-0.2161}],"F":[{"target":-1.55,"M":[-1.6374],"err":-0.0874},{"target":-1.45,"M":[-1.6374,-1.624,-1.6115,-1.5998,-1.5889,-1.5787,-1.5692,-1.5604,-1.5522,-1.5445],"err":-0.0945},{"target":-1.35,"M":[-1.6374,-1.6168,-1.5975,-1.5794,-1.5625,-1.5467,-1.5319,-1.5182,-1.5054,-1.4935,-1.4825,-1.4723],"err":-0.1128},{"target":-1.25,"M":[-1.6374,-1.6096,-1.5834,-1.5588,-1.5358,-1.5142,-1.494,-1.4753,-1.4578,-1.4416,-1.4266,-1.4127],"err":-0.1498},{"target":-1.15,"M":[-1.6374,-1.6024,-1.5693,-1.538,-1.5087,-1.4812,-1.4556,-1.4317,-1.4095,-1.389,-1.3699,-1.3523],"err":-0.186}]},"pres":[{"m":"Driver-OMP","mean":0.00108,"median":0.000174,"p95":0.005086,"max":0.041,"seeds":"4/8","all":"2/8"},{"m":"Coverage-Driver","mean":0.008658,"median":0.002119,"p95":0.035977,"max":0.1698,"seeds":"0/8","all":"0/8"},{"m":"Top-k","mean":0.007986,"median":0.001948,"p95":0.036849,"max":0.1572,"seeds":"0/8","all":"0/8"}]},"sent":{"reach":[{"m":"Driver-OMP","P":0.445,"Pc":"3/8","F":0.766,"Fc":"0/8"},{"m":"Coverage-Driver","P":0.171,"Pc":"8/8","F":0.746,"Fc":"0/8"},{"m":"Top-k","P":0.167,"Pc":"8/8","F":0.742,"Fc":"0/8"}],"rev":[{"m":"Driver-OMP","P":2.3722,"Pc":"4/8","F":0.6547,"Fc":"0/8"},{"m":"Coverage-Driver","P":8.5143,"Pc":"8/8","F":0.9969,"Fc":"0/8"},{"m":"Top-k","P":8.7627,"Pc":"8/8","F":1.0,"Fc":"0/8"}],"dose":{"Driver-OMP":[[0.0,0.0],[0.25,0.0043],[0.5,0.0088],[1.0,0.0181],[1.5,0.0278],[2.0,0.0377],[3.0,0.0568]],"Coverage-Driver":[[0.0,0.0],[0.25,0.0899],[0.5,0.1852],[1.0,0.3938],[1.5,0.6139],[2.0,0.8405],[3.0,1.2713]],"Top-k":[[0.0,0.0],[0.25,0.0837],[0.5,0.1726],[1.0,0.3687],[1.5,0.5766],[2.0,0.7914],[3.0,1.2007]],"random_matched":[[0.0,0.0],[0.25,0.0289],[0.5,0.0591],[1.0,0.1238],[1.5,0.1939],[2.0,0.268],[3.0,0.4128]]},"pres":[{"m":"Driver-OMP","mean":0.005527,"median":0.004959,"p95":0.011119,"max":0.0286,"seeds":"0/8","all":"0/8"},{"m":"Coverage-Driver","mean":0.011015,"median":0.009627,"p95":0.024779,"max":0.0381,"seeds":"0/8","all":"0/8"},{"m":"Top-k","mean":0.011567,"median":0.010322,"p95":0.024746,"max":0.0387,"seeds":"0/8","all":"0/8"}],"fixed":{"Driver-OMP|P":{"3":0.3602,"5":0.4949,"8":0.5928},"Driver-OMP|F":{"3":0.3536,"5":0.4538,"8":0.5291},"Coverage-Driver|P":{"3":0.7687,"5":0.9542,"8":1.0311},"Coverage-Driver|F":{"3":0.8137,"5":0.8891,"8":0.942},"Top-k|P":{"3":0.7804,"5":0.9328,"8":1.0325},"Top-k|F":{"3":0.8127,"5":0.888,"8":0.937},"Random|P":{"3":0.0745,"5":0.1065,"8":0.1532},"Random|F":{"3":0.0743,"5":0.0845,"8":0.1122}}},"ioi":{"reach":[{"m":"Driver-OMP","v":0.201,"c":"10/10"},{"m":"Coverage-Driver","v":0.294,"c":"10/10"},{"m":"Top-k","v":0.24,"c":"10/10"},{"m":"Random","v":0.747,"c":"1/10"},{"m":"Nonlinear greedy","v":0.151,"c":"10/10"}],"rev":[{"m":"Driver-OMP","P":4.7425,"Pc":"10/10"},{"m":"Coverage-Driver","P":2.5702,"Pc":"10/10"},{"m":"Top-k","P":3.4315,"Pc":"10/10"}],"dose":{"Driver-OMP":[[-1.0,-1.0791],[-0.5,-0.5373],[0.0,0.0],[0.25,0.2089],[0.5,0.3747],[0.75,0.5918],[1.0,0.8821],[1.25,1.2069],[1.5,1.5283],[2.0,2.1003]],"random_matched":[[-1.0,0.1957],[-0.5,0.1682],[0.0,0.0],[0.25,0.2642],[0.5,0.213],[0.75,0.211],[1.0,0.2495],[1.25,0.2875],[1.5,0.3329],[2.0,0.4271]]},"hits":[{"mode":"P","Driver-OMP":"24/24","Coverage-Driver":"---","Top-k":"---"}],"fb":{"P":[{"target":-3.0,"M":[-3.1223],"err":-0.1223},{"target":-1.0,"M":[-3.1223,-1.4505,-1.104],"err":-0.104},{"target":0.0,"M":[-3.1223,-0.6615,-0.0941],"err":-0.0941},{"target":1.0,"M":[-3.1223,0.2105,0.9517],"err":-0.0483},{"target":2.0,"M":[-3.1223,1.1551,1.9865],"err":-0.0135},{"target":3.0,"M":[-3.1223,2.1408,2.9976],"err":-0.0024},{"target":4.0,"M":[-3.1223,3.1378,3.9898],"err":-0.0102},{"target":5.0,"M":[-3.1223,4.1245,4.9695],"err":-0.0305}]},"reuse":[{"m":"Driver-OMP","refit":0.461,"frozen":0.391},{"m":"Coverage-Driver","refit":0.449,"frozen":0.298},{"m":"Top-k","refit":0.632,"frozen":0.434},{"m":"Random","refit":-0.67,"frozen":-0.649}]}};
+  const xr = $('#xr'); if (!xr || !D.ioi) return;
+  const K = { li: '#D7EE5B', g: '#8B8B88', cr: '#F4F3EE', ln: '#2E2E2C', ax: '#4A4A47' };
+  const AX = ['Reachability', 'Signed reversal', 'Dose response', 'Feedback controllability', 'Off-target preservation', 'Held-out reuse'];
+  const SHORT = ['Reach', 'Reverse', 'Dose', 'Feedback', 'Preserve', 'Reuse'];
+  const TASK = {
+    ioi: { n: '01', name: 'Indirect object identification', title: 'IOI', meta: 'GPT-2 small · 64 paired prompts · IO–S logit margin' },
+    mcqa: { n: '02', name: 'Multiple-choice answering', title: 'MCQA', meta: 'Qwen3-4B · MMLU, 24 questions per subject, fit/eval 12/12' },
+    sent: { n: '03', name: 'Sentiment steering', title: 'Sentiment', meta: 'GPT-2 small · 16 pairs, fit/eval 8/8 · unpaired dose on 16 + 16 templates' },
+    ref: { n: '04', name: 'Refusal steering', title: 'Refusal', meta: 'Qwen3-1.7B · 20 pairs, fit/eval 10/10 · lexical refusal margin' }
+  };
+  const f2 = v => (Math.abs(v) >= 10 ? v.toFixed(1) : Math.abs(v) >= 1 ? v.toFixed(2) : Math.abs(v) >= .01 || v === 0 ? v.toFixed(3).replace(/0$/, '') : v.toPrecision(2));
+  const mk = (p, n, a) => { const e = el(n, a); p.appendChild(e); return e; };
+  const tx = (p, x, y, s, a = {}) => { const t = mk(p, 'text', Object.assign({ x, y }, a)); t.textContent = s; return t; };
+  const ease = t => 1 - Math.pow(1 - t, 3);
+  let uid = 0;
+
+  /* charts: each returns a function k -> draw state, k in [0, 1] */
+  function hbars(svg, o){
+    const W = 600, lab = 130, x0 = lab + 10, x1 = W - 70, bh = 13, gap = 4;
+    const rowH = r => r.bars.length * (bh + gap) + 12;
+    const H = 46 + o.rows.reduce((a, r) => a + rowH(r), 0) + 26;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const lo = o.log ? Math.log10(o.min) : 0, hi = o.log ? Math.log10(o.max) : o.max;
+    const X = v => x0 + (clamp(o.log ? Math.log10(Math.max(v, o.min)) : Math.max(0, v), lo, hi) - lo) / (hi - lo) * (x1 - x0);
+    tx(svg, W, 14, o.note, { 'text-anchor': 'end' });
+    if (o.legend) o.legend.forEach(([c, s], i) => { mk(svg, 'rect', { x: i * 92, y: 4, width: 12, height: 12, fill: c }); tx(svg, i * 92 + 18, 14, s); });
+    const yb = H - 22;
+    mk(svg, 'line', { x1: x0, x2: x1, y1: yb, y2: yb, stroke: K.ax, 'stroke-width': 1.5 });
+    (o.ticks || []).forEach(t => { const x = X(t); mk(svg, 'line', { x1: x, x2: x, y1: yb, y2: yb + 5, stroke: K.ax, 'stroke-width': 1.5 }); tx(svg, x, yb + 18, o.tickFmt ? o.tickFmt(t) : String(t), { 'text-anchor': 'middle' }); });
+    const anim = [];
+    let y = 46;
+    o.rows.forEach(r => {
+      tx(svg, lab, y + 10 + (r.bars.length - 1) * (bh + gap) / 2, r.label, { 'text-anchor': 'end', fill: r.dim ? '#6E6E6B' : '#BDBDB8' });
+      r.bars.forEach((b, i) => {
+        const yy = y + i * (bh + gap), w = X(b.v) - x0;
+        const rect = mk(svg, 'rect', { x: x0, y: yy, height: bh, width: 0, fill: b.c });
+        const val = tx(svg, x0 + w + 6, yy + 11, b.t || f2(b.v), { class: 'v', opacity: 0 });
+        if (b.v > (o.log ? o.max : o.max)) val.textContent = '› ' + (b.t || f2(b.v));
+        anim.push(k => { rect.setAttribute('width', Math.max(0, w * k)); val.setAttribute('x', x0 + w * k + 6); val.setAttribute('opacity', k > .85 ? (k - .85) / .15 : 0); });
+      });
+      y += rowH(r);
+    });
+    if (o.thr !== undefined){
+      const x = X(o.thr);
+      mk(svg, 'line', { x1: x, x2: x, y1: 28, y2: yb, stroke: K.cr, 'stroke-width': 1.5, 'stroke-dasharray': '4 4' });
+      tx(svg, x + 5, 36, o.thrLabel, { fill: K.cr });
+    }
+    return k => anim.forEach(a => a(k));
+  }
+  function lines(svg, o){
+    const W = 600, H = o.h || 250, l = 46, r = 12, t = 26, b = 34, pw = W - l - r, ph = H - t - b;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const X = v => l + (v - o.x[0]) / (o.x[1] - o.x[0]) * pw, Y = v => t + (1 - (clamp(v, o.y[0], o.y[1]) - o.y[0]) / (o.y[1] - o.y[0])) * ph;
+    (o.yt || []).forEach(v => { mk(svg, 'line', { x1: l, x2: l + pw, y1: Y(v), y2: Y(v), stroke: K.ln, 'stroke-width': 1 }); tx(svg, l - 8, Y(v) + 4, String(v), { 'text-anchor': 'end' }); });
+    (o.xt || []).forEach(v => tx(svg, X(v), H - b + 18, String(v), { 'text-anchor': 'middle' }));
+    tx(svg, l + pw, H - 2, o.xl, { 'text-anchor': 'end' });
+    tx(svg, l, 12, o.yl);
+    (o.h0 || []).forEach(h => { mk(svg, 'line', { x1: l, x2: l + pw, y1: Y(h.y), y2: Y(h.y), stroke: h.c || K.cr, 'stroke-width': h.w || 1.5, 'stroke-dasharray': h.d || '4 4', opacity: h.o || 1 }); if (h.label) tx(svg, l + pw, Y(h.y) - 6, h.label, { 'text-anchor': 'end', fill: K.cr }); });
+    const id = 'clip' + (++uid), cp = mk(svg, 'clipPath', { id }), cr = mk(cp, 'rect', { x: l - 8, y: 0, width: 0, height: H });
+    const g = mk(svg, 'g', { 'clip-path': `url(#${id})` });
+    o.series.forEach(s => {
+      const d = s.pts.map((p, i) => (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join('');
+      mk(g, 'path', { d, fill: 'none', stroke: s.c, 'stroke-width': s.w || 3, 'stroke-dasharray': s.d || null, 'stroke-linejoin': 'round', opacity: s.o || 1 });
+      if (s.dots !== false) s.pts.forEach(p => mk(g, 'circle', { cx: X(p[0]), cy: Y(p[1]), r: s.r || 3.5, fill: s.c, opacity: s.o || 1 }));
+    });
+    if (o.legend){ let lx = l + 8; o.legend.forEach(([c, s, d]) => { mk(svg, 'line', { x1: lx, x2: lx + 20, y1: t + 6, y2: t + 6, stroke: c, 'stroke-width': 3, 'stroke-dasharray': d || null }); tx(svg, lx + 26, t + 10, s); lx += 40 + s.length * 7.6; }); }
+    return k => cr.setAttribute('width', (pw + 16) * k);
+  }
+  function tiles(svg, rowsIn){
+    const W = 600, per = Math.max(...rowsIn.map(r => r.n)) > 24 ? Math.ceil(Math.max(...rowsIn.map(r => r.n)) / 2) : 24, lab = 70, tw = (W - lab) / per;
+    let y = 0; const anim = [];
+    const H = rowsIn.reduce((a, r) => a + Math.ceil(r.n / per) * (tw * .8 + 3) + 10, 0);
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    rowsIn.forEach(r => {
+      tx(svg, 0, y + tw * .6, r.label + ' ' + r.hit + '/' + r.n, { fill: r.c === K.li ? K.li : '#BDBDB8', class: 'v' });
+      const cells = [];
+      for (let i = 0; i < r.n; i++){ const c = i % per, rr = Math.floor(i / per); cells.push(mk(svg, 'rect', { x: lab + c * tw, y: y + rr * (tw * .8 + 3), width: tw - 3, height: tw * .8, fill: '#262624' })); }
+      anim.push(k => cells.forEach((e, i) => e.setAttribute('fill', i < r.hit && k * r.n > i ? r.c : '#262624')));
+      y += Math.ceil(r.n / per) * (tw * .8 + 3) + 10;
+    });
+    return k => anim.forEach(a => a(k));
+  }
+  function vbars(svg, o){
+    const W = 600, H = 240, l = 46, t = 30, b = 40, pw = W - l - 8, ph = H - t - b, y0 = o.y[0], y1 = o.y[1];
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const Y = v => t + (1 - (clamp(v, y0, y1) - y0) / (y1 - y0)) * ph;
+    o.yt.forEach(v => { mk(svg, 'line', { x1: l, x2: l + pw, y1: Y(v), y2: Y(v), stroke: v === 0 ? K.ax : K.ln, 'stroke-width': v === 0 ? 1.5 : 1 }); tx(svg, l - 8, Y(v) + 4, String(v), { 'text-anchor': 'end' }); });
+    if (o.hl) { mk(svg, 'line', { x1: l, x2: l + pw, y1: Y(o.hl), y2: Y(o.hl), stroke: K.cr, 'stroke-width': 1.5, 'stroke-dasharray': '4 4' }); tx(svg, l + pw, Y(o.hl) - 6, o.hlLabel, { 'text-anchor': 'end', fill: K.cr }); }
+    o.legend.forEach(([c, s], i) => { mk(svg, 'rect', { x: l + i * 170, y: 4, width: 12, height: 12, fill: c }); tx(svg, l + i * 170 + 18, 14, s); });
+    const gw = pw / o.groups.length, bw = Math.min(34, gw / 3), anim = [];
+    o.groups.forEach((gr, i) => {
+      const cx = l + gw * (i + .5);
+      tx(svg, cx, H - b + 18, gr.label, { 'text-anchor': 'middle', fill: gr.dim ? '#6E6E6B' : '#BDBDB8' });
+      gr.vals.forEach((v, j) => {
+        const x = cx + (j - gr.vals.length / 2) * (bw + 4) + 2, top = Y(Math.max(v, 0)), base = Y(0), bot = Y(Math.min(v, 0));
+        const r = mk(svg, 'rect', { x, y: base, width: bw, height: 0, fill: o.colors[j] });
+        const lbl = tx(svg, x + bw / 2, (v >= 0 ? top - 6 : bot + 14), f2(v), { 'text-anchor': 'middle', class: 'v', opacity: 0, 'font-size': 12 });
+        anim.push(k => { const h = (v >= 0 ? base - top : bot - base) * k; r.setAttribute('height', Math.max(0, h)); r.setAttribute('y', v >= 0 ? base - h : base); lbl.setAttribute('opacity', k > .85 ? (k - .85) / .15 : 0); });
+      });
+    });
+    return k => anim.forEach(a => a(k));
+  }
+  function na(svg, line1, line2){
+    svg.setAttribute('viewBox', '0 0 600 200');
+    const id = 'hatch' + (++uid), pat = mk(svg, 'pattern', { id, width: 12, height: 12, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)' });
+    mk(pat, 'rect', { width: 4, height: 12, fill: '#1E1E1C' });
+    mk(svg, 'rect', { x: 0, y: 0, width: 600, height: 200, fill: `url(#${id})`, stroke: '#2E2E2C', 'stroke-width': 2 });
+    tx(svg, 300, 108, line1, { class: 'big', 'text-anchor': 'middle' });
+    tx(svg, 300, 140, line2, { 'text-anchor': 'middle' });
+    return () => {};
+  }
+
+  /* per-task cards */
+  const P = K.li, F = K.g;
+  const by = (arr, m) => arr.find(r => r.m === m);
+  function reachPF(d){ return { rows: d.reach.map(r => ({ label: r.m, bars: [{ v: r.P, c: P, t: f2(r.P) + ' (' + r.Pc + ')' }, { v: r.F, c: F, t: f2(r.F) + ' (' + r.Fc + ')' }] })), max: 1.2, thr: .4, thrLabel: 'ε = 0.4', note: 'lower is better', legend: [[P, 'P'], [F, 'F']], ticks: [0, .4, .8, 1.2] }; }
+  function revPF(d){ const mx = Math.max(4, Math.ceil(Math.max(...d.rev.map(r => Math.max(r.P || 0, r.F || 0))))); return { rows: d.rev.map(r => ({ label: r.m, bars: [{ v: r.P, c: P, t: f2(r.P) + ' (' + r.Pc + ')' }].concat(r.F !== undefined ? [{ v: r.F, c: F, t: f2(r.F) + ' (' + r.Fc + ')' }] : []) })), max: mx, thr: 2, thrLabel: 'pass ≥ 2', note: 'higher is better', legend: r0(d) ? [[P, 'P'], [F, 'F']] : [[P, 'P']], ticks: [0, 2, mx] }; }
+  const r0 = d => d.rev.some(r => r.F !== undefined);
+  function pres(d, hl){ return { rows: d.pres.map(r => ({ label: r.m, bars: [{ v: r.median, c: hl && hl(r) ? P : K.cr, t: 'median ' + f2(r.median) }, { v: r.mean, c: F, t: 'mean ' + f2(r.mean) + ' · ' + r.seeds }] })), log: true, min: 1e-4, max: 20, thr: .001, thrLabel: 'δ = 0.001', note: 'KL, log scale', ticks: [1e-4, 1e-3, 1e-2, .1, 1, 10], tickFmt: v => v >= 1 ? String(v) : v.toExponential(0).replace('e-', 'e−') }; }
+  function traj(svg, fb, tol, yl){
+    const all = [].concat(...Object.values(fb).map(a => a.map(r => r.M.concat([r.target])))).flat();
+    const lo = Math.floor(Math.min(...all) * 2) / 2 - .25, hi = Math.ceil(Math.max(...all) * 2) / 2 + .25;
+    const n = Math.max(...[].concat(...Object.values(fb)).map(r => r.M.length));
+    const series = [], h0 = [];
+    (fb.P || []).forEach(r => { h0.push({ y: r.target, c: K.cr, o: .45, w: 1.25, d: '2 3' }); });
+    (fb.F || []).forEach(r => series.push({ pts: r.M.map((m, i) => [i, m]), c: F, w: 2, r: 2.5, d: '6 4' }));
+    (fb.P || []).forEach(r => series.push({ pts: r.M.map((m, i) => [i, m]), c: P, w: 2.5, r: 3 }));
+    const yt = []; for (let v = Math.ceil(lo); v <= hi; v += (hi - lo > 4 ? 1 : .5)) yt.push(+v.toFixed(2));
+    return lines(svg, { x: [0, Math.max(1, n - 1)], y: [lo, hi], xt: [0, Math.max(1, n - 1)], yt, xl: 'feedback step', yl: yl, h0, series, legend: fb.F ? [[P, 'P'], [F, 'F', '6 4'], [K.cr, 'targets', '3 4']] : [[P, 'output'], [K.cr, 'targets', '3 4']], h: 260 });
+  }
+  const hitsOf = (d, mode, m) => { const r = d.hits.find(h => h.mode === mode); const [a, b] = r[m].split('/').map(Number); return { hit: a, n: b }; };
+
+  function cards(task, sub){
+    if (task === 'ioi'){
+      const d = D.ioi, cd = by(d.reach, 'Coverage-Driver'), rev = d.rev, ru = by(d.reuse, 'Coverage-Driver');
+      return [
+        { v: ['ok', 'Pass · 10/10'], draw: s => hbars(s, { rows: d.reach.map(r => ({ label: r.m, dim: r.m === 'Random', bars: [{ v: r.v, c: r.m === 'Random' ? F : P, t: f2(r.v) + ' (' + r.c + ')' }] })), max: 1.2, thr: .4, thrLabel: 'ε = 0.4', note: 'lower is better', ticks: [0, .4, .8, 1.2] }),
+          x: `All three selectors bring the IO–S margin within ε on every seed (Coverage-Driver ${f2(cd.v)}). Random sites of the same size pass on ${by(d.reach, 'Random').c.split('/')[0]} of 10.`, f: 'Same-panel Rel_tar(1), mean over 10 seeds.' },
+        { v: ['ok', 'Pass · 10/10'], draw: s => hbars(s, revPF(d)),
+          x: `The opposite patch returns target-side inputs toward the source on every seed, with ratios from ${f2(Math.min(...rev.map(r => r.P)))} to ${f2(Math.max(...rev.map(r => r.P)))}.`, f: 'Reversal ratio with evaluation-pair directions, 10 seeds.' },
+        { v: ['info', 'Supporting'], draw: s => lines(s, { x: [-1, 2], y: [-1.25, 2.25], xt: [-1, 0, 1, 2], yt: [-1, 0, 1, 2], xl: 'dose γ', yl: 'margin progress', h0: [{ y: 1, label: 'target' }, { y: 0, c: K.ax, d: null, w: 1 }], series: [{ pts: d.dose['random_matched'], c: F, d: '6 4' }, { pts: d.dose['Driver-OMP'], c: P }], legend: [[P, 'Driver-OMP'], [F, 'random sites', '6 4']] }),
+          x: 'Driver-OMP’s progress grows steadily with the dose, in both directions and past γ = 1. Random sites barely move the margin.', f: 'Mean margin progress; Driver-OMP k = 4 (2 seeds), random sites (3 seeds).' },
+        { v: ['ok', 'Pass · 24/24'], draw: s => traj(s, d.fb, .3, 'IO–S margin'), tiles: s => tiles(s, [{ label: 'hits', hit: hitsOf(d, 'P', 'Driver-OMP').hit, n: hitsOf(d, 'P', 'Driver-OMP').n, c: P }]),
+          x: 'Adjusting only the dose from the measured error hits all 24 requested margins (3 seeds × 8 targets).', f: 'Lines: seed 0, eight targets, Driver-OMP with evaluation-pair directions.' },
+        { v: ['na', 'Not on panel'], draw: s => na(s, 'NOT ON THE PANEL', 'IOI is outside the shared 32-prompt preservation panel'),
+          x: 'IOI is not part of the shared off-target panel. Its dose study tracks the change at non-answer positions instead.', f: 'See the IOI dose records in the repository.' },
+        { v: ['mid', 'Partial · ' + f2(ru.refit)], draw: s => vbars(s, { groups: d.reuse.map(r => ({ label: r.m, dim: r.m === 'Random', vals: [r.refit, r.frozen] })), colors: [P, F], y: [-.8, 1.1], yt: [-.5, 0, .5, 1], hl: 1, hlLabel: 'full recovery', legend: [[P, 'refit strengths'], [F, 'fixed strengths']] }),
+          x: `On 64 independently built pairs the sites recover about half of the clean margin (Coverage-Driver ${f2(ru.refit)} refit, ${f2(ru.frozen)} fixed). Random sites make it worse.`, f: 'Clean-normalized recovery on unseen pairs, 3 seeds.' }
+      ];
+    }
+    if (task === 'mcqa'){
+      const d = D[sub], cd = by(d.reach, 'Coverage-Driver'), rv = by(d.rev, 'Coverage-Driver'), rhoP = d.rho.find(r => r.m === 'Coverage-Driver' && r.mode === 'P'), rhoF = d.rho.find(r => r.m === 'Coverage-Driver' && r.mode === 'F');
+      const hp = hitsOf(d, 'P', 'Coverage-Driver'), hf = hitsOf(d, 'F', 'Coverage-Driver'), pr = by(d.pres, 'Coverage-Driver'), ru = by(d.reuse, 'Coverage-Driver');
+      return [
+        { v: ['ok', 'Pass · ' + cd.Pc], draw: s => hbars(s, reachPF(d)),
+          x: `With evaluation-pair directions, Coverage-Driver lands within ε on held-out questions in ${cd.Pc} seeds (${f2(cd.P)}). With training-mean directions every selector stays near the source (≈ ${f2(cd.F)}).`, f: 'Held-out Rel_tar(1), mean over 8 seeds.' },
+        { v: ['ok', 'Pass · ' + rv.Pc], draw: s => hbars(s, revPF(d)),
+          x: `The opposite patch pushes target-side answers back with ratio ${f2(rv.P)} (P, ${rv.Pc} seeds). Training-mean directions barely move them (${f2(rv.F)}).`, f: 'Reversal ratio, mean over 8 seeds.' },
+        { v: ['mid', rhoP.pass_ + ' ρ ≥ 0.95'], draw: s => lines(s, { x: [-1, 2], y: [-1.15, 1.2], xt: [-1, 0, 1, 2], yt: [-1, 0, 1], xl: 'dose γ', yl: 'target progress', h0: [{ y: 1, label: 'target' }, { y: 0, c: K.ax, d: null, w: 1 }], series: [{ pts: d.dose['Coverage-Driver|F'], c: F, d: '6 4' }, { pts: d.dose['Coverage-Driver|P'], c: P }], legend: [[P, 'P'], [F, 'F', '6 4']] }),
+          x: `Progress rises with γ and levels off near the target; ${rhoP.pass_} Coverage-Driver curves are ordered with ρ ≥ 0.95. With F directions, ${rhoF.neg} run the wrong way.`, f: 'Mean progress over 8 seeds, Coverage-Driver, ten doses.' },
+        { v: ['ok', hp.hit + '/' + hp.n + ' hits'], draw: s => traj(s, d.fb, .3, 'answer margin'), tiles: s => tiles(s, [{ label: 'P', hit: hp.hit, n: hp.n, c: P }, { label: 'F', hit: hf.hit, n: hf.n, c: F }]),
+          x: `Feedback-adjusted doses hit ${hp.hit} of ${hp.n} requested targets with P directions and ${hf.hit} of ${hf.n} with F, where the output stalls short of the target.`, f: 'Lines: seed 0, six targets, Coverage-Driver. Tolerance 0.3.' },
+        { v: ['no', 'Fail · ' + pr.seeds], draw: s => hbars(s, pres(d)),
+          x: `Off-target prompts move: median KL ${f2(pr.median)}, about ${Math.round(pr.median / .001)} times the δ = 0.001 budget, and no seed passes.`, f: 'Shared 32-prompt panel, 256 prompt–seed observations per selector.' },
+        { v: ['info', 'Recovery ' + f2(ru.refit)], draw: s => vbars(s, { groups: d.reuse.map(r => ({ label: r.m, dim: r.m === 'Random', vals: [r.refit, r.frozen] })), colors: [P, F], y: [0, 1.2], yt: [0, .5, 1], hl: 1, hlLabel: 'full recovery', legend: [[P, 'refit strengths'], [F, 'fully frozen']] }),
+          x: `Reusing the sites and refitting strengths on unseen questions recovers ${f2(ru.refit)} of the margin; freezing the whole intervention recovers ${f2(ru.frozen)}.`, f: 'Module-level reuse, 16 unseen questions, 4 seeds.' }
+      ];
+    }
+    if (task === 'sent'){
+      const d = D.sent, cd = by(d.reach, 'Coverage-Driver'), rv = by(d.rev, 'Coverage-Driver'), pr = by(d.pres, 'Coverage-Driver');
+      const fx = (m, md) => [3, 5, 8].map(k => [k, d.fixed[m + '|' + md][String(k)]]);
+      return [
+        { v: ['ok', 'Pass · ' + cd.Pc], draw: s => hbars(s, reachPF(d)),
+          x: `Coverage-Driver reaches held-out pairs in ${cd.Pc} seeds with P directions (${f2(cd.P)}); with F directions none pass (${f2(cd.F)}).`, f: 'Held-out Rel_tar(1), mean over 8 seeds.' },
+        { v: ['ok', 'Pass · ' + rv.Pc], draw: s => hbars(s, revPF(d)),
+          x: `Reversal is strongest here: ratio ${f2(rv.P)} with P directions on ${rv.Pc} seeds. With F directions it stays near ${f2(rv.F)}, no return.`, f: 'Reversal ratio, mean over 8 seeds.' },
+        { v: ['info', 'Supporting'], draw: s => lines(s, { x: [0, 3], y: [-.05, 1.35], xt: [0, 1, 2, 3], yt: [0, .5, 1], xl: 'dose scale', yl: 'steering recovery', h0: [{ y: 1, label: 'target' }], series: [{ pts: d.dose['random_matched'], c: F, d: '2 4' }, { pts: d.dose['Driver-OMP'], c: K.cr, d: '6 4', w: 2 }, { pts: d.dose['Coverage-Driver'], c: P }], legend: [[P, 'Coverage-Driver'], [K.cr, 'Driver-OMP', '6 4'], [F, 'random', '2 4']] }),
+          x: 'On unpaired prompts, Coverage-Driver’s recovery grows almost linearly with the dose and passes the target between 2× and 3×. Driver-OMP stays nearly flat.', f: 'Mean over 3 seeds, seven doses.' },
+        { v: ['na', 'Not evaluated'], draw: s => na(s, 'NOT EVALUATED', 'no feedback experiment is registered for Sentiment'),
+          x: 'Feedback tracking was not evaluated for Sentiment; the fixed-dose and dose studies cover its control instead.', f: 'See the experiment guide.' },
+        { v: ['no', 'Fail · ' + pr.seeds], draw: s => hbars(s, pres(d)),
+          x: `Changes on the off-target panel are small (mean KL ${f2(pr.mean)}) but still above δ = 0.001 for every seed.`, f: 'Shared 32-prompt panel, training-mean directions.' },
+        { v: ['info', 'Recovery ' + f2(d.fixed['Coverage-Driver|P']['8'])], draw: s => lines(s, { x: [3, 8], y: [0, 1.15], xt: [3, 5, 8], yt: [0, .5, 1], xl: 'support size k', yl: 'held-out recovery', h0: [{ y: 1, label: 'full recovery' }], series: [{ pts: fx('Random', 'P'), c: F, d: '2 4' }, { pts: fx('Driver-OMP', 'P'), c: K.cr, d: '6 4', w: 2 }, { pts: fx('Coverage-Driver', 'F'), c: P, d: '6 4', w: 2, o: .6 }, { pts: fx('Coverage-Driver', 'P'), c: P }], legend: [[P, 'Coverage-Driver P'], [K.cr, 'Driver-OMP', '6 4'], [F, 'random', '2 4']] }),
+          x: `At a fixed dose, recovery on held-out pairs grows with the support size: Coverage-Driver reaches ${[3, 5, 8].map(k => f2(d.fixed['Coverage-Driver|P'][k])).join(', ')} at k = 3, 5, 8. Random sites reach only ${f2(d.fixed['Random|P']['8'])}.`, f: 'Paired fixed-dose reuse, 8 seeds. Faded line: Coverage-Driver with F directions.' }
+      ];
+    }
+    const d = D.ref, cd = by(d.reach, 'Coverage-Driver'), om = by(d.pres, 'Driver-OMP'), hp = hitsOf(d, 'P', 'Coverage-Driver'), hf = hitsOf(d, 'F', 'Coverage-Driver');
+    return [
+      { v: ['no', 'Fail · 0/8'], draw: s => hbars(s, reachPF(d)),
+        x: `No selector reaches the held-out target: Rel_tar stays near ${f2(cd.P)} with either direction, on 0 of 8 seeds.`, f: 'Held-out Rel_tar(1), mean over 8 seeds.' },
+      { v: ['no', 'Fail · 0/8'], draw: s => hbars(s, revPF(d)),
+        x: `The opposite patch does not bring outputs back: ratios ${f2(Math.min(...d.rev.map(r => Math.min(r.P, r.F))))} to ${f2(Math.max(...d.rev.map(r => Math.max(r.P, r.F))))}, far below 2, on every seed.`, f: 'Reversal ratio, mean over 8 seeds.' },
+      { v: ['ok', 'ρ = 1 · 48/48'], draw: s => lines(s, { x: [-1, 2], y: [-.3, 1.1], xt: [-1, 0, 1, 2], yt: [0, .5, 1], xl: 'dose γ', yl: 'target progress', h0: [{ y: 1, label: 'target' }, { y: 0, c: K.ax, d: null, w: 1 }], series: [{ pts: d.dose['Coverage-Driver|F'], c: F, d: '6 4' }, { pts: d.dose['Coverage-Driver|P'], c: P }], legend: [[P, 'P'], [F, 'F', '6 4']] }),
+        x: `All 48 curves are perfectly ordered (ρ = 1), yet progress is only ${f2(d.dose['Coverage-Driver|P'].find(p => p[0] === 1)[1])} at the nominal dose γ = 1. Ordered is not the same as reaching or reversing.`, f: 'Mean progress over 8 seeds, Coverage-Driver, ten doses.' },
+      { v: ['mid', hp.hit + '/' + hp.n + ' hits'], draw: s => traj(s, d.fb, .1, 'refusal margin'), tiles: s => tiles(s, [{ label: 'P', hit: hp.hit, n: hp.n, c: P }, { label: 'F', hit: hf.hit, n: hf.n, c: F }]),
+        x: `Feedback hits ${hp.hit} of ${hp.n} targets with P directions and ${hf.hit} with F, under a tighter tolerance of 0.1.`, f: 'Lines: seed 0, five targets, Coverage-Driver.' },
+      { v: ['mid', 'Driver-OMP ' + om.seeds], draw: s => hbars(s, pres(d, r => r.m === 'Driver-OMP')),
+        x: `Driver-OMP keeps the seed-mean KL under δ = 0.001 on ${om.seeds} seeds (${om.all} on every prompt), the only selector to pass anywhere.`, f: 'Shared 32-prompt panel, training-mean directions.' },
+      { v: ['na', 'Not evaluated'], draw: s => na(s, 'NOT EVALUATED', 'no held-out reuse experiment for Refusal'),
+        x: 'Held-out reuse was not run for Refusal.', f: 'See the experiment guide.' }
+    ];
+  }
+  const TAKE = {
+    ioi: 'IOI <b>reaches, reverses and tracks</b> targets on every seed; reuse on new pairs is only partial.',
+    mcqa: '<b>Direction information decides the profile.</b> Evaluation-pair directions pass reachability, reversal and feedback; training-mean directions fail all three.',
+    sent: '<b>Strong, reversible control</b> with evaluation-pair directions, at a small but measurable off-target cost.',
+    ref: '<b>Ordered is not reversible.</b> Refusal follows the dose in perfect order, yet never reaches the held-out target or comes back.'
+  };
+
+  let cur = 'ioi', sub = 'hum', opener = null, raf = 0;
+  const grid = $('#xr-grid'), score = $('#xr-score');
+  function render(){
+    cancelAnimationFrame(raf);
+    const t = TASK[cur], list = cards(cur, sub);
+    $('#xr-k').textContent = `04 / Experiments · ${t.n} / ${t.name}`;
+    $('#xr-title').textContent = cur === 'mcqa' ? `MCQA · ${sub === 'hum' ? 'Humanities' : 'STEM'}` : t.title;
+    $('#xr-meta').textContent = t.meta; $('#xr-take').innerHTML = TAKE[cur];
+    $('#xr-sub').hidden = cur !== 'mcqa';
+    $$('#xr-sub button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.sub === sub)));
+    $$('.xr-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.task === cur)));
+    score.innerHTML = ''; grid.innerHTML = '';
+    const anims = [];
+    list.forEach((c, i) => {
+      const a = document.createElement('a'); a.href = '#xc-' + i;
+      a.innerHTML = `<span class="n">0${i + 1} / ${SHORT[i]}</span><span class="t">${AX[i]}</span><span class="chip ${c.v[0]}">${c.v[1]}</span>`;
+      a.addEventListener('click', e => { e.preventDefault(); $('#xc-' + i).scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); });
+      score.appendChild(a);
+      const card = document.createElement('article'); card.className = 'xc'; card.id = 'xc-' + i;
+      card.innerHTML = `<div class="xc-h"><p class="label">0${i + 1} / ${AX[i]}</p><span class="chip ${c.v[0]}">${c.v[1]}</span></div>`;
+      const svg = el('svg', { role: 'img', 'aria-label': `${AX[i]} chart` }); card.appendChild(svg);
+      const fn = c.draw(svg); let fn2 = null;
+      if (c.tiles){ const s2 = el('svg', { 'aria-hidden': 'true' }); s2.style.marginTop = '4px'; card.appendChild(s2); fn2 = c.tiles(s2); }
+      const p = document.createElement('p'); p.className = 'x'; p.textContent = c.x; card.appendChild(p);
+      const f = document.createElement('p'); f.className = 'f'; f.textContent = c.f; card.appendChild(f);
+      grid.appendChild(card);
+      anims.push({ fn, fn2, d: i * 90 });
+    });
+    const t0 = performance.now();
+    const step = now => { let busy = false; anims.forEach(a => { const k = reduce ? 1 : clamp((now - t0 - a.d) / 1100, 0, 1); a.fn(ease(k)); if (a.fn2) a.fn2(clamp(k * 1.15 - .1, 0, 1)); if (k < 1) busy = true; }); if (busy) raf = requestAnimationFrame(step); };
+    raf = requestAnimationFrame(step);
+  }
+  function open(task, from){
+    cur = task; opener = from || null; xr.hidden = false; document.documentElement.classList.add('modal-open');
+    xr.scrollTop = 0; render();
+    requestAnimationFrame(() => requestAnimationFrame(() => xr.classList.add('on')));
+    setTimeout(() => $('#xr-x').focus({ preventScroll: true }), 50);
+  }
+  function close(){
+    xr.classList.remove('on'); document.documentElement.classList.remove('modal-open');
+    setTimeout(() => { xr.hidden = true; }, reduce ? 0 : 520);
+    if (opener) opener.focus({ preventScroll: true });
+  }
+  $$('.ex[data-task]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); open(a.dataset.task, a); }));
+  $$('.xr-tab').forEach(b => b.addEventListener('click', () => { if (b.dataset.task === cur) return; cur = b.dataset.task; xr.scrollTo({ top: 0 }); render(); }));
+  $$('#xr-sub button').forEach(b => b.addEventListener('click', () => { if (b.dataset.sub === sub) return; sub = b.dataset.sub; render(); }));
+  $('#xr-x').addEventListener('click', close);
+  document.addEventListener('keydown', e => {
+    if (xr.hidden) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'Tab'){ const f = $$('button, a[href]', xr).filter(x => x.offsetParent !== null); if (!f.length) return; const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); } }
+  });
+})();
 
 /* ---- nav: current section and mobile menu ---- */
 const links = $$('.links a[href^="#"]'), map = {}; links.forEach(a => { map[a.getAttribute('href').slice(1)] = a; });

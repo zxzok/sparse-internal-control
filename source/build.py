@@ -90,6 +90,8 @@ def main():
     zh = json.loads(zh_path.read_text(encoding="utf-8")) if zh_path.exists() else {}
     src = src.replace("/*ZH_DICT*/{}", json.dumps(zh, ensure_ascii=False).replace("</", "<\\/"))
     snap = (ROOT / "src" / "snap.js").read_text(encoding="utf-8")
+    exp = (ROOT / "data" / "experiments.json").read_text(encoding="utf-8").strip()
+    src = src.replace("/*EXP_DATA*/{}", exp.replace("</", "<\\/"))
     src = src.replace("/*SNAP_JS*/", snap)
     theory = (ROOT / "src" / "theory.html").read_text(encoding="utf-8").replace("/*SNAP_JS*/", snap)
     DIST.mkdir(exist_ok=True)
