@@ -19,10 +19,11 @@ def run_preservation(root,config,profile,seeds,output,task=None,single_site=Fals
  import torch
  from ..tasks.pairs import MCQAExample,build_mcqa_pairs
  from ..metrics.preservation import kl_unpatched_patched
- root,output=Path(root),Path(output);tasks=[task] if task else ['mcqa_humanities','mcqa_stem','sentiment','refusal'];panel=load_json(root/'data/inputs/preservation/panel.json')['records'];total=0
+ root,output=Path(root),Path(output);tasks=[task] if task else ['mcqa_humanities','mcqa_stem','sentiment','refusal'];panel=load_json(root/'data/inputs/preservation/panel.json')['records'];total=0;loaded_models=[]
  for task in tasks:
   if task not in ['mcqa_humanities','mcqa_stem','sentiment','refusal']:raise ValueError(task)
   exp='sentiment_paired' if task=='sentiment' else task+'_head';cfg=load_json(root/f'configs/{exp}.json');model,tok,adapter=load_model(root,cfg,profile)
+  loaded_models.append(dict(task=task,source_experiment_id=exp,**model._sic_execution_metadata))
   records=load_jsonl(root/f'data/measurements/preservation/{task}.jsonl') if not single_site else load_jsonl(root/'data/measurements/refusal_single_site/preservation.jsonl')
   controls={}
   for r in records:
@@ -44,4 +45,4 @@ def run_preservation(root,config,profile,seeds,output,task=None,single_site=Fals
     for (seed,method),r in controls.items():
      ds=pd if task.startswith('mcqa') else means[seed];patch={node(v):float(a)*ds[node(v)] for v,a in zip(r['drivers'],r['alphas'])};y=adapter.run_with_patches(batch,patch,FinalVocab());v=kl_unpatched_patched(baseline.cpu().double().numpy().reshape(-1),y.cpu().double().numpy().reshape(-1));filename=f'patched_{index:02d}_{seed}_{method.replace(" ","_")}.npz';np.savez_compressed(ld/filename,logits=y.cpu().float().numpy());f.write(json.dumps(dict(task=task,seed=seed,method=method,prompt_id=p['prompt_id'],kl=float(v),baseline_logits=f'logits/baseline_{index:02d}.npz',patched_logits='logits/'+filename,drivers=r['drivers'],alphas=r['alphas'],dose=1.,direction='P' if task.startswith('mcqa') else 'F',refit=False))+'\n');total+=1
   (dest/'batches.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in batches));del model,adapter
- return dict(records=total,model_execution=True,selection=False,coefficient_refit=False)
+ return dict(records=total,model_execution=True,selection=False,coefficient_refit=False,loaded_models=loaded_models)

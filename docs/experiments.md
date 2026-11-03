@@ -1,6 +1,6 @@
 # Experiments
 
-Every configuration lists its seeds, input and intervention paths, readout, ridge/normalization, available stages and explicit execution profiles. A plan can be inspected without loading a model: `python -m sparse_control run --experiment <id> --stage <listed-stage> --profile <compatible-profile> --plan`. Replace the angle-bracket arguments with registered values from the table/configuration.
+Model-experiment configurations list their seeds, input and intervention paths, readout, ridge/normalization, available stages and explicit execution profiles. The `formal_reachability` configuration describes saved-vector analysis; its `source_configs` links each record’s `source_experiment_id` to the model precision and fitting parameters used by that series. A plan can be inspected without loading a model: `python -m sparse_control run --experiment <id> --stage <listed-stage> --profile <compatible-profile> --plan`. Replace the angle-bracket arguments with registered values from the table/configuration.
 
 | Experiment | Model and panel | Registered stages |
 |---|---|---|
@@ -32,6 +32,8 @@ Full producers are invoked with the complete registered argument sequence, inclu
 
 Model runs use new output directories. The delivered `results/` are calculated from the distributed saved records, never silently replaced by fresh model outputs. Compare matching experiment/seed/method/direction/panel identities before interpreting numerical differences.
 
-Tabular mappings are in `experiments/artifacts.json`; measurement-only figure mappings are in `experiments/figure_records.json`. Table 2 remains R_clean; the formal target-residual tables are `formal_reachability_samepanel` and `formal_reachability_heldout`. Updating a display number does not change an artifact ID or metric definition.
+Tabular mappings are in `experiments/artifacts.json`; measurement-only figure mappings are in `experiments/figure_records.json`. Table 2 uses the mean and sample SD columns of `formal_reachability_samepanel`; the same artifact also supplies the appendix threshold counts. The `nominal_reconstruction` artifact supplies the supplemental R_clean table. Held-out P/F results are in `formal_reachability_heldout`. Artifact IDs retain their metric definitions independently of display numbering.
 
 Fixed input checks compare stored fields before controls, including order, tokens, masks, positions and answer IDs. Available baseline vectors use 1e-4 absolute tolerance. Series without saved token batches are marked as reconstructed. External `--interventions` is accepted only for fixed nominal/dose/reversal/feedback stages; unsupported combinations are rejected.
+
+Preservation run reports include `loaded_models`, with observed loader metadata for each task and source experiment. Refusal-generation reports include `loaded_model`. These fields record the actual load, including parameter dtype/device, tokenizer sides and checkpoint revision, rather than copying only the requested profile.

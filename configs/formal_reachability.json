@@ -1,6 +1,5 @@
 {
   "experiment_id": "formal_reachability",
-  "model": "task-specific models",
   "panel": "the seven applicable nominal/held-out series",
   "settings": "gamma=1; complete stacked vectors; xi=1e-6; eps=.30,.35,.40,.45,.50",
   "direction_conditions": "P or P,F by series",
@@ -25,21 +24,9 @@
   "max_support": 8,
   "nominal_dose": 1.0,
   "interventions": "data/interventions/formal_reachability/interventions.jsonl",
-  "model_asset_id": null,
-  "execution_profiles": [
-    "mps_head_fp32",
-    "cuda_head_fp32"
-  ],
-  "dtype": "float32",
+  "execution_profiles": [],
   "readout": "series_specific_complete_source_target_patched_vectors",
-  "refit": {
-    "implementation": "coefficient_ridge",
-    "lambda": 1.0,
-    "row_normalization": "none",
-    "energy_constraint": null,
-    "off_target_penalty": 0.0
-  },
-  "fixed_evaluation_available": true,
+  "fixed_evaluation_available": false,
   "available_stages": [],
   "methods": [
     "driver_omp",
@@ -51,5 +38,36 @@
   "direction_modes": [
     "P",
     "F"
-  ]
+  ],
+  "analysis_kind": "saved_readout_vectors",
+  "model_execution": false,
+  "coefficient_refit": false,
+  "analysis": {
+    "arithmetic": "Python float (binary64) on saved JSON readouts",
+    "readout_fields": {
+      "source": "source_behavior",
+      "target": "target_behavior",
+      "patched": "forward_behavior"
+    },
+    "nominal_dose": 1.0,
+    "xi": 1e-06,
+    "thresholds": [
+      0.3,
+      0.35,
+      0.4,
+      0.45,
+      0.5
+    ],
+    "aggregation": "complete-vector residual per seed; mean and sample SD across seeds"
+  },
+  "source_configs": {
+    "ioi_nominal": "configs/ioi_nominal.json",
+    "mcqa_humanities_head": "configs/mcqa_humanities_head.json",
+    "mcqa_humanities_nominal": "configs/mcqa_humanities_nominal.json",
+    "mcqa_stem_head": "configs/mcqa_stem_head.json",
+    "mcqa_stem_nominal": "configs/mcqa_stem_nominal.json",
+    "refusal_head": "configs/refusal_head.json",
+    "sentiment_paired": "configs/sentiment_paired.json"
+  },
+  "source_settings": "Resolve each record by source_experiment_id. Model precision, loader and fitting parameters belong to its source configuration and execution profile; this analysis does not load models or refit coefficients. Saved run metadata applies only to its recorded scope."
 }

@@ -23,36 +23,107 @@
     ],
     "record_paths": [
       "data/measurements/mcqa_humanities_head/dose_scan.jsonl",
-      "data/measurements/mcqa_humanities_head/feedback_trajectories.jsonl",
-      "data/measurements/mcqa_humanities_head/readouts.jsonl",
-      "data/measurements/mcqa_humanities_head/reversal.jsonl",
-      "data/measurements/mcqa_humanities_head/run_metadata.json",
       "data/measurements/mcqa_stem_head/dose_scan.jsonl",
-      "data/measurements/mcqa_stem_head/feedback_trajectories.jsonl",
-      "data/measurements/mcqa_stem_head/readouts.jsonl",
-      "data/measurements/mcqa_stem_head/reversal.jsonl",
-      "data/measurements/refusal_head/dose_scan.jsonl",
-      "data/measurements/refusal_head/feedback_trajectories.jsonl",
-      "data/measurements/refusal_head/readouts.jsonl",
-      "data/measurements/refusal_head/reversal.jsonl",
-      "data/measurements/refusal_head/run_metadata.json"
+      "data/measurements/refusal_head/dose_scan.jsonl"
     ]
   },
   {
-    "artifact_id": "ioi_feedback",
-    "paper_label": "fig:closed_loop",
-    "paper_display_name": "Figure G.1",
+    "artifact_id": "feedback_trajectories",
+    "paper_label": "fig:feedback-trajectories",
+    "paper_display_name": "Figure 4",
     "experiment_ids": [
-      "ioi_feedback"
+      "ioi_feedback",
+      "mcqa_humanities_head",
+      "refusal_head"
     ],
     "record_paths": [
-      "data/measurements/ioi_feedback/feedback_trajectories.jsonl"
-    ]
+      "data/measurements/ioi_feedback/feedback_trajectories.jsonl",
+      "data/measurements/mcqa_humanities_head/feedback_trajectories.jsonl",
+      "data/measurements/refusal_head/feedback_trajectories.jsonl"
+    ],
+    "panels": [
+      {
+        "panel": "a",
+        "experiment_id": "ioi_feedback",
+        "method": "driver_omp",
+        "direction": "P",
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "targets": [
+          -3,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "tolerance": 0.3
+      },
+      {
+        "panel": "b",
+        "experiment_id": "mcqa_humanities_head",
+        "method": "coverage_driver",
+        "direction": "P",
+        "seeds": [
+          0
+        ],
+        "targets": [
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3
+        ],
+        "tolerance": 0.3
+      },
+      {
+        "panel": "c",
+        "experiment_id": "mcqa_humanities_head",
+        "method": "coverage_driver",
+        "direction": "F",
+        "seeds": [
+          0
+        ],
+        "targets": [
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3
+        ],
+        "tolerance": 0.3
+      },
+      {
+        "panel": "d",
+        "experiment_id": "refusal_head",
+        "method": "coverage_driver",
+        "direction": "F",
+        "seeds": [
+          0
+        ],
+        "targets": [
+          -1.55,
+          -1.45,
+          -1.35,
+          -1.25,
+          -1.15
+        ],
+        "tolerance": 0.1
+      }
+    ],
+    "coordinates": "Recorded feedback iteration and batch-mean margin; include initial and terminal evaluations, and stop each trajectory at its recorded endpoint."
   },
   {
     "artifact_id": "ioi_recurrence",
     "paper_label": "fig:driver-class-freq-app",
-    "paper_display_name": "Figure G.2",
+    "paper_display_name": "Figure G.1",
     "experiment_ids": [
       "ioi_recurrence"
     ],

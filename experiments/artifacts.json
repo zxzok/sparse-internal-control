@@ -20,8 +20,8 @@
   },
   {
     "artifact_id": "nominal_reconstruction",
-    "paper_label": "tab:nominal-restored",
-    "paper_display_name": "Table 2",
+    "paper_label": "tab:nominal-clean",
+    "paper_display_name": "Table G.5",
     "experiment_ids": [
       "ioi_nominal",
       "mcqa_humanities_nominal",
@@ -156,6 +156,26 @@
       "tables/formal_reachability_samepanel.tex",
       "tables/formal_reachability_samepanel.json",
       "tables/formal_reachability_samepanel_statistics.csv"
+    ],
+    "paper_appearances": [
+      {
+        "paper_label": "tab:nominal-restored",
+        "paper_display_name": "Table 2",
+        "reported_fields": [
+          "Rel_tar_mean",
+          "Rel_tar_sample_sd"
+        ]
+      },
+      {
+        "paper_label": "tab:formal_reachability_samepanel",
+        "paper_display_name": "Table G.3",
+        "reported_fields": [
+          "Rel_tar_mean",
+          "Rel_tar_sample_sd",
+          "passes_0p4",
+          "seeds"
+        ]
+      }
     ]
   },
   {
@@ -185,7 +205,7 @@
   {
     "artifact_id": "signed_reversal",
     "paper_label": "tab:formal-reversal",
-    "paper_display_name": "Table G.5",
+    "paper_display_name": "Table G.6",
     "experiment_ids": [
       "ioi_nominal",
       "sentiment_paired",
@@ -233,7 +253,7 @@
   {
     "artifact_id": "dose_ordering",
     "paper_label": "tab:independent-dose-stats",
-    "paper_display_name": "Table G.6",
+    "paper_display_name": "Table G.7",
     "experiment_ids": [
       "mcqa_humanities_head",
       "mcqa_stem_head",
@@ -272,7 +292,7 @@
   {
     "artifact_id": "feedback_details",
     "paper_label": "tab:feedback-details",
-    "paper_display_name": "Table G.7",
+    "paper_display_name": "Table G.8",
     "experiment_ids": [
       "mcqa_humanities_head",
       "mcqa_stem_head",
@@ -311,7 +331,7 @@
   {
     "artifact_id": "off_target_preservation",
     "paper_label": "tab:fixed-panel-preservation",
-    "paper_display_name": "Table G.8",
+    "paper_display_name": "Table G.9",
     "experiment_ids": [
       "preservation"
     ],
@@ -338,7 +358,7 @@
   {
     "artifact_id": "mcqa_reuse",
     "paper_label": "tab:baselines-transfer",
-    "paper_display_name": "Table G.9",
+    "paper_display_name": "Table G.10",
     "experiment_ids": [
       "mcqa_humanities_reuse",
       "mcqa_stem_reuse"
@@ -364,7 +384,7 @@
   {
     "artifact_id": "ioi_reuse",
     "paper_label": "tab:ioi-reuse",
-    "paper_display_name": "Table G.10",
+    "paper_display_name": "Table G.11",
     "experiment_ids": [
       "ioi_reuse"
     ],
@@ -388,7 +408,7 @@
   {
     "artifact_id": "sentiment_fixed_dose",
     "paper_label": "tab:sentiment-reuse",
-    "paper_display_name": "Table G.11",
+    "paper_display_name": "Table G.12",
     "experiment_ids": [
       "sentiment_paired"
     ],
@@ -414,7 +434,7 @@
   {
     "artifact_id": "feedback_tolerance",
     "paper_label": "tab:feedback-tolerances",
-    "paper_display_name": "Table G.12",
+    "paper_display_name": "Table G.13",
     "experiment_ids": [
       "mcqa_humanities_head",
       "mcqa_stem_head",
@@ -453,7 +473,7 @@
   {
     "artifact_id": "model_comparison",
     "paper_label": "tab:source-bound-scale",
-    "paper_display_name": "Table G.13",
+    "paper_display_name": "Table G.14",
     "experiment_ids": [
       "mcqa_humanities_nominal",
       "model_qwen3_8b",

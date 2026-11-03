@@ -1,6 +1,6 @@
 # Third-party assets
 
-The code is MIT licensed. Third-party model weights and datasets retain their own licenses and use conditions. Model weights and caches are not included. The repository/revision entries below are the executable assets, not a claim that every saved experiment recorded its checkpoint commit at execution time.
+The project code is licensed under Apache-2.0 (see [LICENSE](../LICENSE)). Third-party model weights and datasets retain their own licenses and use conditions. Model weights and caches are not included. The repository/revision entries below are the executable assets, not a claim that every saved experiment recorded its checkpoint commit at execution time.
 
 | Asset | Revision | License | Source |
 |---|---|---|---|
@@ -15,4 +15,4 @@ The included MMLU preservation panel retains dataset row identities and attribut
 
 ## Code notice
 
-The MIT copyright notice supplied with the implementation is retained verbatim in `LICENSE`: “Copyright (c) 2026 The Driver Circuits Authors”. This notice is not a paper author list. The paper/software citation names Xizhe Zhang. No reassignment of the supplied code copyright is asserted.
+Project notices are provided in [NOTICE](../NOTICE) and [PATENTS.md](../PATENTS.md). The third-party licenses listed above apply to their respective assets.

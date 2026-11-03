@@ -76,7 +76,7 @@ Fixed-intervention evaluation and full fitting are separate workflows. `--stage 
 
 ## Interpreting the results
 
-- **Normalization:** `Rel_tar` is normalized by source-to-target displacement; `R_clean` is normalized by clean target output. Table 2 retains `R_clean`; the two metrics are not interchangeable.
+- **Normalization:** `Rel_tar` is normalized by source-to-target displacement; `R_clean` is normalized by clean target output. Table 2 reports same-panel `Rel_tar(1)` from `formal_reachability_samepanel`; the supplemental `nominal_reconstruction` table reports `R_clean`. The two metrics are not interchangeable.
 - **Direction conditions:** evaluation-pair directions (P) use activation contrasts from evaluation pairs; training-mean directions (F) use the fitting split. Feedback can adapt dose even with fixed F directions.
 - **Sentiment:** unpaired dose response and paired fixed-dose reuse are separate experiments; feedback is not separately evaluated.
 - **Preservation:** the reported statistics are reproduced from supplied prompt-level KL measurements. Recomputing these measurements from model outputs requires running the preservation experiments.

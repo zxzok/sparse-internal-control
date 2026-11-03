@@ -9,7 +9,7 @@ description = "Sparse Internal Control of Language Models: methods and experimen
 requires-python = ">=3.12"
 dependencies = []
 license = "Apache-2.0"
-license-files = ["LICENSE", "NOTICE"]
+license-files = ["LICENSE", "NOTICE", "PATENTS.md"]
 authors = [{name = "Xizhe Zhang"}]
 
 [project.optional-dependencies]

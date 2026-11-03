@@ -311,5 +311,6 @@ tests/test_records.py
 tests/test_release_paths.py
 tests/test_reuse.py
 tests/test_reversal.py
+tests/test_runtime_reports.py
 tests/test_seed_statistics.py
 tests/test_selection.py
