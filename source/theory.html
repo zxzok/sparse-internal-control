@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Control Theory · Sparse Internal Control</title>
+<meta name="description" content="The mathematical model behind sparse internal control: the intervention, the sparse control problem, local controllability of a frozen Transformer and the results that link them.">
+<!--HEAD_META-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap">
+<!--KATEX_CSS-->
+<style>
+/* Same system as the home page: poster sections, black, paper and lime grounds, tile grids. Sizes are drawn on a 1586px canvas and scale with --u. */
+:root{
+  --u:clamp(.62px, calc(100vw / 1586), 1.35px);
+  --black:#111111; --paper:#F1F1EC; --cream:#F4F3EE; --lime:#D7EE5B;
+  --g1:#8B8B88; --g2:#6E6E6B; --g3:#BDBDB8; --rule-dark:#5E5E5B; --tile:#7F7F7C; --panel:#2E2E2C;
+  --anton:"Anton","Archivo","Arial Narrow",sans-serif;
+  --display:"Archivo","Arial Narrow","Helvetica Neue",sans-serif;
+  --sans:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --pad:max(16px, calc(var(--u) * 40));
+  --pl:max(var(--pad), env(safe-area-inset-left,0px)); --pr:max(var(--pad), env(safe-area-inset-right,0px));
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:64px}
+body{margin:0; background:var(--black); color:var(--cream); font-family:var(--sans); font-size:1rem; line-height:1.5rem; -webkit-font-smoothing:antialiased}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:60; background:var(--black)}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+ul,ol{margin:0; padding:0; list-style:none}
+button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer; text-align:left}
+:focus-visible{outline:3px solid var(--lime); outline-offset:3px}
+.lime :focus-visible,.light :focus-visible{outline-color:var(--black)}
+.skip{position:fixed; left:16px; top:16px; z-index:100; padding:8px 12px; background:var(--lime); color:var(--black); font-weight:600; transform:translateY(-200%); transition:transform 300ms var(--ease)}
+.skip:focus{transform:none}
+.label{font-family:var(--mono); font-weight:600; font-size:max(12px, calc(var(--u) * 18)); line-height:calc(var(--u) * 28); letter-spacing:.08em; text-transform:uppercase}
+.disp{font-family:var(--display); font-weight:900; font-stretch:62%; text-transform:uppercase; line-height:.8; letter-spacing:-.02em}
+.dispm{font-family:var(--display); font-weight:900; font-stretch:72%; line-height:.92; letter-spacing:-.02em}
+.ic{width:1em; height:1em; fill:none; stroke:currentColor; stroke-width:2.6; stroke-linecap:square; vertical-align:-.1em}
+.ulink{display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:max(16px, calc(var(--u) * 21)); line-height:1.3; text-decoration:none; padding-bottom:3px; border-bottom:2px solid currentColor; white-space:nowrap}
+.ulink .ic{transition:transform 300ms var(--ease)}
+.ulink:hover .ic{transform:translate(3px,-3px)}
+.katex{font-size:1.06em}
+
+/* nav */
+.nav{position:sticky; top:env(safe-area-inset-top,0px); z-index:50; background:var(--black)}
+.nav-in{display:flex; align-items:center; justify-content:space-between; gap:24px; height:64px; margin-left:var(--pl); margin-right:var(--pr); border-bottom:2px solid var(--rule-dark)}
+.brand{display:inline-flex; align-items:center; gap:14px; text-decoration:none; color:var(--cream)}
+.logo{display:grid; grid-template-columns:repeat(2,13px); gap:4px}
+.logo i{width:13px; height:13px; background:var(--lime)}
+.brand-t{font-family:var(--anton); font-size:31px; line-height:1; letter-spacing:.005em; text-transform:uppercase}
+.links{display:flex; align-items:center; gap:36px}
+.links a{position:relative; font-family:var(--display); font-weight:600; font-stretch:92%; font-size:20px; line-height:28px; text-decoration:none; color:var(--cream); padding-block:4px}
+.links a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:3px; background:var(--lime); transform:scaleX(0); transform-origin:left; transition:transform 500ms var(--ease)}
+.links a:hover::after,.links a[aria-current="page"]::after{transform:scaleX(1)}
+.menu-btn{display:none; width:40px; height:40px; position:relative}
+.menu-btn span{position:absolute; left:8px; right:8px; height:3px; background:var(--cream); transition:transform 500ms var(--ease)}
+.menu-btn span:first-child{top:13px} .menu-btn span:last-child{top:24px}
+.open .menu-btn span:first-child{transform:translateY(5.5px) rotate(45deg)}
+.open .menu-btn span:last-child{transform:translateY(-5.5px) rotate(-45deg)}
+
+/* sections */
+.sec{position:relative; padding:calc(var(--u) * 34) var(--pr) calc(var(--u) * 64) var(--pl)}
+.light{background:var(--paper); color:var(--black)}
+.lime{background:var(--lime); color:var(--black)}
+.dark{background:var(--black); color:var(--cream)}
+.sec-label{display:flex; align-items:center; gap:calc(var(--u) * 20)}
+.sec-label .rule{flex:1; height:2px; background:currentColor}
+.h2{font-size:calc(var(--u) * 120); margin-top:calc(var(--u) * 18)}
+.h2m{font-size:calc(var(--u) * 104); margin-top:calc(var(--u) * 22)}
+.lead{font-size:calc(var(--u) * 27); line-height:1.3; margin-top:calc(var(--u) * 14); max-width:calc(var(--u) * 1060)}
+.box{border:2px solid currentColor; padding:calc(var(--u) * 14) calc(var(--u) * 18); overflow-x:auto; overflow-y:hidden; position:relative}
+
+/* hero */
+.hero{position:relative; padding:calc(var(--u) * 22) var(--pr) calc(var(--u) * 48) var(--pl); overflow:hidden}
+.t-title{font-family:var(--anton); font-weight:400; text-transform:uppercase; font-size:calc(var(--u) * 260); line-height:1; letter-spacing:.012em; white-space:nowrap; width:max-content; margin:calc(var(--u) * -4) 0 0 calc(var(--u) * -9)}
+.t-sub{font-weight:500; font-size:calc(var(--u) * 39); line-height:1.1; margin-top:calc(var(--u) * -6)}
+.gwrap{position:relative; margin-top:calc(var(--u) * 54)}
+#gmat{display:block; width:100%; height:auto; overflow:visible}
+.t-foot{display:flex; justify-content:space-between; align-items:flex-end; gap:32px; margin-top:calc(var(--u) * 44)}
+.t-foot p{font-size:calc(var(--u) * 24); line-height:1.35; max-width:calc(var(--u) * 820)}
+.ctas{display:flex; flex-wrap:wrap; align-items:center; gap:calc(var(--u) * 34)}
+.btn-lime{display:inline-flex; align-items:center; gap:12px; height:calc(var(--u) * 51); padding:0 calc(var(--u) * 27); background:var(--lime); color:var(--black); font-weight:600; font-size:calc(var(--u) * 21); text-decoration:none; white-space:nowrap; transition:transform 300ms var(--ease), background-color 300ms var(--ease)}
+.btn-lime:hover{background:#E4F57C; transform:translateY(-2px)}
+.btn-lime:active{transform:scale(.98)}
+
+/* model */
+.steps{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:calc(var(--u) * 44); border-top:2px solid var(--black)}
+.step{display:grid; grid-template-rows:auto auto auto 1fr; gap:calc(var(--u) * 14); padding:calc(var(--u) * 24) calc(var(--u) * 36) calc(var(--u) * 8) 0; min-width:0}
+.step + .step{padding-left:calc(var(--u) * 36); border-left:2px solid var(--black)}
+.step:last-child{padding-right:0}
+.step .label{font-weight:700; font-size:calc(var(--u) * 21); letter-spacing:.1em}
+.step h3{font-size:calc(var(--u) * 54)}
+.step p{font-size:calc(var(--u) * 19); line-height:1.45}
+.step .box{font-size:calc(var(--u) * 22); align-self:end}
+.defs{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin-top:calc(var(--u) * 40); border-top:2px solid var(--black); border-bottom:2px solid var(--black)}
+.def{padding:calc(var(--u) * 18) calc(var(--u) * 24) calc(var(--u) * 20) 0; display:grid; gap:calc(var(--u) * 8); min-width:0}
+.def + .def{padding-left:calc(var(--u) * 24); border-left:2px solid var(--black)}
+.def .sym{font-size:calc(var(--u) * 26); overflow-x:auto; overflow-y:hidden; position:relative}
+.def p{font-size:calc(var(--u) * 17); line-height:1.45; color:#3A3A37}
+
+/* objective */
+.obj{margin-top:calc(var(--u) * 40); background:var(--black); color:var(--cream); padding:calc(var(--u) * 44) calc(var(--u) * 40); overflow-x:auto; overflow-y:hidden; position:relative; font-size:calc(var(--u) * 40); text-align:center}
+.obj .narrow{display:none}
+.obj .label{display:block; text-align:left; color:var(--lime); font-size:calc(var(--u) * 16); margin-bottom:calc(var(--u) * 20)}
+.terms{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:calc(var(--u) * 36); border-top:2px solid var(--black)}
+.term{padding:calc(var(--u) * 22) calc(var(--u) * 30) 0 0; display:grid; gap:calc(var(--u) * 10); align-content:start; min-width:0}
+.term + .term{padding-left:calc(var(--u) * 30); border-left:2px solid var(--black)}
+.term .sym{font-size:calc(var(--u) * 30); overflow-x:auto; overflow-y:hidden; position:relative}
+.term h3{font-size:calc(var(--u) * 46)}
+.term p{font-size:calc(var(--u) * 19); line-height:1.45}
+
+/* explorer */
+.xp{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:calc(var(--u) * 40); margin-top:calc(var(--u) * 44)}
+.xp-plot{position:relative; min-height:calc(var(--u) * 520); border:2px solid var(--panel)}
+.xp-plot canvas{position:absolute; inset:0; width:100%; height:100%}
+.xp-side{display:grid; gap:calc(var(--u) * 26); align-content:start}
+.xp-side .note{font-size:calc(var(--u) * 19); line-height:1.45; color:var(--g3)}
+.xp-k{font-family:var(--mono); font-weight:600; font-size:max(12px, calc(var(--u) * 15)); letter-spacing:.08em; text-transform:uppercase; color:var(--g3); margin-bottom:calc(var(--u) * 10)}
+.chips{display:flex; flex-wrap:wrap; gap:calc(var(--u) * 10)}
+.chip{min-width:calc(var(--u) * 62); padding:calc(var(--u) * 10) calc(var(--u) * 14); border:2px solid var(--cream); font-size:calc(var(--u) * 20); line-height:1; text-align:center; transition:background-color 300ms var(--ease), color 300ms var(--ease), border-color 300ms var(--ease), transform 300ms var(--ease)}
+.chip:hover{border-color:var(--lime)}
+.chip:active{transform:scale(.96)}
+.chip[aria-pressed="true"]{background:var(--lime); border-color:var(--lime); color:var(--black)}
+.krow{display:flex; justify-content:space-between; align-items:baseline; gap:16px}
+.kval{font-family:var(--mono); font-weight:500; font-size:calc(var(--u) * 18); color:var(--lime)}
+input[type=range]{width:100%; accent-color:var(--lime)}
+.reads{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:2px solid var(--panel); border-left:2px solid var(--panel)}
+.reads div{padding:calc(var(--u) * 14) calc(var(--u) * 16); border-right:2px solid var(--panel); border-bottom:2px solid var(--panel); display:grid; gap:4px; position:relative}
+.reads dt{font-size:calc(var(--u) * 16); color:var(--g3)}
+.reads dd{margin:0; font-family:var(--mono); font-weight:600; font-size:calc(var(--u) * 26); font-variant-numeric:tabular-nums}
+.status{font-size:calc(var(--u) * 19); line-height:1.45; padding:calc(var(--u) * 14) calc(var(--u) * 18); border-left:4px solid var(--g1); background:#1B1B1A; position:relative}
+.status.ok{border-left-color:var(--lime)}
+.status.mid{border-left-color:var(--cream)}
+.xp-btns{display:flex; flex-wrap:wrap; align-items:center; gap:calc(var(--u) * 24)}
+.btn-line{display:inline-flex; align-items:center; gap:10px; padding:calc(var(--u) * 12) calc(var(--u) * 22); border:2px solid var(--cream); font-weight:600; font-size:calc(var(--u) * 19); transition:background-color 300ms var(--ease), color 300ms var(--ease), border-color 300ms var(--ease)}
+.btn-line:hover{background:var(--lime); border-color:var(--lime); color:var(--black)}
+.btn-line:disabled{opacity:.45; pointer-events:none}
+.txt-btn{font-family:var(--mono); font-weight:600; font-size:calc(var(--u) * 15); letter-spacing:.08em; text-transform:uppercase; border-bottom:2px solid currentColor}
+.cap{font-size:calc(var(--u) * 17); line-height:1.45; color:var(--g1); margin-top:calc(var(--u) * 16)}
+
+/* results */
+.thm{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:calc(var(--u) * 44); border-top:2px solid var(--black)}
+.thm li{display:grid; grid-template-rows:auto auto auto 1fr; gap:calc(var(--u) * 14); padding:calc(var(--u) * 24) calc(var(--u) * 32) calc(var(--u) * 32) 0; min-width:0}
+.thm li:not(:nth-child(3n+1)){padding-left:calc(var(--u) * 32); border-left:2px solid var(--black)}
+.thm li:nth-child(3n){padding-right:0}
+.thm li:nth-child(n+4){border-top:2px solid var(--black)}
+.thm .tag{font-family:var(--mono); font-weight:600; font-size:calc(var(--u) * 15); letter-spacing:.08em; text-transform:uppercase; color:var(--g2)}
+.thm h3{font-size:calc(var(--u) * 50)}
+.thm .box{font-size:calc(var(--u) * 21); display:grid; gap:calc(var(--u) * 8)}
+.thm p{font-size:calc(var(--u) * 18); line-height:1.5}
+.thm-foot{display:flex; justify-content:space-between; align-items:center; gap:24px; margin-top:calc(var(--u) * 28); font-weight:500; font-size:calc(var(--u) * 22)}
+
+/* selectors */
+.sel{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); margin-top:calc(var(--u) * 44); border-top:2px solid var(--black)}
+.sel > div{display:grid; gap:calc(var(--u) * 16); align-content:start; padding:calc(var(--u) * 26) calc(var(--u) * 40) 0 0; min-width:0}
+.sel > div + div{padding-left:calc(var(--u) * 40); padding-right:0; border-left:2px solid var(--black)}
+.sel h3{font-size:calc(var(--u) * 92)}
+.sel p{font-size:calc(var(--u) * 20); line-height:1.45}
+.sel .box{font-size:calc(var(--u) * 22)}
+.pipe{display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:stretch; gap:calc(var(--u) * 14); margin-top:calc(var(--u) * 48)}
+.pipe .st{background:var(--black); color:var(--cream); padding:calc(var(--u) * 20) calc(var(--u) * 22); display:grid; gap:calc(var(--u) * 8); position:relative; overflow:hidden}
+.pipe .st b{font-family:var(--display); font-weight:900; font-stretch:68%; font-size:calc(var(--u) * 40); line-height:1; letter-spacing:-.015em}
+.pipe .st span{font-size:calc(var(--u) * 17); line-height:1.4; color:var(--g3)}
+.pipe .st i{position:absolute; left:0; bottom:0; height:4px; width:0; background:var(--lime)}
+.pipe .ar{display:grid; place-items:center; font-size:calc(var(--u) * 34)}
+
+/* closing band and footer */
+.close{padding:calc(var(--u) * 56) var(--pr) calc(var(--u) * 20) var(--pl)}
+.close h2{font-size:calc(var(--u) * 112)}
+.close h2 span{color:var(--lime)}
+.close .row{display:flex; flex-wrap:wrap; gap:16px calc(var(--u) * 40); margin-top:calc(var(--u) * 36)}
+.foot{display:flex; justify-content:space-between; align-items:center; gap:16px; margin-top:calc(var(--u) * 64); padding-top:calc(var(--u) * 12); padding-bottom:calc(var(--u) * 12); border-top:2px solid var(--g3)}
+.foot .label{font-weight:500}
+.foot a{font-family:var(--mono); font-weight:500; font-size:max(12px, calc(var(--u) * 18)); letter-spacing:.04em; text-decoration:none; display:inline-flex; gap:8px; align-items:center}
+.foot a:hover{color:var(--lime)}
+
+@media (max-width:1100px){
+  .links{gap:22px}
+  .thm{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .thm li:not(:nth-child(3n+1)){padding-left:0; border-left:0}
+  .thm li:nth-child(3n){padding-right:calc(var(--u) * 32)}
+  .thm li:nth-child(2n){padding-left:calc(var(--u) * 32); border-left:2px solid var(--black); padding-right:0}
+  .thm li:nth-child(n+3){border-top:2px solid var(--black)}
+  .defs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .def:nth-child(3){padding-left:0; border-left:0}
+  .def:nth-child(n+3){border-top:2px solid var(--black)}
+}
+@media (max-width:860px){
+  :root{--u:.62px}
+  .links{display:none}
+  .menu-btn{display:block}
+  .open .links{display:flex; position:fixed; top:calc(64px + env(safe-area-inset-top,0px)); left:0; right:0; flex-direction:column; align-items:flex-start; gap:12px; padding:24px var(--pl) 32px; background:var(--black); border-bottom:2px solid var(--rule-dark)}
+  .open .links a{font-size:2rem; line-height:2.5rem}
+  .brand-t{font-size:26px}
+  .sec{padding-top:48px; padding-bottom:56px}
+  .hero{padding-top:24px}
+  .t-sub{font-size:22px; margin-top:6px}
+  .gwrap{margin-top:28px}
+  .t-foot{flex-direction:column; align-items:flex-start; gap:22px}
+  .t-foot p{font-size:17px}
+  .btn-lime{height:48px; font-size:18px; padding:0 22px}
+  .ctas{gap:24px}
+  .h2{font-size:56px} .h2m{font-size:46px}
+  .lead{font-size:17px}
+  .steps,.terms,.sel{grid-template-columns:minmax(0,1fr)}
+  .step,.step + .step,.term,.term + .term,.sel > div,.sel > div + div{padding:20px 0 24px; border-left:0}
+  .step + .step,.term + .term,.sel > div + div{border-top:2px solid var(--black)}
+  .step .label{font-size:14px} .step h3{font-size:36px} .step p,.term p,.sel p{font-size:16px}
+  .step .box,.sel .box{font-size:16px}
+  .defs{grid-template-columns:minmax(0,1fr)}
+  .def,.def + .def,.def:nth-child(3){padding:16px 0; border-left:0}
+  .def + .def{border-top:2px solid var(--black)}
+  .def .sym{font-size:19px} .def p{font-size:15px}
+  .obj{font-size:17px; padding:20px 16px}
+  .obj .wide{display:none} .obj .narrow{display:block}
+  .obj .label{font-size:12px}
+  .term .sym{font-size:20px} .term h3{font-size:32px}
+  .xp{grid-template-columns:minmax(0,1fr); gap:24px}
+  .xp-plot{min-height:340px}
+  .xp-side .note,.status{font-size:15px}
+  .xp-k{font-size:12px}
+  .chip{font-size:16px; min-width:52px; padding:10px 12px}
+  .kval{font-size:15px}
+  .reads dt{font-size:13px} .reads dd{font-size:19px}
+  .btn-line{font-size:16px; padding:10px 16px}
+  .txt-btn{font-size:12px}
+  .cap{font-size:14px}
+  .thm{grid-template-columns:minmax(0,1fr)}
+  .thm li,.thm li:nth-child(2n),.thm li:not(:nth-child(3n+1)),.thm li:nth-child(3n){padding:22px 0 26px; border-left:0}
+  .thm li + li{border-top:2px solid var(--black)}
+  .thm .tag{font-size:12px} .thm h3{font-size:34px} .thm .box{font-size:16px} .thm p{font-size:15px}
+  .thm-foot{flex-direction:column; align-items:flex-start; font-size:16px}
+  .sel h3{font-size:56px}
+  .pipe{grid-template-columns:minmax(0,1fr); gap:8px}
+  .pipe .ar{transform:rotate(90deg); font-size:24px}
+  .pipe .st b{font-size:30px} .pipe .st span{font-size:15px}
+  .close h2{font-size:50px}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:1ms !important; animation:none !important}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="ne" viewBox="0 0 24 24"><path d="M6 18 18 6M8 6h10v10"/></symbol>
+  <symbol id="e" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+  <symbol id="w" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="s" viewBox="0 0 24 24"><path d="M12 4v15M6 13l6 6 6-6"/></symbol>
+  <symbol id="n" viewBox="0 0 24 24"><path d="M12 20V5M6 11l6-6 6 6"/></symbol>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="./" aria-label="Sparse Control, home"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-t">Sparse Control</span></a>
+    <nav class="links" id="links" aria-label="Primary">
+      <a href="./#framework">Framework</a>
+      <a href="./#protocol">Protocol</a>
+      <a href="./#experiments">Experiments</a>
+      <a href="theory.html" aria-current="page">Theory</a>
+      <a href="{{PAPER_URL}}" target="_blank" rel="noopener">Paper <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
+      <a href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener">Code <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
+    </nav>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="links" aria-label="Open menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- Hero -->
+<section class="hero" aria-labelledby="t-title">
+  <p class="label">Theory / Mathematical model</p>
+  <h1 class="t-title" id="t-title">Control theory</h1>
+  <p class="t-sub">The mathematics behind sparse internal control.</p>
+  <div class="gwrap"><svg id="gmat" role="img" aria-label="The effect dictionary G drawn as a tile matrix: a few columns, the support S, are selected so that G times beta approximates the requested displacement q bar"></svg></div>
+  <div class="t-foot">
+    <p>Near the unpatched model, a frozen Transformer acts as a linear map from intervention strengths to behavior. Choosing drivers becomes a controllability question: can a few columns reach the requested displacement, and at what energy?</p>
+    <div class="ctas">
+      <a class="btn-lime" href="#explorer">Try the explorer <svg class="ic" aria-hidden="true"><use href="#s"/></svg></a>
+      <a class="ulink" href="{{PAPER_URL}}" target="_blank" rel="noopener">Read the paper <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- Model -->
+<section class="sec light" id="model" aria-labelledby="h-model">
+  <div class="sec-label"><span class="label">01 / Model</span><span class="rule"></span></div>
+  <h2 class="dispm h2m" id="h-model">A frozen network.<br>A few handles.</h2>
+  <p class="lead">An intervention adds scaled directions to a handful of internal activations during the forward pass. The parameters \(\theta\) never change, and \(\beta = 0\) recovers the original model exactly.</p>
+  <div class="steps">
+    <div class="step">
+      <p class="label">01 / Specify</p>
+      <h3 class="disp">The behavior</h3>
+      <p>Choose a scalar readout \(b\), a target \(\tau_i\) for each target prompt \(x_i\), and a panel of off-target prompts \(\tilde x_j\) whose outputs must not move.</p>
+      <div class="box">\(q_i = \tau_i - b_\theta(x_i)\)</div>
+    </div>
+    <div class="step">
+      <p class="label">02 / Actuate</p>
+      <h3 class="disp">The drivers</h3>
+      <p>A candidate \(v = (s_v, u_v, c_v)\) pairs a site with a direction and a cost. Candidates with a nonzero strength form the driver set \(S_\beta = \operatorname{supp}(\beta)\).</p>
+      <div class="box">\(h_s(x) \leftarrow h_s(x) + \textstyle\sum_{v:\, s_v = s} \beta_v\, u_v(x)\)</div>
+    </div>
+    <div class="step">
+      <p class="label">03 / Certify</p>
+      <h3 class="disp">The control</h3>
+      <p>An intervention counts as control only when target error, off-target change and energy all pass in the full nonlinear model.</p>
+      <div class="box">\(\mathrm{Rel}_{\mathrm{tar}}(\beta) \le \varepsilon,\ \ L_{\mathrm{off}}(\beta) \le \delta,\ \ E(\beta) \le \kappa\)</div>
+    </div>
+  </div>
+  <div class="defs">
+    <div class="def"><div class="sym">\(F(\beta)\)</div><p>The readout change on the target prompts, \(b(f_\theta^{\beta}, x_i) - b(f_\theta, x_i)\).</p></div>
+    <div class="def"><div class="sym">\(\mathrm{Rel}_{\mathrm{tar}} = \frac{\|q - F(\beta)\|_2}{\|q\|_2 + \xi}\)</div><p>Relative target error, the share of the requested displacement left unmet.</p></div>
+    <div class="def"><div class="sym">\(L_{\mathrm{off}} = \overline{\mathrm{KL}}\big(p_\theta \,\|\, p_\theta^{\beta}\big)\)</div><p>Mean divergence of the output distribution on the off-target panel.</p></div>
+    <div class="def"><div class="sym">\(E(\beta) = \beta^{\top} W \beta\)</div><p>Intervention energy, how hard the selected sites are pushed.</p></div>
+  </div>
+</section>
+
+<!-- Objective -->
+<section class="sec lime" id="objective" aria-labelledby="h-obj">
+  <p class="label">02 / Objective</p>
+  <h2 class="disp h2" id="h-obj">One sparse program.</h2>
+  <p class="lead">Pick the fewest, cheapest drivers whose intervention passes the certificate, with energy as a tie breaker.</p>
+  <div class="obj"><span class="label">The sparse internal control problem</span><div class="wide">\[\min_{\beta \in \mathbb{R}^{M}}\ \|\beta\|_{0,c} + \lambda_E\, E(\beta) \quad \text{subject to}\quad \beta \text{ is an } (\varepsilon, \delta, \kappa) \text{ certificate}\]</div><div class="narrow">\[\begin{aligned}&\min_{\beta \in \mathbb{R}^{M}}\ \|\beta\|_{0,c} + \lambda_E\, E(\beta)\\ &\text{s.t. } \beta \text{ is an } (\varepsilon, \delta, \kappa) \text{ certificate}\end{aligned}\]</div></div>
+  <div class="terms">
+    <div class="term"><div class="sym">\(\|\beta\|_{0,c} = \sum_{v \in S_\beta} c_v\)</div><h3 class="dispm">Weighted sparsity</h3><p>Counts the selected sites, each at its own cost, so a residual stream position and an attention head need not be priced alike.</p></div>
+    <div class="term"><div class="sym">\(E(\beta) = \beta^{\top} W \beta\)</div><h3 class="dispm">Energy</h3><p>A quadratic budget on the strengths. It keeps the intervention near the unpatched model, where the local analysis is valid.</p></div>
+    <div class="term"><div class="sym">\((\varepsilon,\ \delta,\ \kappa)\)</div><h3 class="dispm">Certificate</h3><p>Three tolerances checked together in the nonlinear model. A proposal that misses any one of them is rejected.</p></div>
+  </div>
+</section>
+
+<!-- Explorer -->
+<section class="sec dark" id="explorer" aria-labelledby="h-xp">
+  <div class="sec-label"><span class="label">03 / Local controllability</span><span class="rule"></span></div>
+  <h2 class="disp h2" id="h-xp">Can the drivers<br>reach the target?</h2>
+  <p class="lead">At first order the target moves by \(\bar G_S \beta_S\). Reaching \(\bar q\) needs two things: \(\bar q\) must lie in the span of the selected columns, and the cheapest exact fit must cost no more than \(\kappa\).</p>
+  <div class="xp">
+    <div class="xp-plot" id="xp-plot"><canvas id="xp-canvas" role="img" aria-label="Controllability explorer: the requested displacement, the selected effect columns, their energy limited reachable set and the residual"></canvas></div>
+    <div class="xp-side">
+      <p class="note">Two target prompts with scalar readouts, so \(\bar q\) lives in a plane. Each candidate contributes one column of \(\bar G\), its first order effect on both prompts. Energy uses \(W = I\).</p>
+      <div role="group" aria-labelledby="xp-s"><p class="xp-k" id="xp-s">Support S</p>
+        <div class="chips" id="chips">
+          <button class="chip" type="button" data-v="0" aria-pressed="true">\(v_1\)</button>
+          <button class="chip" type="button" data-v="1" aria-pressed="true">\(v_2\)</button>
+          <button class="chip" type="button" data-v="2" aria-pressed="false">\(v_3\)</button>
+          <button class="chip" type="button" data-v="3" aria-pressed="false">\(v_4\)</button>
+          <button class="chip" type="button" data-v="4" aria-pressed="false">\(v_5\)</button>
+        </div>
+      </div>
+      <div><div class="krow"><label class="xp-k" for="kappa">Energy budget κ</label><span class="kval" id="kappa-num">κ = 4.00</span></div><input type="range" id="kappa" min="0.25" max="9" step="0.05" value="4"></div>
+      <dl class="reads">
+        <div><dt>\(\operatorname{rank} \bar G_S\)</dt><dd id="r-rank">2</dd></div>
+        <div><dt>\(\bar q \in \operatorname{range}(\bar G_S)\)</dt><dd id="r-range">yes</dd></div>
+        <div><dt>\(E_{\min}(S)\)</dt><dd id="r-emin">—</dd></div>
+        <div><dt>\(\chi_\kappa(S)\)</dt><dd id="r-chi">—</dd></div>
+      </dl>
+      <p class="status" id="status" aria-live="polite"></p>
+      <div class="xp-btns"><button class="btn-line" id="omp" type="button">Run Driver-OMP, k = 2</button><button class="txt-btn" id="reset" type="button">Reset</button></div>
+    </div>
+  </div>
+  <p class="cap">The reachable set \(\{\bar G_S\beta : \beta^{\top}\beta \le \kappa\}\) is an ellipse centred on the unpatched model. The lime point is the energy constrained best fit; the dashed segment is the residual that \(\chi_\kappa(S)\) normalizes.</p>
+</section>
+
+<!-- Results -->
+<section class="sec light" id="results" aria-labelledby="h-res">
+  <div class="sec-label"><span class="label">04 / Results</span><span class="rule"></span></div>
+  <h2 class="disp h2" id="h-res">Six results.</h2>
+  <p class="lead">From the effect dictionary to the selectors: what the local analysis guarantees, and where the nonlinear model takes over.</p>
+  <ul class="thm">
+    <li><span class="tag">Definition B.1</span><h3 class="dispm">Local effect dictionary</h3><div class="box"><span>\(g_{i,v} = J_{i,s_v}\, u_v(x_i)\)</span><span>\(J_{i,s_v} = \dfrac{\partial b(f_\theta, x_i)}{\partial h_{s_v}(x_i)}\)</span><span>\(q \approx G\beta\)</span></div><p>Each candidate’s first order effect on every target readout is one column of \(G\), taken at the unpatched model. A preservation dictionary \(H\) is built the same way from a differentiable surrogate of the off-target observable.</p></li>
+    <li><span class="tag">Theorem 1</span><h3 class="dispm">Local linearization error</h3><div class="box"><span>\(\|\Phi_S(\beta_S) - G_S\beta_S\|_2 \le \dfrac{L_S}{2}\, \beta_S^{\top} W_{SS}\, \beta_S\)</span></div><p>Inside the energy ball the model departs from its linearization by at most the curvature bound \(L_S\) times half the energy. Target recovery therefore holds whenever \(\|q - G_S\beta_S\|_2 + L_S\kappa/2 \le \varepsilon(\|q\|_2 + \xi)\).</p></li>
+    <li><span class="tag">Equation B.19</span><h3 class="dispm">Local target controllability</h3><div class="box"><span>\(\chi_\kappa(S) = \displaystyle\min_{\beta_S^{\top} W_{SS}\beta_S \le \kappa} \frac{\|\bar q - \bar G_S\beta_S\|_2}{\|\bar q\|_2 + \xi}\)</span></div><p>A support reaches the target exactly at first order within budget if and only if \(\bar q \in \operatorname{range}(\bar G_S)\), a span condition, and \(E_{\min}(S) \le \kappa\), an energy condition.</p></li>
+    <li><span class="tag">Theorem 2</span><h3 class="dispm">Minimum energy interpolation</h3><div class="box"><span>\(\beta_S^{\dagger} = W_{SS}^{-1/2}\, \tilde G_S^{+}\, \bar q\)</span><span>\((\beta_S^{\dagger})^{\top} W_{SS}\, \beta_S^{\dagger} \le \dfrac{\|\bar q\|_2^2}{\sigma_{\min}^{+}(\tilde G_S)^2}\)</span></div><p>In whitened coordinates \(\tilde G_S = \bar G_S W_{SS}^{-1/2}\), the cheapest exact fit is a pseudoinverse. A support with a small nonzero singular value can demand far more energy to reach the same target.</p></li>
+    <li><span class="tag">Proposition 1</span><h3 class="dispm">Energy constrained refit</h3><div class="box"><span>\(\beta_S^{\star}(\nu) = \big(\hat G_S^{\top}\hat G_S + (\lambda + \nu) W_{SS}\big)^{-1} \hat G_S^{\top}\hat q\)</span></div><p>Target fit and a quadratic preservation term are refit jointly on the chosen support. Energy decreases monotonically in the multiplier \(\nu\), so the budget \(\kappa\) is met exactly by bisection.</p></li>
+    <li><span class="tag">Proposition 2</span><h3 class="dispm">Saturated coverage</h3><div class="box"><span>\(C(S) = \sum_j w_j \min\Big(1, \sum_{v \in S} a_{jv}\Big)\)</span><span>\(C(S_{\mathrm{greedy}}) \ge (1 - 1/e)\, C(S^{\star})\)</span></div><p>Coverage is monotone submodular, so greedy selection under a pure cardinality budget is within \(1 - 1/e\) of optimal.</p></li>
+  </ul>
+  <div class="thm-foot"><p>Proofs, assumptions and constants are in Appendix B.</p><a class="ulink" href="{{PAPER_URL}}" target="_blank" rel="noopener">Read the appendix <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a></div>
+</section>
+
+<!-- Selectors -->
+<section class="sec lime" id="selectors" aria-labelledby="h-sel">
+  <p class="label">05 / Selectors</p>
+  <h2 class="disp h2" id="h-sel">Two selectors.<br>One pipeline.</h2>
+  <div class="sel">
+    <div><h3 class="disp">Driver-OMP</h3><p>Fits the requested displacement by sparse residual fitting: add the candidate best aligned with what is still missing, refit, repeat. In its simplest setting it reduces to orthogonal matching pursuit.</p><div class="box">\(v_k = \arg\max_{v \notin S} \dfrac{|\langle g_v,\ \bar q - \bar G_S\beta_S \rangle|}{\|g_v\|_2}\)</div></div>
+    <div><h3 class="disp">Coverage-Driver</h3><p>Adds candidates by saturated coverage across prompts, so the support keeps working when the prompt changes. Greedy selection carries the \(1 - 1/e\) guarantee.</p><div class="box">\(S \leftarrow S \cup \{\arg\max_{v} C(S \cup \{v\}) - C(S)\}\)</div></div>
+  </div>
+  <div class="pipe" id="pipe">
+    <div class="st"><b>Local proposal</b><span>A selector proposes a support from the linear dictionary.</span><i></i></div><span class="ar" aria-hidden="true"><svg class="ic"><use href="#e"/></svg></span>
+    <div class="st"><b>Shared refit</b><span>Strengths are refit under the energy budget, Proposition 1.</span><i></i></div><span class="ar" aria-hidden="true"><svg class="ic"><use href="#e"/></svg></span>
+    <div class="st"><b>Nonlinear validation</b><span>The \((\varepsilon, \delta, \kappa)\) certificate is checked in the full model.</span><i></i></div>
+  </div>
+</section>
+
+<!-- Close -->
+<section class="close dark" aria-labelledby="h-close">
+  <h2 class="disp" id="h-close">Local results propose.<br><span>The certificate decides.</span></h2>
+  <div class="row">
+    <a class="btn-lime" href="./#protocol"><svg class="ic" aria-hidden="true"><use href="#w"/></svg> Back to the six axes</a>
+    <a class="ulink" href="{{PAPER_URL}}" target="_blank" rel="noopener">Read the paper <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
+    <a class="ulink" href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener">Explore the code <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
+  </div>
+  <footer class="foot">
+    <span class="label">Xizhe Zhang / NeurIPS 2026</span>
+    <a href="#main">Back to top <svg class="ic" aria-hidden="true"><use href="#n"/></svg></a>
+  </footer>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script data-snap="main > section">/*SNAP_JS*/</script>
+<script>
+(() => {
+'use strict';
+const $ = (q, r = document) => r.querySelector(q), $$ = (q, r = document) => Array.from(r.querySelectorAll(q));
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), lerp = (a, b, t) => a + (b - a) * t;
+const C = { black: '#111111', cream: '#F4F3EE', lime: '#D7EE5B', g1: '#8B8B88', g2: '#6E6E6B', g3: '#BDBDB8', panel: '#2E2E2C' };
+const SVGNS = 'http://www.w3.org/2000/svg';
+const el = (n, a) => { const e = document.createElementNS(SVGNS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+const U = () => window.innerWidth <= 860 ? .62 : clamp(window.innerWidth / 1586, .62, 1.35);
+const math = node => { if (window.renderMathInElement) { try { renderMathInElement(node, { delimiters: [{ left: '\\[', right: '\\]', display: true }, { left: '\\(', right: '\\)', display: false }], throwOnError: false }); } catch (e) {} } };
+math(document.body);
+
+/* ---- title fills the width ---- */
+const title = $('.t-title');
+function fitTitle(){ const ps = getComputedStyle(title.parentElement), w = title.parentElement.clientWidth - parseFloat(ps.paddingLeft) - parseFloat(ps.paddingRight) + 14 * U(); title.style.fontSize = '100px'; const tw = title.getBoundingClientRect().width || 1; title.style.fontSize = Math.max(40, Math.floor(100 * w / tw * 100) / 100) + 'px'; }
+
+/* ---- hero: the effect dictionary G as tiles; lime columns are the support ---- */
+const gsvg = $('#gmat');
+let gCols = [], gBeta = [], sel = [];
+function buildG(){
+  const W = gsvg.getBoundingClientRect().width, u = U(), narrow = window.innerWidth <= 860;
+  const cols = narrow ? 14 : 40, rows = narrow ? 5 : 7, gap = Math.max(2, 4 * u), qGap = narrow ? 44 : 120 * u;
+  const pitch = (W - qGap) / (cols + 1), cw = pitch - gap, ch = Math.max(8, Math.round(cw * .58)), py = ch + gap;
+  const top = narrow ? 8 : 44 * u, bTop = top + rows * py + (narrow ? 18 : 30 * u), H = bTop + ch + (narrow ? 34 : 64 * u);
+  gsvg.setAttribute('viewBox', `0 0 ${W} ${H}`); gsvg.style.height = H + 'px'; gsvg.innerHTML = '';
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  gCols = []; gBeta = [];
+  for (let c = 0; c < cols; c++){
+    const col = [];
+    for (let r = 0; r < rows; r++){ const v = rnd(); const e = el('rect', { x: c * pitch, y: top + r * py, width: cw, height: ch, fill: C.cream, 'fill-opacity': (.1 + .5 * v).toFixed(2), 'data-o': (.1 + .5 * v).toFixed(2) }); e.style.transition = 'fill 600ms cubic-bezier(0.22,1,0.36,1), fill-opacity 600ms cubic-bezier(0.22,1,0.36,1)'; gsvg.appendChild(e); col.push(e); }
+    gCols.push(col);
+    const b = el('rect', { x: c * pitch, y: bTop, width: cw, height: ch, fill: '#2A2A28' }); b.style.transition = 'fill 600ms cubic-bezier(0.22,1,0.36,1)'; gsvg.appendChild(b); gBeta.push(b);
+  }
+  const qx = W - pitch + gap / 2;
+  for (let r = 0; r < rows; r++) gsvg.appendChild(el('rect', { x: qx, y: top + r * py, width: cw, height: ch, fill: C.cream }));
+  const eq = el('text', { x: cols * pitch + (qGap - pitch) / 2 + pitch / 2 - gap, y: top + rows * py / 2 + 14 * Math.max(u, .8), 'text-anchor': 'middle', fill: C.cream, 'font-size': Math.max(26, 54 * u), 'font-family': 'Poppins, sans-serif', 'font-weight': 500 }); eq.textContent = '≈'; gsvg.appendChild(eq);
+  const fs = Math.max(11, 15 * u), lw = Math.max(1.4, 2 * u);
+  const lab = (txt, x, y, x1, tx, ty, anchor = 'start') => {
+    const t = el('text', { x, y, fill: C.cream, 'font-size': fs, 'font-family': '"IBM Plex Mono", monospace', 'font-weight': 500, 'text-anchor': anchor }); t.textContent = txt; gsvg.appendChild(t);
+    gsvg.appendChild(el('path', { d: `M${x} ${y + 8 * Math.max(u, .7)} H${x1} L${tx} ${ty}`, fill: 'none', stroke: C.cream, 'stroke-width': lw }));
+  };
+  if (!narrow){
+    lab('Effect dictionary G', 0, 18 * u, 230 * u, 270 * u, top - 4);
+    const sx = 5 * pitch + cw / 2, lx = sx + 70 * u, ly = H - 14 * u;
+    const st = el('text', { x: lx, y: ly, fill: C.cream, 'font-size': fs, 'font-family': '"IBM Plex Mono", monospace', 'font-weight': 500 }); st.textContent = 'Support S = supp β'; gsvg.appendChild(st);
+    gsvg.appendChild(el('path', { d: `M${lx + 190 * u} ${ly + 8 * u} H${lx - 4 * u} L${sx} ${bTop + ch + 4}`, fill: 'none', stroke: C.cream, 'stroke-width': lw }));
+    lab('Requested displacement q̄', W - 330 * u, 18 * u, W - 40 * u, qx + cw / 2, top - 4);
+    const bl = el('text', { x: -10 * u, y: bTop + ch - 2, fill: C.g1, 'font-size': fs, 'font-family': '"IBM Plex Mono", monospace', 'text-anchor': 'end' }); bl.textContent = 'β'; gsvg.appendChild(bl);
+  }
+  sel = narrow ? [2, 7, 11] : [5, 13, 22, 31];
+  paintG();
+}
+function paintG(){
+  gCols.forEach((col, c) => { const on = sel.includes(c); col.forEach(e => { e.setAttribute('fill', on ? C.lime : C.cream); e.setAttribute('fill-opacity', on ? 1 : e.dataset.o); }); gBeta[c].setAttribute('fill', on ? C.lime : '#2A2A28'); });
+}
+let gVisible = true;
+new IntersectionObserver(es => { gVisible = es[0].isIntersecting; }).observe(gsvg);
+if (!reduce) setInterval(() => { if (!gVisible || !gCols.length) return; const i = Math.floor(Math.random() * sel.length); let c; do { c = Math.floor(Math.random() * gCols.length); } while (sel.includes(c)); sel[i] = c; paintG(); }, 1600);
+
+/* ---- explorer ---- */
+(() => {
+  const cv = $('#xp-canvas'), box = $('#xp-plot'); const ctx = cv.getContext('2d');
+  let w = 0, h = 0, dpr = 1;
+  const Q = [2.2, 1.4], QN = Math.hypot(Q[0], Q[1]);
+  const G = [[1.0, .15], [.25, .9], [1.1, .8], [-.6, .5], [.35, -.2]];
+  const chips = $$('#chips .chip'), kSl = $('#kappa'), kNum = $('#kappa-num'), omp = $('#omp');
+  const rd = { rank: $('#r-rank'), range: $('#r-range'), emin: $('#r-emin'), chi: $('#r-chi'), status: $('#status') };
+  let set = [0, 1], kappa = 4, note = '', cur = null, from = null, t0 = 0, raf = 0, running = false;
+  const SUB = '₀₁₂₃₄₅₆₇₈₉';
+  function eig2(a, b, d){
+    const tr = a + d, det = a * d - b * b, disc = Math.sqrt(Math.max(0, tr * tr / 4 - det));
+    const l1 = tr / 2 + disc, l2 = tr / 2 - disc;
+    let v = Math.abs(b) > 1e-12 ? [l1 - d, b] : (a >= d ? [1, 0] : [0, 1]);
+    const n = Math.hypot(v[0], v[1]) || 1; v = [v[0] / n, v[1] / n];
+    return { l: [Math.max(l1, 0), Math.max(l2, 0)], e: [v, [-v[1], v[0]]] };
+  }
+  function solve(S, kap){
+    let a = 0, b = 0, d = 0;
+    S.forEach(i => { const g = G[i]; a += g[0] * g[0]; b += g[0] * g[1]; d += g[1] * g[1]; });
+    const E = eig2(a, b, d), pos = [0, 1].filter(k => E.l[k] > 1e-9), rank = pos.length;
+    const c = E.e.map(e => e[0] * Q[0] + e[1] * Q[1]);
+    const energy = nu => pos.reduce((acc, k) => acc + E.l[k] * c[k] * c[k] / ((E.l[k] + nu) ** 2), 0);
+    const Emin = energy(0);
+    let nu = 0;
+    if (rank && Emin > kap){ let lo = 0, hi = 1; while (energy(hi) > kap) hi *= 2; for (let it = 0; it < 80; it++){ const mid = (lo + hi) / 2; if (energy(mid) > kap) lo = mid; else hi = mid; } nu = hi; }
+    const yc = [0, 1].map(k => pos.includes(k) ? c[k] / (E.l[k] + nu) : 0);
+    const y = [E.e[0][0] * yc[0] + E.e[1][0] * yc[1], E.e[0][1] * yc[0] + E.e[1][1] * yc[1]];
+    const beta = S.map(i => G[i][0] * y[0] + G[i][1] * y[1]);
+    const fit = [0, 1].map(j => S.reduce((acc, i, k) => acc + beta[k] * G[i][j], 0));
+    const perp = Math.sqrt([0, 1].filter(k => !pos.includes(k)).reduce((acc, k) => acc + c[k] * c[k], 0));
+    const inRange = rank === 2 || (rank === 1 && perp < 1e-6 * QN);
+    const chi = Math.hypot(Q[0] - fit[0], Q[1] - fit[1]) / (QN + 1e-6);
+    return { set: S.slice(), M: [a, b, d], rank, Emin, inRange, beta, fit, chi, kap };
+  }
+  const sizeIt = () => { const r = box.getBoundingClientRect(); w = r.width; h = r.height; dpr = Math.min(window.devicePixelRatio || 1, 2); cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); if (cur) draw(); };
+  new ResizeObserver(sizeIt).observe(box);
+  function view(){
+    const xr = [-2.4, 3.2], yr = [-1.5, 2.2];
+    const sc = Math.min((w - 48) / (xr[1] - xr[0]), (h - 64) / (yr[1] - yr[0]));
+    const ox = w / 2 - (xr[0] + xr[1]) / 2 * sc, oy = h / 2 + (yr[0] + yr[1]) / 2 * sc + 6;
+    return { X: v => ox + v * sc, Y: v => oy - v * sc, sc, ox, oy };
+  }
+  const line = (x0, y0, x1, y1, col, lw, dash) => { ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = lw; if (dash) ctx.setLineDash(dash); ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke(); ctx.restore(); };
+  const arrow = (x0, y0, x1, y1, col, lw, dash, head = 9) => {
+    const a = Math.atan2(y1 - y0, x1 - x0), L = Math.hypot(x1 - x0, y1 - y0); if (L < 2) return;
+    line(x0, y0, x1 - Math.cos(a) * head * .6, y1 - Math.sin(a) * head * .6, col, lw, dash);
+    ctx.save(); ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x1 - head * Math.cos(a - .42), y1 - head * Math.sin(a - .42)); ctx.lineTo(x1 - head * Math.cos(a + .42), y1 - head * Math.sin(a + .42)); ctx.closePath(); ctx.fill(); ctx.restore();
+  };
+  const text = (s, x, y, o = {}) => { ctx.save(); ctx.fillStyle = o.c || C.cream; ctx.font = `${o.wt || 500} ${o.size || 14}px ${o.mono ? '"IBM Plex Mono", monospace' : 'Poppins, sans-serif'}`; ctx.textAlign = o.align || 'left'; ctx.fillText(s, x, y); ctx.restore(); };
+  function draw(now){
+    raf = 0; if (!w || !h) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+    const V = view(), k = reduce || !from ? 1 : 1 - Math.pow(1 - clamp(((now || performance.now()) - t0) / 650, 0, 1), 3);
+    const M = [0, 1, 2].map(j => lerp(from ? from.M[j] : cur.M[j], cur.M[j], k));
+    const kap = lerp(from ? from.kap : cur.kap, cur.kap, k);
+    const fit = [0, 1].map(j => lerp(from ? from.fit[j] : cur.fit[j], cur.fit[j], k));
+    ctx.fillStyle = '#262624'; for (let x = 12; x < w; x += 24) for (let y = 12; y < h; y += 24) ctx.fillRect(x, y, 2, 2);
+    line(0, V.oy, w, V.oy, '#3A3A37', 1.5); line(V.ox, 0, V.ox, h, '#3A3A37', 1.5);
+    text('PROMPT 1', w - 14, V.oy - 10, { size: 12, c: C.g1, mono: true, align: 'right' });
+    text('PROMPT 2', V.ox + 10, 22, { size: 12, c: C.g1, mono: true });
+    const E = eig2(M[0], M[1], M[2]), r1 = Math.sqrt(kap * E.l[0]) * V.sc, r2 = Math.sqrt(kap * E.l[1]) * V.sc, ang = Math.atan2(E.e[0][1], E.e[0][0]);
+    if (r1 > .5){
+      ctx.save(); ctx.translate(V.ox, V.oy); ctx.rotate(-ang);
+      if (cur.rank === 1 && k >= 1) line(-w * 2, 0, w * 2, 0, 'rgba(215,238,91,.35)', 1, [3, 5]);
+      ctx.beginPath(); ctx.ellipse(0, 0, r1, Math.max(r2, 1.5), 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(215,238,91,.10)'; ctx.fill(); ctx.setLineDash([6, 5]); ctx.strokeStyle = 'rgba(215,238,91,.75)'; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.restore();
+    }
+    G.forEach((g, i) => {
+      const on = cur.set.includes(i), x = V.X(g[0]), y = V.Y(g[1]);
+      arrow(V.ox, V.oy, x, y, on ? C.lime : 'rgba(139,139,136,.7)', on ? 2.5 : 1.5, on ? null : [4, 4], 8);
+      const n = Math.hypot(g[0], g[1]);
+      text('v' + SUB[i + 1], x + g[0] / n * 16, y - g[1] / n * 16 + 5, { size: 16, c: on ? C.lime : C.g1, align: 'center', wt: 600 });
+    });
+    const qx = V.X(Q[0]), qy = V.Y(Q[1]);
+    arrow(V.ox, V.oy, qx, qy, C.cream, 2.75, null, 10);
+    text('q̄', qx + 12, qy - 10, { size: 20, wt: 600 });
+    if (k >= 1 && cur.set.length){
+      let px = V.ox, py = V.oy;
+      ctx.save(); ctx.strokeStyle = 'rgba(215,238,91,.5)'; ctx.lineWidth = 1.5; ctx.setLineDash([2, 3]); ctx.beginPath(); ctx.moveTo(px, py);
+      cur.set.forEach((i, j) => { px += cur.beta[j] * G[i][0] * V.sc; py -= cur.beta[j] * G[i][1] * V.sc; ctx.lineTo(px, py); });
+      ctx.stroke(); ctx.restore();
+    }
+    const fx = V.X(fit[0]), fy = V.Y(fit[1]);
+    if (Math.hypot(fx - V.ox, fy - V.oy) > 2) arrow(V.ox, V.oy, fx, fy, C.lime, 3.25, null, 10);
+    const chi = Math.hypot(Q[0] - fit[0], Q[1] - fit[1]) / QN;
+    if (chi > .004){
+      line(fx, fy, qx, qy, C.cream, 1.75, [4, 4]);
+      text('χκ(S) = ' + chi.toFixed(3), (fx + qx) / 2 + 12, (fy + qy) / 2 + 18, { size: 14, mono: true });
+    }
+    ctx.save(); ctx.fillStyle = C.lime; ctx.strokeStyle = C.black; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(fx, fy, 7, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.restore();
+    ctx.save(); ctx.fillStyle = C.cream; ctx.beginPath(); ctx.arc(V.ox, V.oy, 4, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    if (note) { ctx.save(); ctx.fillStyle = 'rgba(17,17,17,.85)'; ctx.fillRect(0, h - 40, w, 40); ctx.restore(); text(note, 16, h - 14, { size: 14, wt: 500 }); }
+    if (k < 1) raf = requestAnimationFrame(draw);
+  }
+  function commit(){
+    from = cur ? { M: cur.M.slice(), kap: cur.kap, fit: cur.fit.slice() } : null;
+    if (raf){ cancelAnimationFrame(raf); raf = 0; }
+    cur = solve(set, kappa); t0 = performance.now();
+    chips.forEach(c => c.setAttribute('aria-pressed', String(set.includes(+c.dataset.v))));
+    kNum.textContent = 'κ = ' + kappa.toFixed(2);
+    rd.rank.textContent = cur.rank; rd.range.textContent = cur.inRange ? 'yes' : 'no';
+    rd.emin.textContent = cur.inRange && cur.rank ? cur.Emin.toFixed(2) : '—'; rd.chi.textContent = cur.chi.toFixed(3);
+    let msg, cls = '';
+    if (!cur.rank) msg = String.raw`Empty support. Nothing moves, so \(\chi_\kappa(S) = 1\).`;
+    else if (!cur.inRange) msg = String.raw`Outside the span of the chosen columns. A residual floor remains for every \(\kappa\).`;
+    else if (cur.Emin > kappa + 1e-9){ msg = String.raw`In the span, but the cheapest exact fit needs \(E_{\min} = ` + cur.Emin.toFixed(2) + String.raw` > \kappa\).`; cls = 'mid'; }
+    else { msg = String.raw`Reachable within budget: \(\chi_\kappa(S) = 0\).`; cls = 'ok'; }
+    rd.status.innerHTML = msg; rd.status.className = 'status ' + cls; math(rd.status);
+    draw();
+  }
+  const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
+  async function runOMP(){
+    if (running) return; running = true; omp.disabled = true;
+    set = []; note = 'Driver-OMP starts from an empty support.'; commit();
+    await wait(1000);
+    for (let step = 1; step <= 2; step++){
+      const st = solve(set, kappa), r = [Q[0] - st.fit[0], Q[1] - st.fit[1]];
+      let best = -1, bs = -1;
+      G.forEach((g, i) => { if (set.includes(i)) return; const sc = Math.abs(g[0] * r[0] + g[1] * r[1]) / Math.hypot(g[0], g[1]); if (sc > bs){ bs = sc; best = i; } });
+      set = set.concat(best).sort((x, y) => x - y);
+      note = `Step ${step}: add v${SUB[best + 1]}, the column best aligned with the residual, then refit.`; commit();
+      await wait(1700);
+    }
+    note = 'Stopped at k = 2. Lower κ to watch the energy condition bind.'; commit();
+    running = false; omp.disabled = false;
+  }
+  chips.forEach(c => c.addEventListener('click', () => { if (running) return; const v = +c.dataset.v; set = set.includes(v) ? set.filter(x => x !== v) : set.concat(v).sort((x, y) => x - y); note = ''; commit(); }));
+  kSl.addEventListener('input', () => { kappa = parseFloat(kSl.value); note = ''; from = null; cur = solve(set, kappa); commit(); });
+  omp.addEventListener('click', runOMP);
+  $('#reset').addEventListener('click', () => { if (running) return; set = [0, 1]; kappa = 4; kSl.value = 4; note = ''; commit(); });
+  sizeIt(); commit();
+})();
+
+/* ---- pipeline: a lime bar runs through the three stages ---- */
+(() => {
+  const bars = $$('#pipe .st i'); if (!bars.length || reduce) { bars.forEach(b => { b.style.width = '100%'; }); return; }
+  let vis = false; new IntersectionObserver(es => { vis = es[0].isIntersecting; }).observe($('#pipe'));
+  let t0 = performance.now();
+  const loop = now => { if (vis){ const t = ((now - t0) / 1000) % 4.2; bars.forEach((b, i) => { b.style.width = (clamp((t - i * 1.2) / 1.1, 0, 1) * 100) + '%'; }); } requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+})();
+
+/* ---- mobile menu ---- */
+const nav = $('#nav'), mb = $('#menu-btn');
+mb.addEventListener('click', () => { const o = !nav.classList.contains('open'); nav.classList.toggle('open', o); mb.setAttribute('aria-expanded', String(o)); mb.setAttribute('aria-label', o ? 'Close menu' : 'Open menu'); });
+$$('.links a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); }));
+
+function rebuild(){ fitTitle(); buildG(); }
+new ResizeObserver(rebuild).observe($('.hero'));
+rebuild();
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(rebuild);
+})();
+</script>
+</body>
+</html>
