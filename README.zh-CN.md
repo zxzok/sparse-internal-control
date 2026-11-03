@@ -4,7 +4,7 @@
 
 # Sparse Internal Control of Language Models
 
-**Xizhe Zhang** · NeurIPS 2026
+**张锡哲**（Xizhe Zhang）· NeurIPS 2026
 
 [![Website](https://img.shields.io/badge/website-sparsecontrol.xizhe.net-D7EE5B?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net)
 [![Paper](https://img.shields.io/badge/paper-PDF-D7EE5B?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net/paper.pdf)
@@ -21,7 +21,7 @@
 > [!TIP]
 > **项目网站：[sparsecontrol.xizhe.net](https://sparsecontrol.xizhe.net)**。用交互动画讲解控制框架与六轴协议，并附[数学模型](https://sparsecontrol.xizhe.net/theory.html)。
 
-论文 **Sparse Internal Control of Language Models** 的代码与测量记录，作者为 **Xizhe Zhang**。
+论文 **Sparse Internal Control of Language Models** 的代码与测量记录，作者为 **张锡哲**（Xizhe Zhang）。
 
 ## 核心思想
 
