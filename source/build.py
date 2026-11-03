@@ -170,7 +170,7 @@ def main():
             pages[name].replace("{{PAPER_URL}}", "paper.pdf").replace("<!--KATEX_CSS-->", KATEX_LINK).replace("<!--HEAD_META-->", t_meta), encoding="utf-8")
     (SITE / "404.html").write_text(NOT_FOUND, encoding="utf-8")
     (SITE / "favicon.svg").write_text(FAVICON, encoding="utf-8")
-    (SITE / "CNAME").write_text(DOMAIN + "\n", encoding="utf-8")
+    (SITE / "CNAME").write_text(DOMAIN, encoding="utf-8")  # same bytes GitHub writes when the domain is set in Settings
     (SITE / ".nojekyll").write_text("", encoding="utf-8")
     (SITE / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {URL}sitemap.xml\n", encoding="utf-8")
     (SITE / "sitemap.xml").write_text(
