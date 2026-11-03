@@ -16,10 +16,10 @@
   --u:clamp(.62px, calc(100vw / 1586), 1.35px);
   --black:#111111; --paper:#F1F1EC; --cream:#F4F3EE; --lime:#D7EE5B;
   --g1:#8B8B88; --g2:#6E6E6B; --g3:#BDBDB8; --rule-dark:#5E5E5B; --tile:#7F7F7C; --panel:#2E2E2C;
-  --anton:"Anton","Archivo","Arial Narrow",sans-serif;
-  --display:"Archivo","Arial Narrow","Helvetica Neue",sans-serif;
-  --sans:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --anton:"Anton","Archivo","Arial Narrow","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --display:"Archivo","Arial Narrow","Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --sans:"Poppins",system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC";
   --pad:max(16px, calc(var(--u) * 40));
   --pl:max(var(--pad), env(safe-area-inset-left,0px)); --pr:max(var(--pad), env(safe-area-inset-right,0px));
   --ease:cubic-bezier(0.22,1,0.36,1);
@@ -241,6 +241,24 @@ input[type=range]{width:100%; accent-color:var(--lime)}
   .pipe .st b{font-size:30px} .pipe .st span{font-size:15px}
   .close h2{font-size:50px}
 }
+/* language switch and Chinese typesetting */
+.nav-in{justify-content:flex-start}
+.links{margin-left:auto}
+.lang-sw{display:flex; flex:none; margin-left:32px; border:2px solid #3A3A37}
+.lang-sw button{padding:4px 10px; font-family:var(--mono); font-weight:600; font-size:13px; line-height:20px; letter-spacing:.06em; color:var(--g3); transition:background-color 300ms var(--ease), color 300ms var(--ease)}
+.lang-sw button:hover{color:var(--cream)}
+.lang-sw button[aria-pressed="true"]{background:var(--lime); color:var(--black)}
+.menu-btn{margin-left:14px}
+html[lang="zh-CN"] .disp,html[lang="zh-CN"] .dispm{letter-spacing:0; line-height:1.14}
+html[lang="zh-CN"] .label{letter-spacing:.05em}
+html[lang="zh-CN"] body{line-break:strict}
+@media (max-width:1040px){
+  .links{display:none}
+  .menu-btn{display:block}
+  .lang-sw{margin-left:auto}
+  .open .links{display:flex; position:fixed; top:calc(64px + env(safe-area-inset-top,0px)); left:0; right:0; flex-direction:column; align-items:flex-start; gap:12px; padding:24px var(--pl) 32px; background:var(--black); border-bottom:2px solid var(--rule-dark)}
+  .open .links a{font-size:2rem; line-height:2.5rem}
+}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition-duration:1ms !important; animation:none !important}
@@ -263,12 +281,13 @@ input[type=range]{width:100%; accent-color:var(--lime)}
     <a class="brand" href="./" aria-label="Sparse Control, home"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-t">Sparse Control</span></a>
     <nav class="links" id="links" aria-label="Primary">
       <a href="./#framework">Framework</a>
-      <a href="./#protocol">Protocol</a>
+      <a href="protocol.html">Protocol</a>
       <a href="./#experiments">Experiments</a>
       <a href="theory.html" aria-current="page">Theory</a>
       <a href="{{PAPER_URL}}" target="_blank" rel="noopener">Paper <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
       <a href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener">Code <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
     </nav>
+    <div class="lang-sw" role="group" aria-label="Language / 语言" data-noi18n><button type="button" data-lang-btn="en" aria-pressed="true">EN</button><button type="button" data-lang-btn="zh" aria-pressed="false">中文</button></div>
     <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="links" aria-label="Open menu"><span></span><span></span></button>
   </div>
 </header>
@@ -417,6 +436,7 @@ input[type=range]{width:100%; accent-color:var(--lime)}
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script data-snap="main > section">/*SNAP_JS*/</script>
+<script>/*I18N_JS*/</script>
 <script>
 (() => {
 'use strict';
@@ -428,7 +448,9 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 const el = (n, a) => { const e = document.createElementNS(SVGNS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
 const U = () => window.innerWidth <= 860 ? .62 : clamp(window.innerWidth / 1586, .62, 1.35);
 const math = node => { if (window.renderMathInElement) { try { renderMathInElement(node, { delimiters: [{ left: '\\[', right: '\\]', display: true }, { left: '\\(', right: '\\)', display: false }], throwOnError: false }); } catch (e) {} } };
+I18N.init();
 math(document.body);
+I18N.on((l, els) => els.forEach(e => math(e)));
 
 /* ---- title fills the width ---- */
 const title = $('.t-title');
@@ -460,11 +482,11 @@ function buildG(){
     gsvg.appendChild(el('path', { d: `M${x} ${y + 8 * Math.max(u, .7)} H${x1} L${tx} ${ty}`, fill: 'none', stroke: C.cream, 'stroke-width': lw }));
   };
   if (!narrow){
-    lab('Effect dictionary G', 0, 18 * u, 230 * u, 270 * u, top - 4);
+    lab(I18N.t('Effect dictionary G'), 0, 18 * u, 230 * u, 270 * u, top - 4);
     const sx = 5 * pitch + cw / 2, lx = sx + 70 * u, ly = H - 14 * u;
-    const st = el('text', { x: lx, y: ly, fill: C.cream, 'font-size': fs, 'font-family': '"IBM Plex Mono", monospace', 'font-weight': 500 }); st.textContent = 'Support S = supp β'; gsvg.appendChild(st);
+    const st = el('text', { x: lx, y: ly, fill: C.cream, 'font-size': fs, 'font-family': '"IBM Plex Mono", monospace', 'font-weight': 500 }); st.textContent = I18N.t('Support S = supp β'); gsvg.appendChild(st);
     gsvg.appendChild(el('path', { d: `M${lx + 190 * u} ${ly + 8 * u} H${lx - 4 * u} L${sx} ${bTop + ch + 4}`, fill: 'none', stroke: C.cream, 'stroke-width': lw }));
-    lab('Requested displacement q̄', W - 330 * u, 18 * u, W - 40 * u, qx + cw / 2, top - 4);
+    lab(I18N.t('Requested displacement q̄'), W - 330 * u, 18 * u, W - 40 * u, qx + cw / 2, top - 4);
     const bl = el('text', { x: -10 * u, y: bTop + ch - 2, fill: C.g1, 'font-size': fs, 'font-family': '"IBM Plex Mono", monospace', 'text-anchor': 'end' }); bl.textContent = 'β'; gsvg.appendChild(bl);
   }
   sel = narrow ? [2, 7, 11] : [5, 13, 22, 31];
@@ -536,8 +558,8 @@ if (!reduce) setInterval(() => { if (!gVisible || !gCols.length) return; const i
     const fit = [0, 1].map(j => lerp(from ? from.fit[j] : cur.fit[j], cur.fit[j], k));
     ctx.fillStyle = '#262624'; for (let x = 12; x < w; x += 24) for (let y = 12; y < h; y += 24) ctx.fillRect(x, y, 2, 2);
     line(0, V.oy, w, V.oy, '#3A3A37', 1.5); line(V.ox, 0, V.ox, h, '#3A3A37', 1.5);
-    text('PROMPT 1', w - 14, V.oy - 10, { size: 12, c: C.g1, mono: true, align: 'right' });
-    text('PROMPT 2', V.ox + 10, 22, { size: 12, c: C.g1, mono: true });
+    text(I18N.t('PROMPT 1'), w - 14, V.oy - 10, { size: 12, c: C.g1, mono: true, align: 'right' });
+    text(I18N.t('PROMPT 2'), V.ox + 10, 22, { size: 12, c: C.g1, mono: true });
     const E = eig2(M[0], M[1], M[2]), r1 = Math.sqrt(kap * E.l[0]) * V.sc, r2 = Math.sqrt(kap * E.l[1]) * V.sc, ang = Math.atan2(E.e[0][1], E.e[0][0]);
     if (r1 > .5){
       ctx.save(); ctx.translate(V.ox, V.oy); ctx.rotate(-ang);
@@ -579,30 +601,30 @@ if (!reduce) setInterval(() => { if (!gVisible || !gCols.length) return; const i
     cur = solve(set, kappa); t0 = performance.now();
     chips.forEach(c => c.setAttribute('aria-pressed', String(set.includes(+c.dataset.v))));
     kNum.textContent = 'κ = ' + kappa.toFixed(2);
-    rd.rank.textContent = cur.rank; rd.range.textContent = cur.inRange ? 'yes' : 'no';
+    rd.rank.textContent = cur.rank; rd.range.textContent = cur.inRange ? I18N.L('yes', '是') : I18N.L('no', '否');
     rd.emin.textContent = cur.inRange && cur.rank ? cur.Emin.toFixed(2) : '—'; rd.chi.textContent = cur.chi.toFixed(3);
     let msg, cls = '';
-    if (!cur.rank) msg = String.raw`Empty support. Nothing moves, so \(\chi_\kappa(S) = 1\).`;
-    else if (!cur.inRange) msg = String.raw`Outside the span of the chosen columns. A residual floor remains for every \(\kappa\).`;
-    else if (cur.Emin > kappa + 1e-9){ msg = String.raw`In the span, but the cheapest exact fit needs \(E_{\min} = ` + cur.Emin.toFixed(2) + String.raw` > \kappa\).`; cls = 'mid'; }
-    else { msg = String.raw`Reachable within budget: \(\chi_\kappa(S) = 0\).`; cls = 'ok'; }
+    if (!cur.rank) msg = I18N.L(String.raw`Empty support. Nothing moves, so \(\chi_\kappa(S) = 1\).`, String.raw`支撑集为空，输出不动，因此 \(\chi_\kappa(S) = 1\)。`);
+    else if (!cur.inRange) msg = I18N.L(String.raw`Outside the span of the chosen columns. A residual floor remains for every \(\kappa\).`, String.raw`目标不在所选列张成的空间内，任何 \(\kappa\) 下都留有残差下限。`);
+    else if (cur.Emin > kappa + 1e-9){ msg = I18N.L(String.raw`In the span, but the cheapest exact fit needs \(E_{\min} = `, String.raw`目标在张成空间内，但最省能量的精确拟合需要 \(E_{\min} = `) + cur.Emin.toFixed(2) + String.raw` > \kappa\)` + I18N.L('.', '。'); cls = 'mid'; }
+    else { msg = I18N.L(String.raw`Reachable within budget: \(\chi_\kappa(S) = 0\).`, String.raw`预算内可达：\(\chi_\kappa(S) = 0\)。`); cls = 'ok'; }
     rd.status.innerHTML = msg; rd.status.className = 'status ' + cls; math(rd.status);
     draw();
   }
   const wait = ms => new Promise(r => setTimeout(r, reduce ? 0 : ms));
   async function runOMP(){
     if (running) return; running = true; omp.disabled = true;
-    set = []; note = 'Driver-OMP starts from an empty support.'; commit();
+    set = []; note = I18N.L('Driver-OMP starts from an empty support.', 'Driver-OMP 从空支撑集开始。'); commit();
     await wait(1000);
     for (let step = 1; step <= 2; step++){
       const st = solve(set, kappa), r = [Q[0] - st.fit[0], Q[1] - st.fit[1]];
       let best = -1, bs = -1;
       G.forEach((g, i) => { if (set.includes(i)) return; const sc = Math.abs(g[0] * r[0] + g[1] * r[1]) / Math.hypot(g[0], g[1]); if (sc > bs){ bs = sc; best = i; } });
       set = set.concat(best).sort((x, y) => x - y);
-      note = `Step ${step}: add v${SUB[best + 1]}, the column best aligned with the residual, then refit.`; commit();
+      note = I18N.L(`Step ${step}: add v${SUB[best + 1]}, the column best aligned with the residual, then refit.`, `第 ${step} 步：加入与残差最对齐的列 v${SUB[best + 1]}，然后重新拟合。`); commit();
       await wait(1700);
     }
-    note = 'Stopped at k = 2. Lower κ to watch the energy condition bind.'; commit();
+    note = I18N.L('Stopped at k = 2. Lower κ to watch the energy condition bind.', '在 k = 2 处停止。调低 κ 可以看到能量条件生效。'); commit();
     running = false; omp.disabled = false;
   }
   chips.forEach(c => c.addEventListener('click', () => { if (running) return; const v = +c.dataset.v; set = set.includes(v) ? set.filter(x => x !== v) : set.concat(v).sort((x, y) => x - y); note = ''; commit(); }));
@@ -610,6 +632,7 @@ if (!reduce) setInterval(() => { if (!gVisible || !gCols.length) return; const i
   omp.addEventListener('click', runOMP);
   $('#reset').addEventListener('click', () => { if (running) return; set = [0, 1]; kappa = 4; kSl.value = 4; note = ''; commit(); });
   sizeIt(); commit();
+  I18N.on(() => { note = ''; from = null; commit(); });
 })();
 
 /* ---- pipeline: a lime bar runs through the three stages ---- */
@@ -628,6 +651,7 @@ $$('.links a').forEach(a => a.addEventListener('click', () => { nav.classList.re
 
 function rebuild(){ fitTitle(); buildG(); }
 new ResizeObserver(rebuild).observe($('.hero'));
+I18N.on(() => rebuild());
 rebuild();
 (document.fonts ? document.fonts.ready : Promise.resolve()).then(rebuild);
 })();

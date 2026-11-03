@@ -12,10 +12,10 @@
   --u:clamp(.62px, calc(100vw / 1586), 1.35px);
   --black:#111111; --paper:#F1F1EC; --cream:#F4F3EE; --lime:#D7EE5B;
   --g1:#8B8B88; --g2:#6E6E6B; --g3:#BDBDB8; --rule-dark:#5E5E5B; --tile:#7F7F7C;
-  --anton:"Anton","Archivo","Arial Narrow",sans-serif;
-  --display:"Archivo","Arial Narrow","Helvetica Neue",sans-serif;
-  --sans:"Poppins",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --anton:"Anton","Archivo","Arial Narrow","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --display:"Archivo","Arial Narrow","Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --sans:"Poppins",system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC";
   --pad:max(16px, calc(var(--u) * 40));
   --pl:max(var(--pad), env(safe-area-inset-left,0px)); --pr:max(var(--pad), env(safe-area-inset-right,0px));
   --ease:cubic-bezier(0.22,1,0.36,1);
@@ -292,6 +292,8 @@ html.modal-open{overflow:hidden}
 .xr-tab{flex:none; padding:8px 14px; border:2px solid #3A3A37; font-family:var(--mono); font-weight:600; font-size:max(12px, calc(var(--u) * 15)); letter-spacing:.06em; text-transform:uppercase; color:var(--g3); transition:border-color 300ms var(--ease), color 300ms var(--ease), background-color 300ms var(--ease)}
 .xr-tab:hover{border-color:var(--cream); color:var(--cream)}
 .xr-tab[aria-selected="true"]{background:var(--lime); border-color:var(--lime); color:var(--black)}
+.lang-sw.xr-lang{margin-left:auto; margin-right:14px}
+html[lang="zh-CN"] .xr-title{font-family:var(--display); font-weight:900; font-stretch:62%; letter-spacing:0; line-height:1.02}
 .xr-x{flex:none; width:44px; height:44px; display:grid; place-items:center; border:2px solid var(--cream); font-size:24px; line-height:1; transition:background-color 300ms var(--ease), color 300ms var(--ease), transform 300ms var(--ease)}
 .xr-x:hover{background:var(--lime); border-color:var(--lime); color:var(--black); transform:rotate(90deg)}
 .xr-body{padding:calc(var(--u) * 30) var(--pr) calc(var(--u) * 56) var(--pl)}
@@ -355,6 +357,24 @@ html.modal-open{overflow:hidden}
   .xr-grid{grid-template-columns:minmax(0,1fr)}
   .xc,.xc:nth-child(n){padding:20px 0 24px; border-left:0}
 }
+/* language switch and Chinese typesetting */
+.nav-in{justify-content:flex-start}
+.links{margin-left:auto}
+.lang-sw{display:flex; flex:none; margin-left:32px; border:2px solid #3A3A37}
+.lang-sw button{padding:4px 10px; font-family:var(--mono); font-weight:600; font-size:13px; line-height:20px; letter-spacing:.06em; color:var(--g3); transition:background-color 300ms var(--ease), color 300ms var(--ease)}
+.lang-sw button:hover{color:var(--cream)}
+.lang-sw button[aria-pressed="true"]{background:var(--lime); color:var(--black)}
+.menu-btn{margin-left:14px}
+html[lang="zh-CN"] .disp,html[lang="zh-CN"] .dispm{letter-spacing:0; line-height:1.14}
+html[lang="zh-CN"] .label{letter-spacing:.05em}
+html[lang="zh-CN"] body{line-break:strict}
+@media (max-width:1040px){
+  .links{display:none}
+  .menu-btn{display:block}
+  .lang-sw{margin-left:auto}
+  .open .links{display:flex; position:fixed; top:calc(64px + env(safe-area-inset-top,0px)); left:0; right:0; flex-direction:column; align-items:flex-start; gap:12px; padding:24px var(--pl) 32px; background:var(--black); border-bottom:2px solid var(--rule-dark)}
+  .open .links a{font-size:2rem; line-height:2.5rem}
+}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition-duration:1ms !important; animation:none !important}
@@ -381,6 +401,7 @@ html.modal-open{overflow:hidden}
       <a href="{{PAPER_URL}}" target="_blank" rel="noopener">Paper <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
       <a href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener">Code <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
     </nav>
+    <div class="lang-sw" role="group" aria-label="Language / 语言" data-noi18n><button type="button" data-lang-btn="en" aria-pressed="true">EN</button><button type="button" data-lang-btn="zh" aria-pressed="false">中文</button></div>
     <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="links" aria-label="Open menu"><span></span><span></span></button>
   </div>
 </header>
@@ -467,7 +488,7 @@ html.modal-open{overflow:hidden}
   </ol>
   <div class="proto-foot">
     <p>Six complementary properties of control.</p>
-    <a class="ulink" href="{{PAPER_URL}}" target="_blank" rel="noopener">Read the protocol <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
+    <a class="ulink" href="protocol.html">Read the protocol <svg class="ic" aria-hidden="true"><use href="#e"/></svg></a>
   </div>
 </section>
 
@@ -514,7 +535,7 @@ html.modal-open{overflow:hidden}
     <li><a href="{{PAPER_URL}}" target="_blank" rel="noopener"><span><span class="disp t">Read the paper</span><span class="s">Formulation, experiments and appendices.</span></span><svg class="big" viewBox="0 0 100 100" aria-hidden="true"><path d="M14 86 80 20M32 20h48v48" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="square"/></svg></a></li>
     <li><a href="theory.html"><span><span class="disp t">Learn the theory</span><span class="s">Control model, local controllability and six results.</span></span><svg class="big" viewBox="0 0 100 100" aria-hidden="true"><path d="M14 86 80 20M32 20h48v48" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="square"/></svg></a></li>
     <li><a href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener"><span><span class="disp t">Explore the code</span><span class="s">Reference selectors and experiment records.</span></span><svg class="big" viewBox="0 0 100 100" aria-hidden="true"><path d="M14 86 80 20M32 20h48v48" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="square"/></svg></a></li>
-    <li><a href="#protocol"><span><span class="disp t">Study the protocol</span><span class="s">Six axes and their operational definitions.</span></span><svg class="big" viewBox="0 0 100 100" aria-hidden="true"><path d="M14 86 80 20M32 20h48v48" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="square"/></svg></a></li>
+    <li><a href="protocol.html"><span><span class="disp t">Study the protocol</span><span class="s">Six axes and their operational definitions.</span></span><svg class="big" viewBox="0 0 100 100" aria-hidden="true"><path d="M14 86 80 20M32 20h48v48" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="square"/></svg></a></li>
   </ul>
   <div class="cite-row">
     <div class="cite">
@@ -544,6 +565,7 @@ html.modal-open{overflow:hidden}
       <button class="xr-tab" role="tab" data-task="sent" aria-selected="false">03 Sentiment</button>
       <button class="xr-tab" role="tab" data-task="ref" aria-selected="false">04 Refusal</button>
     </div>
+    <div class="lang-sw xr-lang" role="group" aria-label="Language / 语言" data-noi18n><button type="button" data-lang-btn="en" aria-pressed="true">EN</button><button type="button" data-lang-btn="zh" aria-pressed="false">中文</button></div>
     <button class="xr-x" id="xr-x" type="button" aria-label="Close results">×</button>
   </div>
   <div class="xr-body">
@@ -561,6 +583,7 @@ html.modal-open{overflow:hidden}
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
 <script data-snap="main > section">/*SNAP_JS*/</script>
+<script>/*I18N_JS*/</script>
 <script>
 (() => {
 'use strict';
@@ -571,7 +594,10 @@ const C = { black: '#111111', paper: '#F1F1EC', cream: '#F4F3EE', lime: '#D7EE5B
 const SVGNS = 'http://www.w3.org/2000/svg';
 const el = (n, a) => { const e = document.createElementNS(SVGNS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
 const U = () => window.innerWidth <= 860 ? .62 : clamp(window.innerWidth / 1586, .62, 1.35);
-if (window.renderMathInElement) { try { renderMathInElement($('#axes'), { delimiters: [{ left: '\\(', right: '\\)', display: false }], throwOnError: false }); } catch (e) {} }
+const math = node => { if (window.renderMathInElement) { try { renderMathInElement(node, { delimiters: [{ left: '\\(', right: '\\)', display: false }], throwOnError: false }); } catch (e) {} } };
+I18N.init();
+math($('#axes'));
+I18N.on((l, els) => els.forEach(e => math(e)));
 
 /* ---- hero title fills the content width ---- */
 const title = $('.hero-title');
@@ -609,8 +635,8 @@ function buildHero(){
   if (!narrow){
     o.strokeStyle = C.cream; o.fillStyle = C.cream; o.lineWidth = 1.6; o.font = `500 ${Math.round(15 * u)}px "IBM Plex Mono", ui-monospace, monospace`; o.textBaseline = 'alphabetic';
     const lab = (txt, x0, y0, x1, ty, tx2, ty2) => { o.fillText(txt, x0 * u, y0 * u + dy); o.beginPath(); o.moveTo(x0 * u, ty * u + dy); o.lineTo(x1 * u, ty * u + dy); o.lineTo(tx2 * u, ty2 * u + dy); o.stroke(); };
-    lab('Activation patches', 163, 384, 368, 392, 415, 434);
-    lab('Weights fixed', 1108, 320, 1246, 328, 1296, 376);
+    lab(I18N.t('Activation patches'), 163, 384, 368, 392, 415, 434);
+    lab(I18N.t('Weights fixed'), 1108, 320, 1246, 328, 1296, 376);
   }
   const pick = narrow ? [[.2, .3], [.45, .62], [.7, .2], [.86, .5], [.33, .85], [.62, .9]].map(([a, b]) => [a * W / u, b * H / u]) : PATCH.map(([a, b]) => [a, b + dy / u]);
   lime = pick.map(([x, y]) => nearest(x * u, y * u)).filter(Boolean).map(c => ({ c, a: 1 }));
@@ -626,6 +652,7 @@ function drawHero(){
 }
 function rebuild(){ fitTitle(); buildHero(); drawHero(); }
 new ResizeObserver(rebuild).observe(hero);
+I18N.on(() => rebuild());
 let heroVisible = true;
 new IntersectionObserver(es => { heroVisible = es[0].isIntersecting; }).observe(art);
 function swapPatch(){
@@ -695,156 +722,7 @@ if (!reduce) setInterval(() => { fwLime.forEach((e, i) => { e.style.transition =
   if (!reduce) setInterval(() => { const arr = [...on], i = arr[Math.floor(Math.random() * arr.length)], j = (i + 2) % n; if (on.has(j)) return; on.delete(i); on.add(j); sq[i].className = ''; sq[j].className = 'on'; }, 900);
 })();
 
-/* ---- six axis scenes: one drawing per axis, used as a live thumbnail and as the full stage ---- */
-const S = { tr: '#45453F', g: '#8B8B88', cr: '#F4F3EE', li: '#D7EE5B', lb: '#BDBDB8' };
-const ease = t => 1 - Math.pow(1 - t, 3);
-const wait = ms => new Promise(r => setTimeout(r, ms));
-const tw = (ms, f) => new Promise(res => { if (reduce){ f(1); return res(); } const t0 = performance.now(); const st = n => { const k = Math.min(1, (n - t0) / ms); f(ease(k)); if (k < 1) requestAnimationFrame(st); else res(); }; requestAnimationFrame(st); });
-const mk = (p, n, a) => { const e = el(n, a); p.appendChild(e); return e; };
-const tx = (p, x, y, s, a = {}) => { const t = mk(p, 'text', Object.assign({ x, y, class: 'lb', fill: S.lb, 'font-size': 15, 'text-anchor': 'middle' }, a)); t.textContent = s; return t; };
-const arrow = (p, x, y, dx, dy, col) => { const l = Math.hypot(dx, dy), ux = dx / l, uy = dy / l, s = 9; return mk(p, 'path', { d: `M${x - ux * s - uy * s * .6} ${y - uy * s + ux * s * .6} L${x} ${y} L${x - ux * s + uy * s * .6} ${y - uy * s - ux * s * .6}`, fill: 'none', stroke: col, 'stroke-width': 2.5 }); };
-
-const SCENES = {
-  1(s){ // reachability
-    const y = 104, xs = 70, xt = 525, xp = 405;
-    mk(s, 'line', { x1: xs, y1: y, x2: xt, y2: y, stroke: S.tr, 'stroke-width': 3 });
-    const ln = mk(s, 'line', { x1: xs, y1: y, x2: xs, y2: y, stroke: S.li, 'stroke-width': 4 });
-    mk(s, 'circle', { cx: xs, cy: y, r: 8, fill: S.g });
-    mk(s, 'circle', { cx: xt, cy: y, r: 17, fill: 'none', stroke: S.cr, 'stroke-width': 3 });
-    const ah = arrow(s, 0, y, 1, 0, S.li);
-    const dot = mk(s, 'circle', { cx: xs, cy: y, r: 11, fill: S.li });
-    tx(s, xs, y + 42, 'Source'); tx(s, xt, y + 46, 'Target');
-    const pl = tx(s, xp, y - 26, 'Patched', { fill: S.cr });
-    const res = mk(s, 'g', { opacity: 0 });
-    mk(res, 'path', { d: `M${xp} ${y - 70}v14M${xp} ${y - 63}H${xt - 17}M${xt - 17} ${y - 70}v14`, stroke: S.li, 'stroke-width': 2.5, 'stroke-dasharray': '6 5', fill: 'none' });
-    tx(res, (xp + xt) / 2, y - 80, 'Residual');
-    const at = x => { dot.setAttribute('cx', x); ln.setAttribute('x2', Math.max(xs, x - 14)); pl.setAttribute('x', x); ah.setAttribute('transform', `translate(${x - 13} 0)`); ah.setAttribute('opacity', x - xs > 30 ? 1 : 0); };
-    return {
-      async play(){ res.setAttribute('opacity', 0); pl.setAttribute('opacity', 0); at(xs); await tw(1100, k => at(lerp(xs, xp, k))); pl.setAttribute('opacity', 1); await tw(500, k => res.setAttribute('opacity', k)); },
-      final(){ at(xp); res.setAttribute('opacity', 1); pl.setAttribute('opacity', 1); }
-    };
-  },
-  2(s){ // signed reversal
-    const y = 112, xs = 70, xt = 525, xe = 190, ex = 118, ey = y - 26;
-    mk(s, 'line', { x1: xs, y1: y, x2: xt, y2: y, stroke: S.tr, 'stroke-width': 3 });
-    mk(s, 'circle', { cx: xs, cy: y, r: 8, fill: S.g });
-    mk(s, 'circle', { cx: xt, cy: y, r: 17, fill: 'none', stroke: S.cr, 'stroke-width': 3 });
-    const arc = mk(s, 'path', { d: `M${xt - 12} ${y - 30} Q ${(xs + xt) / 2 + 20} ${y - 128} ${ex} ${ey}`, fill: 'none', stroke: S.li, 'stroke-width': 3, pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1 });
-    const head = arrow(s, ex, ey, ex - ((xs + xt) / 2 + 20), ey - (y - 128), S.li); head.setAttribute('opacity', 0);
-    const b = tx(s, (xs + xt) / 2 + 20, 24, '−β', { fill: S.cr, 'font-size': 22 }); b.setAttribute('opacity', 0);
-    const dot = mk(s, 'circle', { cx: xt, cy: y, r: 11, fill: S.li });
-    tx(s, xs, y + 42, 'Source'); tx(s, xt, y + 46, 'Target');
-    const set = (a, d) => { arc.setAttribute('stroke-dashoffset', 1 - a); head.setAttribute('opacity', a > .98 ? 1 : 0); b.setAttribute('opacity', a); dot.setAttribute('cx', lerp(xt, xe, d)); };
-    return {
-      async play(){ set(0, 0); await wait(200); await tw(800, k => set(k, 0)); await tw(1000, k => set(1, k)); },
-      final(){ set(1, 1); }
-    };
-  },
-  3(s, onSet){ // dose response
-    const X0 = 92, X1 = 560, Y0 = 136, Y1 = 40;
-    const P = g => 1 / (1 + Math.exp(-8.5 * (g - .42))), p0 = P(0), p1 = P(1), Pn = g => (P(g) - p0) / (p1 - p0);
-    const fx = g => X0 + g * (X1 - X0), fy = g => Y0 - Pn(g) * (Y0 - Y1);
-    const path = (a, b) => { let d = ''; for (let i = 0; i <= 60; i++){ const g = a + (b - a) * i / 60; d += (i ? 'L' : 'M') + fx(g).toFixed(1) + ' ' + fy(g).toFixed(1); } return d; };
-    mk(s, 'path', { d: `M${X0} ${Y1 - 12}V${Y0}H${X1 + 8}`, fill: 'none', stroke: S.tr, 'stroke-width': 2.5 });
-    for (let i = 0; i < 10; i++){ const g = .05 + i * .1; mk(s, 'line', { x1: fx(g), y1: Y0 + 3, x2: fx(g), y2: Y0 + 10, stroke: S.g, 'stroke-width': 2 }); }
-    mk(s, 'path', { d: path(0, 1), fill: 'none', stroke: S.tr, 'stroke-width': 3 });
-    const act = mk(s, 'path', { d: path(0, .01), fill: 'none', stroke: S.li, 'stroke-width': 3.5 });
-    const vl = mk(s, 'line', { stroke: S.cr, 'stroke-width': 1.5, 'stroke-dasharray': '4 4' });
-    const dot = mk(s, 'circle', { r: 9, fill: S.li });
-    tx(s, X0 + 10, Y1 - 18, 'Target progress', { 'text-anchor': 'start' }); tx(s, X1 + 8, Y0 + 30, 'Dose γ', { 'text-anchor': 'end' });
-    for (let i = 0; i < 9; i++) mk(s, 'rect', { x: 424 + i * 13, y: 8, width: 9, height: 9, fill: i === 2 || i === 6 ? S.li : S.g });
-    tx(s, 414, 17, 'Support fixed', { 'text-anchor': 'end', 'font-size': 13 });
-    const set = g => { g = clamp(g, .005, 1); act.setAttribute('d', path(0, g)); dot.setAttribute('cx', fx(g)); dot.setAttribute('cy', fy(g)); vl.setAttribute('x1', fx(g)); vl.setAttribute('x2', fx(g)); vl.setAttribute('y1', fy(g) + 9); vl.setAttribute('y2', Y0); if (onSet) onSet(g); };
-    set(.8);
-    return {
-      set,
-      async play(){ await tw(1700, k => set(.04 + .92 * k)); await wait(500); await tw(1100, k => set(.96 - .76 * k)); },
-      final(){ set(.8); }
-    };
-  },
-  4(s, onStep){ // feedback controllability
-    const ty = 30, xa = 92, xT = 470;
-    mk(s, 'line', { x1: xa, y1: ty, x2: 540, y2: ty, stroke: S.tr, 'stroke-width': 2.5 });
-    mk(s, 'circle', { cx: xT, cy: ty, r: 13, fill: 'none', stroke: S.cr, 'stroke-width': 3 });
-    const err = mk(s, 'line', { y1: ty - 20, y2: ty - 20, x2: xT, stroke: S.li, 'stroke-width': 2, 'stroke-dasharray': '6 5' });
-    const dot = mk(s, 'circle', { cy: ty, r: 9, fill: S.li });
-    tx(s, 548, ty + 5, 'Target', { 'text-anchor': 'start', 'font-size': 14 });
-    tx(s, xa, ty + 30, 'Target error', { 'text-anchor': 'start', 'font-size': 14 });
-    const ly = 98;
-    mk(s, 'circle', { cx: 112, cy: ly, r: 18, fill: 'none', stroke: S.cr, 'stroke-width': 2.5 });
-    tx(s, 112, ly + 6, 'e', { fill: S.cr, 'font-size': 18 });
-    mk(s, 'line', { x1: 130, y1: ly, x2: 214, y2: ly, stroke: S.g, 'stroke-width': 2.5 }); arrow(s, 214, ly, 1, 0, S.g);
-    mk(s, 'rect', { x: 218, y: ly - 21, width: 112, height: 42, fill: 'none', stroke: S.cr, 'stroke-width': 2.5 }); tx(s, 274, ly + 6, 'Dose γ', { fill: S.cr, 'font-size': 17 });
-    mk(s, 'line', { x1: 330, y1: ly, x2: 384, y2: ly, stroke: S.li, 'stroke-width': 2.5 }); arrow(s, 384, ly, 1, 0, S.li);
-    mk(s, 'rect', { x: 388, y: ly - 21, width: 112, height: 42, fill: 'none', stroke: S.cr, 'stroke-width': 2.5 }); tx(s, 444, ly + 6, 'Model', { fill: S.cr, 'font-size': 17 });
-    mk(s, 'path', { d: `M444 ${ly + 21}V${ly + 46}H112V${ly + 20}`, fill: 'none', stroke: S.li, 'stroke-width': 2.5 }); arrow(s, 112, ly + 20, 0, -1, S.li);
-    tx(s, 278, 166, 'Measured output', { 'font-size': 14 });
-    const loop = el('path', { d: `M130 ${ly}H444V${ly + 46}H112V${ly + 18}` });
-    const pulse = mk(s, 'circle', { r: 6, fill: S.li, opacity: 0 });
-    s.appendChild(loop); loop.setAttribute('fill', 'none'); loop.setAttribute('stroke', 'none');
-    let m = .12, n = 0, busy = false;
-    const px = v => lerp(xa + 14, xT, v);
-    const show = () => { dot.setAttribute('cx', px(m)); err.setAttribute('x1', px(m) + 10); err.setAttribute('opacity', 1 - m > .04 ? 1 : 0); if (onStep) onStep(n); };
-    show();
-    const reset = () => { m = .12; n = 0; show(); };
-    async function step(){
-      if (busy) return; busy = true;
-      if (1 - m < .04) { reset(); await wait(250); }
-      const L = loop.getTotalLength(); pulse.setAttribute('opacity', 1);
-      await tw(950, k => { const p = loop.getPointAtLength(k * L); pulse.setAttribute('cx', p.x); pulse.setAttribute('cy', p.y); });
-      pulse.setAttribute('opacity', 0);
-      const a = m, b = m + .58 * (1 - m); n++;
-      await tw(550, k => { m = lerp(a, b, k); dot.setAttribute('cx', px(m)); err.setAttribute('x1', px(m) + 10); });
-      show(); busy = false;
-    }
-    return {
-      step,
-      async play(){ reset(); await wait(300); for (let i = 0; i < 4; i++){ await step(); await wait(200); } },
-      final(){ m = .97; n = 4; show(); }
-    };
-  },
-  5(s){ // off-target preservation
-    const base = 146, Hh = 112, xs = [170, 270, 370, 470], b = [.86, .58, .38, .2], q = [.8, .65, .42, .23];
-    mk(s, 'line', { x1: 100, y1: base, x2: 540, y2: base, stroke: S.tr, 'stroke-width': 2.5 });
-    mk(s, 'line', { x1: 100, y1: base, x2: 100, y2: 22, stroke: S.tr, 'stroke-width': 2.5 });
-    tx(s, 110, 24, 'Probability', { 'text-anchor': 'start', 'font-size': 14 });
-    const bars = [], marks = [];
-    xs.forEach((x, i) => {
-      mk(s, 'rect', { x: x - 26, y: base - b[i] * Hh, width: 22, height: b[i] * Hh, fill: S.g });
-      bars.push(mk(s, 'rect', { x: x + 2, width: 22, fill: S.li }));
-      const g = mk(s, 'g', { opacity: 0 });
-      mk(g, 'line', { x1: x - 30, x2: x + 30, y1: base - b[i] * Hh, y2: base - b[i] * Hh, stroke: S.cr, 'stroke-width': 1.6, 'stroke-dasharray': '3 3' });
-      mk(g, 'line', { x1: x + 34, x2: x + 34, y1: base - b[i] * Hh, y2: base - q[i] * Hh, stroke: S.cr, 'stroke-width': 2.5 });
-      marks.push(g);
-      tx(s, x, base + 20, 'ABCD'[i], { 'font-size': 15 });
-    });
-    const set = (k, mk2) => { bars.forEach((r, i) => { const h = lerp(b[i], q[i], k) * Hh; r.setAttribute('y', base - h); r.setAttribute('height', h); }); marks.forEach(g => g.setAttribute('opacity', mk2)); };
-    set(0, 0);
-    return {
-      async play(){ set(0, 0); await wait(250); await tw(900, k => set(k, 0)); await tw(450, k => set(1, k)); },
-      final(){ set(1, 1); }
-    };
-  },
-  6(s){ // held-out reuse
-    const T = 17, G = 4, x0 = 46, y0 = 40, on = [2, 5, 11];
-    for (let i = 0; i < 16; i++) mk(s, 'rect', { x: x0 + (i % 4) * (T + G), y: y0 + Math.floor(i / 4) * (T + G), width: T, height: T, fill: on.includes(i) ? S.li : S.g });
-    tx(s, x0 + 40, y0 + 112, 'Same sites', { 'font-size': 14 });
-    mk(s, 'path', { d: `M136 ${y0 + 40}H176M176 ${y0 + 2}V${y0 + 82}M176 ${y0 + 2}H204M176 ${y0 + 82}H204`, fill: 'none', stroke: S.cr, 'stroke-width': 2 });
-    arrow(s, 206, y0 + 2, 1, 0, S.cr); arrow(s, 206, y0 + 82, 1, 0, S.cr);
-    const rows = [[22, 'Fixed sites · refit strengths', '0.992', [.99, .96, .93]], [104, 'Full patch fixed', '0.021', [.05, .02, .08]]];
-    const fills = [];
-    rows.forEach(([ly, lab, val, vs]) => {
-      tx(s, 222, ly, lab, { 'text-anchor': 'start', fill: S.cr, 'font-size': 15, 'font-weight': 600 });
-      tx(s, 560, ly, val, { 'text-anchor': 'end', fill: S.li, 'font-size': 14, class: 'lb mono' });
-      vs.forEach((v, j) => { const y = ly + 12 + j * 11; mk(s, 'rect', { x: 222, y, width: 338, height: 6, fill: S.tr }); fills.push([mk(s, 'rect', { x: 222, y, width: 0, height: 6, fill: S.li }), v]); });
-    });
-    const set = k => fills.forEach(([r, v], i) => r.setAttribute('width', 338 * v * clamp(k * 1.25 - (i % 3) * .1, 0, 1)));
-    return {
-      async play(){ set(0); await wait(250); await tw(1300, set); },
-      final(){ set(1); }
-    };
-  }
-};
+/*SCENES_JS*/
 
 // thumbnails loop while visible
 $$('svg.scene.mini').forEach(svg => {
@@ -858,7 +736,7 @@ $$('svg.scene.mini').forEach(svg => {
 const stages = {};
 $$('.stage').forEach(st => {
   const svg = $('svg.scene', st), n = svg.dataset.s, status = $('.stage-st', st), btn = $('.stage-btn', st), range = $('input[type=range]', st);
-  const c = SCENES[n](svg, n === '3' ? g => { status.textContent = 'γ ' + g.toFixed(2); if (range && document.activeElement !== range) range.value = g; } : n === '4' ? k => { status.textContent = 'Update ' + k; } : null);
+  const c = SCENES[n](svg, n === '3' ? g => { status.textContent = 'γ ' + g.toFixed(2); if (range && document.activeElement !== range) range.value = g; } : n === '4' ? k => { status.textContent = I18N.L('Update ' + k, '第 ' + k + ' 次更新'); } : null);
   if (n !== '3') c.final();
   stages[st.parentElement.id] = c;
   if (btn) btn.addEventListener('click', () => { if (n === '4') c.step(); else c.play(); });
@@ -887,7 +765,8 @@ $$('.ax').forEach(b => b.addEventListener('click', () => {
   };
   const f2 = v => (Math.abs(v) >= 10 ? v.toFixed(1) : Math.abs(v) >= 1 ? v.toFixed(2) : Math.abs(v) >= .01 || v === 0 ? v.toFixed(3).replace(/0$/, '') : v.toPrecision(2));
   const mk = (p, n, a) => { const e = el(n, a); p.appendChild(e); return e; };
-  const tx = (p, x, y, s, a = {}) => { const t = mk(p, 'text', Object.assign({ x, y }, a)); t.textContent = s; return t; };
+  const tx = (p, x, y, s, a = {}) => { const t = mk(p, 'text', Object.assign({ x, y }, a)); t.textContent = I18N.t(s); return t; };
+  const tw = s => [...I18N.t(s)].reduce((a, ch) => a + (ch.charCodeAt(0) > 0x2e80 ? 13 : 7.6), 0);
   const ease = t => 1 - Math.pow(1 - t, 3);
   let uid = 0;
 
@@ -940,7 +819,7 @@ $$('.ax').forEach(b => b.addEventListener('click', () => {
       mk(g, 'path', { d, fill: 'none', stroke: s.c, 'stroke-width': s.w || 3, 'stroke-dasharray': s.d || null, 'stroke-linejoin': 'round', opacity: s.o || 1 });
       if (s.dots !== false) s.pts.forEach(p => mk(g, 'circle', { cx: X(p[0]), cy: Y(p[1]), r: s.r || 3.5, fill: s.c, opacity: s.o || 1 }));
     });
-    if (o.legend){ let lx = l + 8; o.legend.forEach(([c, s, d]) => { mk(svg, 'line', { x1: lx, x2: lx + 20, y1: t + 6, y2: t + 6, stroke: c, 'stroke-width': 3, 'stroke-dasharray': d || null }); tx(svg, lx + 26, t + 10, s); lx += 40 + s.length * 7.6; }); }
+    if (o.legend){ let lx = l + 8; o.legend.forEach(([c, s, d]) => { mk(svg, 'line', { x1: lx, x2: lx + 20, y1: t + 6, y2: t + 6, stroke: c, 'stroke-width': 3, 'stroke-dasharray': d || null }); tx(svg, lx + 26, t + 10, s); lx += 40 + tw(s); }); }
     return k => cr.setAttribute('width', (pw + 16) * k);
   }
   function tiles(svg, rowsIn){
@@ -949,7 +828,7 @@ $$('.ax').forEach(b => b.addEventListener('click', () => {
     const H = rowsIn.reduce((a, r) => a + Math.ceil(r.n / per) * (tw * .8 + 3) + 10, 0);
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     rowsIn.forEach(r => {
-      tx(svg, 0, y + tw * .6, r.label + ' ' + r.hit + '/' + r.n, { fill: r.c === K.li ? K.li : '#BDBDB8', class: 'v' });
+      tx(svg, 0, y + tw * .6, I18N.t(r.label) + ' ' + r.hit + '/' + r.n, { fill: r.c === K.li ? K.li : '#BDBDB8', class: 'v' });
       const cells = [];
       for (let i = 0; i < r.n; i++){ const c = i % per, rr = Math.floor(i / per); cells.push(mk(svg, 'rect', { x: lab + c * tw, y: y + rr * (tw * .8 + 3), width: tw - 3, height: tw * .8, fill: '#262624' })); }
       anim.push(k => cells.forEach((e, i) => e.setAttribute('fill', i < r.hit && k * r.n > i ? r.c : '#262624')));
@@ -993,7 +872,7 @@ $$('.ax').forEach(b => b.addEventListener('click', () => {
   function reachPF(d){ return { rows: d.reach.map(r => ({ label: r.m, bars: [{ v: r.P, c: P, t: f2(r.P) + ' (' + r.Pc + ')' }, { v: r.F, c: F, t: f2(r.F) + ' (' + r.Fc + ')' }] })), max: 1.2, thr: .4, thrLabel: 'ε = 0.4', note: 'lower is better', legend: [[P, 'P'], [F, 'F']], ticks: [0, .4, .8, 1.2] }; }
   function revPF(d){ const mx = Math.max(4, Math.ceil(Math.max(...d.rev.map(r => Math.max(r.P || 0, r.F || 0))))); return { rows: d.rev.map(r => ({ label: r.m, bars: [{ v: r.P, c: P, t: f2(r.P) + ' (' + r.Pc + ')' }].concat(r.F !== undefined ? [{ v: r.F, c: F, t: f2(r.F) + ' (' + r.Fc + ')' }] : []) })), max: mx, thr: 2, thrLabel: 'pass ≥ 2', note: 'higher is better', legend: r0(d) ? [[P, 'P'], [F, 'F']] : [[P, 'P']], ticks: [0, 2, mx] }; }
   const r0 = d => d.rev.some(r => r.F !== undefined);
-  function pres(d, hl){ return { rows: d.pres.map(r => ({ label: r.m, bars: [{ v: r.median, c: hl && hl(r) ? P : K.cr, t: 'median ' + f2(r.median) }, { v: r.mean, c: F, t: 'mean ' + f2(r.mean) + ' · ' + r.seeds }] })), log: true, min: 1e-4, max: 20, thr: .001, thrLabel: 'δ = 0.001', note: 'KL, log scale', ticks: [1e-4, 1e-3, 1e-2, .1, 1, 10], tickFmt: v => v >= 1 ? String(v) : v.toExponential(0).replace('e-', 'e−') }; }
+  function pres(d, hl){ return { rows: d.pres.map(r => ({ label: r.m, bars: [{ v: r.median, c: hl && hl(r) ? P : K.cr, t: I18N.L('median ', '中位数 ') + f2(r.median) }, { v: r.mean, c: F, t: I18N.L('mean ', '均值 ') + f2(r.mean) + ' · ' + r.seeds }] })), log: true, min: 1e-4, max: 20, thr: .001, thrLabel: 'δ = 0.001', note: 'KL, log scale', ticks: [1e-4, 1e-3, 1e-2, .1, 1, 10], tickFmt: v => v >= 1 ? String(v) : v.toExponential(0).replace('e-', 'e−') }; }
   function traj(svg, fb, tol, yl){
     const all = [].concat(...Object.values(fb).map(a => a.map(r => r.M.concat([r.target])))).flat();
     const lo = Math.floor(Math.min(...all) * 2) / 2 - .25, hi = Math.ceil(Math.max(...all) * 2) / 2 + .25;
@@ -1011,77 +890,77 @@ $$('.ax').forEach(b => b.addEventListener('click', () => {
     if (task === 'ioi'){
       const d = D.ioi, cd = by(d.reach, 'Coverage-Driver'), rev = d.rev, ru = by(d.reuse, 'Coverage-Driver');
       return [
-        { v: ['ok', 'Pass · 10/10'], draw: s => hbars(s, { rows: d.reach.map(r => ({ label: r.m, dim: r.m === 'Random', bars: [{ v: r.v, c: r.m === 'Random' ? F : P, t: f2(r.v) + ' (' + r.c + ')' }] })), max: 1.2, thr: .4, thrLabel: 'ε = 0.4', note: 'lower is better', ticks: [0, .4, .8, 1.2] }),
-          x: `All three selectors bring the IO–S margin within ε on every seed (Coverage-Driver ${f2(cd.v)}). Random sites of the same size pass on ${by(d.reach, 'Random').c.split('/')[0]} of 10.`, f: 'Same-panel Rel_tar(1), mean over 10 seeds.' },
-        { v: ['ok', 'Pass · 10/10'], draw: s => hbars(s, revPF(d)),
-          x: `The opposite patch returns target-side inputs toward the source on every seed, with ratios from ${f2(Math.min(...rev.map(r => r.P)))} to ${f2(Math.max(...rev.map(r => r.P)))}.`, f: 'Reversal ratio with evaluation-pair directions, 10 seeds.' },
-        { v: ['info', 'Supporting'], draw: s => lines(s, { x: [-1, 2], y: [-1.25, 2.25], xt: [-1, 0, 1, 2], yt: [-1, 0, 1, 2], xl: 'dose γ', yl: 'margin progress', h0: [{ y: 1, label: 'target' }, { y: 0, c: K.ax, d: null, w: 1 }], series: [{ pts: d.dose['random_matched'], c: F, d: '6 4' }, { pts: d.dose['Driver-OMP'], c: P }], legend: [[P, 'Driver-OMP'], [F, 'random sites', '6 4']] }),
-          x: 'Driver-OMP’s progress grows steadily with the dose, in both directions and past γ = 1. Random sites barely move the margin.', f: 'Mean margin progress; Driver-OMP k = 4 (2 seeds), random sites (3 seeds).' },
-        { v: ['ok', 'Pass · 24/24'], draw: s => traj(s, d.fb, .3, 'IO–S margin'), tiles: s => tiles(s, [{ label: 'hits', hit: hitsOf(d, 'P', 'Driver-OMP').hit, n: hitsOf(d, 'P', 'Driver-OMP').n, c: P }]),
-          x: 'Adjusting only the dose from the measured error hits all 24 requested margins (3 seeds × 8 targets).', f: 'Lines: seed 0, eight targets, Driver-OMP with evaluation-pair directions.' },
-        { v: ['na', 'Not on panel'], draw: s => na(s, 'NOT ON THE PANEL', 'IOI is outside the shared 32-prompt preservation panel'),
-          x: 'IOI is not part of the shared off-target panel. Its dose study tracks the change at non-answer positions instead.', f: 'See the IOI dose records in the repository.' },
-        { v: ['mid', 'Partial · ' + f2(ru.refit)], draw: s => vbars(s, { groups: d.reuse.map(r => ({ label: r.m, dim: r.m === 'Random', vals: [r.refit, r.frozen] })), colors: [P, F], y: [-.8, 1.1], yt: [-.5, 0, .5, 1], hl: 1, hlLabel: 'full recovery', legend: [[P, 'refit strengths'], [F, 'fixed strengths']] }),
-          x: `On 64 independently built pairs the sites recover about half of the clean margin (Coverage-Driver ${f2(ru.refit)} refit, ${f2(ru.frozen)} fixed). Random sites make it worse.`, f: 'Clean-normalized recovery on unseen pairs, 3 seeds.' }
+        { v: ['ok', I18N.L('Pass · 10/10', '通过 · 10/10')], draw: s => hbars(s, { rows: d.reach.map(r => ({ label: r.m, dim: r.m === 'Random', bars: [{ v: r.v, c: r.m === 'Random' ? F : P, t: f2(r.v) + ' (' + r.c + ')' }] })), max: 1.2, thr: .4, thrLabel: 'ε = 0.4', note: 'lower is better', ticks: [0, .4, .8, 1.2] }),
+          x: I18N.L(`All three selectors bring the IO–S margin within ε on every seed (Coverage-Driver ${f2(cd.v)}). Random sites of the same size pass on ${by(d.reach, 'Random').c.split('/')[0]} of 10.`, `三种选择器在每个种子上都把 IO–S 裕度推进到 ε 以内（Coverage-Driver 为 ${f2(cd.v)}）。同样大小的随机位点只在 10 个种子中的 ${by(d.reach, 'Random').c.split('/')[0]} 个上通过。`), f: I18N.L('Same-panel Rel_tar(1), mean over 10 seeds.', '同面板 Rel_tar(1)，10 个种子的均值。') },
+        { v: ['ok', I18N.L('Pass · 10/10', '通过 · 10/10')], draw: s => hbars(s, revPF(d)),
+          x: I18N.L(`The opposite patch returns target-side inputs toward the source on every seed, with ratios from ${f2(Math.min(...rev.map(r => r.P)))} to ${f2(Math.max(...rev.map(r => r.P)))}.`, `反向补丁在每个种子上都把目标侧输入拉回源，比值在 ${f2(Math.min(...rev.map(r => r.P)))} 到 ${f2(Math.max(...rev.map(r => r.P)))} 之间。`), f: I18N.L('Reversal ratio with evaluation-pair directions, 10 seeds.', '使用评价对方向的反转比值，10 个种子。') },
+        { v: ['info', I18N.L('Supporting', '辅助研究')], draw: s => lines(s, { x: [-1, 2], y: [-1.25, 2.25], xt: [-1, 0, 1, 2], yt: [-1, 0, 1, 2], xl: 'dose γ', yl: 'margin progress', h0: [{ y: 1, label: 'target' }, { y: 0, c: K.ax, d: null, w: 1 }], series: [{ pts: d.dose['random_matched'], c: F, d: '6 4' }, { pts: d.dose['Driver-OMP'], c: P }], legend: [[P, 'Driver-OMP'], [F, 'random sites', '6 4']] }),
+          x: I18N.L('Driver-OMP’s progress grows steadily with the dose, in both directions and past γ = 1. Random sites barely move the margin.', 'Driver-OMP 的进展随剂量稳定增长，正负两个方向都成立，并能越过 γ = 1。随机位点几乎不改变裕度。'), f: I18N.L('Mean margin progress; Driver-OMP k = 4 (2 seeds), random sites (3 seeds).', '平均裕度进展；Driver-OMP k = 4（2 个种子），随机位点（3 个种子）。') },
+        { v: ['ok', I18N.L('Pass · 24/24', '通过 · 24/24')], draw: s => traj(s, d.fb, .3, 'IO–S margin'), tiles: s => tiles(s, [{ label: 'hits', hit: hitsOf(d, 'P', 'Driver-OMP').hit, n: hitsOf(d, 'P', 'Driver-OMP').n, c: P }]),
+          x: I18N.L('Adjusting only the dose from the measured error hits all 24 requested margins (3 seeds × 8 targets).', '仅根据测得误差调整剂量，就命中了全部 24 个指定裕度（3 个种子 × 8 个目标）。'), f: I18N.L('Lines: seed 0, eight targets, Driver-OMP with evaluation-pair directions.', '曲线：种子 0、八个目标，Driver-OMP，使用评价对方向。') },
+        { v: ['na', I18N.L('Not on panel', '不在面板中')], draw: s => na(s, 'NOT ON THE PANEL', 'IOI is outside the shared 32-prompt preservation panel'),
+          x: I18N.L('IOI is not part of the shared off-target panel. Its dose study tracks the change at non-answer positions instead.', 'IOI 不在共享的非目标面板中，其剂量研究改为追踪非答案位置上的变化。'), f: I18N.L('See the IOI dose records in the repository.', '见仓库中的 IOI 剂量记录。') },
+        { v: ['mid', I18N.L('Partial · ', '部分 · ') + f2(ru.refit)], draw: s => vbars(s, { groups: d.reuse.map(r => ({ label: r.m, dim: r.m === 'Random', vals: [r.refit, r.frozen] })), colors: [P, F], y: [-.8, 1.1], yt: [-.5, 0, .5, 1], hl: 1, hlLabel: 'full recovery', legend: [[P, 'refit strengths'], [F, 'fixed strengths']] }),
+          x: I18N.L(`On 64 independently built pairs the sites recover about half of the clean margin (Coverage-Driver ${f2(ru.refit)} refit, ${f2(ru.frozen)} fixed). Random sites make it worse.`, `在 64 组独立构造的提示对上，这些位点恢复了约一半的干净裕度（Coverage-Driver 重拟合 ${f2(ru.refit)}，固定 ${f2(ru.frozen)}）。随机位点反而更差。`), f: I18N.L('Clean-normalized recovery on unseen pairs, 3 seeds.', '未见提示对上按干净输出归一化的恢复率，3 个种子。') }
       ];
     }
     if (task === 'mcqa'){
       const d = D[sub], cd = by(d.reach, 'Coverage-Driver'), rv = by(d.rev, 'Coverage-Driver'), rhoP = d.rho.find(r => r.m === 'Coverage-Driver' && r.mode === 'P'), rhoF = d.rho.find(r => r.m === 'Coverage-Driver' && r.mode === 'F');
       const hp = hitsOf(d, 'P', 'Coverage-Driver'), hf = hitsOf(d, 'F', 'Coverage-Driver'), pr = by(d.pres, 'Coverage-Driver'), ru = by(d.reuse, 'Coverage-Driver');
       return [
-        { v: ['ok', 'Pass · ' + cd.Pc], draw: s => hbars(s, reachPF(d)),
-          x: `With evaluation-pair directions, Coverage-Driver lands within ε on held-out questions in ${cd.Pc} seeds (${f2(cd.P)}). With training-mean directions every selector stays near the source (≈ ${f2(cd.F)}).`, f: 'Held-out Rel_tar(1), mean over 8 seeds.' },
-        { v: ['ok', 'Pass · ' + rv.Pc], draw: s => hbars(s, revPF(d)),
-          x: `The opposite patch pushes target-side answers back with ratio ${f2(rv.P)} (P, ${rv.Pc} seeds). Training-mean directions barely move them (${f2(rv.F)}).`, f: 'Reversal ratio, mean over 8 seeds.' },
+        { v: ['ok', I18N.L('Pass · ', '通过 · ') + cd.Pc], draw: s => hbars(s, reachPF(d)),
+          x: I18N.L(`With evaluation-pair directions, Coverage-Driver lands within ε on held-out questions in ${cd.Pc} seeds (${f2(cd.P)}). With training-mean directions every selector stays near the source (≈ ${f2(cd.F)}).`, `使用评价对方向时，Coverage-Driver 在留出题目上有 ${cd.Pc} 个种子落在 ε 以内（${f2(cd.P)}）。使用训练均值方向时，所有选择器都停在源附近（≈ ${f2(cd.F)}）。`), f: I18N.L('Held-out Rel_tar(1), mean over 8 seeds.', '留出 Rel_tar(1)，8 个种子的均值。') },
+        { v: ['ok', I18N.L('Pass · ', '通过 · ') + rv.Pc], draw: s => hbars(s, revPF(d)),
+          x: I18N.L(`The opposite patch pushes target-side answers back with ratio ${f2(rv.P)} (P, ${rv.Pc} seeds). Training-mean directions barely move them (${f2(rv.F)}).`, `反向补丁把目标侧答案推回，比值 ${f2(rv.P)}（P 方向，${rv.Pc} 个种子）。训练均值方向几乎推不动（${f2(rv.F)}）。`), f: I18N.L('Reversal ratio, mean over 8 seeds.', '反转比值，8 个种子的均值。') },
         { v: ['mid', rhoP.pass_ + ' ρ ≥ 0.95'], draw: s => lines(s, { x: [-1, 2], y: [-1.15, 1.2], xt: [-1, 0, 1, 2], yt: [-1, 0, 1], xl: 'dose γ', yl: 'target progress', h0: [{ y: 1, label: 'target' }, { y: 0, c: K.ax, d: null, w: 1 }], series: [{ pts: d.dose['Coverage-Driver|F'], c: F, d: '6 4' }, { pts: d.dose['Coverage-Driver|P'], c: P }], legend: [[P, 'P'], [F, 'F', '6 4']] }),
-          x: `Progress rises with γ and levels off near the target; ${rhoP.pass_} Coverage-Driver curves are ordered with ρ ≥ 0.95. With F directions, ${rhoF.neg} run the wrong way.`, f: 'Mean progress over 8 seeds, Coverage-Driver, ten doses.' },
-        { v: ['ok', hp.hit + '/' + hp.n + ' hits'], draw: s => traj(s, d.fb, .3, 'answer margin'), tiles: s => tiles(s, [{ label: 'P', hit: hp.hit, n: hp.n, c: P }, { label: 'F', hit: hf.hit, n: hf.n, c: F }]),
-          x: `Feedback-adjusted doses hit ${hp.hit} of ${hp.n} requested targets with P directions and ${hf.hit} of ${hf.n} with F, where the output stalls short of the target.`, f: 'Lines: seed 0, six targets, Coverage-Driver. Tolerance 0.3.' },
-        { v: ['no', 'Fail · ' + pr.seeds], draw: s => hbars(s, pres(d)),
-          x: `Off-target prompts move: median KL ${f2(pr.median)}, about ${Math.round(pr.median / .001)} times the δ = 0.001 budget, and no seed passes.`, f: 'Shared 32-prompt panel, 256 prompt–seed observations per selector.' },
-        { v: ['info', 'Recovery ' + f2(ru.refit)], draw: s => vbars(s, { groups: d.reuse.map(r => ({ label: r.m, dim: r.m === 'Random', vals: [r.refit, r.frozen] })), colors: [P, F], y: [0, 1.2], yt: [0, .5, 1], hl: 1, hlLabel: 'full recovery', legend: [[P, 'refit strengths'], [F, 'fully frozen']] }),
-          x: `Reusing the sites and refitting strengths on unseen questions recovers ${f2(ru.refit)} of the margin; freezing the whole intervention recovers ${f2(ru.frozen)}.`, f: 'Module-level reuse, 16 unseen questions, 4 seeds.' }
+          x: I18N.L(`Progress rises with γ and levels off near the target; ${rhoP.pass_} Coverage-Driver curves are ordered with ρ ≥ 0.95. With F directions, ${rhoF.neg} run the wrong way.`, `进展随 γ 上升，并在目标附近趋于平稳；${rhoP.pass_} 条 Coverage-Driver 曲线满足 ρ ≥ 0.95。使用 F 方向时，${rhoF.neg} 条方向相反。`), f: I18N.L('Mean progress over 8 seeds, Coverage-Driver, ten doses.', '8 个种子的平均进展，Coverage-Driver，十个剂量。') },
+        { v: ['ok', hp.hit + '/' + hp.n + I18N.L(' hits', ' 命中')], draw: s => traj(s, d.fb, .3, 'answer margin'), tiles: s => tiles(s, [{ label: 'P', hit: hp.hit, n: hp.n, c: P }, { label: 'F', hit: hf.hit, n: hf.n, c: F }]),
+          x: I18N.L(`Feedback-adjusted doses hit ${hp.hit} of ${hp.n} requested targets with P directions and ${hf.hit} of ${hf.n} with F, where the output stalls short of the target.`, `反馈调整的剂量在 P 方向下命中 ${hp.hit}/${hp.n} 个指定目标，在 F 方向下只命中 ${hf.hit}/${hf.n} 个，输出停在目标之前。`), f: I18N.L('Lines: seed 0, six targets, Coverage-Driver. Tolerance 0.3.', '曲线：种子 0、六个目标，Coverage-Driver。容差 0.3。') },
+        { v: ['no', I18N.L('Fail · ', '未通过 · ') + pr.seeds], draw: s => hbars(s, pres(d)),
+          x: I18N.L(`Off-target prompts move: median KL ${f2(pr.median)}, about ${Math.round(pr.median / .001)} times the δ = 0.001 budget, and no seed passes.`, `非目标提示发生了变化：KL 中位数 ${f2(pr.median)}，约为 δ = 0.001 预算的 ${Math.round(pr.median / .001)} 倍，没有种子通过。`), f: I18N.L('Shared 32-prompt panel, 256 prompt–seed observations per selector.', '共享的 32 条提示面板，每个选择器 256 个提示–种子观测。') },
+        { v: ['info', I18N.L('Recovery ', '恢复率 ') + f2(ru.refit)], draw: s => vbars(s, { groups: d.reuse.map(r => ({ label: r.m, dim: r.m === 'Random', vals: [r.refit, r.frozen] })), colors: [P, F], y: [0, 1.2], yt: [0, .5, 1], hl: 1, hlLabel: 'full recovery', legend: [[P, 'refit strengths'], [F, 'fully frozen']] }),
+          x: I18N.L(`Reusing the sites and refitting strengths on unseen questions recovers ${f2(ru.refit)} of the margin; freezing the whole intervention recovers ${f2(ru.frozen)}.`, `在未见题目上复用位点并重拟合强度，可恢复 ${f2(ru.refit)} 的裕度；冻结整个干预只恢复 ${f2(ru.frozen)}。`), f: I18N.L('Module-level reuse, 16 unseen questions, 4 seeds.', '模块级复用，16 道未见题目，4 个种子。') }
       ];
     }
     if (task === 'sent'){
       const d = D.sent, cd = by(d.reach, 'Coverage-Driver'), rv = by(d.rev, 'Coverage-Driver'), pr = by(d.pres, 'Coverage-Driver');
       const fx = (m, md) => [3, 5, 8].map(k => [k, d.fixed[m + '|' + md][String(k)]]);
       return [
-        { v: ['ok', 'Pass · ' + cd.Pc], draw: s => hbars(s, reachPF(d)),
-          x: `Coverage-Driver reaches held-out pairs in ${cd.Pc} seeds with P directions (${f2(cd.P)}); with F directions none pass (${f2(cd.F)}).`, f: 'Held-out Rel_tar(1), mean over 8 seeds.' },
-        { v: ['ok', 'Pass · ' + rv.Pc], draw: s => hbars(s, revPF(d)),
-          x: `Reversal is strongest here: ratio ${f2(rv.P)} with P directions on ${rv.Pc} seeds. With F directions it stays near ${f2(rv.F)}, no return.`, f: 'Reversal ratio, mean over 8 seeds.' },
-        { v: ['info', 'Supporting'], draw: s => lines(s, { x: [0, 3], y: [-.05, 1.35], xt: [0, 1, 2, 3], yt: [0, .5, 1], xl: 'dose scale', yl: 'steering recovery', h0: [{ y: 1, label: 'target' }], series: [{ pts: d.dose['random_matched'], c: F, d: '2 4' }, { pts: d.dose['Driver-OMP'], c: K.cr, d: '6 4', w: 2 }, { pts: d.dose['Coverage-Driver'], c: P }], legend: [[P, 'Coverage-Driver'], [K.cr, 'Driver-OMP', '6 4'], [F, 'random', '2 4']] }),
-          x: 'On unpaired prompts, Coverage-Driver’s recovery grows almost linearly with the dose and passes the target between 2× and 3×. Driver-OMP stays nearly flat.', f: 'Mean over 3 seeds, seven doses.' },
-        { v: ['na', 'Not evaluated'], draw: s => na(s, 'NOT EVALUATED', 'no feedback experiment is registered for Sentiment'),
-          x: 'Feedback tracking was not evaluated for Sentiment; the fixed-dose and dose studies cover its control instead.', f: 'See the experiment guide.' },
-        { v: ['no', 'Fail · ' + pr.seeds], draw: s => hbars(s, pres(d)),
-          x: `Changes on the off-target panel are small (mean KL ${f2(pr.mean)}) but still above δ = 0.001 for every seed.`, f: 'Shared 32-prompt panel, training-mean directions.' },
-        { v: ['info', 'Recovery ' + f2(d.fixed['Coverage-Driver|P']['8'])], draw: s => lines(s, { x: [3, 8], y: [0, 1.15], xt: [3, 5, 8], yt: [0, .5, 1], xl: 'support size k', yl: 'held-out recovery', h0: [{ y: 1, label: 'full recovery' }], series: [{ pts: fx('Random', 'P'), c: F, d: '2 4' }, { pts: fx('Driver-OMP', 'P'), c: K.cr, d: '6 4', w: 2 }, { pts: fx('Coverage-Driver', 'F'), c: P, d: '6 4', w: 2, o: .6 }, { pts: fx('Coverage-Driver', 'P'), c: P }], legend: [[P, 'Coverage-Driver P'], [K.cr, 'Driver-OMP', '6 4'], [F, 'random', '2 4']] }),
-          x: `At a fixed dose, recovery on held-out pairs grows with the support size: Coverage-Driver reaches ${[3, 5, 8].map(k => f2(d.fixed['Coverage-Driver|P'][k])).join(', ')} at k = 3, 5, 8. Random sites reach only ${f2(d.fixed['Random|P']['8'])}.`, f: 'Paired fixed-dose reuse, 8 seeds. Faded line: Coverage-Driver with F directions.' }
+        { v: ['ok', I18N.L('Pass · ', '通过 · ') + cd.Pc], draw: s => hbars(s, reachPF(d)),
+          x: I18N.L(`Coverage-Driver reaches held-out pairs in ${cd.Pc} seeds with P directions (${f2(cd.P)}); with F directions none pass (${f2(cd.F)}).`, `Coverage-Driver 在 P 方向下有 ${cd.Pc} 个种子到达留出提示对（${f2(cd.P)}）；F 方向下没有种子通过（${f2(cd.F)}）。`), f: I18N.L('Held-out Rel_tar(1), mean over 8 seeds.', '留出 Rel_tar(1)，8 个种子的均值。') },
+        { v: ['ok', I18N.L('Pass · ', '通过 · ') + rv.Pc], draw: s => hbars(s, revPF(d)),
+          x: I18N.L(`Reversal is strongest here: ratio ${f2(rv.P)} with P directions on ${rv.Pc} seeds. With F directions it stays near ${f2(rv.F)}, no return.`, `这里的反转最强：P 方向下比值 ${f2(rv.P)}，${rv.Pc} 个种子通过。F 方向下停在 ${f2(rv.F)} 附近，没有回拉。`), f: I18N.L('Reversal ratio, mean over 8 seeds.', '反转比值，8 个种子的均值。') },
+        { v: ['info', I18N.L('Supporting', '辅助研究')], draw: s => lines(s, { x: [0, 3], y: [-.05, 1.35], xt: [0, 1, 2, 3], yt: [0, .5, 1], xl: 'dose scale', yl: 'steering recovery', h0: [{ y: 1, label: 'target' }], series: [{ pts: d.dose['random_matched'], c: F, d: '2 4' }, { pts: d.dose['Driver-OMP'], c: K.cr, d: '6 4', w: 2 }, { pts: d.dose['Coverage-Driver'], c: P }], legend: [[P, 'Coverage-Driver'], [K.cr, 'Driver-OMP', '6 4'], [F, 'random', '2 4']] }),
+          x: I18N.L('On unpaired prompts, Coverage-Driver’s recovery grows almost linearly with the dose and passes the target between 2× and 3×. Driver-OMP stays nearly flat.', '在非配对提示上，Coverage-Driver 的恢复率随剂量近乎线性增长，在 2 倍到 3 倍之间越过目标。Driver-OMP 几乎持平。'), f: I18N.L('Mean over 3 seeds, seven doses.', '3 个种子的均值，七个剂量。') },
+        { v: ['na', I18N.L('Not evaluated', '未评测')], draw: s => na(s, 'NOT EVALUATED', 'no feedback experiment is registered for Sentiment'),
+          x: I18N.L('Feedback tracking was not evaluated for Sentiment; the fixed-dose and dose studies cover its control instead.', '情感任务没有评测反馈跟踪，其控制由固定剂量研究与剂量研究覆盖。'), f: I18N.L('See the experiment guide.', '见实验说明。') },
+        { v: ['no', I18N.L('Fail · ', '未通过 · ') + pr.seeds], draw: s => hbars(s, pres(d)),
+          x: I18N.L(`Changes on the off-target panel are small (mean KL ${f2(pr.mean)}) but still above δ = 0.001 for every seed.`, `非目标面板上的变化很小（KL 均值 ${f2(pr.mean)}），但每个种子仍高于 δ = 0.001。`), f: I18N.L('Shared 32-prompt panel, training-mean directions.', '共享的 32 条提示面板，训练均值方向。') },
+        { v: ['info', I18N.L('Recovery ', '恢复率 ') + f2(d.fixed['Coverage-Driver|P']['8'])], draw: s => lines(s, { x: [3, 8], y: [0, 1.15], xt: [3, 5, 8], yt: [0, .5, 1], xl: 'support size k', yl: 'held-out recovery', h0: [{ y: 1, label: 'full recovery' }], series: [{ pts: fx('Random', 'P'), c: F, d: '2 4' }, { pts: fx('Driver-OMP', 'P'), c: K.cr, d: '6 4', w: 2 }, { pts: fx('Coverage-Driver', 'F'), c: P, d: '6 4', w: 2, o: .6 }, { pts: fx('Coverage-Driver', 'P'), c: P }], legend: [[P, 'Coverage-Driver P'], [K.cr, 'Driver-OMP', '6 4'], [F, 'random', '2 4']] }),
+          x: I18N.L(`At a fixed dose, recovery on held-out pairs grows with the support size: Coverage-Driver reaches ${[3, 5, 8].map(k => f2(d.fixed['Coverage-Driver|P'][k])).join(', ')} at k = 3, 5, 8. Random sites reach only ${f2(d.fixed['Random|P']['8'])}.`, `在固定剂量下，留出提示对上的恢复率随支撑大小增长：Coverage-Driver 在 k = 3、5、8 时分别为 ${[3, 5, 8].map(k => f2(d.fixed['Coverage-Driver|P'][k])).join('、')}。随机位点只有 ${f2(d.fixed['Random|P']['8'])}。`), f: I18N.L('Paired fixed-dose reuse, 8 seeds. Faded line: Coverage-Driver with F directions.', '配对固定剂量复用，8 个种子。淡色线：使用 F 方向的 Coverage-Driver。') }
       ];
     }
     const d = D.ref, cd = by(d.reach, 'Coverage-Driver'), om = by(d.pres, 'Driver-OMP'), hp = hitsOf(d, 'P', 'Coverage-Driver'), hf = hitsOf(d, 'F', 'Coverage-Driver');
     return [
-      { v: ['no', 'Fail · 0/8'], draw: s => hbars(s, reachPF(d)),
-        x: `No selector reaches the held-out target: Rel_tar stays near ${f2(cd.P)} with either direction, on 0 of 8 seeds.`, f: 'Held-out Rel_tar(1), mean over 8 seeds.' },
-      { v: ['no', 'Fail · 0/8'], draw: s => hbars(s, revPF(d)),
-        x: `The opposite patch does not bring outputs back: ratios ${f2(Math.min(...d.rev.map(r => Math.min(r.P, r.F))))} to ${f2(Math.max(...d.rev.map(r => Math.max(r.P, r.F))))}, far below 2, on every seed.`, f: 'Reversal ratio, mean over 8 seeds.' },
+      { v: ['no', I18N.L('Fail · 0/8', '未通过 · 0/8')], draw: s => hbars(s, reachPF(d)),
+        x: I18N.L(`No selector reaches the held-out target: Rel_tar stays near ${f2(cd.P)} with either direction, on 0 of 8 seeds.`, `没有选择器到达留出目标：无论哪种方向，Rel_tar 都停在 ${f2(cd.P)} 附近，8 个种子全部未通过。`), f: I18N.L('Held-out Rel_tar(1), mean over 8 seeds.', '留出 Rel_tar(1)，8 个种子的均值。') },
+      { v: ['no', I18N.L('Fail · 0/8', '未通过 · 0/8')], draw: s => hbars(s, revPF(d)),
+        x: I18N.L(`The opposite patch does not bring outputs back: ratios ${f2(Math.min(...d.rev.map(r => Math.min(r.P, r.F))))} to ${f2(Math.max(...d.rev.map(r => Math.max(r.P, r.F))))}, far below 2, on every seed.`, `反向补丁无法把输出拉回：比值在 ${f2(Math.min(...d.rev.map(r => Math.min(r.P, r.F))))} 到 ${f2(Math.max(...d.rev.map(r => Math.max(r.P, r.F))))} 之间，每个种子都远低于 2。`), f: I18N.L('Reversal ratio, mean over 8 seeds.', '反转比值，8 个种子的均值。') },
       { v: ['ok', 'ρ = 1 · 48/48'], draw: s => lines(s, { x: [-1, 2], y: [-.3, 1.1], xt: [-1, 0, 1, 2], yt: [0, .5, 1], xl: 'dose γ', yl: 'target progress', h0: [{ y: 1, label: 'target' }, { y: 0, c: K.ax, d: null, w: 1 }], series: [{ pts: d.dose['Coverage-Driver|F'], c: F, d: '6 4' }, { pts: d.dose['Coverage-Driver|P'], c: P }], legend: [[P, 'P'], [F, 'F', '6 4']] }),
-        x: `All 48 curves are perfectly ordered (ρ = 1), yet progress is only ${f2(d.dose['Coverage-Driver|P'].find(p => p[0] === 1)[1])} at the nominal dose γ = 1. Ordered is not the same as reaching or reversing.`, f: 'Mean progress over 8 seeds, Coverage-Driver, ten doses.' },
-      { v: ['mid', hp.hit + '/' + hp.n + ' hits'], draw: s => traj(s, d.fb, .1, 'refusal margin'), tiles: s => tiles(s, [{ label: 'P', hit: hp.hit, n: hp.n, c: P }, { label: 'F', hit: hf.hit, n: hf.n, c: F }]),
-        x: `Feedback hits ${hp.hit} of ${hp.n} targets with P directions and ${hf.hit} with F, under a tighter tolerance of 0.1.`, f: 'Lines: seed 0, five targets, Coverage-Driver.' },
+        x: I18N.L(`All 48 curves are perfectly ordered (ρ = 1), yet progress is only ${f2(d.dose['Coverage-Driver|P'].find(p => p[0] === 1)[1])} at the nominal dose γ = 1. Ordered is not the same as reaching or reversing.`, `全部 48 条曲线完全有序（ρ = 1），但在名义剂量 γ = 1 处进展只有 ${f2(d.dose['Coverage-Driver|P'].find(p => p[0] === 1)[1])}。有序并不等于能到达或能反转。`), f: I18N.L('Mean progress over 8 seeds, Coverage-Driver, ten doses.', '8 个种子的平均进展，Coverage-Driver，十个剂量。') },
+      { v: ['mid', hp.hit + '/' + hp.n + I18N.L(' hits', ' 命中')], draw: s => traj(s, d.fb, .1, 'refusal margin'), tiles: s => tiles(s, [{ label: 'P', hit: hp.hit, n: hp.n, c: P }, { label: 'F', hit: hf.hit, n: hf.n, c: F }]),
+        x: I18N.L(`Feedback hits ${hp.hit} of ${hp.n} targets with P directions and ${hf.hit} with F, under a tighter tolerance of 0.1.`, `在更严格的 0.1 容差下，反馈在 P 方向命中 ${hp.hit}/${hp.n} 个目标，F 方向命中 ${hf.hit} 个。`), f: I18N.L('Lines: seed 0, five targets, Coverage-Driver.', '曲线：种子 0、五个目标，Coverage-Driver。') },
       { v: ['mid', 'Driver-OMP ' + om.seeds], draw: s => hbars(s, pres(d, r => r.m === 'Driver-OMP')),
-        x: `Driver-OMP keeps the seed-mean KL under δ = 0.001 on ${om.seeds} seeds (${om.all} on every prompt), the only selector to pass anywhere.`, f: 'Shared 32-prompt panel, training-mean directions.' },
-      { v: ['na', 'Not evaluated'], draw: s => na(s, 'NOT EVALUATED', 'no held-out reuse experiment for Refusal'),
-        x: 'Held-out reuse was not run for Refusal.', f: 'See the experiment guide.' }
+        x: I18N.L(`Driver-OMP keeps the seed-mean KL under δ = 0.001 on ${om.seeds} seeds (${om.all} on every prompt), the only selector to pass anywhere.`, `Driver-OMP 在 ${om.seeds} 个种子上把种子均值 KL 保持在 δ = 0.001 以下（${om.all} 个种子在每条提示上都满足），是唯一在任何任务上通过的选择器。`), f: I18N.L('Shared 32-prompt panel, training-mean directions.', '共享的 32 条提示面板，训练均值方向。') },
+      { v: ['na', I18N.L('Not evaluated', '未评测')], draw: s => na(s, 'NOT EVALUATED', 'no held-out reuse experiment for Refusal'),
+        x: I18N.L('Held-out reuse was not run for Refusal.', '拒答任务没有进行留出复用实验。'), f: I18N.L('See the experiment guide.', '见实验说明。') }
     ];
   }
   const TAKE = {
-    ioi: 'IOI <b>reaches, reverses and tracks</b> targets on every seed; reuse on new pairs is only partial.',
-    mcqa: '<b>Direction information decides the profile.</b> Evaluation-pair directions pass reachability, reversal and feedback; training-mean directions fail all three.',
-    sent: '<b>Strong, reversible control</b> with evaluation-pair directions, at a small but measurable off-target cost.',
-    ref: '<b>Ordered is not reversible.</b> Refusal follows the dose in perfect order, yet never reaches the held-out target or comes back.'
+    ioi: ['IOI <b>reaches, reverses and tracks</b> targets on every seed; reuse on new pairs is only partial.', 'IOI 在每个种子上都能<b>到达、反转并跟踪</b>目标；在新提示对上的复用只部分有效。'],
+    mcqa: ['<b>Direction information decides the profile.</b> Evaluation-pair directions pass reachability, reversal and feedback; training-mean directions fail all three.', '<b>方向信息决定表现。</b>评价对方向通过可达性、反转与反馈；训练均值方向三项全部失败。'],
+    sent: ['<b>Strong, reversible control</b> with evaluation-pair directions, at a small but measurable off-target cost.', '使用评价对方向时得到<b>强而可逆的控制</b>，代价是小但可测的非目标变化。'],
+    ref: ['<b>Ordered is not reversible.</b> Refusal follows the dose in perfect order, yet never reaches the held-out target or comes back.', '<b>有序不等于可逆。</b>拒答任务完全按剂量有序变化，却从未到达留出目标，也无法被拉回。']
   };
 
   let cur = 'ioi', sub = 'hum', opener = null, raf = 0;
@@ -1089,9 +968,9 @@ $$('.ax').forEach(b => b.addEventListener('click', () => {
   function render(){
     cancelAnimationFrame(raf);
     const t = TASK[cur], list = cards(cur, sub);
-    $('#xr-k').textContent = `04 / Experiments · ${t.n} / ${t.name}`;
-    $('#xr-title').textContent = cur === 'mcqa' ? `MCQA · ${sub === 'hum' ? 'Humanities' : 'STEM'}` : t.title;
-    $('#xr-meta').textContent = t.meta; $('#xr-take').innerHTML = TAKE[cur];
+    $('#xr-k').textContent = I18N.L(`04 / Experiments · ${t.n} / ${t.name}`, `04 / 实验 · ${t.n} / ${I18N.t(t.name)}`);
+    $('#xr-title').textContent = cur === 'mcqa' ? `MCQA · ${I18N.t(sub === 'hum' ? 'Humanities' : 'STEM')}` : I18N.t(t.title);
+    $('#xr-meta').textContent = I18N.t(t.meta); $('#xr-take').innerHTML = I18N.L(...TAKE[cur]);
     $('#xr-sub').hidden = cur !== 'mcqa';
     $$('#xr-sub button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.sub === sub)));
     $$('.xr-tab').forEach(b => b.setAttribute('aria-selected', String(b.dataset.task === cur)));
@@ -1099,12 +978,12 @@ $$('.ax').forEach(b => b.addEventListener('click', () => {
     const anims = [];
     list.forEach((c, i) => {
       const a = document.createElement('a'); a.href = '#xc-' + i;
-      a.innerHTML = `<span class="n">0${i + 1} / ${SHORT[i]}</span><span class="t">${AX[i]}</span><span class="chip ${c.v[0]}">${c.v[1]}</span>`;
+      a.innerHTML = `<span class="n">0${i + 1} / ${I18N.t(SHORT[i])}</span><span class="t">${I18N.t(AX[i])}</span><span class="chip ${c.v[0]}">${c.v[1]}</span>`;
       a.addEventListener('click', e => { e.preventDefault(); $('#xc-' + i).scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); });
       score.appendChild(a);
       const card = document.createElement('article'); card.className = 'xc'; card.id = 'xc-' + i;
-      card.innerHTML = `<div class="xc-h"><p class="label">0${i + 1} / ${AX[i]}</p><span class="chip ${c.v[0]}">${c.v[1]}</span></div>`;
-      const svg = el('svg', { role: 'img', 'aria-label': `${AX[i]} chart` }); card.appendChild(svg);
+      card.innerHTML = `<div class="xc-h"><p class="label">0${i + 1} / ${I18N.t(AX[i])}</p><span class="chip ${c.v[0]}">${c.v[1]}</span></div>`;
+      const svg = el('svg', { role: 'img', 'aria-label': `${I18N.t(AX[i])}` }); card.appendChild(svg);
       const fn = c.draw(svg); let fn2 = null;
       if (c.tiles){ const s2 = el('svg', { 'aria-hidden': 'true' }); s2.style.marginTop = '4px'; card.appendChild(s2); fn2 = c.tiles(s2); }
       const p = document.createElement('p'); p.className = 'x'; p.textContent = c.x; card.appendChild(p);
@@ -1131,6 +1010,7 @@ $$('.ax').forEach(b => b.addEventListener('click', () => {
   $$('.xr-tab').forEach(b => b.addEventListener('click', () => { if (b.dataset.task === cur) return; cur = b.dataset.task; xr.scrollTo({ top: 0 }); render(); }));
   $$('#xr-sub button').forEach(b => b.addEventListener('click', () => { if (b.dataset.sub === sub) return; sub = b.dataset.sub; render(); }));
   $('#xr-x').addEventListener('click', close);
+  I18N.on(() => { if (!xr.hidden) render(); });
   document.addEventListener('keydown', e => {
     if (xr.hidden) return;
     if (e.key === 'Escape') close();
@@ -1149,9 +1029,9 @@ $$('.links a').forEach(a => a.addEventListener('click', () => { nav.classList.re
 /* ---- copy BibTeX ---- */
 $('#copy-bib').addEventListener('click', e => {
   const b = e.currentTarget, text = $('#bib').textContent;
-  const done = m => { b.textContent = m; setTimeout(() => { b.textContent = 'Copy BibTeX'; }, 2000); };
-  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done('Copied'), () => done('Copy blocked here'));
-  else done('Copy blocked here');
+  const label = b.innerHTML, done = m => { b.textContent = m; setTimeout(() => { b.innerHTML = label; }, 2000); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done(I18N.L('Copied', '已复制')), () => done(I18N.L('Copy blocked here', '此处无法复制')));
+  else done(I18N.L('Copy blocked here', '此处无法复制'));
 });
 
 rebuild(); buildFw();

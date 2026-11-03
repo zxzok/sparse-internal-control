@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Six-Axis Protocol · Sparse Internal Control</title>
+<meta name="description" content="The six-axis protocol for evaluating internal control of language models: reachability, signed reversal, dose response, feedback controllability, off-target preservation and held-out reuse, with operational definitions, thresholds and results.">
+<link rel="canonical" href="https://sparsecontrol.xizhe.net/protocol.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="author" content="Xizhe Zhang">
+<meta name="theme-color" content="#111111">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sparse Internal Control">
+<meta property="og:title" content="Six-axis protocol · Sparse Internal Control of Language Models">
+<meta property="og:description" content="Operational definitions, thresholds and results for reachability, signed reversal, dose response, feedback controllability, off-target preservation and held-out reuse.">
+<meta property="og:url" content="https://sparsecontrol.xizhe.net/protocol.html">
+<meta property="og:image" content="https://sparsecontrol.xizhe.net/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<style>
+/* Same system as the home page: poster sections, black, paper and lime grounds, tile grids. Sizes are drawn on a 1586px canvas and scale with --u. */
+:root{
+  --u:clamp(.62px, calc(100vw / 1586), 1.35px);
+  --black:#111111; --paper:#F1F1EC; --cream:#F4F3EE; --lime:#D7EE5B;
+  --g1:#8B8B88; --g2:#6E6E6B; --g3:#BDBDB8; --rule-dark:#5E5E5B; --tile:#7F7F7C; --panel:#2E2E2C;
+  --anton:"Anton","Archivo","Arial Narrow","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --display:"Archivo","Arial Narrow","Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --sans:"Poppins",system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC","Noto Sans CJK SC","Source Han Sans SC";
+  --pad:max(16px, calc(var(--u) * 40));
+  --pl:max(var(--pad), env(safe-area-inset-left,0px)); --pr:max(var(--pad), env(safe-area-inset-right,0px));
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:64px}
+body{margin:0; background:var(--black); color:var(--cream); font-family:var(--sans); font-size:1rem; line-height:1.5rem; -webkit-font-smoothing:antialiased}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:60; background:var(--black)}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+ul,ol{margin:0; padding:0; list-style:none}
+button{font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer; text-align:left}
+:focus-visible{outline:3px solid var(--lime); outline-offset:3px}
+.lime :focus-visible,.light :focus-visible{outline-color:var(--black)}
+.skip{position:fixed; left:16px; top:16px; z-index:100; padding:8px 12px; background:var(--lime); color:var(--black); font-weight:600; transform:translateY(-200%); transition:transform 300ms var(--ease)}
+.skip:focus{transform:none}
+.label{font-family:var(--mono); font-weight:600; font-size:max(12px, calc(var(--u) * 18)); line-height:calc(var(--u) * 28); letter-spacing:.08em; text-transform:uppercase}
+.disp{font-family:var(--display); font-weight:900; font-stretch:62%; text-transform:uppercase; line-height:.8; letter-spacing:-.02em}
+.dispm{font-family:var(--display); font-weight:900; font-stretch:72%; line-height:.92; letter-spacing:-.02em}
+.ic{width:1em; height:1em; fill:none; stroke:currentColor; stroke-width:2.6; stroke-linecap:square; vertical-align:-.1em}
+.ulink{display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:max(16px, calc(var(--u) * 21)); line-height:1.3; text-decoration:none; padding-bottom:3px; border-bottom:2px solid currentColor; white-space:nowrap}
+.ulink .ic{transition:transform 300ms var(--ease)}
+.ulink:hover .ic{transform:translate(3px,-3px)}
+.katex{font-size:1.06em}
+
+/* nav */
+.nav{position:sticky; top:env(safe-area-inset-top,0px); z-index:50; background:var(--black)}
+.nav-in{display:flex; align-items:center; justify-content:space-between; gap:24px; height:64px; margin-left:var(--pl); margin-right:var(--pr); border-bottom:2px solid var(--rule-dark)}
+.brand{display:inline-flex; align-items:center; gap:14px; text-decoration:none; color:var(--cream)}
+.logo{display:grid; grid-template-columns:repeat(2,13px); gap:4px}
+.logo i{width:13px; height:13px; background:var(--lime)}
+.brand-t{font-family:var(--anton); font-size:31px; line-height:1; letter-spacing:.005em; text-transform:uppercase}
+.links{display:flex; align-items:center; gap:36px}
+.links a{position:relative; font-family:var(--display); font-weight:600; font-stretch:92%; font-size:20px; line-height:28px; text-decoration:none; color:var(--cream); padding-block:4px}
+.links a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:3px; background:var(--lime); transform:scaleX(0); transform-origin:left; transition:transform 500ms var(--ease)}
+.links a:hover::after,.links a[aria-current="page"]::after{transform:scaleX(1)}
+.menu-btn{display:none; width:40px; height:40px; position:relative}
+.menu-btn span{position:absolute; left:8px; right:8px; height:3px; background:var(--cream); transition:transform 500ms var(--ease)}
+.menu-btn span:first-child{top:13px} .menu-btn span:last-child{top:24px}
+.open .menu-btn span:first-child{transform:translateY(5.5px) rotate(45deg)}
+.open .menu-btn span:last-child{transform:translateY(-5.5px) rotate(-45deg)}
+
+/* sections */
+.sec{position:relative; padding:calc(var(--u) * 34) var(--pr) calc(var(--u) * 64) var(--pl)}
+.light{background:var(--paper); color:var(--black)}
+.lime{background:var(--lime); color:var(--black)}
+.dark{background:var(--black); color:var(--cream)}
+.sec-label{display:flex; align-items:center; gap:calc(var(--u) * 20)}
+.sec-label .rule{flex:1; height:2px; background:currentColor}
+.h2{font-size:calc(var(--u) * 120); margin-top:calc(var(--u) * 18)}
+.h2m{font-size:calc(var(--u) * 104); margin-top:calc(var(--u) * 22)}
+.lead{font-size:calc(var(--u) * 27); line-height:1.3; margin-top:calc(var(--u) * 14); max-width:calc(var(--u) * 1060)}
+.box{border:2px solid currentColor; padding:calc(var(--u) * 14) calc(var(--u) * 18); overflow-x:auto; overflow-y:hidden; position:relative}
+
+/* hero */
+.hero{position:relative; padding:calc(var(--u) * 22) var(--pr) calc(var(--u) * 48) var(--pl); overflow:hidden}
+.t-title{font-family:var(--anton); font-weight:400; text-transform:uppercase; font-size:calc(var(--u) * 260); line-height:1; letter-spacing:.012em; white-space:nowrap; width:max-content; margin:calc(var(--u) * -4) 0 0 calc(var(--u) * -9)}
+.t-sub{font-weight:500; font-size:calc(var(--u) * 39); line-height:1.1; margin-top:calc(var(--u) * -6)}
+.gwrap{position:relative; margin-top:calc(var(--u) * 54)}
+#gmat{display:block; width:100%; height:auto; overflow:visible}
+.t-foot{display:flex; justify-content:space-between; align-items:flex-end; gap:32px; margin-top:calc(var(--u) * 44)}
+.t-foot p{font-size:calc(var(--u) * 24); line-height:1.35; max-width:calc(var(--u) * 820)}
+.ctas{display:flex; flex-wrap:wrap; align-items:center; gap:calc(var(--u) * 34)}
+.btn-lime{display:inline-flex; align-items:center; gap:12px; height:calc(var(--u) * 51); padding:0 calc(var(--u) * 27); background:var(--lime); color:var(--black); font-weight:600; font-size:calc(var(--u) * 21); text-decoration:none; white-space:nowrap; transition:transform 300ms var(--ease), background-color 300ms var(--ease)}
+.btn-lime:hover{background:#E4F57C; transform:translateY(-2px)}
+.btn-lime:active{transform:scale(.98)}
+
+/* model */
+.steps{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:calc(var(--u) * 44); border-top:2px solid var(--black)}
+.step{display:grid; grid-template-rows:auto auto auto 1fr; gap:calc(var(--u) * 14); padding:calc(var(--u) * 24) calc(var(--u) * 36) calc(var(--u) * 8) 0; min-width:0}
+.step + .step{padding-left:calc(var(--u) * 36); border-left:2px solid var(--black)}
+.step:last-child{padding-right:0}
+.step .label{font-weight:700; font-size:calc(var(--u) * 21); letter-spacing:.1em}
+.step h3{font-size:calc(var(--u) * 54)}
+.step p{font-size:calc(var(--u) * 19); line-height:1.45}
+.step .box{font-size:calc(var(--u) * 22); align-self:end}
+.defs{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin-top:calc(var(--u) * 40); border-top:2px solid var(--black); border-bottom:2px solid var(--black)}
+.def{padding:calc(var(--u) * 18) calc(var(--u) * 24) calc(var(--u) * 20) 0; display:grid; gap:calc(var(--u) * 8); min-width:0}
+.def + .def{padding-left:calc(var(--u) * 24); border-left:2px solid var(--black)}
+.def .sym{font-size:calc(var(--u) * 26); overflow-x:auto; overflow-y:hidden; position:relative}
+.def p{font-size:calc(var(--u) * 17); line-height:1.45; color:#3A3A37}
+
+/* objective */
+.obj{margin-top:calc(var(--u) * 40); background:var(--black); color:var(--cream); padding:calc(var(--u) * 44) calc(var(--u) * 40); overflow-x:auto; overflow-y:hidden; position:relative; font-size:calc(var(--u) * 40); text-align:center}
+.obj .narrow{display:none}
+.obj .label{display:block; text-align:left; color:var(--lime); font-size:calc(var(--u) * 16); margin-bottom:calc(var(--u) * 20)}
+.terms{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:calc(var(--u) * 36); border-top:2px solid var(--black)}
+.term{padding:calc(var(--u) * 22) calc(var(--u) * 30) 0 0; display:grid; gap:calc(var(--u) * 10); align-content:start; min-width:0}
+.term + .term{padding-left:calc(var(--u) * 30); border-left:2px solid var(--black)}
+.term .sym{font-size:calc(var(--u) * 30); overflow-x:auto; overflow-y:hidden; position:relative}
+.term h3{font-size:calc(var(--u) * 46)}
+.term p{font-size:calc(var(--u) * 19); line-height:1.45}
+
+/* explorer */
+.xp{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:calc(var(--u) * 40); margin-top:calc(var(--u) * 44)}
+.xp-plot{position:relative; min-height:calc(var(--u) * 520); border:2px solid var(--panel)}
+.xp-plot canvas{position:absolute; inset:0; width:100%; height:100%}
+.xp-side{display:grid; gap:calc(var(--u) * 26); align-content:start}
+.xp-side .note{font-size:calc(var(--u) * 19); line-height:1.45; color:var(--g3)}
+.xp-k{font-family:var(--mono); font-weight:600; font-size:max(12px, calc(var(--u) * 15)); letter-spacing:.08em; text-transform:uppercase; color:var(--g3); margin-bottom:calc(var(--u) * 10)}
+.chips{display:flex; flex-wrap:wrap; gap:calc(var(--u) * 10)}
+.chip{min-width:calc(var(--u) * 62); padding:calc(var(--u) * 10) calc(var(--u) * 14); border:2px solid var(--cream); font-size:calc(var(--u) * 20); line-height:1; text-align:center; transition:background-color 300ms var(--ease), color 300ms var(--ease), border-color 300ms var(--ease), transform 300ms var(--ease)}
+.chip:hover{border-color:var(--lime)}
+.chip:active{transform:scale(.96)}
+.chip[aria-pressed="true"]{background:var(--lime); border-color:var(--lime); color:var(--black)}
+.krow{display:flex; justify-content:space-between; align-items:baseline; gap:16px}
+.kval{font-family:var(--mono); font-weight:500; font-size:calc(var(--u) * 18); color:var(--lime)}
+input[type=range]{width:100%; accent-color:var(--lime)}
+.reads{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:2px solid var(--panel); border-left:2px solid var(--panel)}
+.reads div{padding:calc(var(--u) * 14) calc(var(--u) * 16); border-right:2px solid var(--panel); border-bottom:2px solid var(--panel); display:grid; gap:4px; position:relative}
+.reads dt{font-size:calc(var(--u) * 16); color:var(--g3)}
+.reads dd{margin:0; font-family:var(--mono); font-weight:600; font-size:calc(var(--u) * 26); font-variant-numeric:tabular-nums}
+.status{font-size:calc(var(--u) * 19); line-height:1.45; padding:calc(var(--u) * 14) calc(var(--u) * 18); border-left:4px solid var(--g1); background:#1B1B1A; position:relative}
+.status.ok{border-left-color:var(--lime)}
+.status.mid{border-left-color:var(--cream)}
+.xp-btns{display:flex; flex-wrap:wrap; align-items:center; gap:calc(var(--u) * 24)}
+.btn-line{display:inline-flex; align-items:center; gap:10px; padding:calc(var(--u) * 12) calc(var(--u) * 22); border:2px solid var(--cream); font-weight:600; font-size:calc(var(--u) * 19); transition:background-color 300ms var(--ease), color 300ms var(--ease), border-color 300ms var(--ease)}
+.btn-line:hover{background:var(--lime); border-color:var(--lime); color:var(--black)}
+.btn-line:disabled{opacity:.45; pointer-events:none}
+.txt-btn{font-family:var(--mono); font-weight:600; font-size:calc(var(--u) * 15); letter-spacing:.08em; text-transform:uppercase; border-bottom:2px solid currentColor}
+.cap{font-size:calc(var(--u) * 17); line-height:1.45; color:var(--g1); margin-top:calc(var(--u) * 16)}
+
+/* results */
+.thm{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:calc(var(--u) * 44); border-top:2px solid var(--black)}
+.thm li{display:grid; grid-template-rows:auto auto auto 1fr; gap:calc(var(--u) * 14); padding:calc(var(--u) * 24) calc(var(--u) * 32) calc(var(--u) * 32) 0; min-width:0}
+.thm li:not(:nth-child(3n+1)){padding-left:calc(var(--u) * 32); border-left:2px solid var(--black)}
+.thm li:nth-child(3n){padding-right:0}
+.thm li:nth-child(n+4){border-top:2px solid var(--black)}
+.thm .tag{font-family:var(--mono); font-weight:600; font-size:calc(var(--u) * 15); letter-spacing:.08em; text-transform:uppercase; color:var(--g2)}
+.thm h3{font-size:calc(var(--u) * 50)}
+.thm .box{font-size:calc(var(--u) * 21); display:grid; gap:calc(var(--u) * 8)}
+.thm p{font-size:calc(var(--u) * 18); line-height:1.5}
+.thm-foot{display:flex; justify-content:space-between; align-items:center; gap:24px; margin-top:calc(var(--u) * 28); font-weight:500; font-size:calc(var(--u) * 22)}
+
+/* selectors */
+.sel{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); margin-top:calc(var(--u) * 44); border-top:2px solid var(--black)}
+.sel > div{display:grid; gap:calc(var(--u) * 16); align-content:start; padding:calc(var(--u) * 26) calc(var(--u) * 40) 0 0; min-width:0}
+.sel > div + div{padding-left:calc(var(--u) * 40); padding-right:0; border-left:2px solid var(--black)}
+.sel h3{font-size:calc(var(--u) * 92)}
+.sel p{font-size:calc(var(--u) * 20); line-height:1.45}
+.sel .box{font-size:calc(var(--u) * 22)}
+.pipe{display:grid; grid-template-columns:1fr auto 1fr auto 1fr; align-items:stretch; gap:calc(var(--u) * 14); margin-top:calc(var(--u) * 48)}
+.pipe .st{background:var(--black); color:var(--cream); padding:calc(var(--u) * 20) calc(var(--u) * 22); display:grid; gap:calc(var(--u) * 8); position:relative; overflow:hidden}
+.pipe .st b{font-family:var(--display); font-weight:900; font-stretch:68%; font-size:calc(var(--u) * 40); line-height:1; letter-spacing:-.015em}
+.pipe .st span{font-size:calc(var(--u) * 17); line-height:1.4; color:var(--g3)}
+.pipe .st i{position:absolute; left:0; bottom:0; height:4px; width:0; background:var(--lime)}
+.pipe .ar{display:grid; place-items:center; font-size:calc(var(--u) * 34)}
+
+/* closing band and footer */
+.close{padding:calc(var(--u) * 56) var(--pr) calc(var(--u) * 20) var(--pl)}
+.close h2{font-size:calc(var(--u) * 112)}
+.close h2 span{color:var(--lime)}
+.close .row{display:flex; flex-wrap:wrap; gap:16px calc(var(--u) * 40); margin-top:calc(var(--u) * 36)}
+.foot{display:flex; justify-content:space-between; align-items:center; gap:16px; margin-top:calc(var(--u) * 64); padding-top:calc(var(--u) * 12); padding-bottom:calc(var(--u) * 12); border-top:2px solid var(--g3)}
+.foot .label{font-weight:500}
+.foot a{font-family:var(--mono); font-weight:500; font-size:max(12px, calc(var(--u) * 18)); letter-spacing:.04em; text-decoration:none; display:inline-flex; gap:8px; align-items:center}
+.foot a:hover{color:var(--lime)}
+
+@media (max-width:1100px){
+  .links{gap:22px}
+  .thm{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .thm li:not(:nth-child(3n+1)){padding-left:0; border-left:0}
+  .thm li:nth-child(3n){padding-right:calc(var(--u) * 32)}
+  .thm li:nth-child(2n){padding-left:calc(var(--u) * 32); border-left:2px solid var(--black); padding-right:0}
+  .thm li:nth-child(n+3){border-top:2px solid var(--black)}
+  .defs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .def:nth-child(3){padding-left:0; border-left:0}
+  .def:nth-child(n+3){border-top:2px solid var(--black)}
+}
+@media (max-width:860px){
+  :root{--u:.62px}
+  .links{display:none}
+  .menu-btn{display:block}
+  .open .links{display:flex; position:fixed; top:calc(64px + env(safe-area-inset-top,0px)); left:0; right:0; flex-direction:column; align-items:flex-start; gap:12px; padding:24px var(--pl) 32px; background:var(--black); border-bottom:2px solid var(--rule-dark)}
+  .open .links a{font-size:2rem; line-height:2.5rem}
+  .brand-t{font-size:26px}
+  .sec{padding-top:48px; padding-bottom:56px}
+  .hero{padding-top:24px}
+  .t-sub{font-size:22px; margin-top:6px}
+  .gwrap{margin-top:28px}
+  .t-foot{flex-direction:column; align-items:flex-start; gap:22px}
+  .t-foot p{font-size:17px}
+  .btn-lime{height:48px; font-size:18px; padding:0 22px}
+  .ctas{gap:24px}
+  .h2{font-size:56px} .h2m{font-size:46px}
+  .lead{font-size:17px}
+  .steps,.terms,.sel{grid-template-columns:minmax(0,1fr)}
+  .step,.step + .step,.term,.term + .term,.sel > div,.sel > div + div{padding:20px 0 24px; border-left:0}
+  .step + .step,.term + .term,.sel > div + div{border-top:2px solid var(--black)}
+  .step .label{font-size:14px} .step h3{font-size:36px} .step p,.term p,.sel p{font-size:16px}
+  .step .box,.sel .box{font-size:16px}
+  .defs{grid-template-columns:minmax(0,1fr)}
+  .def,.def + .def,.def:nth-child(3){padding:16px 0; border-left:0}
+  .def + .def{border-top:2px solid var(--black)}
+  .def .sym{font-size:19px} .def p{font-size:15px}
+  .obj{font-size:17px; padding:20px 16px}
+  .obj .wide{display:none} .obj .narrow{display:block}
+  .obj .label{font-size:12px}
+  .term .sym{font-size:20px} .term h3{font-size:32px}
+  .xp{grid-template-columns:minmax(0,1fr); gap:24px}
+  .xp-plot{min-height:340px}
+  .xp-side .note,.status{font-size:15px}
+  .xp-k{font-size:12px}
+  .chip{font-size:16px; min-width:52px; padding:10px 12px}
+  .kval{font-size:15px}
+  .reads dt{font-size:13px} .reads dd{font-size:19px}
+  .btn-line{font-size:16px; padding:10px 16px}
+  .txt-btn{font-size:12px}
+  .cap{font-size:14px}
+  .thm{grid-template-columns:minmax(0,1fr)}
+  .thm li,.thm li:nth-child(2n),.thm li:not(:nth-child(3n+1)),.thm li:nth-child(3n){padding:22px 0 26px; border-left:0}
+  .thm li + li{border-top:2px solid var(--black)}
+  .thm .tag{font-size:12px} .thm h3{font-size:34px} .thm .box{font-size:16px} .thm p{font-size:15px}
+  .thm-foot{flex-direction:column; align-items:flex-start; font-size:16px}
+  .sel h3{font-size:56px}
+  .pipe{grid-template-columns:minmax(0,1fr); gap:8px}
+  .pipe .ar{transform:rotate(90deg); font-size:24px}
+  .pipe .st b{font-size:30px} .pipe .st span{font-size:15px}
+  .close h2{font-size:50px}
+}
+/* language switch and Chinese typesetting */
+.nav-in{justify-content:flex-start}
+.links{margin-left:auto}
+.lang-sw{display:flex; flex:none; margin-left:32px; border:2px solid #3A3A37}
+.lang-sw button{padding:4px 10px; font-family:var(--mono); font-weight:600; font-size:13px; line-height:20px; letter-spacing:.06em; color:var(--g3); transition:background-color 300ms var(--ease), color 300ms var(--ease)}
+.lang-sw button:hover{color:var(--cream)}
+.lang-sw button[aria-pressed="true"]{background:var(--lime); color:var(--black)}
+.menu-btn{margin-left:14px}
+html[lang="zh-CN"] .disp,html[lang="zh-CN"] .dispm{letter-spacing:0; line-height:1.14}
+html[lang="zh-CN"] .label{letter-spacing:.05em}
+html[lang="zh-CN"] body{line-break:strict}
+@media (max-width:1040px){
+  .links{display:none}
+  .menu-btn{display:block}
+  .lang-sw{margin-left:auto}
+  .open .links{display:flex; position:fixed; top:calc(64px + env(safe-area-inset-top,0px)); left:0; right:0; flex-direction:column; align-items:flex-start; gap:12px; padding:24px var(--pl) 32px; background:var(--black); border-bottom:2px solid var(--rule-dark)}
+  .open .links a{font-size:2rem; line-height:2.5rem}
+}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:1ms !important; animation:none !important}
+}
+/* protocol page */
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.axr{font-size:calc(var(--u) * 20); line-height:1.45; margin-top:calc(var(--u) * 16); font-weight:500}
+.ptiles{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:calc(var(--u) * 14); margin-top:calc(var(--u) * 48)}
+.ptile{position:relative; display:grid; grid-template-rows:auto 1fr; gap:calc(var(--u) * 8); padding:calc(var(--u) * 14) calc(var(--u) * 16) calc(var(--u) * 10); background:#1B1B1A; border:2px solid #2E2E2C; text-decoration:none; color:var(--cream); transition:border-color 300ms var(--ease), transform 300ms var(--ease)}
+.ptile:hover{border-color:var(--lime); transform:translateY(-3px)}
+.ptile .ph{display:flex; justify-content:space-between; align-items:baseline; gap:12px}
+.ptile .pn{font-family:var(--mono); font-weight:600; font-size:max(12px, calc(var(--u) * 15)); letter-spacing:.08em; color:var(--lime)}
+.ptile .pt{font-family:var(--display); font-weight:900; font-stretch:66%; font-size:calc(var(--u) * 34); line-height:1; text-transform:uppercase}
+.ptile .pv{font-family:var(--mono); font-weight:600; font-size:max(11px, calc(var(--u) * 13)); letter-spacing:.08em; text-transform:uppercase; color:var(--g1)}
+.ptile svg{display:block; width:100%; height:auto}
+.setup{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin-top:calc(var(--u) * 40); border-top:2px solid var(--black)}
+.setup > div{display:grid; gap:calc(var(--u) * 10); align-content:start; padding:calc(var(--u) * 22) calc(var(--u) * 24) calc(var(--u) * 6) 0; min-width:0}
+.setup > div + div{padding-left:calc(var(--u) * 24); border-left:2px solid var(--black)}
+.setup .label{font-weight:700; font-size:calc(var(--u) * 19); letter-spacing:.1em}
+.setup h3{font-size:calc(var(--u) * 44)}
+.setup p{font-size:calc(var(--u) * 18); line-height:1.45}
+.setup .box{font-size:calc(var(--u) * 19)}
+.note{display:grid; grid-template-columns:auto minmax(0,1fr); gap:calc(var(--u) * 18); align-items:start; margin-top:calc(var(--u) * 34); padding:calc(var(--u) * 18) calc(var(--u) * 22); background:var(--black); color:var(--cream)}
+.note b{font-family:var(--mono); font-weight:600; font-size:max(12px, calc(var(--u) * 14)); letter-spacing:.08em; text-transform:uppercase; color:var(--lime); padding-top:4px}
+.note p{font-size:calc(var(--u) * 19); line-height:1.5}
+.axs .axg{display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); gap:calc(var(--u) * 48); margin-top:calc(var(--u) * 22)}
+.axs .axh{font-size:calc(var(--u) * 128)}
+.axs .axq{font-weight:500; font-size:calc(var(--u) * 29); line-height:1.25; margin-top:calc(var(--u) * 16)}
+.spec{margin:calc(var(--u) * 28) 0 0; border-top:2px solid currentColor}
+.spec > div{display:grid; grid-template-columns:calc(var(--u) * 150) minmax(0,1fr); gap:calc(var(--u) * 20); padding:calc(var(--u) * 13) 0; border-bottom:2px solid currentColor}
+.spec dt{font-family:var(--mono); font-weight:600; font-size:max(12px, calc(var(--u) * 14)); letter-spacing:.08em; text-transform:uppercase; padding-top:4px}
+.spec dd{margin:0; font-size:calc(var(--u) * 19); line-height:1.45; min-width:0; overflow-x:auto; overflow-y:hidden; position:relative}
+.spec code,.res code{font-family:var(--mono); font-size:.92em}
+.dark .spec,.dark .spec > div{border-color:#3A3A37}
+.stage{display:grid; gap:calc(var(--u) * 10); background:var(--black); color:var(--cream); padding:calc(var(--u) * 18) calc(var(--u) * 24) calc(var(--u) * 20); border:2px solid #2E2E2C}
+.stage-k{font-family:var(--mono); font-weight:600; font-size:max(12px, calc(var(--u) * 14)); letter-spacing:.08em; text-transform:uppercase; color:var(--g3)}
+.stage svg{display:block; width:100%; height:auto}
+.stage-bar{display:flex; align-items:center; gap:calc(var(--u) * 20); padding-top:calc(var(--u) * 12); border-top:2px solid #2E2E2C}
+.stage-btn{flex:none; padding:calc(var(--u) * 10) calc(var(--u) * 20); border:2px solid var(--cream); font-weight:600; font-size:max(14px, calc(var(--u) * 18)); line-height:1.2; transition:background-color 300ms var(--ease), color 300ms var(--ease), transform 300ms var(--ease)}
+.stage-btn:hover{background:var(--lime); border-color:var(--lime); color:var(--black)}
+.stage-btn:active{transform:scale(.97)}
+.stage-cap{flex:1; font-size:max(13px, calc(var(--u) * 16)); line-height:1.35; color:var(--g3)}
+.stage-st{flex:none; font-family:var(--mono); font-weight:500; font-size:max(12px, calc(var(--u) * 16)); letter-spacing:.06em; color:var(--lime)}
+.stage-sl{flex:none; display:flex; align-items:center; width:calc(var(--u) * 240)}
+.stage-sl input{width:100%; accent-color:var(--lime)}
+.scene text{font-family:var(--sans)}
+.scene .mono{font-family:var(--mono)}
+.mini .lb{display:none}
+.resw{overflow-x:auto; position:relative}
+.res{width:100%; border-collapse:collapse; margin-top:calc(var(--u) * 22); font-size:calc(var(--u) * 18)}
+.res caption{text-align:left; font-family:var(--mono); font-weight:600; font-size:max(12px, calc(var(--u) * 14)); letter-spacing:.08em; text-transform:uppercase; padding-bottom:calc(var(--u) * 10)}
+.res th,.res td{text-align:left; padding:calc(var(--u) * 9) calc(var(--u) * 10) calc(var(--u) * 9) 0; border-bottom:2px solid currentColor; vertical-align:top}
+.dark .res th,.dark .res td{border-color:#3A3A37}
+.res th{font-family:var(--mono); font-weight:600; font-size:max(11px, calc(var(--u) * 13)); letter-spacing:.06em; text-transform:uppercase}
+.res td.v{font-family:var(--mono); font-weight:500; white-space:nowrap}
+.res .ok{font-weight:700}
+.dark .res .ok{color:var(--lime)}
+.mx{width:100%; border-collapse:separate; border-spacing:calc(var(--u) * 6); margin-top:calc(var(--u) * 36); table-layout:fixed}
+.mx th{font-family:var(--mono); font-weight:600; font-size:max(11px, calc(var(--u) * 14)); letter-spacing:.06em; text-transform:uppercase; text-align:left; padding:0 0 calc(var(--u) * 6)}
+.mx th[scope=row]{font-family:var(--display); font-weight:900; font-stretch:66%; font-size:calc(var(--u) * 34); letter-spacing:0; text-transform:uppercase; vertical-align:middle; padding:0 calc(var(--u) * 10) 0 0}
+.mx td{height:calc(var(--u) * 92); padding:calc(var(--u) * 10) calc(var(--u) * 12); vertical-align:top; background:#262624; color:var(--cream); opacity:0; transform:scale(.9); transition:opacity 500ms var(--ease), transform 500ms var(--ease), background-color 300ms var(--ease)}
+.mx.on td{opacity:1; transform:none}
+.mx td b{display:block; font-family:var(--mono); font-weight:600; font-size:max(13px, calc(var(--u) * 19)); letter-spacing:.02em}
+.mx td span{display:block; font-size:max(11px, calc(var(--u) * 14)); line-height:1.35; margin-top:4px; color:inherit; opacity:.8}
+.mx td.ok{background:var(--lime); color:var(--black)}
+.mx td.mid{background:#3A3A37}
+.mx td.no{background:#262624; color:#BDBDB8; box-shadow:inset 0 0 0 2px #3A3A37}
+.mx td.na{background:transparent; color:#6E6E6B; box-shadow:inset 0 0 0 2px #3A3A37}
+.mx td.info{background:#1B1B1A; box-shadow:inset 0 0 0 2px var(--lime)}
+.mx-key{display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:calc(var(--u) * 18); font-size:max(13px, calc(var(--u) * 16)); color:var(--g3)}
+.mx-key i{display:inline-block; width:14px; height:14px; margin-right:8px; vertical-align:-2px}
+.code{background:var(--black); color:var(--cream); padding:calc(var(--u) * 22) calc(var(--u) * 24); overflow-x:auto; font-family:var(--mono); font-size:max(12px, calc(var(--u) * 16)); line-height:1.65; position:relative}
+.code .c{color:var(--g1)} .code .k{color:var(--lime)}
+.use{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr); gap:calc(var(--u) * 40); margin-top:calc(var(--u) * 40)}
+.mods{border-top:2px solid #3A3A37}
+.mods a{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:center; padding:calc(var(--u) * 14) 0; border-bottom:2px solid #3A3A37; text-decoration:none; color:var(--cream)}
+.mods a:hover{color:var(--lime)}
+.mods code{font-family:var(--mono); font-size:max(13px, calc(var(--u) * 17))}
+.mods span{font-size:max(13px, calc(var(--u) * 16)); color:var(--g3)}
+@media (max-width:1100px){
+  .ptiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .setup{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .setup > div:nth-child(3){padding-left:0; border-left:0}
+  .setup > div:nth-child(n+3){border-top:2px solid var(--black)}
+  .axs .axg,.use{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:860px){
+  .ptiles{grid-template-columns:minmax(0,1fr); gap:10px}
+  .ptile .pt{font-size:26px}
+  .setup{grid-template-columns:minmax(0,1fr)}
+  .setup > div,.setup > div + div{padding:18px 0 20px; border-left:0}
+  .setup > div + div{border-top:2px solid var(--black)}
+  .setup .label{font-size:13px} .setup h3{font-size:32px} .setup p{font-size:16px} .setup .box{font-size:15px}
+  .note{grid-template-columns:minmax(0,1fr); gap:8px} .note p{font-size:15px} .note b{font-size:12px}
+  .axs .axh{font-size:clamp(40px, 13.4vw, 64px)} .axs .axq{font-size:19px}
+  .spec > div{grid-template-columns:minmax(0,1fr); gap:4px}
+  .spec dt{font-size:12px} .spec dd{font-size:15px}
+  .stage{padding:14px} .stage-k{font-size:12px}
+  .stage-bar{flex-wrap:wrap; gap:10px 14px} .stage-cap{flex-basis:100%; order:3} .stage-sl{width:160px}
+  .res{font-size:14px} .res th{font-size:11px} .res td.v{white-space:normal}
+  .axr{font-size:16px}
+  .mxw{overflow-x:auto; margin-right:calc(-1 * var(--pr)); padding-right:var(--pr)}
+  .mx{min-width:760px}
+  .mx th[scope=row]{font-size:22px}
+  .code{font-size:12px; padding:16px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="ne" viewBox="0 0 24 24"><path d="M6 18 18 6M8 6h10v10"/></symbol>
+  <symbol id="e" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+  <symbol id="w" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="s" viewBox="0 0 24 24"><path d="M12 4v15M6 13l6 6 6-6"/></symbol>
+  <symbol id="n" viewBox="0 0 24 24"><path d="M12 20V5M6 11l6-6 6 6"/></symbol>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="./" aria-label="Sparse Control, home"><span class="logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-t">Sparse Control</span></a>
+    <nav class="links" id="links" aria-label="Primary">
+      <a href="./#framework">Framework</a>
+      <a href="protocol.html" aria-current="page">Protocol</a>
+      <a href="./#experiments">Experiments</a>
+      <a href="theory.html">Theory</a>
+      <a href="paper.pdf" target="_blank" rel="noopener">Paper <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
+      <a href="https://github.com/zxzok/sparse-internal-control" target="_blank" rel="noopener">Code <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
+    </nav>
+    <div class="lang-sw" role="group" aria-label="Language / 语言" data-noi18n><button type="button" data-lang-btn="en" aria-pressed="true">EN</button><button type="button" data-lang-btn="zh" aria-pressed="false">中文</button></div>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="links" aria-label="Open menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- Hero -->
+<section class="hero" aria-labelledby="t-title">
+  <p class="label">Protocol / Operational definitions</p>
+  <h1 class="t-title" id="t-title">Six-axis protocol</h1>
+  <p class="t-sub">How the paper measures control, one axis at a time.</p>
+  <div class="ptiles"><a class="ptile" href="#reach"><div class="ph"><span class="pn">01 / hit</span><span class="pv"></span></div><span class="pt">Reachability</span><svg class="scene mini" data-s="1" viewBox="0 0 600 170" aria-hidden="true"></svg></a><a class="ptile" href="#reverse"><div class="ph"><span class="pn">02 / undo</span><span class="pv"></span></div><span class="pt">Signed reversal</span><svg class="scene mini" data-s="2" viewBox="0 0 600 170" aria-hidden="true"></svg></a><a class="ptile" href="#dose"><div class="ph"><span class="pn">03 / dial</span><span class="pv"></span></div><span class="pt">Dose response</span><svg class="scene mini" data-s="3" viewBox="0 0 600 170" aria-hidden="true"></svg></a><a class="ptile" href="#feedback"><div class="ph"><span class="pn">04 / track</span><span class="pv"></span></div><span class="pt">Feedback controllability</span><svg class="scene mini" data-s="4" viewBox="0 0 600 170" aria-hidden="true"></svg></a><a class="ptile" href="#preserve"><div class="ph"><span class="pn">05 / spare</span><span class="pv"></span></div><span class="pt">Off-target preservation</span><svg class="scene mini" data-s="5" viewBox="0 0 600 170" aria-hidden="true"></svg></a><a class="ptile" href="#reuse"><div class="ph"><span class="pn">06 / reuse</span><span class="pv"></span></div><span class="pt">Held-out reuse</span><svg class="scene mini" data-s="6" viewBox="0 0 600 170" aria-hidden="true"></svg></a></div>
+  <div class="t-foot">
+    <p>One push is a demo. Control means you can hit a target, undo it, dial it, track it, spare everything else, and reuse it on prompts you have never seen. Each axis below is one of those requirements, made measurable.</p>
+    <div class="ctas">
+      <a class="btn-lime" href="#setup">Read the definitions <svg class="ic" aria-hidden="true"><use href="#s"/></svg></a>
+      <a class="ulink" href="paper.pdf" target="_blank" rel="noopener">Read the paper <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- Setup -->
+<section class="sec light" id="setup" aria-labelledby="h-setup">
+  <div class="sec-label"><span class="label">00 / Setup</span><span class="rule"></span></div>
+  <h2 class="dispm h2m" id="h-setup">What every axis needs.</h2>
+  <p class="lead">The axes apply to any intervention that has a support, base strengths and a direction rule. Nothing in the protocol depends on how the sites were chosen.</p>
+  <div class="setup">
+    <div><p class="label">01 / Intervention</p><h3 class="disp">Support and strengths</h3><p>A support \(S\) of internal sites, base strengths \(\beta\), and a rule for the direction added at each site.</p></div>
+    <div><p class="label">02 / Dose</p><h3 class="disp">One scale</h3><p>A scalar dose \(\gamma\) multiplies the strengths. \(\gamma = 1\) is the nominal intervention and \(\gamma = 0\) is the unpatched model.</p></div>
+    <div><p class="label">03 / Readouts</p><h3 class="disp">Source, target, patched</h3><p>A task readout on the source input, on the target input, and on the source input under the patch.</p><div class="box">\(y_{\mathrm{src}},\ \ y_{\mathrm{tar}},\ \ y_{\mathrm{pat}}\)</div></div>
+    <div><p class="label">04 / Panels</p><h3 class="disp">Fit and evaluate</h3><p>Fitting and evaluation prompts are split, seeds are repeated, and off-target prompts come from a separate fixed panel.</p></div>
+  </div>
+  <div class="note"><b>P and F</b><p>Two direction conditions run side by side. P uses evaluation-pair activation contrasts; F uses training-mean contrasts from the fitting split. The direction rule is independent of coefficient fitting and of dose updates.</p></div>
+  <div class="note"><b>Scope</b><p>Thresholds are operating choices, and decisions use unrounded values. The six axes characterize the control an intervention provides; on their own they do not establish the joint \((\varepsilon, \delta, \kappa)\) certificate, and the reported results do not claim it was evaluated.</p></div>
+</section>
+
+<section class="sec lime axs" id="reach" aria-labelledby="h-reach">
+  <div class="sec-label"><span class="label">01 / hit</span><span class="rule"></span></div>
+  <div class="axg">
+    <div>
+      <h2 class="disp axh" id="h-reach">Reachability</h2>
+      <p class="axq">How close does the intervention get to the target?</p>
+      <dl class="spec">
+        <div><dt>Probe</dt><dd>Apply the intervention at its nominal dose \(\gamma = 1\) and read the target behavior on evaluation prompts the selector did not fit (the same panel for IOI).</dd></div>
+        <div><dt>Statistic</dt><dd>\(\mathrm{Rel}_{\mathrm{tar}}(1) = \dfrac{\lVert y_{\mathrm{tar}} - y_{\mathrm{pat}} \rVert_2}{\lVert y_{\mathrm{tar}} - y_{\mathrm{src}} \rVert_2 + \xi}\), computed on each complete readout vector before averaging across seeds.</dd></div>
+        <div><dt>Passes when</dt><dd>\(\mathrm{Rel}_{\mathrm{tar}}(1) \le \varepsilon = 0.4\). The appendix repeats the count for \(\varepsilon\) from 0.3 to 0.5.</dd></div>
+        <div><dt>Reported as</dt><dd>Passing seeds, with the mean and sample standard deviation.</dd></div>
+        <div><dt>Code</dt><dd><code>sparse_control.metrics.reachability.rel_tar</code></dd></div>
+      </dl>
+    </div>
+    <div>
+      <div class="stage"><p class="stage-k">Source → target</p><svg class="scene" data-s="1" viewBox="0 0 600 170" role="img" aria-label="Reachability animation"></svg><div class="stage-bar"><button class="stage-btn" type="button">Apply +β</button><p class="stage-cap">The distance left to the target is measured.</p><span class="stage-st">Nominal dose</span></div></div>
+      <div class="resw"><table class="res"><caption>In the paper · Coverage-Driver unless noted</caption><thead><tr><th scope="col">Task</th><th scope="col">Rel_tar, P</th><th scope="col">pass</th><th scope="col">Rel_tar, F</th><th scope="col">pass</th></tr></thead><tbody><tr><th scope="row">IOI (same panel)</th><td class="v">0.294</td><td class="v">10/10</td><td class="v">—</td><td class="v"></td></tr><tr><th scope="row">MCQA Humanities</th><td class="v">0.188</td><td class="v">8/8</td><td class="v">1.012</td><td class="v">0/8</td></tr><tr><th scope="row">MCQA STEM</th><td class="v">0.169</td><td class="v">8/8</td><td class="v">1.031</td><td class="v">0/8</td></tr><tr><th scope="row">Sentiment</th><td class="v">0.171</td><td class="v">8/8</td><td class="v">0.746</td><td class="v">0/8</td></tr><tr><th scope="row">Refusal</th><td class="v">0.799</td><td class="v">0/8</td><td class="v">0.801</td><td class="v">0/8</td></tr></tbody></table></div>
+      <p class="axr">Evaluation-pair directions reach the target on MCQA and Sentiment; training-mean directions never do. Refusal fails with either.</p>
+    </div>
+  </div>
+</section>
+<section class="sec dark axs" id="reverse" aria-labelledby="h-reverse">
+  <div class="sec-label"><span class="label">02 / undo</span><span class="rule"></span></div>
+  <div class="axg">
+    <div>
+      <h2 class="disp axh" id="h-reverse">Signed reversal</h2>
+      <p class="axq">Does the opposite patch move target-side behavior toward the source?</p>
+      <dl class="spec">
+        <div><dt>Probe</dt><dd>Apply the opposite patch \(-\beta\) to the target-side input. For Refusal, the negative coefficients act on the harmful member of each pair.</dd></div>
+        <div><dt>Statistic</dt><dd>\(\mathrm{Reversal}(\beta) = \lVert y_{-\beta} - y_{\mathrm{tar}} \rVert_2 \,/\, \lVert y_{-\beta} - y_{\mathrm{src}} \rVert_2\): the distance of the reversed output from the target over its distance from the source. Infinite and 0/0 ratios are kept explicit.</dd></div>
+        <div><dt>Passes when</dt><dd>\(\mathrm{Reversal}(\beta) \ge 2\): the reversed output ends at least twice as close to the source as to the target.</dd></div>
+        <div><dt>Reported as</dt><dd>Passing seeds, with the mean ratio and standard deviation.</dd></div>
+        <div><dt>Code</dt><dd><code>sparse_control.metrics.reversal.reversal_metrics</code></dd></div>
+      </dl>
+    </div>
+    <div>
+      <div class="stage"><p class="stage-k">Start from the target side</p><svg class="scene" data-s="2" viewBox="0 0 600 170" role="img" aria-label="Signed reversal animation"></svg><div class="stage-bar"><button class="stage-btn" type="button">Apply −β</button><p class="stage-cap">Opposite patch, target-side input.</p><span class="stage-st">Target-side input</span></div></div>
+      <div class="resw"><table class="res"><caption>In the paper · Coverage-Driver unless noted</caption><thead><tr><th scope="col">Task</th><th scope="col">ratio, P</th><th scope="col">pass</th><th scope="col">ratio, F</th><th scope="col">pass</th></tr></thead><tbody><tr><th scope="row">IOI</th><td class="v">2.57</td><td class="v">10/10</td><td class="v">—</td><td class="v"></td></tr><tr><th scope="row">MCQA Humanities</th><td class="v">3.78</td><td class="v">8/8</td><td class="v">0.143</td><td class="v">0/8</td></tr><tr><th scope="row">MCQA STEM</th><td class="v">4.80</td><td class="v">8/8</td><td class="v">0.152</td><td class="v">0/8</td></tr><tr><th scope="row">Sentiment</th><td class="v">8.51</td><td class="v">8/8</td><td class="v">0.997</td><td class="v">0/8</td></tr><tr><th scope="row">Refusal</th><td class="v">0.112</td><td class="v">0/8</td><td class="v">0.125</td><td class="v">0/8</td></tr></tbody></table></div>
+      <p class="axr">Reversal follows the same split as reachability: it passes wherever evaluation-pair directions are available, and fails for Refusal.</p>
+    </div>
+  </div>
+</section>
+<section class="sec light axs" id="dose" aria-labelledby="h-dose">
+  <div class="sec-label"><span class="label">03 / dial</span><span class="rule"></span></div>
+  <div class="axg">
+    <div>
+      <h2 class="disp axh" id="h-dose">Dose response</h2>
+      <p class="axq">How does target progress vary with intervention strength?</p>
+      <dl class="spec">
+        <div><dt>Probe</dt><dd>Hold the support and base strengths fixed and scale them by ten doses \(\gamma \in \{-1, -0.5, 0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2\}\).</dd></div>
+        <div><dt>Statistic</dt><dd>Target progress \(P(\gamma)\) at each dose and the signed Spearman \(\rho\) of progress against \(\gamma\). Ties use average ranks; a constant curve is undefined.</dd></div>
+        <div><dt>Passes when</dt><dd>\(\rho \ge 0.95\). A strong negative correlation is reported separately and never counts as ordered.</dd></div>
+        <div><dt>Reported as</dt><dd>Curves with \(\rho \ge 0.95\) and with \(\rho \le -0.95\), out of 8 seeds.</dd></div>
+        <div><dt>Code</dt><dd><code>sparse_control.metrics.dose.signed_spearman</code></dd></div>
+      </dl>
+    </div>
+    <div>
+      <div class="stage"><p class="stage-k">Support fixed, dose varies</p><svg class="scene" data-s="3" viewBox="0 0 600 170" role="img" aria-label="Dose response animation"></svg><div class="stage-bar"><label class="stage-sl"><span class="sr">Dose γ</span><input type="range" min="0" max="1" step="0.01" value="0.8"></label><p class="stage-cap">Same sites at every dose; only the scale changes.</p><span class="stage-st">γ 0.80</span></div></div>
+      <div class="resw"><table class="res"><caption>In the paper · Coverage-Driver unless noted</caption><thead><tr><th scope="col">Task</th><th scope="col">ρ ≥ .95, P</th><th scope="col">ρ ≤ −.95, P</th><th scope="col">ρ ≥ .95, F</th><th scope="col">ρ ≤ −.95, F</th></tr></thead><tbody><tr><th scope="row">MCQA Humanities</th><td class="v">5/8</td><td class="v">0/8</td><td class="v">5/8</td><td class="v">3/8</td></tr><tr><th scope="row">MCQA STEM</th><td class="v">6/8</td><td class="v">0/8</td><td class="v">4/8</td><td class="v">4/8</td></tr><tr><th scope="row">Refusal</th><td class="v">8/8</td><td class="v">0/8</td><td class="v">8/8</td><td class="v">0/8</td></tr></tbody></table></div>
+      <p class="axr">All 48 Refusal curves are perfectly ordered, yet Refusal fails reachability and reversal. With training-mean directions, MCQA curves run the wrong way on up to half the seeds.</p>
+    </div>
+  </div>
+</section>
+<section class="sec lime axs" id="feedback" aria-labelledby="h-feedback">
+  <div class="sec-label"><span class="label">04 / track</span><span class="rule"></span></div>
+  <div class="axg">
+    <div>
+      <h2 class="disp axh" id="h-feedback">Feedback controllability</h2>
+      <p class="axq">Can feedback-adjusted doses track requested targets?</p>
+      <dl class="spec">
+        <div><dt>Probe</dt><dd>Keep the support, base strengths and direction rule fixed, request a target value \(m^\star\), and update only the dose from the measured error: \(\gamma_{t+1} = \gamma_t + \eta\,(m^\star - M(\gamma_t))\), with a fixed gain.</dd></div>
+        <div><dt>Statistic</dt><dd>The terminal error \(\lvert m^\star - M(\gamma_{\mathrm{end}}) \rvert\) per endpoint, with hits, mean absolute error and the number of readout evaluations. Targets already met at zero dose are reported separately.</dd></div>
+        <div><dt>Passes when</dt><dd>\(\lvert m^\star - M(\gamma_{\mathrm{end}}) \rvert \le \tau_{\mathrm{ctrl}}\): 0.3 for IOI and MCQA, 0.1 for Refusal.</dd></div>
+        <div><dt>Reported as</dt><dd>Hits over endpoints: 8 seeds × 6 targets for MCQA, 8 × 5 for Refusal, 3 × 8 for IOI.</dd></div>
+        <div><dt>Code</dt><dd><code>sparse_control.metrics.feedback.endpoint_metrics</code></dd></div>
+      </dl>
+    </div>
+    <div>
+      <div class="stage"><p class="stage-k">Target error drives the dose</p><svg class="scene" data-s="4" viewBox="0 0 600 170" role="img" aria-label="Feedback controllability animation"></svg><div class="stage-bar"><button class="stage-btn" type="button">One feedback step</button><p class="stage-cap">Only γ changes between steps.</p><span class="stage-st">Update 0</span></div></div>
+      <div class="resw"><table class="res"><caption>In the paper · Coverage-Driver unless noted</caption><thead><tr><th scope="col">Task</th><th scope="col">hits, P</th><th scope="col">MAE, P</th><th scope="col">hits, F</th><th scope="col">MAE, F</th></tr></thead><tbody><tr><th scope="row">IOI (Driver-OMP)</th><td class="v">24/24</td><td class="v">0.135</td><td class="v">—</td><td class="v"></td></tr><tr><th scope="row">MCQA Humanities</th><td class="v">46/48</td><td class="v">0.238</td><td class="v">8/48</td><td class="v">1.924</td></tr><tr><th scope="row">MCQA STEM</th><td class="v">47/48</td><td class="v">0.132</td><td class="v">7/48</td><td class="v">2.449</td></tr><tr><th scope="row">Refusal</th><td class="v">21/40</td><td class="v"></td><td class="v">21/40</td><td class="v"></td></tr><tr><th scope="row">Sentiment</th><td class="v">not evaluated</td><td class="v"></td><td class="v"></td><td class="v"></td></tr></tbody></table></div>
+      <p class="axr">With evaluation-pair directions, feedback hits nearly every MCQA target in about four readouts. Training-mean directions stall short of the target even after eleven.</p>
+    </div>
+  </div>
+</section>
+<section class="sec dark axs" id="preserve" aria-labelledby="h-preserve">
+  <div class="sec-label"><span class="label">05 / spare</span><span class="rule"></span></div>
+  <div class="axg">
+    <div>
+      <h2 class="disp axh" id="h-preserve">Off-target preservation</h2>
+      <p class="axq">How much do non-target outputs change?</p>
+      <dl class="spec">
+        <div><dt>Probe</dt><dd>Apply the intervention at its nominal dose to a fixed panel of 32 unrelated MMLU prompts (16 Humanities, 16 STEM): 256 prompt–seed observations per selector.</dd></div>
+        <div><dt>Statistic</dt><dd>Full-vocabulary \(\mathrm{KL}\big(p_\theta \,\Vert\, p_\theta^{\beta}\big)\) in nats, unpatched against patched, summarized by mean, median, nearest-rank P95 and maximum.</dd></div>
+        <div><dt>Passes when</dt><dd>\(\mathrm{KL} \le \delta = 0.001\), counted twice: on the seed mean, and on every prompt of the seed.</dd></div>
+        <div><dt>Reported as</dt><dd>Passing seeds under each rule, with the KL distribution.</dd></div>
+        <div><dt>Code</dt><dd><code>sparse_control.metrics.preservation.preservation_summary</code></dd></div>
+      </dl>
+    </div>
+    <div>
+      <div class="stage"><p class="stage-k">Non-target prompts</p><svg class="scene" data-s="5" viewBox="0 0 600 170" role="img" aria-label="Off-target preservation animation"></svg><div class="stage-bar"><button class="stage-btn" type="button">Highlight change</button><p class="stage-cap"><span style="color:#8B8B88">■</span> Baseline &nbsp; <span style="color:#D7EE5B">■</span> Patched</p><span class="stage-st">Same dose</span></div></div>
+      <div class="resw"><table class="res"><caption>In the paper · Coverage-Driver unless noted</caption><thead><tr><th scope="col">Task</th><th scope="col">median KL</th><th scope="col">mean KL</th><th scope="col">seed mean</th><th scope="col">every prompt</th></tr></thead><tbody><tr><th scope="row">MCQA Humanities</th><td class="v">0.050</td><td class="v">0.110</td><td class="v">0/8</td><td class="v">0/8</td></tr><tr><th scope="row">MCQA STEM</th><td class="v">0.060</td><td class="v">0.128</td><td class="v">0/8</td><td class="v">0/8</td></tr><tr><th scope="row">Sentiment</th><td class="v">0.0096</td><td class="v">0.011</td><td class="v">0/8</td><td class="v">0/8</td></tr><tr><th scope="row">Refusal</th><td class="v">0.0021</td><td class="v">0.0087</td><td class="v">0/8</td><td class="v">0/8</td></tr><tr><th scope="row">Refusal, Driver-OMP</th><td class="v">0.00017</td><td class="v">0.0011</td><td class="v">4/8</td><td class="v">2/8</td></tr></tbody></table></div>
+      <p class="axr">No MCQA or Sentiment seed stays under δ. Only Driver-OMP on Refusal passes, on half the seeds by the mean rule.</p>
+    </div>
+  </div>
+</section>
+<section class="sec light axs" id="reuse" aria-labelledby="h-reuse">
+  <div class="sec-label"><span class="label">06 / reuse</span><span class="rule"></span></div>
+  <div class="axg">
+    <div>
+      <h2 class="disp axh" id="h-reuse">Held-out reuse</h2>
+      <p class="axq">Do selected sites or complete interventions transfer to unseen prompts?</p>
+      <dl class="spec">
+        <div><dt>Probe</dt><dd>Carry the support selected on fitting prompts to unseen prompts, either refitting the strengths there (refit) or freezing the whole intervention, dose included (frozen).</dd></div>
+        <div><dt>Statistic</dt><dd>Recovery of the source-to-target gap on the unseen prompts: signed mean-margin recovery for MCQA, with task-specific variants for Sentiment and IOI. Recovery is not \(1 - \mathrm{Rel}_{\mathrm{tar}}\).</dd></div>
+        <div><dt>Passes when</dt><dd>No threshold. Recovery is reported as a continuous value together with its information condition.</dd></div>
+        <div><dt>Reported as</dt><dd>Mean recovery and standard deviation for each condition.</dd></div>
+        <div><dt>Code</dt><dd><code>sparse_control.metrics.reuse.mcqa_recovery</code></dd></div>
+      </dl>
+    </div>
+    <div>
+      <div class="stage"><p class="stage-k">Training sites, unseen prompts</p><svg class="scene" data-s="6" viewBox="0 0 600 170" role="img" aria-label="Held-out reuse animation"></svg><div class="stage-bar"><button class="stage-btn" type="button">Show new prompts</button><p class="stage-cap">Reuse the sites and refit, or freeze the whole patch.</p><span class="stage-st">Two reuse regimes</span></div></div>
+      <div class="resw"><table class="res"><caption>In the paper · Coverage-Driver unless noted</caption><thead><tr><th scope="col">Task</th><th scope="col">refit</th><th scope="col">frozen / fixed</th></tr></thead><tbody><tr><th scope="row">MCQA Humanities</th><td class="v">0.995</td><td class="v">0.033</td></tr><tr><th scope="row">MCQA STEM</th><td class="v">0.944</td><td class="v">0.038</td></tr><tr><th scope="row">IOI</th><td class="v">0.449</td><td class="v">0.298</td></tr><tr><th scope="row">Sentiment, k = 8 (fixed dose)</th><td class="v">1.03</td><td class="v">—</td></tr></tbody></table></div>
+      <p class="axr">Sites transfer: refitting strengths on unseen MCQA questions recovers almost the whole gap. The frozen intervention recovers almost nothing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Matrix -->
+<section class="sec dark" id="matrix" aria-labelledby="h-mx">
+  <div class="sec-label"><span class="label">07 / All tasks, all axes</span><span class="rule"></span></div>
+  <h2 class="disp h2" id="h-mx">Six numbers, not one.</h2>
+  <p class="lead">Each row is a task and each column an axis. Coverage-Driver with evaluation-pair directions unless noted. No task passes every axis, and no single axis predicts the others.</p>
+  <div class="mxw"><table class="mx" id="mx"><thead><tr><th scope="col"><span class="sr">Task</span></th><th scope="col">01 Reachability</th><th scope="col">02 Signed reversal</th><th scope="col">03 Dose response</th><th scope="col">04 Feedback controllability</th><th scope="col">05 Off-target preservation</th><th scope="col">06 Held-out reuse</th></tr></thead><tbody><tr><th scope="row">IOI</th><td class="ok"><b>0.294</b><span>10/10, same panel</span></td><td class="ok"><b>2.57</b><span>10/10</span></td><td class="info"><b>monotone</b><span>supporting study</span></td><td class="ok"><b>24/24</b><span>Driver-OMP</span></td><td class="na"><b>—</b><span>not on the panel</span></td><td class="mid"><b>0.449</b><span>refit recovery</span></td></tr><tr><th scope="row">Humanities</th><td class="ok"><b>0.188</b><span>8/8</span></td><td class="ok"><b>3.78</b><span>8/8</span></td><td class="mid"><b>5/8</b><span>ρ ≥ 0.95</span></td><td class="ok"><b>46/48</b><span>hits</span></td><td class="no"><b>0.050</b><span>median KL, 0/8</span></td><td class="info"><b>0.995</b><span>refit · 0.033 frozen</span></td></tr><tr><th scope="row">STEM</th><td class="ok"><b>0.169</b><span>8/8</span></td><td class="ok"><b>4.80</b><span>8/8</span></td><td class="mid"><b>6/8</b><span>ρ ≥ 0.95</span></td><td class="ok"><b>47/48</b><span>hits</span></td><td class="no"><b>0.060</b><span>median KL, 0/8</span></td><td class="info"><b>0.944</b><span>refit · 0.038 frozen</span></td></tr><tr><th scope="row">Sentiment</th><td class="ok"><b>0.171</b><span>8/8</span></td><td class="ok"><b>8.51</b><span>8/8</span></td><td class="info"><b>monotone</b><span>supporting study</span></td><td class="na"><b>—</b><span>not evaluated</span></td><td class="no"><b>0.0096</b><span>median KL, 0/8</span></td><td class="info"><b>1.03</b><span>k = 8, fixed dose</span></td></tr><tr><th scope="row">Refusal</th><td class="no"><b>0.799</b><span>0/8</span></td><td class="no"><b>0.112</b><span>0/8</span></td><td class="ok"><b>ρ = 1</b><span>8/8</span></td><td class="mid"><b>21/40</b><span>hits</span></td><td class="mid"><b>0.0021</b><span>Driver-OMP 4/8</span></td><td class="na"><b>—</b><span>not evaluated</span></td></tr></tbody></table></div>
+  <div class="mx-key"><span><i style="background:#D7EE5B"></i>passes</span><span><i style="background:#3A3A37"></i>partial</span><span><i style="background:#262624; box-shadow:inset 0 0 0 2px #3A3A37"></i>fails</span><span><i style="box-shadow:inset 0 0 0 2px #D7EE5B"></i>reported without a threshold</span><span><i style="box-shadow:inset 0 0 0 2px #3A3A37"></i>not evaluated</span></div>
+</section>
+
+<!-- Use -->
+<section class="sec lime" id="use" aria-labelledby="h-use">
+  <p class="label">08 / Use the protocol</p>
+  <h2 class="disp h2" id="h-use">Score your own intervention.</h2>
+  <p class="lead">Activation steering, sparse autoencoder features, concept erasure or circuit discovery: any intervention with a support, strengths and a direction rule can be scored the same way. Each axis is one function in the released package.</p>
+  <div class="use">
+<pre class="code" aria-label="Python example"><span class="c"># readouts are plain lists of floats</span>
+<span class="k">from</span> sparse_control.metrics.reachability <span class="k">import</span> rel_tar
+<span class="k">from</span> sparse_control.metrics.reversal <span class="k">import</span> reversal_metrics
+<span class="k">from</span> sparse_control.metrics.dose <span class="k">import</span> signed_spearman
+<span class="k">from</span> sparse_control.metrics.feedback <span class="k">import</span> endpoint_metrics
+<span class="k">from</span> sparse_control.metrics.preservation <span class="k">import</span> preservation_summary
+<span class="k">from</span> sparse_control.metrics.reuse <span class="k">import</span> mcqa_recovery
+
+rel_tar(source, target, patched) <span class="c"># reach: &lt;= 0.4</span>
+reversal_metrics(source, target, reversed_out)[<span class="k">"passes"</span>] <span class="c"># ratio &gt;= 2</span>
+signed_spearman(doses, progress) <span class="c"># dial: &gt;= 0.95</span>
+endpoint_metrics(target=m_star, terminal_margin=m_end,
+                 initial_margin=m_0, tolerance=0.3)[<span class="k">"hit"</span>]
+preservation_summary(kl_values, seed_ids) <span class="c"># delta = 0.001</span>
+mcqa_recovery(source, target, patched) <span class="c"># reuse</span></pre>
+    <div>
+      <div class="mods">
+        <a href="https://github.com/zxzok/sparse-internal-control/blob/main/src/sparse_control/metrics/reachability.py" target="_blank" rel="noopener"><code>metrics/reachability.py</code><span>Reachability</span></a>
+        <a href="https://github.com/zxzok/sparse-internal-control/blob/main/src/sparse_control/metrics/reversal.py" target="_blank" rel="noopener"><code>metrics/reversal.py</code><span>Signed reversal</span></a>
+        <a href="https://github.com/zxzok/sparse-internal-control/blob/main/src/sparse_control/metrics/dose.py" target="_blank" rel="noopener"><code>metrics/dose.py</code><span>Dose response</span></a>
+        <a href="https://github.com/zxzok/sparse-internal-control/blob/main/src/sparse_control/metrics/feedback.py" target="_blank" rel="noopener"><code>metrics/feedback.py</code><span>Feedback controllability</span></a>
+        <a href="https://github.com/zxzok/sparse-internal-control/blob/main/src/sparse_control/metrics/preservation.py" target="_blank" rel="noopener"><code>metrics/preservation.py</code><span>Off-target preservation</span></a>
+        <a href="https://github.com/zxzok/sparse-internal-control/blob/main/src/sparse_control/metrics/reuse.py" target="_blank" rel="noopener"><code>metrics/reuse.py</code><span>Held-out reuse</span></a>
+      </div>
+      <p class="cap" style="color:#111">Recalculate every table in the paper from the saved measurements on CPU: <code>python -m sparse_control reproduce</code>, then <code>verify</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Close -->
+<section class="close dark" aria-labelledby="h-close">
+  <h2 class="disp" id="h-close">One push is a demo.<br><span>Six axes make it control.</span></h2>
+  <div class="row">
+    <a class="btn-lime" href="./#protocol"><svg class="ic" aria-hidden="true"><use href="#w"/></svg> Back to the home page</a>
+    <a class="ulink" href="theory.html">Learn the theory <svg class="ic" aria-hidden="true"><use href="#e"/></svg></a>
+    <a class="ulink" href="paper.pdf" target="_blank" rel="noopener">Read the paper <svg class="ic" aria-hidden="true"><use href="#ne"/></svg></a>
+  </div>
+  <footer class="foot">
+    <span class="label">Xizhe Zhang / NeurIPS 2026</span>
+    <a href="#main">Back to top <svg class="ic" aria-hidden="true"><use href="#n"/></svg></a>
+  </footer>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script data-snap="main > section">/* ---- screen snapping with a spring ----
+   A quick wheel flick (or PageDown, PageUp, Space) springs to the next or previous screen with a small overshoot.
+   Slow trackpad scrolling, arrow keys and the scrollbar stay free; a slow scroll that ends close to a screen edge is pulled onto it.
+   Inside a section taller than the screen, scrolling stays native until the next edge is within reach.
+   Off on touch screens, narrow windows and with reduced motion. */
+(() => {
+  const NAV = 64, FLICK = 34, IDLE = 170;
+  const fine = window.matchMedia('(pointer: fine)'), calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const on = () => fine.matches && !calm.matches && window.innerWidth > 860 && window.innerHeight >= 560 && !document.documentElement.classList.contains('modal-open');
+  const sel = document.currentScript && document.currentScript.dataset.snap || 'main > section, main > .snap';
+  let anim = 0, g = null, endT = 0;
+  const vhc = () => window.innerHeight - NAV;
+  function points(){
+    const max = document.documentElement.scrollHeight - window.innerHeight, out = [];
+    document.querySelectorAll(sel).forEach((s, i) => { const y = i === 0 ? 0 : Math.round(s.getBoundingClientRect().top + window.scrollY - NAV); out.push(Math.max(0, Math.min(max, y))); });
+    out.push(max);
+    return out.sort((a, b) => a - b).filter((p, i, a) => !i || p - a[i - 1] > 4);
+  }
+  function pick(dir){
+    const pts = points(), y = window.scrollY, reach = vhc() * 1.12;
+    if (dir > 0){ const n = pts.find(p => p > y + 2); return n !== undefined && n - y <= reach ? n : null; }
+    const p = pts.slice().reverse().find(q => q < y - 2); return p !== undefined && y - p <= reach ? p : null;
+  }
+  const root = document.documentElement, to = y => window.scrollTo(0, y);
+  function stop(){ if (anim){ cancelAnimationFrame(anim); anim = 0; root.style.scrollBehavior = ''; } }
+  function spring(target, v0){
+    stop(); root.style.scrollBehavior = 'auto';
+    const k = 190, c = 2 * .74 * Math.sqrt(k), st = { x: window.scrollY, v: v0 };
+    let last = performance.now();
+    const step = now => {
+      const dt = Math.min(.034, (now - last) / 1000); last = now;
+      for (let i = 0; i < 4; i++){ const h = dt / 4, a = -k * (st.x - target) - c * st.v; st.v += a * h; st.x += st.v * h; }
+      to(st.x);
+      if (Math.abs(st.x - target) < .6 && Math.abs(st.v) < 10){ to(target); anim = 0; root.style.scrollBehavior = ''; return; }
+      anim = requestAnimationFrame(step);
+    };
+    anim = requestAnimationFrame(step);
+  }
+  function settle(){
+    if (!on() || anim) return;
+    const y = window.scrollY, pts = points();
+    let best = null, bd = 1e9; pts.forEach(p => { const d = Math.abs(p - y); if (d < bd){ bd = d; best = p; } });
+    if (best !== null && bd > 2 && bd < vhc() * .1) spring(best, 0);
+  }
+  window.addEventListener('wheel', e => {
+    if (!on() || e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY) || (e.target.closest && e.target.closest('[data-nosnap]'))) return;
+    const dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1), now = performance.now();
+    if (!dy) return;
+    if (!g || now - g.t > IDLE || (g.mode === 'free' && Math.sign(dy) !== g.dir)) g = { dir: Math.sign(dy), mode: 'free', t0: now, n: 0, sum: 0 };
+    g.t = now; g.n++; g.sum += dy;
+    clearTimeout(endT);
+    if (g.mode === 'jump'){ e.preventDefault(); return; }
+    if (anim){ stop(); }
+    const flick = Math.abs(dy) >= FLICK || (now - g.t0 < 140 && Math.abs(g.sum) > 70);
+    if (flick){
+      const t = pick(g.dir);
+      if (t !== null){ e.preventDefault(); g.mode = 'jump'; spring(t, g.dir * 700); return; }
+    }
+    endT = setTimeout(settle, IDLE + 40);
+  }, { passive: false });
+  window.addEventListener('keydown', e => {
+    if (!on() || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+    const t = e.target, typing = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(t.tagName));
+    const dir = e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey) ? 1 : e.key === 'PageUp' || (e.key === ' ' && e.shiftKey) ? -1 : 0;
+    if (!dir || (typing && e.key === ' ')) { if (anim) stop(); return; }
+    const tg = pick(dir); if (tg === null) return;
+    e.preventDefault(); spring(tg, dir * 500);
+  });
+  ['mousedown', 'touchstart'].forEach(ev => window.addEventListener(ev, stop, { passive: true }));
+})();
+</script>
+<script>/* ---- language: English by default, Chinese for visitors in mainland China ----
+   Order of precedence: ?lang= in the URL, then the visitor's own choice on the switch (remembered),
+   then the IP country (CN shows Chinese), with the time zone as an instant first guess and as the fallback
+   when the lookup is blocked or slow. Translations swap whole elements, so sentences keep their own order
+   in each language; callers re-render math in the swapped elements and rebuild drawn labels. */
+const I18N = (() => {
+  const ZH = {"Sparse Internal Control of Language Models": "语言模型的稀疏内部控制", "Skip to content": "跳到正文", "Framework": "框架", "Protocol": "协议", "Experiments": "实验", "Theory": "理论", "Paper <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>": "论文 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>", "Code <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>": "代码 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>", "of Language Models": "语言模型的稀疏内部控制", "Sparse interventions<br>in a frozen model.": "在冻结模型中<br>做稀疏干预。", "A six-axis protocol for evaluating control.": "用六轴协议评价控制。", "Read the paper <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>": "阅读论文 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>", "Explore the protocol <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#e\"><\/use><\/svg>": "了解协议 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#e\"><\/use><\/svg>", "Scroll to explore <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#s\"><\/use><\/svg>": "向下滚动 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#s\"><\/use><\/svg>", "02 / Framework": "02 / 框架", "An internal interface.<br>An explicit objective.": "一个内部接口。<br>一个明确目标。", "Select and adjust activation patches while learned weights remain fixed.": "在学习到的权重保持不变的前提下，选择并调整激活补丁。", "01 / Select sites": "01 / 选择位点", "A compact set of intervention locations.": "一组紧凑的干预位置。", "02 / Adjust strengths": "02 / 调整强度", "Set the activation perturbations.": "设定激活扰动的大小。", "03 / Evaluate behavior": "03 / 评价行为", "Measure the response in the original model.": "在原模型中测量响应。", "Explicit control conditions": "明确的控制条件", "Target recovery": "目标恢复", "Off-target preservation": "非目标保持", "Intervention energy": "干预能量", "<b>Driver-OMP<\/b> — Target-displacement reconstruction.": "<b>Driver-OMP<\/b> — 重建目标位移。", "<b>Coverage-Driver<\/b> — Stable coverage across prompts.": "<b>Coverage-Driver<\/b> — 跨提示稳定覆盖。", "Read the formulation <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#e\"><\/use><\/svg>": "查看形式化 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#e\"><\/use><\/svg>", "03 / Control evaluation": "03 / 控制评价", "Six axes.<br>A common protocol.": "六个轴。<br>一套统一协议。", "Beyond target movement.": "不止于推动目标。", "Reachability": "可达性", "How close does the intervention get to the target?": "干预能把读出推到离目标多近？", "<b>Passes when<\/b>\\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le \\varepsilon = 0.4\\) on held out readouts.": "<b>通过条件<\/b>留出读出上 \\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le \\varepsilon = 0.4\\)。", "<b>In the paper<\/b>Coverage-Driver passes 8/8 seeds with evaluation-pair directions and 0/8 with training-mean directions on MCQA and Sentiment.": "<b>论文结果<\/b>在 MCQA 与情感任务上，Coverage-Driver 使用评价对方向时 8/8 个种子通过，使用训练均值方向时 0/8。", "Source → target": "源 → 目标", "Apply +β": "施加 +β", "The distance left to the target is measured.": "测量离目标还剩多远。", "Nominal dose": "名义剂量", "Signed reversal": "符号反转", "Does the opposite patch move target-side behavior toward the source?": "反向补丁能否把目标侧行为拉回源？", "<b>Passes when<\/b>\\(\\mathrm{Reversal}(\\beta) \\ge 2\\) after applying \\(-\\beta\\) to the target-side input.": "<b>通过条件<\/b>对目标侧输入施加 \\(-\\beta\\) 后 \\(\\mathrm{Reversal}(\\beta) \\ge 2\\)。", "<b>In the paper<\/b>MCQA passes 21/24 (Humanities) and 23/24 (STEM) cells with evaluation-pair directions and none with training-mean directions. Refusal never passes.": "<b>论文结果<\/b>使用评价对方向时，MCQA 有 21/24（人文）和 23/24（STEM）个单元通过，使用训练均值方向时一个也没有。拒答任务从未通过。", "Start from the target side": "从目标侧出发", "Apply −β": "施加 −β", "Opposite patch, target-side input.": "反向补丁，目标侧输入。", "Target-side input": "目标侧输入", "Dose response": "剂量响应", "How does target progress vary with intervention strength?": "目标进展如何随干预强度变化？", "<b>Passes when<\/b>Signed Spearman \\(\\rho \\ge 0.95\\) over ten doses \\(\\gamma \\in \\Gamma\\).": "<b>通过条件<\/b>十个剂量 \\(\\gamma \\in \\Gamma\\) 上带符号 Spearman \\(\\rho \\ge 0.95\\)。", "<b>In the paper<\/b>All 48 Refusal curves have \\(\\rho = 1\\), yet none passes signed reversal.": "<b>论文结果<\/b>拒答任务的 48 条曲线全部 \\(\\rho = 1\\)，却没有一条通过符号反转。", "Support fixed, dose varies": "支撑集固定，剂量变化", "Dose γ": "剂量 γ", "Same sites at every dose; only the scale changes.": "每个剂量用的都是同一组位点，只改变缩放。", "Feedback<br>controllability": "反馈<br>可控性", "Can feedback-adjusted doses track requested targets?": "反馈调整的剂量能否跟踪指定目标？", "<b>Passes when<\/b>\\(|m^{\\star} - M(\\gamma_{\\mathrm{end}})| \\le \\tau_{\\mathrm{ctrl}}\\): 0.3 for IOI and MCQA, 0.1 for Refusal.": "<b>通过条件<\/b>\\(|m^{\\star} - M(\\gamma_{\\mathrm{end}})| \\le \\tau_{\\mathrm{ctrl}}\\)：IOI 与 MCQA 为 0.3，拒答为 0.1。", "<b>In the paper<\/b>Coverage-Driver hits 46/48 Humanities and 47/48 STEM targets with evaluation-pair directions, and 8/48 and 7/48 with training-mean directions.": "<b>论文结果<\/b>Coverage-Driver 使用评价对方向时命中 46/48（人文）和 47/48（STEM）个目标，使用训练均值方向时分别为 8/48 和 7/48。", "Target error drives the dose": "目标误差驱动剂量", "One feedback step": "反馈一步", "Only γ changes between steps.": "每一步之间只有 γ 改变。", "Update 0": "第 0 次更新", "Off-target<br>preservation": "非目标<br>保持", "How much do non-target outputs change?": "非目标输出改变了多少？", "<b>Passes when<\/b>\\(\\mathrm{KL} \\le \\delta = 0.001\\), as a seed mean and on every prompt of a shared 32 prompt panel.": "<b>通过条件<\/b>\\(\\mathrm{KL} \\le \\delta = 0.001\\)，在共享的 32 条提示面板上，按种子均值和逐条提示分别判断。", "<b>In the paper<\/b>No MCQA or Sentiment seed passes. On Refusal, Driver-OMP passes 4/8 seeds by the mean rule.": "<b>论文结果<\/b>MCQA 与情感任务没有种子通过。拒答任务上 Driver-OMP 按均值规则有 4/8 个种子通过。", "Non-target prompts": "非目标提示", "Highlight change": "标出变化", "<span style=\"color:#8B8B88\">■<\/span> Baseline &nbsp; <span style=\"color:#D7EE5B\">■<\/span> Patched": "<span style=\"color:#8B8B88\">■<\/span> 基线 &nbsp; <span style=\"color:#D7EE5B\">■<\/span> 打补丁后", "Same dose": "同一剂量", "Held-out reuse": "留出复用", "Do selected sites or complete interventions transfer to unseen prompts?": "选出的位点或完整干预能否迁移到未见提示？", "<b>Reported as<\/b>Continuous recovery with its information condition: refit-\\(\\beta\\) or fully frozen-\\(\\beta\\).": "<b>报告方式<\/b>以连续恢复率报告，并注明信息条件：重拟合 \\(\\beta\\) 或完全冻结 \\(\\beta\\)。", "<b>In the paper<\/b>Module-level MCQA recovers 0.992 with refit strengths (Humanities) and 0.021 when the whole intervention is frozen.": "<b>论文结果<\/b>模块级 MCQA（人文）重拟合强度时恢复 0.992，整个干预冻结时只有 0.021。", "Training sites, unseen prompts": "训练位点，未见提示", "Show new prompts": "换成新提示", "Reuse the sites and refit, or freeze the whole patch.": "复用位点并重拟合，或冻结整个补丁。", "Two reuse regimes": "两种复用方式", "Six complementary properties of control.": "控制的六个互补性质。", "Read the protocol <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#e\"><\/use><\/svg>": "阅读协议 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#e\"><\/use><\/svg>", "04 / Experiments": "04 / 实验", "Testing internal control.": "检验内部控制。", "Exploratory studies across four behavior families.": "跨四类行为的探索性研究。", "01 / Indirect object identification": "01 / 间接宾语识别", "Six-axis results <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#e\"><\/use><\/svg>": "六轴结果 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#e\"><\/use><\/svg>", "02 / Multiple-choice answering": "02 / 多项选择", "MMLU Humanities &amp; STEM · Qwen3-4B": "MMLU 人文与 STEM · Qwen3-4B", "03 / Sentiment steering": "03 / 情感操控", "positive": "正面", "negative": "负面", "04 / Refusal steering": "04 / 拒答操控", "refusal": "拒答", "compliance": "应答", "Different axes reveal different control properties.": "不同的轴揭示不同的控制性质。", "Explore experiments <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>": "查看实验 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>", "05 / Resources": "05 / 资源", "Go deeper.": "深入了解。", "Explore the formulation, reference algorithms and evaluation protocol.": "查看形式化、参考算法和评价协议。", "Read the paper": "阅读论文", "Formulation, experiments and appendices.": "形式化、实验与附录。", "Learn the theory": "学习理论", "Control model, local controllability and six results.": "控制模型、局部可控性与六个结论。", "Explore the code": "查看代码", "Reference selectors and experiment records.": "参考选择器与实验记录。", "Study the protocol": "研读协议", "Six axes and their operational definitions.": "六个轴及其操作性定义。", "Cite this work": "引用本文", "Copy BibTeX": "复制 BibTeX", "Back to top <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#n\"><\/use><\/svg>": "回到顶部 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#n\"><\/use><\/svg>", "03 Sentiment": "03 情感", "04 Refusal": "04 拒答", "Humanities": "人文", "Numbers come from the paper’s tables; curves are redrawn from the saved measurements in the repository. P: evaluation-pair directions. F: training-mean directions.": "数字来自论文中的表格；曲线由仓库中保存的测量记录重新绘制。P：评价对方向。F：训练均值方向。", "Experiment guide <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>": "实验说明 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>", "Control Theory · Sparse Internal Control": "控制理论 · 语言模型的稀疏内部控制", "Theory / Mathematical model": "理论 / 数学模型", "The mathematics behind sparse internal control.": "稀疏内部控制背后的数学。", "Near the unpatched model, a frozen Transformer acts as a linear map from intervention strengths to behavior. Choosing drivers becomes a controllability question: can a few columns reach the requested displacement, and at what energy?": "在未打补丁的模型附近，冻结的 Transformer 可以看作从干预强度到行为的线性映射。选择驱动点于是成为一个可控性问题：少数几列能否到达所需位移，又需要多少能量？", "Try the explorer <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#s\"><\/use><\/svg>": "试试交互演示 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#s\"><\/use><\/svg>", "01 / Model": "01 / 模型", "A frozen network.<br>A few handles.": "一个冻结的网络。<br>几个把手。", "An intervention adds scaled directions to a handful of internal activations during the forward pass. The parameters \\(\\theta\\) never change, and \\(\\beta = 0\\) recovers the original model exactly.": "干预在前向传播中给少量内部激活加上缩放后的方向。参数 \\(\\theta\\) 始终不变，取 \\(\\beta = 0\\) 即精确恢复原模型。", "01 / Specify": "01 / 指定", "The behavior": "行为", "Choose a scalar readout \\(b\\), a target \\(\\tau_i\\) for each target prompt \\(x_i\\), and a panel of off-target prompts \\(\\tilde x_j\\) whose outputs must not move.": "选定一个标量读出 \\(b\\)，为每条目标提示 \\(x_i\\) 设定目标 \\(\\tau_i\\)，并给出一组输出不应改变的非目标提示 \\(\\tilde x_j\\)。", "02 / Actuate": "02 / 施加", "The drivers": "驱动点", "A candidate \\(v = (s_v, u_v, c_v)\\) pairs a site with a direction and a cost. Candidates with a nonzero strength form the driver set \\(S_\\beta = \\operatorname{supp}(\\beta)\\).": "候选 \\(v = (s_v, u_v, c_v)\\) 由一个位点、一个方向和一个成本组成。强度非零的候选构成驱动点集合 \\(S_\\beta = \\operatorname{supp}(\\beta)\\)。", "03 / Certify": "03 / 认证", "The control": "控制", "An intervention counts as control only when target error, off-target change and energy all pass in the full nonlinear model.": "只有当目标误差、非目标变化和能量在完整的非线性模型中同时通过时，干预才算作控制。", "The readout change on the target prompts, \\(b(f_\\theta^{\\beta}, x_i) - b(f_\\theta, x_i)\\).": "目标提示上的读出变化，\\(b(f_\\theta^{\\beta}, x_i) - b(f_\\theta, x_i)\\)。", "Relative target error, the share of the requested displacement left unmet.": "相对目标误差，即所需位移中未达成的比例。", "Mean divergence of the output distribution on the off-target panel.": "非目标面板上输出分布的平均散度。", "Intervention energy, how hard the selected sites are pushed.": "干预能量，即所选位点被推动的程度。", "02 / Objective": "02 / 目标函数", "One sparse program.": "一个稀疏规划。", "Pick the fewest, cheapest drivers whose intervention passes the certificate, with energy as a tie breaker.": "选出最少、最便宜且能通过证书的驱动点，能量作为次要准则。", "The sparse internal control problem": "稀疏内部控制问题", "Weighted sparsity": "加权稀疏度", "Counts the selected sites, each at its own cost, so a residual stream position and an attention head need not be priced alike.": "按各自的成本计数所选位点，因此残差流位置与注意力头不必同价。", "Energy": "能量", "A quadratic budget on the strengths. It keeps the intervention near the unpatched model, where the local analysis is valid.": "对强度的二次预算，使干预停留在未打补丁模型附近，也就是局部分析成立的范围。", "Certificate": "证书", "Three tolerances checked together in the nonlinear model. A proposal that misses any one of them is rejected.": "在非线性模型中同时检查三个容差，任何一个不满足，提议就被拒绝。", "03 / Local controllability": "03 / 局部可控性", "Can the drivers<br>reach the target?": "驱动点能否<br>到达目标？", "At first order the target moves by \\(\\bar G_S \\beta_S\\). Reaching \\(\\bar q\\) needs two things: \\(\\bar q\\) must lie in the span of the selected columns, and the cheapest exact fit must cost no more than \\(\\kappa\\).": "在一阶近似下，目标的移动为 \\(\\bar G_S \\beta_S\\)。要到达 \\(\\bar q\\) 需要两个条件：\\(\\bar q\\) 落在所选列张成的空间内，且最省能量的精确拟合不超过 \\(\\kappa\\)。", "Two target prompts with scalar readouts, so \\(\\bar q\\) lives in a plane. Each candidate contributes one column of \\(\\bar G\\), its first order effect on both prompts. Energy uses \\(W = I\\).": "两条目标提示各有一个标量读出，因此 \\(\\bar q\\) 位于平面上。每个候选贡献 \\(\\bar G\\) 的一列，即它对两条提示的一阶效应。能量取 \\(W = I\\)。", "Support S": "支撑集 S", "Energy budget κ": "能量预算 κ", "yes": "是", "Run Driver-OMP, k = 2": "运行 Driver-OMP，k = 2", "Reset": "重置", "The reachable set \\(\\{\\bar G_S\\beta : \\beta^{\\top}\\beta \\le \\kappa\\}\\) is an ellipse centred on the unpatched model. The lime point is the energy constrained best fit; the dashed segment is the residual that \\(\\chi_\\kappa(S)\\) normalizes.": "可达集 \\(\\{\\bar G_S\\beta : \\beta^{\\top}\\beta \\le \\kappa\\}\\) 是以未打补丁模型为中心的椭圆。lime 色点是能量约束下的最佳拟合；虚线段是 \\(\\chi_\\kappa(S)\\) 所归一化的残差。", "04 / Results": "04 / 结论", "Six results.": "六个结论。", "From the effect dictionary to the selectors: what the local analysis guarantees, and where the nonlinear model takes over.": "从效应字典到选择器：局部分析能保证什么，以及何时交给非线性模型。", "Definition B.1": "定义 B.1", "Local effect dictionary": "局部效应字典", "Each candidate’s first order effect on every target readout is one column of \\(G\\), taken at the unpatched model. A preservation dictionary \\(H\\) is built the same way from a differentiable surrogate of the off-target observable.": "每个候选对各目标读出的一阶效应构成 \\(G\\) 的一列，在未打补丁的模型处计算。保持字典 \\(H\\) 以同样方式，由非目标观测量的可微替代构建。", "Theorem 1": "定理 1", "Local linearization error": "局部线性化误差", "Inside the energy ball the model departs from its linearization by at most the curvature bound \\(L_S\\) times half the energy. Target recovery therefore holds whenever \\(\\|q - G_S\\beta_S\\|_2 + L_S\\kappa/2 \\le \\varepsilon(\\|q\\|_2 + \\xi)\\).": "在能量球内，模型偏离其线性化的程度至多为曲率界 \\(L_S\\) 乘以能量的一半。因此只要 \\(\\|q - G_S\\beta_S\\|_2 + L_S\\kappa/2 \\le \\varepsilon(\\|q\\|_2 + \\xi)\\)，目标恢复就成立。", "Equation B.19": "式 B.19", "Local target controllability": "局部目标可控性", "A support reaches the target exactly at first order within budget if and only if \\(\\bar q \\in \\operatorname{range}(\\bar G_S)\\), a span condition, and \\(E_{\\min}(S) \\le \\kappa\\), an energy condition.": "支撑集在预算内一阶精确到达目标，当且仅当满足张成条件 \\(\\bar q \\in \\operatorname{range}(\\bar G_S)\\) 与能量条件 \\(E_{\\min}(S) \\le \\kappa\\)。", "Theorem 2": "定理 2", "Minimum energy interpolation": "最小能量插值", "In whitened coordinates \\(\\tilde G_S = \\bar G_S W_{SS}^{-1/2}\\), the cheapest exact fit is a pseudoinverse. A support with a small nonzero singular value can demand far more energy to reach the same target.": "在白化坐标 \\(\\tilde G_S = \\bar G_S W_{SS}^{-1/2}\\) 下，最省能量的精确拟合是一个伪逆。最小非零奇异值很小的支撑集，到达同一目标可能需要多得多的能量。", "Proposition 1": "命题 1", "Energy constrained refit": "能量约束重拟合", "Target fit and a quadratic preservation term are refit jointly on the chosen support. Energy decreases monotonically in the multiplier \\(\\nu\\), so the budget \\(\\kappa\\) is met exactly by bisection.": "在选定的支撑集上联合重拟合目标拟合项与二次保持项。能量随乘子 \\(\\nu\\) 单调下降，因此可用二分法精确满足预算 \\(\\kappa\\)。", "Proposition 2": "命题 2", "Saturated coverage": "饱和覆盖", "Coverage is monotone submodular, so greedy selection under a pure cardinality budget is within \\(1 - 1/e\\) of optimal.": "覆盖是单调次模函数，因此在纯基数预算下，贪心选择至少达到最优值的 \\(1 - 1/e\\)。", "Proofs, assumptions and constants are in Appendix B.": "证明、假设与常数见附录 B。", "Read the appendix <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>": "阅读附录 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>", "05 / Selectors": "05 / 选择器", "Two selectors.<br>One pipeline.": "两个选择器。<br>一条流程。", "Fits the requested displacement by sparse residual fitting: add the candidate best aligned with what is still missing, refit, repeat. In its simplest setting it reduces to orthogonal matching pursuit.": "以稀疏残差拟合逼近所需位移：加入与尚缺部分最对齐的候选，重拟合，重复。在最简单的设定下即为正交匹配追踪。", "Adds candidates by saturated coverage across prompts, so the support keeps working when the prompt changes. Greedy selection carries the \\(1 - 1/e\\) guarantee.": "按跨提示的饱和覆盖加入候选，使支撑集在提示变化时依然有效。贪心选择具有 \\(1 - 1/e\\) 的保证。", "Local proposal": "局部提议", "A selector proposes a support from the linear dictionary.": "选择器根据线性字典提出一个支撑集。", "Shared refit": "共享重拟合", "Strengths are refit under the energy budget, Proposition 1.": "在能量预算下重拟合强度（命题 1）。", "Nonlinear validation": "非线性验证", "The \\((\\varepsilon, \\delta, \\kappa)\\) certificate is checked in the full model.": "在完整模型中检查 \\((\\varepsilon, \\delta, \\kappa)\\) 证书。", "Local results propose.<br><span>The certificate decides.<\/span>": "局部结果负责提议。<br><span>证书负责裁决。<\/span>", "<svg class=\"ic\" aria-hidden=\"true\"><use href=\"#w\"><\/use><\/svg> Back to the six axes": "<svg class=\"ic\" aria-hidden=\"true\"><use href=\"#w\"><\/use><\/svg> 回到六轴", "Explore the code <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>": "查看代码 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#ne\"><\/use><\/svg>", "Six-Axis Protocol · Sparse Internal Control": "六轴协议 · 语言模型的稀疏内部控制", "Protocol / Operational definitions": "协议 / 操作性定义", "How the paper measures control, one axis at a time.": "论文如何逐轴测量控制。", "01 / hit": "01 / 命中", "02 / undo": "02 / 撤销", "03 / dial": "03 / 调节", "04 / track": "04 / 跟踪", "Feedback controllability": "反馈可控性", "05 / spare": "05 / 不扰动", "06 / reuse": "06 / 复用", "One push is a demo. Control means you can hit a target, undo it, dial it, track it, spare everything else, and reuse it on prompts you have never seen. Each axis below is one of those requirements, made measurable.": "推动一次只是演示。控制意味着你能命中目标、撤销它、调节它、跟踪它、不扰动其余一切，并在从未见过的提示上复用它。下面每个轴都是其中一项要求的可测量版本。", "Read the definitions <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#s\"><\/use><\/svg>": "阅读定义 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#s\"><\/use><\/svg>", "00 / Setup": "00 / 设定", "What every axis needs.": "每个轴都需要什么。", "The axes apply to any intervention that has a support, base strengths and a direction rule. Nothing in the protocol depends on how the sites were chosen.": "这些轴适用于任何具有支撑集、基础强度和方向规则的干预。协议本身不依赖于位点是如何选出来的。", "01 / Intervention": "01 / 干预", "Support and strengths": "支撑集与强度", "A support \\(S\\) of internal sites, base strengths \\(\\beta\\), and a rule for the direction added at each site.": "由内部位点组成的支撑集 \\(S\\)、基础强度 \\(\\beta\\)，以及每个位点上所加方向的规则。", "02 / Dose": "02 / 剂量", "One scale": "一个缩放", "A scalar dose \\(\\gamma\\) multiplies the strengths. \\(\\gamma = 1\\) is the nominal intervention and \\(\\gamma = 0\\) is the unpatched model.": "标量剂量 \\(\\gamma\\) 乘在强度上。\\(\\gamma = 1\\) 是名义干预，\\(\\gamma = 0\\) 即未打补丁的模型。", "03 / Readouts": "03 / 读出", "Source, target, patched": "源、目标、打补丁后", "A task readout on the source input, on the target input, and on the source input under the patch.": "源输入上的任务读出、目标输入上的读出，以及源输入在打补丁后的读出。", "04 / Panels": "04 / 面板", "Fit and evaluate": "拟合与评价", "Fitting and evaluation prompts are split, seeds are repeated, and off-target prompts come from a separate fixed panel.": "拟合提示与评价提示分开，种子重复，非目标提示来自单独固定的面板。", "P and F": "P 与 F", "Two direction conditions run side by side. P uses evaluation-pair activation contrasts; F uses training-mean contrasts from the fitting split. The direction rule is independent of coefficient fitting and of dose updates.": "两种方向条件并行。P 使用评价对的激活差；F 使用拟合集上的训练均值差。方向规则与系数拟合、剂量更新相互独立。", "Scope": "范围", "Thresholds are operating choices, and decisions use unrounded values. The six axes characterize the control an intervention provides; on their own they do not establish the joint \\((\\varepsilon, \\delta, \\kappa)\\) certificate, and the reported results do not claim it was evaluated.": "阈值是操作性选择，判定使用未四舍五入的数值。六个轴刻画的是干预提供的控制；它们本身并不构成联合的 \\((\\varepsilon, \\delta, \\kappa)\\) 证书，报告的结果也不声称评价过该证书。", "Probe": "探测", "Apply the intervention at its nominal dose \\(\\gamma = 1\\) and read the target behavior on evaluation prompts the selector did not fit (the same panel for IOI).": "以名义剂量 \\(\\gamma = 1\\) 施加干预，在选择器没有拟合过的评价提示上读取目标行为（IOI 使用同一面板）。", "Statistic": "统计量", "\\(\\mathrm{Rel}_{\\mathrm{tar}}(1) = \\dfrac{\\lVert y_{\\mathrm{tar}} - y_{\\mathrm{pat}} \\rVert_2}{\\lVert y_{\\mathrm{tar}} - y_{\\mathrm{src}} \\rVert_2 + \\xi}\\), computed on each complete readout vector before averaging across seeds.": "\\(\\mathrm{Rel}_{\\mathrm{tar}}(1) = \\dfrac{\\lVert y_{\\mathrm{tar}} - y_{\\mathrm{pat}} \\rVert_2}{\\lVert y_{\\mathrm{tar}} - y_{\\mathrm{src}} \\rVert_2 + \\xi}\\)，在跨种子平均之前，对每个完整读出向量计算。", "Passes when": "通过条件", "\\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le \\varepsilon = 0.4\\). The appendix repeats the count for \\(\\varepsilon\\) from 0.3 to 0.5.": "\\(\\mathrm{Rel}_{\\mathrm{tar}}(1) \\le \\varepsilon = 0.4\\)。附录还给出了 \\(\\varepsilon\\) 从 0.3 到 0.5 时的通过数。", "Reported as": "报告方式", "Passing seeds, with the mean and sample standard deviation.": "通过的种子数，以及均值与样本标准差。", "Code": "代码", "In the paper · Coverage-Driver unless noted": "论文结果 · 未注明时为 Coverage-Driver", "Task": "任务", "Rel_tar, P": "Rel_tar，P", "pass": "通过", "Rel_tar, F": "Rel_tar，F", "IOI (same panel)": "IOI（同面板）", "MCQA Humanities": "MCQA 人文", "Sentiment": "情感", "Refusal": "拒答", "Evaluation-pair directions reach the target on MCQA and Sentiment; training-mean directions never do. Refusal fails with either.": "评价对方向在 MCQA 与情感任务上能到达目标，训练均值方向从未做到。拒答任务两种方向都失败。", "Apply the opposite patch \\(-\\beta\\) to the target-side input. For Refusal, the negative coefficients act on the harmful member of each pair.": "对目标侧输入施加反向补丁 \\(-\\beta\\)。对拒答任务，负系数作用在每对中的有害成员上。", "\\(\\mathrm{Reversal}(\\beta) = \\lVert y_{-\\beta} - y_{\\mathrm{tar}} \\rVert_2 \\,/\\, \\lVert y_{-\\beta} - y_{\\mathrm{src}} \\rVert_2\\): the distance of the reversed output from the target over its distance from the source. Infinite and 0/0 ratios are kept explicit.": "\\(\\mathrm{Reversal}(\\beta) = \\lVert y_{-\\beta} - y_{\\mathrm{tar}} \\rVert_2 \\,/\\, \\lVert y_{-\\beta} - y_{\\mathrm{src}} \\rVert_2\\)：反转后的输出到目标的距离与到源的距离之比。无穷大与 0/0 的情形单独标记。", "\\(\\mathrm{Reversal}(\\beta) \\ge 2\\): the reversed output ends at least twice as close to the source as to the target.": "\\(\\mathrm{Reversal}(\\beta) \\ge 2\\)：反转后的输出离目标的距离至少是离源距离的两倍。", "Passing seeds, with the mean ratio and standard deviation.": "通过的种子数，以及比值的均值与标准差。", "ratio, P": "比值，P", "ratio, F": "比值，F", "Reversal follows the same split as reachability: it passes wherever evaluation-pair directions are available, and fails for Refusal.": "反转与可达性的分界相同：凡是有评价对方向的地方都能通过，拒答任务则失败。", "Hold the support and base strengths fixed and scale them by ten doses \\(\\gamma \\in \\{-1, -0.5, 0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2\\}\\).": "固定支撑集与基础强度，用十个剂量 \\(\\gamma \\in \\{-1, -0.5, 0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2\\}\\) 进行缩放。", "Target progress \\(P(\\gamma)\\) at each dose and the signed Spearman \\(\\rho\\) of progress against \\(\\gamma\\). Ties use average ranks; a constant curve is undefined.": "每个剂量下的目标进展 \\(P(\\gamma)\\)，以及进展对 \\(\\gamma\\) 的带符号 Spearman \\(\\rho\\)。并列值取平均秩；常数曲线无定义。", "\\(\\rho \\ge 0.95\\). A strong negative correlation is reported separately and never counts as ordered.": "\\(\\rho \\ge 0.95\\)。强负相关单独报告，绝不算作有序。", "Curves with \\(\\rho \\ge 0.95\\) and with \\(\\rho \\le -0.95\\), out of 8 seeds.": "8 个种子中满足 \\(\\rho \\ge 0.95\\) 与满足 \\(\\rho \\le -0.95\\) 的曲线数。", "All 48 Refusal curves are perfectly ordered, yet Refusal fails reachability and reversal. With training-mean directions, MCQA curves run the wrong way on up to half the seeds.": "拒答任务的全部 48 条曲线完全有序，却在可达性与反转上失败。使用训练均值方向时，MCQA 最多有一半种子的曲线方向相反。", "Keep the support, base strengths and direction rule fixed, request a target value \\(m^\\star\\), and update only the dose from the measured error: \\(\\gamma_{t+1} = \\gamma_t + \\eta\\,(m^\\star - M(\\gamma_t))\\), with a fixed gain.": "固定支撑集、基础强度与方向规则，指定目标值 \\(m^\\star\\)，只根据测得误差更新剂量：\\(\\gamma_{t+1} = \\gamma_t + \\eta\\,(m^\\star - M(\\gamma_t))\\)，增益固定。", "The terminal error \\(\\lvert m^\\star - M(\\gamma_{\\mathrm{end}}) \\rvert\\) per endpoint, with hits, mean absolute error and the number of readout evaluations. Targets already met at zero dose are reported separately.": "每个终点的终端误差 \\(\\lvert m^\\star - M(\\gamma_{\\mathrm{end}}) \\rvert\\)，以及命中数、平均绝对误差和读出评估次数。零剂量时已满足的目标单独报告。", "\\(\\lvert m^\\star - M(\\gamma_{\\mathrm{end}}) \\rvert \\le \\tau_{\\mathrm{ctrl}}\\): 0.3 for IOI and MCQA, 0.1 for Refusal.": "\\(\\lvert m^\\star - M(\\gamma_{\\mathrm{end}}) \\rvert \\le \\tau_{\\mathrm{ctrl}}\\)：IOI 与 MCQA 为 0.3，拒答为 0.1。", "Hits over endpoints: 8 seeds × 6 targets for MCQA, 8 × 5 for Refusal, 3 × 8 for IOI.": "命中数 / 终点数：MCQA 为 8 个种子 × 6 个目标，拒答为 8 × 5，IOI 为 3 × 8。", "hits, P": "命中，P", "MAE, P": "MAE，P", "hits, F": "命中，F", "MAE, F": "MAE，F", "IOI (Driver-OMP)": "IOI（Driver-OMP）", "not evaluated": "未评测", "With evaluation-pair directions, feedback hits nearly every MCQA target in about four readouts. Training-mean directions stall short of the target even after eleven.": "使用评价对方向时，反馈在约四次读出内命中几乎所有 MCQA 目标；训练均值方向即使读出十一次，仍停在目标之前。", "Apply the intervention at its nominal dose to a fixed panel of 32 unrelated MMLU prompts (16 Humanities, 16 STEM): 256 prompt–seed observations per selector.": "以名义剂量在固定的 32 条无关 MMLU 提示面板（16 条人文、16 条 STEM）上施加干预：每个选择器 256 个提示–种子观测。", "Full-vocabulary \\(\\mathrm{KL}\\big(p_\\theta \\,\\Vert\\, p_\\theta^{\\beta}\\big)\\) in nats, unpatched against patched, summarized by mean, median, nearest-rank P95 and maximum.": "全词表 \\(\\mathrm{KL}\\big(p_\\theta \\,\\Vert\\, p_\\theta^{\\beta}\\big)\\)（单位 nats），未打补丁对打补丁后，以均值、中位数、最近秩 P95 与最大值汇总。", "\\(\\mathrm{KL} \\le \\delta = 0.001\\), counted twice: on the seed mean, and on every prompt of the seed.": "\\(\\mathrm{KL} \\le \\delta = 0.001\\)，分两种规则计数：种子均值，以及该种子的每一条提示。", "Passing seeds under each rule, with the KL distribution.": "两种规则下通过的种子数，以及 KL 分布。", "median KL": "KL 中位数", "mean KL": "KL 均值", "seed mean": "种子均值", "every prompt": "每条提示", "Refusal, Driver-OMP": "拒答，Driver-OMP", "No MCQA or Sentiment seed stays under δ. Only Driver-OMP on Refusal passes, on half the seeds by the mean rule.": "MCQA 与情感任务没有种子低于 δ。只有拒答任务上的 Driver-OMP 按均值规则在一半种子上通过。", "Carry the support selected on fitting prompts to unseen prompts, either refitting the strengths there (refit) or freezing the whole intervention, dose included (frozen).": "把在拟合提示上选出的支撑集带到未见提示上：要么在那里重拟合强度（重拟合），要么连同剂量冻结整个干预（冻结）。", "Recovery of the source-to-target gap on the unseen prompts: signed mean-margin recovery for MCQA, with task-specific variants for Sentiment and IOI. Recovery is not \\(1 - \\mathrm{Rel}_{\\mathrm{tar}}\\).": "未见提示上源到目标差距的恢复率：MCQA 用带符号的平均裕度恢复，情感与 IOI 各有对应的变体。恢复率不等于 \\(1 - \\mathrm{Rel}_{\\mathrm{tar}}\\)。", "No threshold. Recovery is reported as a continuous value together with its information condition.": "不设阈值。恢复率以连续值报告，并注明信息条件。", "Mean recovery and standard deviation for each condition.": "每种条件下的平均恢复率与标准差。", "refit": "重拟合", "frozen / fixed": "冻结 / 固定", "Sentiment, k = 8 (fixed dose)": "情感，k = 8（固定剂量）", "Sites transfer: refitting strengths on unseen MCQA questions recovers almost the whole gap. The frozen intervention recovers almost nothing.": "位点可以迁移：在未见 MCQA 题目上重拟合强度，几乎恢复全部差距；冻结的干预几乎没有恢复。", "07 / All tasks, all axes": "07 / 全部任务，全部轴", "Six numbers, not one.": "六个数，而不是一个。", "Each row is a task and each column an axis. Coverage-Driver with evaluation-pair directions unless noted. No task passes every axis, and no single axis predicts the others.": "每行是一个任务，每列是一个轴。未注明时为使用评价对方向的 Coverage-Driver。没有任务通过所有轴，也没有哪个轴能预测其他轴。", "01 Reachability": "01 可达性", "02 Signed reversal": "02 符号反转", "03 Dose response": "03 剂量响应", "04 Feedback controllability": "04 反馈可控性", "05 Off-target preservation": "05 非目标保持", "06 Held-out reuse": "06 留出复用", "10/10, same panel": "10/10，同面板", "monotone": "单调", "supporting study": "辅助研究", "not on the panel": "不在面板中", "refit recovery": "重拟合恢复率", "hits": "命中", "median KL, 0/8": "KL 中位数，0/8", "refit · 0.033 frozen": "重拟合 · 冻结 0.033", "refit · 0.038 frozen": "重拟合 · 冻结 0.038", "k = 8, fixed dose": "k = 8，固定剂量", "<i style=\"background:#D7EE5B\"><\/i>passes": "<i style=\"background:#D7EE5B\"><\/i>通过", "<i style=\"background:#3A3A37\"><\/i>partial": "<i style=\"background:#3A3A37\"><\/i>部分", "<i style=\"background:#262624; box-shadow:inset 0 0 0 2px #3A3A37\"><\/i>fails": "<i style=\"background:#262624; box-shadow:inset 0 0 0 2px #3A3A37\"><\/i>失败", "<i style=\"box-shadow:inset 0 0 0 2px #D7EE5B\"><\/i>reported without a threshold": "<i style=\"box-shadow:inset 0 0 0 2px #D7EE5B\"><\/i>无阈值报告", "<i style=\"box-shadow:inset 0 0 0 2px #3A3A37\"><\/i>not evaluated": "<i style=\"box-shadow:inset 0 0 0 2px #3A3A37\"><\/i>未评测", "08 / Use the protocol": "08 / 使用协议", "Score your own intervention.": "为你的干预打分。", "Activation steering, sparse autoencoder features, concept erasure or circuit discovery: any intervention with a support, strengths and a direction rule can be scored the same way. Each axis is one function in the released package.": "激活操控、稀疏自编码器特征、概念擦除或电路发现：任何具有支撑集、强度和方向规则的干预，都能用同样的方式打分。每个轴在发布的代码包中都是一个函数。", "Recalculate every table in the paper from the saved measurements on CPU: <code>python -m sparse_control reproduce<\/code>, then <code>verify<\/code>.": "在 CPU 上由保存的测量记录重算论文中的每张表：先运行 <code>python -m sparse_control reproduce<\/code>，再运行 <code>verify<\/code>。", "One push is a demo.<br><span>Six axes make it control.<\/span>": "推动一次只是演示。<br><span>六个轴才构成控制。<\/span>", "<svg class=\"ic\" aria-hidden=\"true\"><use href=\"#w\"><\/use><\/svg> Back to the home page": "<svg class=\"ic\" aria-hidden=\"true\"><use href=\"#w\"><\/use><\/svg> 回到首页", "Learn the theory <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#e\"><\/use><\/svg>": "学习理论 <svg class=\"ic\" aria-hidden=\"true\"><use href=\"#e\"><\/use><\/svg>", "Activation patches": "激活补丁", "Weights fixed": "权重固定", "Effect dictionary G": "效应字典 G", "Support S = supp β": "支撑集 S = supp β", "Requested displacement q̄": "所需位移 q̄", "PROMPT 1": "提示 1", "PROMPT 2": "提示 2", "Source": "源", "Target": "目标", "Patched": "打补丁后", "Residual": "残差", "Target progress": "目标进展", "Support fixed": "支撑集固定", "Target error": "目标误差", "Model": "模型", "Measured output": "测得输出", "Probability": "概率", "Same sites": "同一组位点", "Fixed sites · refit strengths": "位点固定 · 重拟合强度", "Full patch fixed": "整个补丁固定", "Reach": "可达", "Reverse": "反转", "Dose": "剂量", "Feedback": "反馈", "Preserve": "保持", "Reuse": "复用", "Indirect object identification": "间接宾语识别", "Multiple-choice answering": "多项选择", "Sentiment steering": "情感操控", "Refusal steering": "拒答操控", "GPT-2 small · 64 paired prompts · IO–S logit margin": "GPT-2 small · 64 组配对提示 · IO–S logit 裕度", "Qwen3-4B · MMLU, 24 questions per subject, fit/eval 12/12": "Qwen3-4B · MMLU，每个学科 24 题，拟合/评价 12/12", "GPT-2 small · 16 pairs, fit/eval 8/8 · unpaired dose on 16 + 16 templates": "GPT-2 small · 16 对，拟合/评价 8/8 · 非配对剂量实验用 16 + 16 个模板", "Qwen3-1.7B · 20 pairs, fit/eval 10/10 · lexical refusal margin": "Qwen3-1.7B · 20 对，拟合/评价 10/10 · 词汇拒答裕度", "lower is better": "越低越好", "higher is better": "越高越好", "pass ≥ 2": "通过 ≥ 2", "KL, log scale": "KL，对数坐标", "refit strengths": "重拟合强度", "fixed strengths": "固定强度", "fully frozen": "完全冻结", "full recovery": "完全恢复", "target": "目标", "targets": "目标", "dose γ": "剂量 γ", "margin progress": "裕度进展", "target progress": "目标进展", "feedback step": "反馈步", "IO–S margin": "IO–S 裕度", "answer margin": "答案裕度", "refusal margin": "拒答裕度", "output": "输出", "random sites": "随机位点", "random": "随机", "steering recovery": "操控恢复率", "dose scale": "剂量倍数", "support size k": "支撑大小 k", "held-out recovery": "留出恢复率", "NOT ON THE PANEL": "不在面板中", "IOI is outside the shared 32-prompt preservation panel": "IOI 不在共享的 32 条提示保持面板中", "NOT EVALUATED": "未评测", "no feedback experiment is registered for Sentiment": "情感任务没有登记反馈实验", "no held-out reuse experiment for Refusal": "拒答任务没有留出复用实验"};
+  const KEY = 'sic-lang';
+  const norm = s => s.replace(/\s+/g, ' ').trim();
+  const INLINE = new Set(['B', 'STRONG', 'I', 'EM', 'BR', 'CODE', 'SPAN', 'SUB', 'SUP', 'SMALL']);
+  const ownText = el => Array.from(el.childNodes).some(n => n.nodeType === 3 && /\S/.test(n.nodeValue));
+  let lang = 'en', items = [], ready = false, chosen = false;
+  const subs = [];
+  const store = (k, v) => { try { window.localStorage.setItem(k, v); } catch (e) {} };
+  const read = (area, k) => { try { return window[area].getItem(k); } catch (e) { return null; } };
+  function inline(el){ for (const c of el.children){ if (c.tagName === 'svg' ? !c.classList.contains('ic') : !INLINE.has(c.tagName) || !inline(c)) return false; } return true; }
+  function collect(){
+    const taken = new Set();
+    document.querySelectorAll('body *').forEach(el => {
+      if (el.closest('script, style, svg, .katex, [data-noi18n]')) return;
+      for (let a = el.parentElement; a; a = a.parentElement) if (taken.has(a)) return;
+      if (!inline(el) || !ownText(el)) return;
+      const en = el.innerHTML, zh = ZH[norm(en)];
+      if (zh === undefined) return;
+      items.push({ el, en, zh }); taken.add(el);
+    });
+    items.titleEn = document.title;
+  }
+  function set(next, opts = {}){
+    if (next !== 'zh') next = 'en';
+    if (opts.user){ chosen = true; store(KEY, next); }
+    if (next === lang && ready) return;
+    lang = next;
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    items.forEach(it => { it.el.innerHTML = lang === 'zh' ? it.zh : it.en; });
+    document.title = lang === 'zh' ? (ZH[norm(items.titleEn)] || items.titleEn) : items.titleEn;
+    document.querySelectorAll('[data-lang-btn]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.langBtn === lang)));
+    if (ready) subs.forEach(f => { try { f(lang, items.map(i => i.el)); } catch (e) {} });
+  }
+  function geo(){
+    if (!window.fetch) return Promise.resolve(null);
+    const ctl = window.AbortController ? new AbortController() : null, timer = setTimeout(() => ctl && ctl.abort(), 1800);
+    return fetch('https://api.country.is/', { signal: ctl ? ctl.signal : undefined, cache: 'no-store' })
+      .then(r => (r.ok ? r.json() : null)).then(j => (j && typeof j.country === 'string' ? j.country.toUpperCase() : null))
+      .catch(() => null).finally(() => clearTimeout(timer));
+  }
+  function init(){
+    collect();
+    const q = new URLSearchParams(location.search).get('lang'), saved = read('localStorage', KEY);
+    let first = 'en', ask = false;
+    if (q === 'zh' || q === 'en'){ first = q; chosen = true; }
+    else if (saved === 'zh' || saved === 'en'){ first = saved; chosen = true; }
+    else {
+      const cc = read('sessionStorage', KEY + '-cc');
+      if (cc) first = cc === 'CN' ? 'zh' : 'en';
+      else {
+        let tz = ''; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
+        first = /^(Asia\/(Shanghai|Chongqing|Chungking|Harbin|Urumqi|Kashgar)|PRC)$/.test(tz) ? 'zh' : 'en';
+        ask = true;
+      }
+    }
+    set(first);
+    ready = true;
+    document.querySelectorAll('[data-lang-btn]').forEach(b => b.addEventListener('click', () => set(b.dataset.langBtn, { user: true })));
+    if (ask) geo().then(cc => { if (!cc) return; try { sessionStorage.setItem(KEY + '-cc', cc); } catch (e) {} if (!chosen) set(cc === 'CN' ? 'zh' : 'en'); });
+    return lang;
+  }
+  return {
+    init, set,
+    on: f => subs.push(f),
+    get lang(){ return lang; },
+    t: s => (lang === 'zh' && ZH[s] !== undefined ? ZH[s] : s),
+    L: (en, zh) => (lang === 'zh' ? zh : en)
+  };
+})();
+</script>
+<script>
+(() => {
+'use strict';
+const $ = (q, r = document) => r.querySelector(q), $$ = (q, r = document) => Array.from(r.querySelectorAll(q));
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v)), lerp = (a, b, t) => a + (b - a) * t;
+const SVGNS = 'http://www.w3.org/2000/svg';
+const el = (n, a) => { const e = document.createElementNS(SVGNS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+const U = () => window.innerWidth <= 860 ? .62 : clamp(window.innerWidth / 1586, .62, 1.35);
+const math = node => { if (window.renderMathInElement) { try { renderMathInElement(node, { delimiters: [{ left: '\\[', right: '\\]', display: true }, { left: '\\(', right: '\\)', display: false }], throwOnError: false }); } catch (e) {} } };
+I18N.init();
+math(document.body);
+I18N.on((l, els) => els.forEach(e => math(e)));
+
+/* ---- title fills the width ---- */
+const title = $('.t-title');
+function fitTitle(){ const ps = getComputedStyle(title.parentElement), w = title.parentElement.clientWidth - parseFloat(ps.paddingLeft) - parseFloat(ps.paddingRight) + 14 * U(); title.style.fontSize = '100px'; const tw = title.getBoundingClientRect().width || 1; title.style.fontSize = Math.max(40, Math.floor(100 * w / tw * 100) / 100) + 'px'; }
+
+/* ---- six axis scenes: one drawing per axis, used as a live thumbnail and as the full stage ---- */
+const S = { tr: '#45453F', g: '#8B8B88', cr: '#F4F3EE', li: '#D7EE5B', lb: '#BDBDB8' };
+const ease = t => 1 - Math.pow(1 - t, 3);
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const tw = (ms, f) => new Promise(res => { if (reduce){ f(1); return res(); } const t0 = performance.now(); const st = n => { const k = Math.min(1, (n - t0) / ms); f(ease(k)); if (k < 1) requestAnimationFrame(st); else res(); }; requestAnimationFrame(st); });
+const mk = (p, n, a) => { const e = el(n, a); p.appendChild(e); return e; };
+const tx = (p, x, y, s, a = {}) => { const t = mk(p, 'text', Object.assign({ x, y, class: 'lb', fill: S.lb, 'font-size': 15, 'text-anchor': 'middle' }, a)); t.dataset.en = s; t.textContent = I18N.t(s); return t; };
+I18N.on(() => document.querySelectorAll('svg text[data-en]').forEach(t => { t.textContent = I18N.t(t.dataset.en); }));
+const arrow = (p, x, y, dx, dy, col) => { const l = Math.hypot(dx, dy), ux = dx / l, uy = dy / l, s = 9; return mk(p, 'path', { d: `M${x - ux * s - uy * s * .6} ${y - uy * s + ux * s * .6} L${x} ${y} L${x - ux * s + uy * s * .6} ${y - uy * s - ux * s * .6}`, fill: 'none', stroke: col, 'stroke-width': 2.5 }); };
+
+const SCENES = {
+  1(s){ // reachability
+    const y = 104, xs = 70, xt = 525, xp = 405;
+    mk(s, 'line', { x1: xs, y1: y, x2: xt, y2: y, stroke: S.tr, 'stroke-width': 3 });
+    const ln = mk(s, 'line', { x1: xs, y1: y, x2: xs, y2: y, stroke: S.li, 'stroke-width': 4 });
+    mk(s, 'circle', { cx: xs, cy: y, r: 8, fill: S.g });
+    mk(s, 'circle', { cx: xt, cy: y, r: 17, fill: 'none', stroke: S.cr, 'stroke-width': 3 });
+    const ah = arrow(s, 0, y, 1, 0, S.li);
+    const dot = mk(s, 'circle', { cx: xs, cy: y, r: 11, fill: S.li });
+    tx(s, xs, y + 42, 'Source'); tx(s, xt, y + 46, 'Target');
+    const pl = tx(s, xp, y - 26, 'Patched', { fill: S.cr });
+    const res = mk(s, 'g', { opacity: 0 });
+    mk(res, 'path', { d: `M${xp} ${y - 70}v14M${xp} ${y - 63}H${xt - 17}M${xt - 17} ${y - 70}v14`, stroke: S.li, 'stroke-width': 2.5, 'stroke-dasharray': '6 5', fill: 'none' });
+    tx(res, (xp + xt) / 2, y - 80, 'Residual');
+    const at = x => { dot.setAttribute('cx', x); ln.setAttribute('x2', Math.max(xs, x - 14)); pl.setAttribute('x', x); ah.setAttribute('transform', `translate(${x - 13} 0)`); ah.setAttribute('opacity', x - xs > 30 ? 1 : 0); };
+    return {
+      async play(){ res.setAttribute('opacity', 0); pl.setAttribute('opacity', 0); at(xs); await tw(1100, k => at(lerp(xs, xp, k))); pl.setAttribute('opacity', 1); await tw(500, k => res.setAttribute('opacity', k)); },
+      final(){ at(xp); res.setAttribute('opacity', 1); pl.setAttribute('opacity', 1); }
+    };
+  },
+  2(s){ // signed reversal
+    const y = 112, xs = 70, xt = 525, xe = 190, ex = 118, ey = y - 26;
+    mk(s, 'line', { x1: xs, y1: y, x2: xt, y2: y, stroke: S.tr, 'stroke-width': 3 });
+    mk(s, 'circle', { cx: xs, cy: y, r: 8, fill: S.g });
+    mk(s, 'circle', { cx: xt, cy: y, r: 17, fill: 'none', stroke: S.cr, 'stroke-width': 3 });
+    const arc = mk(s, 'path', { d: `M${xt - 12} ${y - 30} Q ${(xs + xt) / 2 + 20} ${y - 128} ${ex} ${ey}`, fill: 'none', stroke: S.li, 'stroke-width': 3, pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1 });
+    const head = arrow(s, ex, ey, ex - ((xs + xt) / 2 + 20), ey - (y - 128), S.li); head.setAttribute('opacity', 0);
+    const b = tx(s, (xs + xt) / 2 + 20, 24, '−β', { fill: S.cr, 'font-size': 22 }); b.setAttribute('opacity', 0);
+    const dot = mk(s, 'circle', { cx: xt, cy: y, r: 11, fill: S.li });
+    tx(s, xs, y + 42, 'Source'); tx(s, xt, y + 46, 'Target');
+    const set = (a, d) => { arc.setAttribute('stroke-dashoffset', 1 - a); head.setAttribute('opacity', a > .98 ? 1 : 0); b.setAttribute('opacity', a); dot.setAttribute('cx', lerp(xt, xe, d)); };
+    return {
+      async play(){ set(0, 0); await wait(200); await tw(800, k => set(k, 0)); await tw(1000, k => set(1, k)); },
+      final(){ set(1, 1); }
+    };
+  },
+  3(s, onSet){ // dose response
+    const X0 = 92, X1 = 560, Y0 = 136, Y1 = 40;
+    const P = g => 1 / (1 + Math.exp(-8.5 * (g - .42))), p0 = P(0), p1 = P(1), Pn = g => (P(g) - p0) / (p1 - p0);
+    const fx = g => X0 + g * (X1 - X0), fy = g => Y0 - Pn(g) * (Y0 - Y1);
+    const path = (a, b) => { let d = ''; for (let i = 0; i <= 60; i++){ const g = a + (b - a) * i / 60; d += (i ? 'L' : 'M') + fx(g).toFixed(1) + ' ' + fy(g).toFixed(1); } return d; };
+    mk(s, 'path', { d: `M${X0} ${Y1 - 12}V${Y0}H${X1 + 8}`, fill: 'none', stroke: S.tr, 'stroke-width': 2.5 });
+    for (let i = 0; i < 10; i++){ const g = .05 + i * .1; mk(s, 'line', { x1: fx(g), y1: Y0 + 3, x2: fx(g), y2: Y0 + 10, stroke: S.g, 'stroke-width': 2 }); }
+    mk(s, 'path', { d: path(0, 1), fill: 'none', stroke: S.tr, 'stroke-width': 3 });
+    const act = mk(s, 'path', { d: path(0, .01), fill: 'none', stroke: S.li, 'stroke-width': 3.5 });
+    const vl = mk(s, 'line', { stroke: S.cr, 'stroke-width': 1.5, 'stroke-dasharray': '4 4' });
+    const dot = mk(s, 'circle', { r: 9, fill: S.li });
+    tx(s, X0 + 10, Y1 - 18, 'Target progress', { 'text-anchor': 'start' }); tx(s, X1 + 8, Y0 + 30, 'Dose γ', { 'text-anchor': 'end' });
+    for (let i = 0; i < 9; i++) mk(s, 'rect', { x: 424 + i * 13, y: 8, width: 9, height: 9, fill: i === 2 || i === 6 ? S.li : S.g });
+    tx(s, 414, 17, 'Support fixed', { 'text-anchor': 'end', 'font-size': 13 });
+    const set = g => { g = clamp(g, .005, 1); act.setAttribute('d', path(0, g)); dot.setAttribute('cx', fx(g)); dot.setAttribute('cy', fy(g)); vl.setAttribute('x1', fx(g)); vl.setAttribute('x2', fx(g)); vl.setAttribute('y1', fy(g) + 9); vl.setAttribute('y2', Y0); if (onSet) onSet(g); };
+    set(.8);
+    return {
+      set,
+      async play(){ await tw(1700, k => set(.04 + .92 * k)); await wait(500); await tw(1100, k => set(.96 - .76 * k)); },
+      final(){ set(.8); }
+    };
+  },
+  4(s, onStep){ // feedback controllability
+    const ty = 30, xa = 92, xT = 470;
+    mk(s, 'line', { x1: xa, y1: ty, x2: 540, y2: ty, stroke: S.tr, 'stroke-width': 2.5 });
+    mk(s, 'circle', { cx: xT, cy: ty, r: 13, fill: 'none', stroke: S.cr, 'stroke-width': 3 });
+    const err = mk(s, 'line', { y1: ty - 20, y2: ty - 20, x2: xT, stroke: S.li, 'stroke-width': 2, 'stroke-dasharray': '6 5' });
+    const dot = mk(s, 'circle', { cy: ty, r: 9, fill: S.li });
+    tx(s, 548, ty + 5, 'Target', { 'text-anchor': 'start', 'font-size': 14 });
+    tx(s, xa, ty + 30, 'Target error', { 'text-anchor': 'start', 'font-size': 14 });
+    const ly = 98;
+    mk(s, 'circle', { cx: 112, cy: ly, r: 18, fill: 'none', stroke: S.cr, 'stroke-width': 2.5 });
+    tx(s, 112, ly + 6, 'e', { fill: S.cr, 'font-size': 18 });
+    mk(s, 'line', { x1: 130, y1: ly, x2: 214, y2: ly, stroke: S.g, 'stroke-width': 2.5 }); arrow(s, 214, ly, 1, 0, S.g);
+    mk(s, 'rect', { x: 218, y: ly - 21, width: 112, height: 42, fill: 'none', stroke: S.cr, 'stroke-width': 2.5 }); tx(s, 274, ly + 6, 'Dose γ', { fill: S.cr, 'font-size': 17 });
+    mk(s, 'line', { x1: 330, y1: ly, x2: 384, y2: ly, stroke: S.li, 'stroke-width': 2.5 }); arrow(s, 384, ly, 1, 0, S.li);
+    mk(s, 'rect', { x: 388, y: ly - 21, width: 112, height: 42, fill: 'none', stroke: S.cr, 'stroke-width': 2.5 }); tx(s, 444, ly + 6, 'Model', { fill: S.cr, 'font-size': 17 });
+    mk(s, 'path', { d: `M444 ${ly + 21}V${ly + 46}H112V${ly + 20}`, fill: 'none', stroke: S.li, 'stroke-width': 2.5 }); arrow(s, 112, ly + 20, 0, -1, S.li);
+    tx(s, 278, 166, 'Measured output', { 'font-size': 14 });
+    const loop = el('path', { d: `M130 ${ly}H444V${ly + 46}H112V${ly + 18}` });
+    const pulse = mk(s, 'circle', { r: 6, fill: S.li, opacity: 0 });
+    s.appendChild(loop); loop.setAttribute('fill', 'none'); loop.setAttribute('stroke', 'none');
+    let m = .12, n = 0, busy = false;
+    const px = v => lerp(xa + 14, xT, v);
+    const show = () => { dot.setAttribute('cx', px(m)); err.setAttribute('x1', px(m) + 10); err.setAttribute('opacity', 1 - m > .04 ? 1 : 0); if (onStep) onStep(n); };
+    show();
+    const reset = () => { m = .12; n = 0; show(); };
+    async function step(){
+      if (busy) return; busy = true;
+      if (1 - m < .04) { reset(); await wait(250); }
+      const L = loop.getTotalLength(); pulse.setAttribute('opacity', 1);
+      await tw(950, k => { const p = loop.getPointAtLength(k * L); pulse.setAttribute('cx', p.x); pulse.setAttribute('cy', p.y); });
+      pulse.setAttribute('opacity', 0);
+      const a = m, b = m + .58 * (1 - m); n++;
+      await tw(550, k => { m = lerp(a, b, k); dot.setAttribute('cx', px(m)); err.setAttribute('x1', px(m) + 10); });
+      show(); busy = false;
+    }
+    return {
+      step,
+      async play(){ reset(); await wait(300); for (let i = 0; i < 4; i++){ await step(); await wait(200); } },
+      final(){ m = .97; n = 4; show(); }
+    };
+  },
+  5(s){ // off-target preservation
+    const base = 146, Hh = 112, xs = [170, 270, 370, 470], b = [.86, .58, .38, .2], q = [.8, .65, .42, .23];
+    mk(s, 'line', { x1: 100, y1: base, x2: 540, y2: base, stroke: S.tr, 'stroke-width': 2.5 });
+    mk(s, 'line', { x1: 100, y1: base, x2: 100, y2: 22, stroke: S.tr, 'stroke-width': 2.5 });
+    tx(s, 110, 24, 'Probability', { 'text-anchor': 'start', 'font-size': 14 });
+    const bars = [], marks = [];
+    xs.forEach((x, i) => {
+      mk(s, 'rect', { x: x - 26, y: base - b[i] * Hh, width: 22, height: b[i] * Hh, fill: S.g });
+      bars.push(mk(s, 'rect', { x: x + 2, width: 22, fill: S.li }));
+      const g = mk(s, 'g', { opacity: 0 });
+      mk(g, 'line', { x1: x - 30, x2: x + 30, y1: base - b[i] * Hh, y2: base - b[i] * Hh, stroke: S.cr, 'stroke-width': 1.6, 'stroke-dasharray': '3 3' });
+      mk(g, 'line', { x1: x + 34, x2: x + 34, y1: base - b[i] * Hh, y2: base - q[i] * Hh, stroke: S.cr, 'stroke-width': 2.5 });
+      marks.push(g);
+      tx(s, x, base + 20, 'ABCD'[i], { 'font-size': 15 });
+    });
+    const set = (k, mk2) => { bars.forEach((r, i) => { const h = lerp(b[i], q[i], k) * Hh; r.setAttribute('y', base - h); r.setAttribute('height', h); }); marks.forEach(g => g.setAttribute('opacity', mk2)); };
+    set(0, 0);
+    return {
+      async play(){ set(0, 0); await wait(250); await tw(900, k => set(k, 0)); await tw(450, k => set(1, k)); },
+      final(){ set(1, 1); }
+    };
+  },
+  6(s){ // held-out reuse
+    const T = 17, G = 4, x0 = 46, y0 = 40, on = [2, 5, 11];
+    for (let i = 0; i < 16; i++) mk(s, 'rect', { x: x0 + (i % 4) * (T + G), y: y0 + Math.floor(i / 4) * (T + G), width: T, height: T, fill: on.includes(i) ? S.li : S.g });
+    tx(s, x0 + 40, y0 + 112, 'Same sites', { 'font-size': 14 });
+    mk(s, 'path', { d: `M136 ${y0 + 40}H176M176 ${y0 + 2}V${y0 + 82}M176 ${y0 + 2}H204M176 ${y0 + 82}H204`, fill: 'none', stroke: S.cr, 'stroke-width': 2 });
+    arrow(s, 206, y0 + 2, 1, 0, S.cr); arrow(s, 206, y0 + 82, 1, 0, S.cr);
+    const rows = [[22, 'Fixed sites · refit strengths', '0.992', [.99, .96, .93]], [104, 'Full patch fixed', '0.021', [.05, .02, .08]]];
+    const fills = [];
+    rows.forEach(([ly, lab, val, vs]) => {
+      tx(s, 222, ly, lab, { 'text-anchor': 'start', fill: S.cr, 'font-size': 15, 'font-weight': 600 });
+      tx(s, 560, ly, val, { 'text-anchor': 'end', fill: S.li, 'font-size': 14, class: 'lb mono' });
+      vs.forEach((v, j) => { const y = ly + 12 + j * 11; mk(s, 'rect', { x: 222, y, width: 338, height: 6, fill: S.tr }); fills.push([mk(s, 'rect', { x: 222, y, width: 0, height: 6, fill: S.li }), v]); });
+    });
+    const set = k => fills.forEach(([r, v], i) => r.setAttribute('width', 338 * v * clamp(k * 1.25 - (i % 3) * .1, 0, 1)));
+    return {
+      async play(){ set(0); await wait(250); await tw(1300, set); },
+      final(){ set(1); }
+    };
+  }
+};
+
+
+/* thumbnails loop while visible; stages respond to their controls and play once when scrolled into view */
+$$('svg.scene.mini').forEach(svg => {
+  const c = SCENES[svg.dataset.s](svg);
+  if (reduce){ c.final(); return; }
+  let vis = false, running = false;
+  const run = async () => { running = true; while (vis){ await c.play(); await wait(1100); } running = false; };
+  new IntersectionObserver(es => { vis = es[0].isIntersecting; if (vis && !running) run(); }).observe(svg);
+});
+$$('.stage').forEach(st => {
+  const svg = $('svg.scene', st), n = svg.dataset.s, status = $('.stage-st', st), btn = $('.stage-btn', st), range = $('input[type=range]', st);
+  const c = SCENES[n](svg, n === '3' ? g => { status.textContent = 'γ ' + g.toFixed(2); if (range && document.activeElement !== range) range.value = g; } : n === '4' ? k => { status.textContent = I18N.L('Update ' + k, '第 ' + k + ' 次更新'); } : null);
+  if (n !== '3') c.final();
+  if (btn) btn.addEventListener('click', () => { if (n === '4') c.step(); else c.play(); });
+  if (range) range.addEventListener('input', () => c.set(+range.value));
+  if (!reduce){ let done = false; new IntersectionObserver(es => { if (es[0].isIntersecting && !done){ done = true; setTimeout(() => c.play(), 300); } }, { threshold: .5 }).observe(svg); }
+});
+
+/* matrix cells fill in row by row */
+const mx = $('#mx');
+if (mx){
+  $$('td', mx).forEach((td, i) => { td.style.transitionDelay = (reduce ? 0 : (Math.floor(i / 6) * 90 + (i % 6) * 45)) + 'ms'; });
+  new IntersectionObserver(es => { if (es[0].isIntersecting) mx.classList.add('on'); }, { threshold: .25 }).observe(mx);
+}
+
+/* ---- mobile menu ---- */
+const nav = $('#nav'), mb = $('#menu-btn');
+mb.addEventListener('click', () => { const o = !nav.classList.contains('open'); nav.classList.toggle('open', o); mb.setAttribute('aria-expanded', String(o)); mb.setAttribute('aria-label', o ? 'Close menu' : 'Open menu'); });
+$$('.links a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); mb.setAttribute('aria-expanded', 'false'); }));
+
+new ResizeObserver(fitTitle).observe($('.hero'));
+fitTitle();
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(fitTitle);
+})();
+</script>
+</body>
+</html>

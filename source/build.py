@@ -90,13 +90,20 @@ def main():
     zh = json.loads(zh_path.read_text(encoding="utf-8")) if zh_path.exists() else {}
     src = src.replace("/*ZH_DICT*/{}", json.dumps(zh, ensure_ascii=False).replace("</", "<\\/"))
     snap = (ROOT / "src" / "snap.js").read_text(encoding="utf-8")
+    scenes = (ROOT / "src" / "scenes.js").read_text(encoding="utf-8")
+    i18n = (ROOT / "src" / "i18n.js").read_text(encoding="utf-8").replace("/*ZH_DICT*/{}", json.dumps(zh, ensure_ascii=False).replace("</", "<\\/"))
+    src = src.replace("/*I18N_JS*/", i18n)
     exp = (ROOT / "data" / "experiments.json").read_text(encoding="utf-8").strip()
     src = src.replace("/*EXP_DATA*/{}", exp.replace("</", "<\\/"))
     src = src.replace("/*SNAP_JS*/", snap)
-    theory = (ROOT / "src" / "theory.html").read_text(encoding="utf-8").replace("/*SNAP_JS*/", snap)
+    src = src.replace("/*SCENES_JS*/", scenes)
+    PAGES = {"theory.html": ("Control theory", "The intervention, the sparse control problem, local controllability of a frozen Transformer and the results that link them."),
+             "protocol.html": ("Six-axis protocol", "Operational definitions, thresholds and results for reachability, signed reversal, dose response, feedback controllability, off-target preservation and held-out reuse.")}
+    pages = {name: (ROOT / "src" / name).read_text(encoding="utf-8").replace("/*SNAP_JS*/", snap).replace("/*SCENES_JS*/", scenes).replace("/*I18N_JS*/", i18n) for name in PAGES}
     DIST.mkdir(exist_ok=True)
-    (DIST / "theory.html").write_text(
-        theory.replace("{{PAPER_URL}}", URL + "paper.pdf").replace("<!--KATEX_CSS-->", katex_inline_css()).replace("<!--HEAD_META-->", ""), encoding="utf-8")
+    for name, html in pages.items():
+        (DIST / name).write_text(
+            html.replace("{{PAPER_URL}}", URL + "paper.pdf").replace("<!--KATEX_CSS-->", katex_inline_css()).replace("<!--HEAD_META-->", ""), encoding="utf-8")
 
     # Preview version for the Artifact tool
     (DIST / "artifact.html").write_text(
@@ -146,20 +153,21 @@ def main():
            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n"
            + head_part + meta + "</head>\n<body>\n" + body_part + "\n</body>\n</html>\n")
     (SITE / "index.html").write_text(doc.replace("{{PAPER_URL}}", "paper.pdf"), encoding="utf-8")
-    t_meta = f"""<link rel="canonical" href="{URL}theory.html">
+    for name, (ttl, desc) in PAGES.items():
+        t_meta = f"""<link rel="canonical" href="{URL}{name}">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta name="author" content="Xizhe Zhang">
 <meta name="theme-color" content="#111111">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Sparse Internal Control">
-<meta property="og:title" content="Control theory · Sparse Internal Control of Language Models">
-<meta property="og:description" content="The intervention, the sparse control problem, local controllability of a frozen Transformer and the results that link them.">
-<meta property="og:url" content="{URL}theory.html">
+<meta property="og:title" content="{ttl} · Sparse Internal Control of Language Models">
+<meta property="og:description" content="{desc}">
+<meta property="og:url" content="{URL}{name}">
 <meta property="og:image" content="{URL}og.png">
 <meta name="twitter:card" content="summary_large_image">
 <style>[hidden]{{display:none!important}}</style>"""
-    (SITE / "theory.html").write_text(
-        theory.replace("{{PAPER_URL}}", "paper.pdf").replace("<!--KATEX_CSS-->", KATEX_LINK).replace("<!--HEAD_META-->", t_meta), encoding="utf-8")
+        (SITE / name).write_text(
+            pages[name].replace("{{PAPER_URL}}", "paper.pdf").replace("<!--KATEX_CSS-->", KATEX_LINK).replace("<!--HEAD_META-->", t_meta), encoding="utf-8")
     (SITE / "404.html").write_text(NOT_FOUND, encoding="utf-8")
     (SITE / "favicon.svg").write_text(FAVICON, encoding="utf-8")
     (SITE / "CNAME").write_text(DOMAIN + "\n", encoding="utf-8")
@@ -167,7 +175,7 @@ def main():
     (SITE / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {URL}sitemap.xml\n", encoding="utf-8")
     (SITE / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
-        f"<url><loc>{URL}</loc></url><url><loc>{URL}theory.html</loc></url></urlset>\n", encoding="utf-8")
+        f"<url><loc>{URL}</loc></url><url><loc>{URL}theory.html</loc></url><url><loc>{URL}protocol.html</loc></url></urlset>\n", encoding="utf-8")
     if (ROOT / "assets" / "og.png").exists():
         shutil.copyfile(ROOT / "assets" / "og.png", SITE / "og.png")
     if (ROOT / "assets" / "readme").is_dir():
