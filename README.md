@@ -33,7 +33,7 @@ Sparse internal control steers a frozen language model through a few internal si
 |---|---|---|
 | **Specify** | Pick a readout, a target for each prompt, and off-target prompts that must not move | $q_i = \tau_i - b_\theta(x_i)$ |
 | **Actuate** | A few site and direction pairs receive strengths $\beta$; the weights $\theta$ stay frozen | $h_s(x) \leftarrow h_s(x) + \sum_{v:\, s_v = s} \beta_v\, u_v(x)$ |
-| **Certify** | Target error, off-target change and energy are checked together in the full model | $\mathrm{Rel}_{\mathrm{tar}} \le \varepsilon,\ L_{\mathrm{off}} \le \delta,\ E \le \kappa$ |
+| **Certify** | Target error, off-target change and energy are checked together in the full model | $\mathrm{Rel}_{\mathrm{tar}} \le \varepsilon$, $L_{\mathrm{off}} \le \delta$, $E \le \kappa$ |
 
 The selectors solve one sparse program, picking the fewest, cheapest drivers whose intervention passes the certificate:
 

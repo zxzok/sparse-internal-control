@@ -33,7 +33,7 @@
 |---|---|---|
 | **指定** | 选定读出、每条提示的目标，以及不应改变的非目标提示 | $q_i = \tau_i - b_\theta(x_i)$ |
 | **施加** | 少数位点与方向获得强度 $\beta$，权重 $\theta$ 冻结 | $h_s(x) \leftarrow h_s(x) + \sum_{v:\, s_v = s} \beta_v\, u_v(x)$ |
-| **认证** | 在完整模型中同时检查目标误差、非目标变化与能量 | $\mathrm{Rel}_{\mathrm{tar}} \le \varepsilon,\ L_{\mathrm{off}} \le \delta,\ E \le \kappa$ |
+| **认证** | 在完整模型中同时检查目标误差、非目标变化与能量 | $\mathrm{Rel}_{\mathrm{tar}} \le \varepsilon$, $L_{\mathrm{off}} \le \delta$, $E \le \kappa$ |
 
 ```math
 \min_{\beta \in \mathbb{R}^{M}}\ \lVert\beta\rVert_{0,c} + \lambda_E\, E(\beta) \quad \text{subject to}\quad \beta \text{ is an } (\varepsilon, \delta, \kappa) \text{ certificate}
