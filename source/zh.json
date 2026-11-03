@@ -376,5 +376,7 @@
 "IOI is outside the shared 32-prompt preservation panel": "IOI 不在共享的 32 条提示保持面板中",
 "NOT EVALUATED": "未评测",
 "no feedback experiment is registered for Sentiment": "情感任务没有登记反馈实验",
-"no held-out reuse experiment for Refusal": "拒答任务没有留出复用实验"
+"no held-out reuse experiment for Refusal": "拒答任务没有留出复用实验",
+"Xizhe Zhang / NeurIPS 2026": "张锡哲 / NeurIPS 2026",
+"Xizhe Zhang.<br>Sparse Internal Control of Language Models.<br>NeurIPS 2026.": "张锡哲（Xizhe Zhang）<br>Sparse Internal Control of Language Models<br>NeurIPS 2026"
 }
