@@ -7,6 +7,7 @@
 **Xizhe Zhang** · NeurIPS 2026
 
 [![Website](https://img.shields.io/badge/website-sparsecontrol.xizhe.net-D7EE5B?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net)
+[![arXiv](https://img.shields.io/badge/arXiv-2611.04349-D7EE5B?style=flat-square&labelColor=111111)](https://arxiv.org/abs/2611.04349)
 [![Paper](https://img.shields.io/badge/paper-PDF-D7EE5B?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net/paper.pdf)
 [![Theory](https://img.shields.io/badge/theory-mathematical%20model-D7EE5B?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net/theory.html)
 [![NeurIPS 2026](https://img.shields.io/badge/NeurIPS-2026-F4F3EE?style=flat-square&labelColor=111111)](https://sparsecontrol.xizhe.net)
@@ -14,7 +15,7 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-F4F3EE?style=flat-square&labelColor=111111)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12-F4F3EE?style=flat-square&labelColor=111111)](pyproject.toml)
 
-**[Website](https://sparsecontrol.xizhe.net)** &nbsp;·&nbsp; **[Paper (PDF)](https://sparsecontrol.xizhe.net/paper.pdf)** &nbsp;·&nbsp; **[Theory](https://sparsecontrol.xizhe.net/theory.html)** &nbsp;·&nbsp; [Quick start](#quick-start) &nbsp;·&nbsp; [Experiment guide](docs/experiments.md) &nbsp;·&nbsp; [Reproduction scope](REPRODUCIBILITY.md) &nbsp;·&nbsp; [中文](README.zh-CN.md)
+**[Website](https://sparsecontrol.xizhe.net)** &nbsp;·&nbsp; **[arXiv](https://arxiv.org/abs/2611.04349)** &nbsp;·&nbsp; **[Paper (PDF)](https://sparsecontrol.xizhe.net/paper.pdf)** &nbsp;·&nbsp; **[Theory](https://sparsecontrol.xizhe.net/theory.html)** &nbsp;·&nbsp; [Quick start](#quick-start) &nbsp;·&nbsp; [Experiment guide](docs/experiments.md) &nbsp;·&nbsp; [Reproduction scope](REPRODUCIBILITY.md) &nbsp;·&nbsp; [中文](README.zh-CN.md)
 
 </div>
 
@@ -189,7 +190,8 @@ To cite the paper:
   title     = {Sparse Internal Control of Language Models},
   author    = {Zhang, Xizhe},
   booktitle = {Advances in Neural Information Processing Systems},
-  year      = {2026}
+  year      = {2026},
+  url       = {https://arxiv.org/abs/2611.04349}
 }
 ```
 
