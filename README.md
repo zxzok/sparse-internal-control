@@ -17,3 +17,11 @@ This branch serves the project website for *Sparse Internal Control of Language 
 To rebuild, copy the page sources, `snap.js`, `scenes.js`, `i18n.js` and `zh.json` to `src/`, `source/experiments.json` to `data/`, and `source/og.png` to `assets/og.png`, next to `build.py` (the KaTeX stylesheet and fonts go in `assets/katex/`), then run `python3 build.py path/to/paper.pdf [arxiv_id]`. Passing an arXiv ID adds the BibTeX eprint. The output lands in `dist/site/`.
 
 The code and measurement records for the paper live on the `main` branch.
+
+## Website analytics
+
+Cloudflare Web Analytics records page views, referring websites, visited paths, country or region, browsers and devices for `sparsecontrol.xizhe.net`. Open the Cloudflare dashboard, choose **Web Analytics**, select **sparsecontrol.xizhe.net**, and view **Referrers** for traffic sources. The analytics dashboard is accessible through the site owner's Cloudflare account.
+
+The official beacon is included once in each of the three content pages and the 404 page. `source/build.py` also inserts it into deployable pages; local artifact previews omit it. The beacon token is a public site identifier, not an account API credential.
+
+Statistics begin after installation and may take several minutes to appear. Referrers depend on what the visitor's browser or app supplies: direct visits and links that omit the referrer cannot be assigned to a specific source. These statistics cover the website, separately from GitHub repository traffic.

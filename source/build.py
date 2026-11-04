@@ -13,6 +13,7 @@ DIST = ROOT / "dist"
 SITE = DIST / "site"
 DOMAIN = "sparsecontrol.xizhe.net"
 URL = f"https://{DOMAIN}/"
+CLOUDFLARE_BEACON = '<!-- Cloudflare Web Analytics --><script type=\'module\' src=\'https://static.cloudflareinsights.com/beacon.min.js\' data-cf-beacon=\'{"token": "88893279ffa349669e67c3253e0a217e"}\'></script><!-- End Cloudflare Web Analytics -->'
 PAPER_PDF = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else None
 ARXIV_ID = sys.argv[2] if len(sys.argv) > 2 else ""
 
@@ -75,6 +76,13 @@ def katex_inline_css():
 
     css = re.sub(r"@font-face\{[^}]*\}", face, css)
     return "<style>" + css + "</style>"
+
+
+def add_web_analytics(html):
+    """Add the site beacon to a deployable HTML page, not local previews."""
+    if html.count("</body>") != 1 or "data-cf-beacon" in html:
+        raise ValueError("Expected one body and no existing analytics beacon")
+    return html.replace("</body>", CLOUDFLARE_BEACON + "\n</body>", 1)
 
 
 def main():
@@ -152,7 +160,7 @@ def main():
     doc = ("<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
            "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n"
            + head_part + meta + "</head>\n<body>\n" + body_part + "\n</body>\n</html>\n")
-    (SITE / "index.html").write_text(doc.replace("{{PAPER_URL}}", "paper.pdf"), encoding="utf-8")
+    (SITE / "index.html").write_text(add_web_analytics(doc.replace("{{PAPER_URL}}", "paper.pdf")), encoding="utf-8")
     for name, (ttl, desc) in PAGES.items():
         t_meta = f"""<link rel="canonical" href="{URL}{name}">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -167,8 +175,8 @@ def main():
 <meta name="twitter:card" content="summary_large_image">
 <style>[hidden]{{display:none!important}}</style>"""
         (SITE / name).write_text(
-            pages[name].replace("{{PAPER_URL}}", "paper.pdf").replace("<!--KATEX_CSS-->", KATEX_LINK).replace("<!--HEAD_META-->", t_meta), encoding="utf-8")
-    (SITE / "404.html").write_text(NOT_FOUND, encoding="utf-8")
+            add_web_analytics(pages[name].replace("{{PAPER_URL}}", "paper.pdf").replace("<!--KATEX_CSS-->", KATEX_LINK).replace("<!--HEAD_META-->", t_meta)), encoding="utf-8")
+    (SITE / "404.html").write_text(add_web_analytics(NOT_FOUND), encoding="utf-8")
     (SITE / "favicon.svg").write_text(FAVICON, encoding="utf-8")
     (SITE / "CNAME").write_text(DOMAIN, encoding="utf-8")  # same bytes GitHub writes when the domain is set in Settings
     (SITE / ".nojekyll").write_text("", encoding="utf-8")
