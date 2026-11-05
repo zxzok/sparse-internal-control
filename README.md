@@ -15,9 +15,17 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-F4F3EE?style=flat-square&labelColor=111111)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12-F4F3EE?style=flat-square&labelColor=111111)](pyproject.toml)
 
-**[Website](https://sparsecontrol.xizhe.net)** &nbsp;·&nbsp; **[arXiv](https://arxiv.org/abs/2611.04349)** &nbsp;·&nbsp; **[Paper (PDF)](https://sparsecontrol.xizhe.net/paper.pdf)** &nbsp;·&nbsp; **[Theory](https://sparsecontrol.xizhe.net/theory.html)** &nbsp;·&nbsp; [Quick start](#quick-start) &nbsp;·&nbsp; [Experiment guide](docs/experiments.md) &nbsp;·&nbsp; [Reproduction scope](REPRODUCIBILITY.md) &nbsp;·&nbsp; [中文](README.zh-CN.md)
+**[Website](https://sparsecontrol.xizhe.net)** &nbsp;·&nbsp; **[arXiv](https://arxiv.org/abs/2611.04349)** &nbsp;·&nbsp; **[Paper (PDF)](https://sparsecontrol.xizhe.net/paper.pdf)** &nbsp;·&nbsp; **[Video](#video-overview)** &nbsp;·&nbsp; **[Theory](https://sparsecontrol.xizhe.net/theory.html)** &nbsp;·&nbsp; [Quick start](#quick-start) &nbsp;·&nbsp; [Experiment guide](docs/experiments.md) &nbsp;·&nbsp; [Reproduction scope](REPRODUCIBILITY.md) &nbsp;·&nbsp; [中文](README.zh-CN.md)
 
 </div>
+
+## Video overview
+
+A 69-second introduction to sparse internal control and the six-axis evaluation protocol.
+
+[![Watch the Sparse Internal Control video — 69 seconds, 1080p](https://raw.githubusercontent.com/zxzok/sparse-internal-control/gh-pages/readme/video-poster.jpg)](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4)
+
+**[▶ Watch the video](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4)** · [MP4 on GitHub](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/sparse-control-neurips2026.mp4) · [Audio credits](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/MUSIC-AND-LICENSES.md)
 
 > [!TIP]
 > **Project website: [sparsecontrol.xizhe.net](https://sparsecontrol.xizhe.net)**. The framework and the six axes, with interactive animations, and the [mathematical model](https://sparsecontrol.xizhe.net/theory.html) behind them.

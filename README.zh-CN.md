@@ -14,9 +14,17 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-F4F3EE?style=flat-square&labelColor=111111)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12-F4F3EE?style=flat-square&labelColor=111111)](pyproject.toml)
 
-**[项目网站](https://sparsecontrol.xizhe.net)** &nbsp;·&nbsp; **[论文 PDF](https://sparsecontrol.xizhe.net/paper.pdf)** &nbsp;·&nbsp; **[理论与数学模型](https://sparsecontrol.xizhe.net/theory.html)** &nbsp;·&nbsp; [快速复算](#无需-gpu-的结果复算) &nbsp;·&nbsp; [实验说明](docs/experiments.md) &nbsp;·&nbsp; [复现范围](REPRODUCIBILITY.md) &nbsp;·&nbsp; [English](README.md)
+**[项目网站](https://sparsecontrol.xizhe.net)** &nbsp;·&nbsp; **[论文 PDF](https://sparsecontrol.xizhe.net/paper.pdf)** &nbsp;·&nbsp; **[宣传视频](#宣传视频)** &nbsp;·&nbsp; **[理论与数学模型](https://sparsecontrol.xizhe.net/theory.html)** &nbsp;·&nbsp; [快速复算](#无需-gpu-的结果复算) &nbsp;·&nbsp; [实验说明](docs/experiments.md) &nbsp;·&nbsp; [复现范围](REPRODUCIBILITY.md) &nbsp;·&nbsp; [English](README.md)
 
 </div>
+
+## 宣传视频
+
+69 秒介绍稀疏内部控制框架与六轴评价协议，1080p 高清。
+
+[![点击观看 Sparse Internal Control 宣传视频（69 秒）](https://raw.githubusercontent.com/zxzok/sparse-internal-control/gh-pages/readme/video-poster.jpg)](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4)
+
+**[▶ 播放视频](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4)** · [GitHub 上的 MP4](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/sparse-control-neurips2026.mp4) · [音频来源](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/MUSIC-AND-LICENSES.md)
 
 > [!TIP]
 > **项目网站：[sparsecontrol.xizhe.net](https://sparsecontrol.xizhe.net)**。用交互动画讲解控制框架与六轴协议，并附[数学模型](https://sparsecontrol.xizhe.net/theory.html)。
