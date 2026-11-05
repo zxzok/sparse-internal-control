@@ -1,5 +1,3 @@
-<a href="https://sparsecontrol.xizhe.net"><img src="https://raw.githubusercontent.com/zxzok/sparse-internal-control/gh-pages/readme/banner.png" alt="Sparse Internal Control of Language Models：冻结模型中的稀疏干预，以及评价控制的六轴协议" width="100%"></a>
-
 <div align="center">
 
 # Sparse Internal Control of Language Models
@@ -22,9 +20,9 @@
 
 69 秒介绍稀疏内部控制框架与六轴评价协议，1080p 高清。
 
-[![点击观看 Sparse Internal Control 宣传视频（69 秒）](https://raw.githubusercontent.com/zxzok/sparse-internal-control/gh-pages/readme/video-poster.jpg)](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4)
+https://github.com/user-attachments/assets/88cf30bc-4fa6-4396-9610-dfb057dbadba
 
-**[▶ 播放视频](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4)** · [GitHub 上的 MP4](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/sparse-control-neurips2026.mp4) · [音频来源](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/MUSIC-AND-LICENSES.md)
+[原始 MP4](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4) · [音频来源](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/MUSIC-AND-LICENSES.md)
 
 > [!TIP]
 > **项目网站：[sparsecontrol.xizhe.net](https://sparsecontrol.xizhe.net)**。用交互动画讲解控制框架与六轴协议，并附[数学模型](https://sparsecontrol.xizhe.net/theory.html)。

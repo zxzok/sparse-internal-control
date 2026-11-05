@@ -1,5 +1,3 @@
-<a href="https://sparsecontrol.xizhe.net"><img src="https://raw.githubusercontent.com/zxzok/sparse-internal-control/gh-pages/readme/banner.png" alt="Sparse Internal Control of Language Models: sparse interventions in a frozen model, and a six-axis protocol for evaluating control" width="100%"></a>
-
 <div align="center">
 
 # Sparse Internal Control of Language Models
@@ -23,9 +21,9 @@
 
 A 69-second introduction to sparse internal control and the six-axis evaluation protocol.
 
-[![Watch the Sparse Internal Control video — 69 seconds, 1080p](https://raw.githubusercontent.com/zxzok/sparse-internal-control/gh-pages/readme/video-poster.jpg)](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4)
+https://github.com/user-attachments/assets/88cf30bc-4fa6-4396-9610-dfb057dbadba
 
-**[▶ Watch the video](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4)** · [MP4 on GitHub](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/sparse-control-neurips2026.mp4) · [Audio credits](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/MUSIC-AND-LICENSES.md)
+[Original MP4](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4) · [Audio credits](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/MUSIC-AND-LICENSES.md)
 
 > [!TIP]
 > **Project website: [sparsecontrol.xizhe.net](https://sparsecontrol.xizhe.net)**. The framework and the six axes, with interactive animations, and the [mathematical model](https://sparsecontrol.xizhe.net/theory.html) behind them.
