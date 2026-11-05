@@ -7,6 +7,8 @@ This branch serves the project website for *Sparse Internal Control of Language 
 - `protocol.html`: the six-axis protocol, axis by axis: definitions, thresholds, results and code
 - `404.html`, `favicon.svg`, `og.png`, `paper.pdf`, `robots.txt`, `sitemap.xml`: supporting files
 - `CNAME`: custom domain
+- `media/sparse-control-neurips2026.mp4`: the 69-second 1080p paper video, with audio source and license notes
+- `readme/video-poster.jpg`: a still from the video used by the main-branch README
 - `source/page.html`, `source/theory.html`, `source/protocol.html`: page sources
 - `source/snap.js`: screen snapping shared by the pages, inlined at build time
 - `source/scenes.js`: the six axis animations, shared by the home and protocol pages
