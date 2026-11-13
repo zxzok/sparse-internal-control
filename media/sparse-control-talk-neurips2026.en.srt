@@ -1,0 +1,211 @@
+1
+00:00:01,400 --> 00:00:08,067
+Hello, I'm Xizhe Zhang. This work introduces sparse internal control of language models.
+
+2
+00:00:08,300 --> 00:00:11,267
+We ask how a small set of internal interventions can
+
+3
+00:00:11,267 --> 00:00:15,433
+form a structured control interface for a frozen model.
+
+4
+00:00:17,167 --> 00:00:20,833
+An internal intervention can change a model's output.
+
+5
+00:00:20,833 --> 00:00:24,467
+A control framework asks a more specific question.
+
+6
+00:00:24,733 --> 00:00:26,833
+What behavior should change?
+
+7
+00:00:26,833 --> 00:00:31,800
+What should remain stable? And what intervention resources are available?
+
+8
+00:00:32,033 --> 00:00:38,300
+We specify a target behavior, a desired value, and an off-target preservation set.
+
+9
+00:00:38,533 --> 00:00:41,767
+For example, in multiple-choice question answering,
+
+10
+00:00:41,767 --> 00:00:46,967
+the target can be the margin between the correct answer and the competing answers.
+
+11
+00:00:47,167 --> 00:00:51,633
+We then seek a compact intervention that moves the model toward that target,
+
+12
+00:00:51,633 --> 00:00:54,800
+with limited strength and collateral change.
+
+13
+00:00:56,533 --> 00:01:02,067
+Our control variables are internal sites, intervention directions, and strengths.
+
+14
+00:01:02,333 --> 00:01:08,433
+During inference, we add weighted directions to the activations at the selected sites.
+
+15
+00:01:08,667 --> 00:01:15,000
+The model weights remain unchanged, and setting the strengths to zero removes the intervention.
+
+16
+00:01:15,233 --> 00:01:22,033
+The framework specifies feasibility through target error, off-target change, and intervention energy.
+
+17
+00:01:22,033 --> 00:01:26,233
+Sparsity determines how many control variables are used.
+
+18
+00:01:26,467 --> 00:01:32,967
+Together, these elements turn activation steering into an explicit target-control problem.
+
+19
+00:01:34,700 --> 00:01:37,567
+How do we construct such an intervention?
+
+20
+00:01:37,567 --> 00:01:41,200
+Two selectors work within a shared control pipeline.
+
+21
+00:01:41,433 --> 00:01:48,667
+First, we estimate how each candidate intervention changes the target readout, at the unpatched model.
+
+22
+00:01:48,900 --> 00:01:54,600
+These effects form a local dictionary, G, for constructing a sparse intervention.
+
+23
+00:01:54,833 --> 00:02:00,933
+Second, support selection: choosing the small set of interventions, called the support.
+
+24
+00:02:00,933 --> 00:02:06,533
+Driver-OMP prefers candidates that reduce the remaining target error.
+
+25
+00:02:06,767 --> 00:02:12,633
+Coverage-Driver prefers candidates that cover prompts not yet adequately controlled.
+
+26
+00:02:12,867 --> 00:02:17,300
+Third, in the formal formulation, the strengths are fitted jointly,
+
+27
+00:02:17,300 --> 00:02:21,467
+accounting for target error, preservation, and energy.
+
+28
+00:02:21,700 --> 00:02:26,367
+We then evaluate the intervention in the original nonlinear model.
+
+29
+00:02:28,100 --> 00:02:32,133
+We evaluate each intervention along six axes.
+
+30
+00:02:32,367 --> 00:02:35,800
+Reachability asks whether it gets to the target.
+
+31
+00:02:35,800 --> 00:02:38,567
+Signed reversal asks whether the opposite intervention
+
+32
+00:02:38,567 --> 00:02:43,100
+moves behavior back along the same behavioral axis.
+
+33
+00:02:43,333 --> 00:02:48,400
+Dose response measures how behavior changes with intervention strength.
+
+34
+00:02:48,400 --> 00:02:54,233
+Feedback control tests whether a fixed set of sites can track different requested targets.
+
+35
+00:02:54,467 --> 00:02:59,267
+Off-target preservation measures how unrelated outputs change.
+
+36
+00:02:59,267 --> 00:03:04,667
+Held-out reuse tests how well the intervention transfers to new prompts.
+
+37
+00:03:04,900 --> 00:03:08,367
+These axes describe distinct properties.
+
+38
+00:03:08,367 --> 00:03:11,533
+Different control objectives place different demands on them,
+
+39
+00:03:11,533 --> 00:03:17,500
+so the protocol characterizes the intervention rather than reducing it to one score.
+
+40
+00:03:19,233 --> 00:03:23,900
+The experiments illustrate these differences across control objectives.
+
+41
+00:03:24,133 --> 00:03:30,433
+In multiple-choice question answering, Coverage-Driver reaches 46 of 48 requested endpoints
+
+42
+00:03:30,433 --> 00:03:37,033
+with example-specific directions, compared with 8 using a shared training-mean direction.
+
+43
+00:03:37,267 --> 00:03:41,133
+Sentiment steering uses a shared population direction.
+
+44
+00:03:41,133 --> 00:03:46,533
+The fixed intervention achieves mean-margin recovery of about 0.94.
+
+45
+00:03:46,533 --> 00:03:50,333
+Yet errors on individual prompts remain large.
+
+46
+00:03:50,567 --> 00:03:57,300
+Refusal steering shows another pattern: the first-token refusal margin changes monotonically with dose,
+
+47
+00:03:57,300 --> 00:04:00,500
+while formal signed reversal fails.
+
+48
+00:04:00,733 --> 00:04:06,867
+Under a common evaluation protocol, these results reveal different combinations of control properties,
+
+49
+00:04:06,867 --> 00:04:10,833
+depending on the task and the available direction information.
+
+50
+00:04:12,567 --> 00:04:15,033
+The contribution is a control framework,
+
+51
+00:04:15,033 --> 00:04:20,600
+two complementary selection algorithms, and a six-axis evaluation protocol.
+
+52
+00:04:20,833 --> 00:04:25,200
+Together, they connect internal interventions to explicit behavioral objectives,
+
+53
+00:04:25,200 --> 00:04:30,767
+and reveal the control properties that different tasks support. Thank you.
