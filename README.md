@@ -13,7 +13,7 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-F4F3EE?style=flat-square&labelColor=111111)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12-F4F3EE?style=flat-square&labelColor=111111)](pyproject.toml)
 
-**[Website](https://sparsecontrol.xizhe.net)** &nbsp;·&nbsp; **[arXiv](https://arxiv.org/abs/2611.04349)** &nbsp;·&nbsp; **[Paper (PDF)](https://sparsecontrol.xizhe.net/paper.pdf)** &nbsp;·&nbsp; **[Video](#video-overview)** &nbsp;·&nbsp; **[Theory](https://sparsecontrol.xizhe.net/theory.html)** &nbsp;·&nbsp; [Quick start](#quick-start) &nbsp;·&nbsp; [Experiment guide](docs/experiments.md) &nbsp;·&nbsp; [Reproduction scope](REPRODUCIBILITY.md) &nbsp;·&nbsp; [中文](README.zh-CN.md)
+**[Website](https://sparsecontrol.xizhe.net)** &nbsp;·&nbsp; **[arXiv](https://arxiv.org/abs/2611.04349)** &nbsp;·&nbsp; **[Paper (PDF)](https://sparsecontrol.xizhe.net/paper.pdf)** &nbsp;·&nbsp; **[Video](#video-overview)** &nbsp;·&nbsp; **[NeurIPS talk](#neurips-talk)** &nbsp;·&nbsp; **[Theory](https://sparsecontrol.xizhe.net/theory.html)** &nbsp;·&nbsp; [Quick start](#quick-start) &nbsp;·&nbsp; [Experiment guide](docs/experiments.md) &nbsp;·&nbsp; [Reproduction scope](REPRODUCIBILITY.md) &nbsp;·&nbsp; [中文](README.zh-CN.md)
 
 </div>
 
@@ -24,6 +24,14 @@ A 69-second introduction to sparse internal control and the six-axis evaluation 
 https://github.com/user-attachments/assets/88cf30bc-4fa6-4396-9610-dfb057dbadba
 
 [Original MP4](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4) · [Audio credits](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/MUSIC-AND-LICENSES.md)
+
+### NeurIPS talk
+
+A 4.5-minute narrated walkthrough: the control problem, the framework, the two selectors, the six-axis protocol and three representative results. Click the image to play.
+
+[![NeurIPS talk: Sparse Internal Control of Language Models](https://sparsecontrol.xizhe.net/readme/talk-poster.jpg)](https://sparsecontrol.xizhe.net/media/sparse-control-talk-neurips2026.mp4)
+
+[MP4 (1080p)](https://sparsecontrol.xizhe.net/media/sparse-control-talk-neurips2026.mp4) · [Subtitles (SRT)](https://sparsecontrol.xizhe.net/media/sparse-control-talk-neurips2026.en.srt) · [Credits](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/MUSIC-AND-LICENSES.md)
 
 > [!TIP]
 > **Project website: [sparsecontrol.xizhe.net](https://sparsecontrol.xizhe.net)**. The framework and the six axes, with interactive animations, and the [mathematical model](https://sparsecontrol.xizhe.net/theory.html) behind them.

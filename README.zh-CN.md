@@ -12,7 +12,7 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-F4F3EE?style=flat-square&labelColor=111111)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.12-F4F3EE?style=flat-square&labelColor=111111)](pyproject.toml)
 
-**[项目网站](https://sparsecontrol.xizhe.net)** &nbsp;·&nbsp; **[论文 PDF](https://sparsecontrol.xizhe.net/paper.pdf)** &nbsp;·&nbsp; **[宣传视频](#宣传视频)** &nbsp;·&nbsp; **[理论与数学模型](https://sparsecontrol.xizhe.net/theory.html)** &nbsp;·&nbsp; [快速复算](#无需-gpu-的结果复算) &nbsp;·&nbsp; [实验说明](docs/experiments.md) &nbsp;·&nbsp; [复现范围](REPRODUCIBILITY.md) &nbsp;·&nbsp; [English](README.md)
+**[项目网站](https://sparsecontrol.xizhe.net)** &nbsp;·&nbsp; **[论文 PDF](https://sparsecontrol.xizhe.net/paper.pdf)** &nbsp;·&nbsp; **[宣传视频](#宣传视频)** &nbsp;·&nbsp; **[NeurIPS 讲解视频](#neurips-讲解视频)** &nbsp;·&nbsp; **[理论与数学模型](https://sparsecontrol.xizhe.net/theory.html)** &nbsp;·&nbsp; [快速复算](#无需-gpu-的结果复算) &nbsp;·&nbsp; [实验说明](docs/experiments.md) &nbsp;·&nbsp; [复现范围](REPRODUCIBILITY.md) &nbsp;·&nbsp; [English](README.md)
 
 </div>
 
@@ -23,6 +23,14 @@
 https://github.com/user-attachments/assets/88cf30bc-4fa6-4396-9610-dfb057dbadba
 
 [原始 MP4](https://sparsecontrol.xizhe.net/media/sparse-control-neurips2026.mp4) · [音频来源](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/MUSIC-AND-LICENSES.md)
+
+### NeurIPS 讲解视频
+
+4.5 分钟的英文讲解（有旁白）：控制问题、框架、两个选择算法、六轴评价协议和三组代表性结果。点击图片播放。
+
+[![NeurIPS 讲解视频：语言模型的稀疏内部控制](https://sparsecontrol.xizhe.net/readme/talk-poster.jpg)](https://sparsecontrol.xizhe.net/media/sparse-control-talk-neurips2026.mp4)
+
+[MP4（1080p）](https://sparsecontrol.xizhe.net/media/sparse-control-talk-neurips2026.mp4) · [英文字幕（SRT）](https://sparsecontrol.xizhe.net/media/sparse-control-talk-neurips2026.en.srt) · [来源说明](https://github.com/zxzok/sparse-internal-control/blob/gh-pages/media/MUSIC-AND-LICENSES.md)
 
 > [!TIP]
 > **项目网站：[sparsecontrol.xizhe.net](https://sparsecontrol.xizhe.net)**。用交互动画讲解控制框架与六轴协议，并附[数学模型](https://sparsecontrol.xizhe.net/theory.html)。
