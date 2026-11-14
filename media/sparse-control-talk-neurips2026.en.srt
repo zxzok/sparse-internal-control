@@ -159,53 +159,53 @@ so the protocol characterizes the intervention rather than reducing it to one sc
 The experiments illustrate these differences across control objectives.
 
 41
-00:03:24,133 --> 00:03:30,433
-In multiple-choice question answering, Coverage-Driver reaches 46 of 48 requested endpoints
+00:03:24,133 --> 00:03:31,267
+In multiple-choice question answering on MMLU Humanities, Coverage-Driver reaches 46 of 48 requested
 
 42
-00:03:30,433 --> 00:03:37,033
-with example-specific directions, compared with 8 using a shared training-mean direction.
+00:03:31,267 --> 00:03:38,167
+endpoints with evaluation-pair directions, compared with 8 using a shared training-mean direction.
 
 43
-00:03:37,267 --> 00:03:41,133
-Sentiment steering uses a shared population direction.
+00:03:38,367 --> 00:03:41,800
+For sentiment steering with a fixed training-mean direction,
 
 44
-00:03:41,133 --> 00:03:46,533
-The fixed intervention achieves mean-margin recovery of about 0.94.
+00:03:41,800 --> 00:03:47,100
+the frozen intervention achieves mean-margin recovery of about 0.94.
 
 45
-00:03:46,533 --> 00:03:50,333
+00:03:47,100 --> 00:03:51,033
 Yet errors on individual prompts remain large.
 
 46
-00:03:50,567 --> 00:03:57,300
+00:03:51,267 --> 00:03:58,000
 Refusal steering shows another pattern: the first-token refusal margin changes monotonically with dose,
 
 47
-00:03:57,300 --> 00:04:00,500
+00:03:58,000 --> 00:04:01,200
 while formal signed reversal fails.
 
 48
-00:04:00,733 --> 00:04:06,867
+00:04:01,467 --> 00:04:07,600
 Under a common evaluation protocol, these results reveal different combinations of control properties,
 
 49
-00:04:06,867 --> 00:04:10,833
+00:04:07,600 --> 00:04:11,567
 depending on the task and the available direction information.
 
 50
-00:04:12,567 --> 00:04:15,033
+00:04:13,300 --> 00:04:15,767
 The contribution is a control framework,
 
 51
-00:04:15,033 --> 00:04:20,600
+00:04:15,767 --> 00:04:21,333
 two complementary selection algorithms, and a six-axis evaluation protocol.
 
 52
-00:04:20,833 --> 00:04:25,200
+00:04:21,567 --> 00:04:25,933
 Together, they connect internal interventions to explicit behavioral objectives,
 
 53
-00:04:25,200 --> 00:04:30,767
+00:04:25,933 --> 00:04:31,500
 and reveal the control properties that different tasks support. Thank you.
